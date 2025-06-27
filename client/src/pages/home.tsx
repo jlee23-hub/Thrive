@@ -1,12 +1,30 @@
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4">
-      <div className="text-center">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-gray-800 tracking-tight">
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: 'white',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '0 1rem'
+    }}>
+      <div style={{ textAlign: 'center' }}>
+        <h1 style={{
+          fontSize: 'clamp(2.5rem, 8vw, 5rem)',
+          fontWeight: '600',
+          color: '#374151',
+          letterSpacing: '-0.025em',
+          margin: 0
+        }}>
           Hello World
         </h1>
         
-        <p className="mt-4 text-lg sm:text-xl text-gray-600 font-light">
+        <p style={{
+          marginTop: '1rem',
+          fontSize: 'clamp(1.125rem, 3vw, 1.25rem)',
+          color: '#6b7280',
+          fontWeight: '300'
+        }}>
           A simple beginning to something great
         </p>
       </div>
