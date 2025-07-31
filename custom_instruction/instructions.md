@@ -3,6 +3,186 @@
 ## Overview
 This guide focuses on key considerations and decision-making when working with Atlassian's Design System. For setup steps and implementation details, refer to the guidelines file.
 
+## 🚨 MANDATORY SETUP STEPS (ONE-TIME CONFIGURATION)
+
+**CRITICAL: Every app using Atlaskit Design System MUST complete these setup steps first.**
+
+### Step 1: Install Required Packages
+```bash
+npm install @atlaskit/tokens @atlaskit/primitives @atlaskit/button @atlaskit/form @atlaskit/textfield @atlaskit/select @atlaskit/modal-dialog @atlaskit/avatar @atlaskit/badge @atlaskit/lozenge @atlaskit/icon @atlaskit/navigation-system @atlaskit/logo @atlaskit/app-provider @atlaskit/platform-feature-flags
+```
+
+### Step 2: Import App Provider (ONE-TIME SETUP)
+**CRITICAL: Only include these imports once. If the imports already exist then skip this step entirely.**
+
+```tsx
+import AppProvider from "@atlaskit/app-provider";
+```
+
+**Add AppProvider to main file (ONE-TIME SETUP)**
+You must wrap the main app in an `<AppProvider>` **only if it's not already wrapped**
+
+```tsx
+<AppProvider>...</AppProvider>
+```
+
+### Step 3: Import Tokens (IN EVERY FILE)
+**NOTE: Include the import below in every file created, but only if it doesn't already exist.**
+
+```tsx
+import { token } from "@atlaskit/tokens";
+```
+
+### Step 4: Feature Flag Setup (ONE-TIME SETUP)
+**CRITICAL: You MUST create this file - it does not exist by default**
+
+**Step 4a: Create the utils directory**
+- Create a `utils` folder in your project root (same level as your main app file)
+- If the `utils` folder already exists, skip this step
+
+**Step 4b: Create the feature flag file**
+- Create a new file: `utils/feature-flag.tsx`
+- **IMPORTANT: The file extension must be `.tsx` (not `.ts` or `.js`)**
+- Copy and paste the exact code below into this new file:
+
+```tsx
+import { setBooleanFeatureFlagResolver } from "@atlaskit/platform-feature-flags";
+
+/**
+ * List of default feature flags to enable:
+ */
+const defaultFeatureFlags = [
+  // Enable the fix for portals in React 18 concurrent (should be defaulted, just no one's landed it)
+  "platform_design_system_team_portal_logic_r18_fix",
+  // Enable the new context (should be defaulted, just no one's landed it)
+  "analytics-next-use-modern-context_jira",
+  // Enable the Visual Refresh
+  "platform-component-visual-refresh",
+  "platform-default-typography-modernized",
+];
+
+/**
+ * Update the feature flag resolver to resolve new feature flags (as well as root defined flags)
+ * This could accept feature flags at runtime, but not doing that.
+ */
+export const resolveFeatureFlags = (featureFlags: string[] = []) => {
+  const flags = [...featureFlags, ...defaultFeatureFlags];
+  setBooleanFeatureFlagResolver((flagKey) => {
+    return flags.includes(flagKey);
+  });
+};
+```
+
+**Step 4c: Import and call the function**
+- In your main app file (like `app/layout.tsx`, `app.tsx`, or `page.tsx`), add this import at the top:
+
+```tsx
+import { resolveFeatureFlags } from './utils/feature-flag';
+```
+
+- Then call the function near the top of your main component, before any other code:
+
+```tsx
+// Call this near the top of your main app file, before your App component
+resolveFeatureFlags();
+```
+
+### Step 5: CSS Setup for Navigation (ONE-TIME SETUP)
+**CRITICAL: These CSS overrides are REQUIRED for navigation system to display correctly**
+
+**Step 5a: Create or update your global CSS file**
+- Find your global CSS file (usually `globals.css`, `app.css`, or `index.css`)
+- If it doesn't exist, create it in your project root or src directory
+
+**Step 5b: Add the required CSS overrides**
+- Add these CSS overrides to your global CSS file BEFORE any other styles:
+
+```css
+/* REQUIRED: Navigation system CSS overrides */
+/* Show top nav */
+._1e0cglyw {
+  display: inherit !important;
+}
+
+/* Hide search Icon Button */
+._1e0cglyw._1m0a19ly {
+  display: none !important;
+}
+
+/* Button vertical middle */
+._1o9zidpf {
+  align-items: center !important;
+}
+
+/* Search bar center */
+._1bahh9n0 {
+  justify-content: center !important;
+}
+
+/* Fix navigation layout */
+._1e0cglyw._1m0a19ly {
+  display: none !important;
+}
+```
+
+**Step 5c: Import the global CSS file**
+- In your main app file (same file where you imported resolveFeatureFlags), add this import:
+
+```tsx
+import './globals.css'; // 🚨 CRITICAL: Must import AFTER adding overrides above
+```
+
+**VERIFICATION: After adding the CSS overrides, verify:**
+- The CSS overrides are added to your global CSS file
+- The global CSS file is imported in your main app file
+- The import path matches your actual file location
+
+**VERIFICATION: After creating the file, verify it exists at:**
+- `./utils/feature-flag.tsx` (relative to your project root)
+- The file should contain the exact code above
+- The import path in your main file should match the actual file location
+
+**IMPORTANT ICON USAGE NOTE:** 
+- When using folder icons, use `FolderClosedIcon` from `@atlaskit/icon/core/folder-closed` or `FolderOpenIcon` from `@atlaskit/icon/core/folder-open`
+- **NEVER** use `@atlaskit/icon/core/folder` - this path does not exist and will cause MIME type errors
+- Always use the exact icon paths from the approved Atlaskit icon list
+
+**TROUBLESHOOTING: If you get import errors for the feature flag file:**
+
+**Common import path issues:**
+- If your main file is in `app/layout.tsx`, use: `import { resolveFeatureFlags } from '../utils/feature-flag';`
+- If your main file is in `app/page.tsx`, use: `import { resolveFeatureFlags } from '../utils/feature-flag';`
+- If your main file is in the root (like `app.tsx`), use: `import { resolveFeatureFlags } from './utils/feature-flag';`
+- If your main file is in `src/app/layout.tsx`, use: `import { resolveFeatureFlags } from '../../utils/feature-flag';`
+
+**File structure should look like:**
+```
+your-project/
+├── app/
+│   ├── layout.tsx (imports from '../utils/feature-flag')
+│   └── page.tsx
+├── utils/
+│   └── feature-flag.tsx
+└── package.json
+```
+
+**FINAL STEP: Once setup is complete, display this confirmation message:**
+
+```
+✅ Atlaskit Design System setup is now complete!
+
+Setup completed:
+□ CSS imports added to main file
+□ Token imports configured
+□ AppProvider wrapper added
+□ Feature flags utility created and imported
+□ Navigation system CSS overrides added to global CSS
+□ Global CSS file imported in main app file
+□ Foundation ready for Atlaskit components
+
+You can now use Atlaskit Design System components and tokens in your project.
+```
+
 ## Design Philosophy
 
 ### Core Principles
@@ -509,6 +689,24 @@ import AddIcon from '@atlaskit/icon/glyph/add';
    - All headings → Heading component
    - Never use HTML p, span, h1, h2, etc.
 
+8. **Never add style props to primitives**
+   - **❌ WRONG** - Never use style props on Box, Stack, Inline, Grid
+   - **✅ CORRECT** - Wrap primitives in div with inline styles when additional styling needed
+   - **Example:**
+     ```tsx
+     // ❌ WRONG
+     <Box style={{ backgroundColor: token('color.background.neutral') }}>
+       Content
+     </Box>
+     
+     // ✅ CORRECT
+     <div style={{ backgroundColor: token('color.background.neutral') }}>
+       <Box>
+         Content
+       </Box>
+     </div>
+     ```
+
 ### When Converting Existing Code
 
 1. **Map existing patterns to Atlaskit**
@@ -558,6 +756,7 @@ import AddIcon from '@atlaskit/icon/glyph/add';
 12. **Button/new only** - Never use @atlaskit/button, always use @atlaskit/button/new
 13. **Text primitive for text** - Never use p or span tags, always use Text component
 14. **Heading component for headings** - Never use h1, h2, etc., always use Heading component
+15. **No style props on primitives** - Never add style props to Box, Stack, Inline, Grid; wrap in div instead
 
 ### Success Metrics:
 - ✅ Components use semantic tokens
