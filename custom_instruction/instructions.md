@@ -17,6 +17,236 @@ Atlassian's design system prioritizes:
 - **Performance** through zero-runtime styling
 - **Semantic meaning** over visual styling
 
+## 🚨 CRITICAL: Strict Component Usage Rules
+
+### Button Component Rules
+
+#### 1. Always Use @atlaskit/button/new
+**❌ NEVER use:**
+```tsx
+import Button from '@atlaskit/button';
+```
+
+**✅ ALWAYS use:**
+```tsx
+import Button, { IconButton } from '@atlaskit/button/new';
+```
+
+#### 2. Icon-Only Buttons Must Use IconButton
+**❌ WRONG - Never use iconOnly prop:**
+```tsx
+<Button iconBefore={AddIcon} iconOnly>
+  Add
+</Button>
+```
+
+**✅ CORRECT - Use IconButton component:**
+```tsx
+<IconButton icon={AddIcon} label="Add item" />
+```
+
+#### 3. Button with Icon and Text
+**✅ CORRECT - Use iconBefore/iconAfter props:**
+```tsx
+<Button appearance="primary" iconBefore={AddIcon}>
+  Create Item
+</Button>
+
+<Button appearance="default" iconAfter={EditIcon}>
+  Edit
+</Button>
+```
+
+### IconTile Component Rules
+
+#### 1. Use IconTile for Icons in Colored Boxes
+**❌ WRONG - Don't use IconButton for colored icon boxes:**
+```tsx
+<IconButton 
+  icon={AddIcon} 
+  label="Add"
+  style={{ 
+    backgroundColor: token('color.background.accent.blue'),
+    borderRadius: '50%',
+    padding: token('space.100')
+  }}
+/>
+```
+
+**✅ CORRECT - Use IconTile for icons in colored containers:**
+```tsx
+import { IconTile } from '@atlaskit/icon';
+import AddIcon from '@atlaskit/icon/core/add';
+
+<IconTile 
+  icon={AddIcon} 
+  label="Add icon" 
+  appearance="blue" 
+  shape="circle" 
+  size="24" 
+/>
+```
+
+#### 2. IconTile Usage Guidelines
+```tsx
+// Status indicators (icon only)
+<IconTile 
+  icon={CheckMarkIcon} 
+  label="Success status" 
+  appearance="green" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Category indicators (icon only)
+<IconTile 
+  icon={BugIcon} 
+  label="Bug category" 
+  appearance="red" 
+  shape="square" 
+  size="24" 
+/>
+
+// Feature indicators (icon only)
+<IconTile 
+  icon={AutomationIcon} 
+  label="Automation feature" 
+  appearance="blueBold" 
+  shape="circle" 
+  size="40" 
+/>
+```
+
+#### 3. IconTile Size Reference
+| Size | Dimensions | Usage |
+|------|------------|-------|
+| `16` | 16px × 16px | Small status indicators |
+| `24` | 24px × 24px | Standard icon tiles |
+| `32` | 32px × 32px | Medium feature indicators |
+| `40` | 40px × 40px | Large feature indicators |
+| `48` | 48px × 48px | Extra large indicators |
+
+#### 4. IconTile Appearance Options
+```tsx
+// Color appearances
+<IconTile appearance="blue" />      // Blue background
+<IconTile appearance="green" />     // Green background
+<IconTile appearance="red" />       // Red background
+<IconTile appearance="yellow" />    // Yellow background
+<IconTile appearance="purple" />    // Purple background
+<IconTile appearance="blueBold" />  // Bold blue background
+<IconTile appearance="greenBold" /> // Bold green background
+<IconTile appearance="redBold" />   // Bold red background
+```
+
+#### 5. IconTile Shape Options
+```tsx
+// Shape options
+<IconTile shape="circle" />   // Circular background
+<IconTile shape="square" />   // Square background
+```
+
+### Text Component Rules
+
+#### 1. Replace All p and span Tags with Text Primitive
+**❌ WRONG - Never use HTML text tags:**
+```tsx
+<p>This is body text</p>
+<span>This is small text</span>
+<div>This is some content</div>
+```
+
+**✅ CORRECT - Use Text primitive:**
+```tsx
+import { Text } from '@atlaskit/primitives';
+
+<Text size="large">This is body text</Text>
+<Text size="small">This is small text</Text>
+<Text size="medium">This is medium text</Text>
+```
+
+#### 2. Text Size Guidelines
+```tsx
+// Large text (16px) - Main body content
+<Text size="large">Main body text content</Text>
+
+// Medium text (14px) - Secondary content
+<Text size="medium">Secondary information</Text>
+
+// Small text (12px) - Captions, metadata
+<Text size="small">Caption or metadata</Text>
+```
+
+### Heading Component Rules
+
+#### 1. Replace All h1, h2, h3, etc. with Heading Component
+**❌ WRONG - Never use HTML heading tags:**
+```tsx
+<h1>Page Title</h1>
+<h2>Section Title</h2>
+<h3>Subsection Title</h3>
+```
+
+**✅ CORRECT - Use Heading component:**
+```tsx
+import Heading from '@atlaskit/heading';
+
+<Heading size="xxlarge">Page Title</Heading>
+<Heading size="large">Section Title</Heading>
+<Heading size="medium">Subsection Title</Heading>
+```
+
+#### 2. Heading Size Guidelines
+```tsx
+// Extra extra large (32px) - Main page title
+<Heading size="xxlarge">Main Page Title</Heading>
+
+// Large (24px) - Section titles
+<Heading size="large">Section Title</Heading>
+
+// Medium (20px) - Subsection titles
+<Heading size="medium">Subsection Title</Heading>
+```
+
+### Complete Example of Proper Usage
+```tsx
+import { Text } from '@atlaskit/primitives';
+import Heading from '@atlaskit/heading';
+import Button, { IconButton } from '@atlaskit/button/new';
+import { IconTile } from '@atlaskit/icon';
+import AddIcon from '@atlaskit/icon/core/add';
+import EditIcon from '@atlaskit/icon/core/edit';
+import CheckMarkIcon from '@atlaskit/icon/core/check-mark';
+
+// ✅ CORRECT - Proper component usage
+<div>
+  <Heading size="large">Project Dashboard</Heading>
+  
+  <Text size="large">
+    Welcome to your project dashboard. Here you can manage your tasks and track progress.
+  </Text>
+  
+  <Text size="medium" color="color.text.subtle">
+    Last updated 2 hours ago
+  </Text>
+  
+  <Button appearance="primary" iconBefore={AddIcon}>
+    Create New Task
+  </Button>
+  
+  <IconButton icon={EditIcon} label="Edit project" />
+  
+  {/* IconTile for status indicators */}
+  <IconTile 
+    icon={CheckMarkIcon} 
+    label="Completed status" 
+    appearance="green" 
+    shape="circle" 
+    size="24" 
+  />
+</div>
+```
+
 ## Critical Design Decisions
 
 ### 1. Styling Approach Selection
@@ -53,6 +283,18 @@ Atlassian's design system prioritizes:
 3. **Is it a form element?**
    - Yes → Use @atlaskit/form with Field wrapper
    - No → Use standalone components
+
+4. **Is it text content?**
+   - Yes → Use Text primitive (never p or span)
+   - No → Use appropriate component
+
+5. **Is it a heading?**
+   - Yes → Use Heading component (never h1, h2, etc.)
+   - No → Use appropriate component
+
+6. **Is it a button with only an icon?**
+   - Yes → Use IconButton (never Button with iconOnly)
+   - No → Use Button with iconBefore/iconAfter
 
 ### 3. Navigation Architecture
 
@@ -158,6 +400,36 @@ Atlassian's design system prioritizes:
 
 ### ❌ What NOT to do
 
+#### Button Anti-Patterns
+```tsx
+// ❌ WRONG - Using old button import
+import Button from '@atlaskit/button';
+
+// ❌ WRONG - Using iconOnly prop instead of IconButton
+<Button iconBefore={AddIcon} iconOnly>
+  Add
+</Button>
+
+// ❌ WRONG - Using IconButton for buttons with text
+<IconButton icon={AddIcon} label="Add">
+  Create Item
+</IconButton>
+```
+
+#### Text Anti-Patterns
+```tsx
+// ❌ WRONG - Using HTML text tags
+<p>This is body text</p>
+<span>This is small text</span>
+<h1>This is a heading</h1>
+<h2>This is a subheading</h2>
+
+// ❌ WRONG - Using inline styles for text
+<div style={{ fontSize: '16px', color: '#172B4D' }}>
+  This is text
+</div>
+```
+
 #### Styling Anti-Patterns
 ```tsx
 // ❌ Don't hardcode values
@@ -227,6 +499,16 @@ import AddIcon from '@atlaskit/icon/glyph/add';
    - Use exact icon names and paths
    - Include proper labels
 
+6. **Use correct button patterns**
+   - Icon-only buttons → IconButton
+   - Buttons with text → Button with iconBefore/iconAfter
+   - Always import from @atlaskit/button/new
+
+7. **Use text primitives**
+   - All text content → Text component
+   - All headings → Heading component
+   - Never use HTML p, span, h1, h2, etc.
+
 ### When Converting Existing Code
 
 1. **Map existing patterns to Atlaskit**
@@ -249,6 +531,16 @@ import AddIcon from '@atlaskit/icon/glyph/add';
    - Use correct import paths
    - Add proper labels
 
+5. **Update button usage**
+   - Replace iconOnly buttons with IconButton
+   - Update button imports to @atlaskit/button/new
+   - Ensure proper icon placement
+
+6. **Replace HTML text tags**
+   - p tags → Text component
+   - span tags → Text component
+   - h1, h2, etc. → Heading component
+
 ## Key Takeaways
 
 ### Remember These Critical Points:
@@ -262,6 +554,10 @@ import AddIcon from '@atlaskit/icon/glyph/add';
 8. **Verify icons exist** - Always check approved icon list before suggesting
 9. **Use exact icon paths** - Follow `@atlaskit/icon/core/[exact-name]` pattern
 10. **Include icon labels** - Always add meaningful labels for accessibility
+11. **IconButton for icon-only** - Never use Button with iconOnly prop
+12. **Button/new only** - Never use @atlaskit/button, always use @atlaskit/button/new
+13. **Text primitive for text** - Never use p or span tags, always use Text component
+14. **Heading component for headings** - Never use h1, h2, etc., always use Heading component
 
 ### Success Metrics:
 - ✅ Components use semantic tokens
@@ -273,6 +569,11 @@ import AddIcon from '@atlaskit/icon/glyph/add';
 - ✅ Icons are from approved list only
 - ✅ Icon import paths are correct
 - ✅ Icon labels are meaningful and accessible
+- ✅ Icon-only buttons use IconButton component
+- ✅ All buttons import from @atlaskit/button/new
+- ✅ All text content uses Text primitive
+- ✅ All headings use Heading component
+- ✅ No HTML p, span, h1, h2, etc. tags used
 
 The Atlassian Design System is designed to make building consistent, accessible, and performant applications easier. Focus on the principles and let the system guide your decisions.
 

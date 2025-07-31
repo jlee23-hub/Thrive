@@ -23,7 +23,7 @@ import Textfield from '@atlaskit/textfield';
 import Select from '@atlaskit/select';
 
 // Primitives - use named imports
-import { Stack, Inline, Box, Grid } from '@atlaskit/primitives';
+import { Stack, Inline, Box, Grid, Text } from '@atlaskit/primitives';
 
 // Icons - import from core folder
 import AddIcon from '@atlaskit/icon/core/add';
@@ -369,8 +369,6 @@ import WarningIcon from '@atlaskit/icon/core/warning';
 ```tsx
 import { Text } from "@atlaskit/primitives";
 import Heading from "@atlaskit/heading";
-import "@atlaskit/primitives?css&bundle-deps";
-import "@atlaskit/heading?css&bundle-deps";
 ```
 
 ### Usage
@@ -385,14 +383,29 @@ import "@atlaskit/heading?css&bundle-deps";
 ```
 
 ### Size Reference
-| Component | Size | Font Size | Usage |
-|-----------|------|-----------|-------|
-| Heading | xxlarge | 32px | Main title |
-| Heading | large | 24px | Section title |
-| Heading | medium | 20px | Subsection |
-| Text | large | 16px | Body text |
-| Text | medium | 14px | Secondary |
-| Text | small | 12px | Caption |
+
+| Component | Size Prop | Font Size | Usage         |
+|-----------|-----------|-----------|---------------|
+| Heading   | xxlarge   | 35px      | Main title    |
+| Heading   | xlarge    | 29px      | Large heading |
+| Heading   | large     | 24px      | Section title / Large heading |
+| Heading   | medium    | 20px      | Subsection / Medium heading   |
+| Heading   | small     | 16px      | Small heading |
+| Heading   | xsmall    | 14px      | Small heading |
+| Heading   | xxsmall   | 12px      | Small heading |
+| Text      | large     | 16px/18px | Body text     |
+| Text      | medium    | 14px      | Secondary     |
+| Text      | small     | 12px      | Caption       |
+
+
+### IconTile Size Reference
+| Size | Dimensions | Usage |
+|------|------------|-------|
+| `16` | 16px × 16px | Small status indicators |
+| `24` | 24px × 24px | Standard icon tiles |
+| `32` | 32px × 32px | Medium feature indicators |
+| `40` | 40px × 40px | Large feature indicators |
+| `48` | 48px × 48px | Extra large indicators |
 
 ## Component Quick Reference
 
@@ -476,7 +489,7 @@ import Modal, { ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalTransition
         <ModalTitle>Confirm Action</ModalTitle>
       </ModalHeader>
       <ModalBody>
-        <p>Are you sure you want to delete this item?</p>
+        <Text size="large">Are you sure you want to delete this item?</Text>
       </ModalBody>
       <ModalFooter>
         <Button appearance="subtle" onClick={onClose}>Cancel</Button>

@@ -23,6 +23,8 @@ import Badge from '@atlaskit/badge';
 import Button from '@atlaskit/button/new';
 import Avatar from '@atlaskit/avatar';
 import { ConfluenceIcon } from '@atlaskit/logo';
+import { Text } from '@atlaskit/primitives';
+import Heading from '@atlaskit/heading';
 
 // Icons - ALWAYS import from core
 import HomeIcon from '@atlaskit/icon/core/home';
@@ -90,7 +92,7 @@ export const NavigationLayout = ({ children }) => (
 
       <TopNavEnd>
         <Button
-          iconBefore={<SearchIcon label="Search" />}
+          iconBefore={SearchIcon}
           onClick={() => {}}
         >
           Quick Search
@@ -350,7 +352,7 @@ import Button from '@atlaskit/button/new';
         <ModalTitle>Confirm Action</ModalTitle>
       </ModalHeader>
       <ModalBody>
-        <p>Are you sure you want to delete this item?</p>
+        <Text size="large">Are you sure you want to delete this item?</Text>
       </ModalBody>
       <ModalFooter>
         <Button appearance="subtle" onClick={onClose}>
@@ -403,16 +405,16 @@ import SectionMessage from '@atlaskit/section-message';
 
 // Simple messages
 <SectionMessage appearance="success" title="Success">
-  <p>Operation completed successfully.</p>
+  <Text size="large">Operation completed successfully.</Text>
 </SectionMessage>
 
 <SectionMessage appearance="discovery" title="New Feature">
-  <p>Check out our new collaboration tools!</p>
+  <Text size="large">Check out our new collaboration tools!</Text>
 </SectionMessage>
 
 // Message with actions
 <SectionMessage appearance="warning" title="Action Required">
-  <p>Your subscription expires in 7 days.</p>
+  <Text size="large">Your subscription expires in 7 days.</Text>
   <SectionMessage.Actions>
     <SectionMessage.Action href="/billing">Renew Now</SectionMessage.Action>
     <SectionMessage.Action href="/plans">View Plans</SectionMessage.Action>
@@ -421,7 +423,7 @@ import SectionMessage from '@atlaskit/section-message';
 
 // Rich content message
 <SectionMessage appearance="information" title="Getting Started">
-  <p>Welcome to the platform! Here's what you can do:</p>
+  <Text size="large">Welcome to the platform! Here's what you can do:</Text>
   <ul>
     <li>Create your first project</li>
     <li>Invite team members</li>
@@ -575,7 +577,7 @@ import SaveIcon from '@atlaskit/icon/core/save';
 
 // Tooltip with custom delay
 <Tooltip content="Quick info" delay={0}>
-  <span>Instant tooltip</span>
+  <Text size="medium">Instant tooltip</Text>
 </Tooltip>
 ```
 
@@ -630,29 +632,16 @@ export const Card = ({ title, description, status }) => {
     boxShadow: token('elevation.shadow.overflow'),
   };
 
-  const titleStyle = {
-    fontSize: token('font.size.200'),
-    fontWeight: token('font.weight.semibold'),
-    color: token('color.text'),
-    margin: 0,
-    marginBottom: token('space.100'),
-  };
 
-  const descriptionStyle = {
-    fontSize: token('font.size.100'),
-    color: token('color.text.subtle'),
-    margin: 0,
-    marginBottom: token('space.200'),
-  };
 
   return (
     <div style={cardStyle}>
       <Stack space="space.200">
         <Inline spread="space-between" alignBlock="center">
-          <h3 style={titleStyle}>{title}</h3>
+          <Heading size="medium">{title}</Heading>
           <Badge appearance="primary">{status}</Badge>
         </Inline>
-        <p style={descriptionStyle}>{description}</p>
+        <Text size="large">{description}</Text>
         <Inline space="space.100">
           <Button appearance="primary" spacing="compact">View</Button>
           <Button spacing="compact">Edit</Button>
@@ -687,16 +676,7 @@ const StatCard = ({ title, value, icon, trend }) => {
     iconWrapper: {
       color: token('color.text.subtlest'),
     },
-    value: {
-      margin: 0,
-      fontSize: '24px',
-      fontWeight: token('font.weight.bold'),
-    },
-    title: {
-      margin: 0,
-      color: token('color.text.subtle'),
-      fontSize: token('font.size.100'),
-    },
+
   };
 
   return (
@@ -710,8 +690,8 @@ const StatCard = ({ title, value, icon, trend }) => {
             </Lozenge>
           )}
         </Inline>
-        <h3 style={styles.value}>{value}</h3>
-        <p style={styles.title}>{title}</p>
+        <Heading size="large">{value}</Heading>
+        <Text size="medium" color="color.text.subtle">{title}</Text>
       </Stack>
     </div>
   );
@@ -719,20 +699,6 @@ const StatCard = ({ title, value, icon, trend }) => {
 
 export const Dashboard = () => {
   const styles = {
-    heading: {
-      margin: 0,
-      fontSize: token('font.size.500'),
-      fontWeight: token('font.weight.bold'),
-    },
-    subheading: {
-      margin: 0,
-      fontSize: token('font.size.300'),
-      fontWeight: token('font.weight.semibold'),
-    },
-    subtleText: {
-      color: token('color.text.subtle'),
-      fontSize: token('font.size.075'),
-    },
     section: {
       padding: token('space.300'),
       backgroundColor: token('color.background.neutral'),
@@ -752,12 +718,12 @@ export const Dashboard = () => {
       {/* Header */}
       <Inline spread="space-between" alignBlock="center">
         <Stack space="space.100">
-          <h1 style={styles.heading}>Project Alpha Dashboard</h1>
+          <Heading size="xxlarge">Project Alpha Dashboard</Heading>
           <Inline space="space.100" alignBlock="center">
             <Lozenge appearance="success">Active</Lozenge>
-            <span style={styles.subtleText}>
+            <Text size="small" color="color.text.subtle">
               Last updated 2 hours ago
-            </span>
+            </Text>
           </Inline>
         </Stack>
         <Button appearance="primary">Create Report</Button>
@@ -788,7 +754,7 @@ export const Dashboard = () => {
       <div style={styles.section}>
         <Stack space="space.200">
           <Inline spread="space-between" alignBlock="center">
-            <h2 style={styles.subheading}>Team Members</h2>
+            <Heading size="large">Team Members</Heading>
             <Badge appearance="primary">{teamMembers.length}</Badge>
           </Inline>
           <AvatarGroup
@@ -1199,11 +1165,11 @@ import DeleteIcon from '@atlaskit/icon/core/delete';
 <Stack space="space.200">
   <Inline space="space.100" alignBlock="center">
     <AddIcon label="Add" />
-    <span>Add new item</span>
+    <Text size="medium">Add new item</Text>
   </Inline>
   <Inline space="space.100" alignBlock="center">
     <EditIcon label="Edit" />
-    <span>Edit existing item</span>
+    <Text size="medium">Edit existing item</Text>
   </Inline>
 </Stack>
 ```
@@ -1280,4 +1246,446 @@ import SettingsIcon from '@atlaskit/icon/core/settings';
 <AddIcon />
 <EditIcon />
 <DeleteIcon />
+```
+
+## IconTile Usage Examples
+
+### Basic IconTile Usage
+```tsx
+import { IconTile } from '@atlaskit/icon';
+import AddIcon from '@atlaskit/icon/core/add';
+import CheckMarkIcon from '@atlaskit/icon/core/check-mark';
+import BugIcon from '@atlaskit/icon/core/bug';
+import AutomationIcon from '@atlaskit/icon/core/automation';
+
+// Standard icon tile
+<IconTile 
+  icon={AddIcon} 
+  label="Add icon" 
+  appearance="blue" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Status indicator
+<IconTile 
+  icon={CheckMarkIcon} 
+  label="Success status" 
+  appearance="green" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Category indicator
+<IconTile 
+  icon={BugIcon} 
+  label="Bug category" 
+  appearance="red" 
+  shape="square" 
+  size="24" 
+/>
+
+// Feature indicator
+<IconTile 
+  icon={AutomationIcon} 
+  label="Automation feature" 
+  appearance="blueBold" 
+  shape="circle" 
+  size="40" 
+/>
+```
+
+### IconTile Size Examples
+```tsx
+import { IconTile } from '@atlaskit/icon';
+import AddIcon from '@atlaskit/icon/core/add';
+
+// Small (16px) - For compact UI
+<IconTile 
+  icon={AddIcon} 
+  label="Add icon" 
+  appearance="blue" 
+  shape="circle" 
+  size="16" 
+/>
+
+// Standard (24px) - Most common size
+<IconTile 
+  icon={AddIcon} 
+  label="Add icon" 
+  appearance="blue" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Medium (32px) - For emphasis
+<IconTile 
+  icon={AddIcon} 
+  label="Add icon" 
+  appearance="blue" 
+  shape="circle" 
+  size="32" 
+/>
+
+// Large (40px) - For feature highlights
+<IconTile 
+  icon={AddIcon} 
+  label="Add icon" 
+  appearance="blue" 
+  shape="circle" 
+  size="40" 
+/>
+
+// Extra large (48px) - For prominent features
+<IconTile 
+  icon={AddIcon} 
+  label="Add icon" 
+  appearance="blue" 
+  shape="circle" 
+  size="48" 
+/>
+```
+
+### IconTile Appearance Examples
+```tsx
+import { IconTile } from '@atlaskit/icon';
+import CheckMarkIcon from '@atlaskit/icon/core/check-mark';
+import ErrorIcon from '@atlaskit/icon/core/error';
+import WarningIcon from '@atlaskit/icon/core/warning';
+import InformationIcon from '@atlaskit/icon/core/information';
+
+// Success states
+<IconTile 
+  icon={CheckMarkIcon} 
+  label="Success" 
+  appearance="green" 
+  shape="circle" 
+  size="24" 
+/>
+
+<IconTile 
+  icon={CheckMarkIcon} 
+  label="Success" 
+  appearance="greenBold" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Error states
+<IconTile 
+  icon={ErrorIcon} 
+  label="Error" 
+  appearance="red" 
+  shape="circle" 
+  size="24" 
+/>
+
+<IconTile 
+  icon={ErrorIcon} 
+  label="Error" 
+  appearance="redBold" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Warning states
+<IconTile 
+  icon={WarningIcon} 
+  label="Warning" 
+  appearance="yellow" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Information states
+<IconTile 
+  icon={InformationIcon} 
+  label="Information" 
+  appearance="blue" 
+  shape="circle" 
+  size="24" 
+/>
+
+<IconTile 
+  icon={InformationIcon} 
+  label="Information" 
+  appearance="blueBold" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Purple accent
+<IconTile 
+  icon={AddIcon} 
+  label="Add" 
+  appearance="purple" 
+  shape="circle" 
+  size="24" 
+/>
+```
+
+### IconTile Shape Examples
+```tsx
+import { IconTile } from '@atlaskit/icon';
+import AddIcon from '@atlaskit/icon/core/add';
+import BugIcon from '@atlaskit/icon/core/bug';
+
+// Circular tiles (most common)
+<IconTile 
+  icon={AddIcon} 
+  label="Add icon" 
+  appearance="blue" 
+  shape="circle" 
+  size="24" 
+/>
+
+// Square tiles (for categories)
+<IconTile 
+  icon={BugIcon} 
+  label="Bug category" 
+  appearance="red" 
+  shape="square" 
+  size="24" 
+/>
+```
+
+### IconTile in Different Contexts
+```tsx
+import { IconTile } from '@atlaskit/icon';
+import { Stack, Inline } from '@atlaskit/primitives';
+import CheckMarkIcon from '@atlaskit/icon/core/check-mark';
+import ErrorIcon from '@atlaskit/icon/core/error';
+import WarningIcon from '@atlaskit/icon/core/warning';
+import BugIcon from '@atlaskit/icon/core/bug';
+import FeatureIcon from '@atlaskit/icon/core/component';
+
+// Status indicators in a list
+<Stack space="space.200">
+  <Inline space="space.100" alignBlock="center">
+    <IconTile 
+      icon={CheckMarkIcon} 
+      label="Completed" 
+      appearance="green" 
+      shape="circle" 
+      size="16" 
+    />
+    <Text size="medium">Task completed successfully</Text>
+  </Inline>
+  
+  <Inline space="space.100" alignBlock="center">
+    <IconTile 
+      icon={ErrorIcon} 
+      label="Error" 
+      appearance="red" 
+      shape="circle" 
+      size="16" 
+    />
+    <Text size="medium">Task failed to complete</Text>
+  </Inline>
+  
+  <Inline space="space.100" alignBlock="center">
+    <IconTile 
+      icon={WarningIcon} 
+      label="Warning" 
+      appearance="yellow" 
+      shape="circle" 
+      size="16" 
+    />
+    <Text size="medium">Task has warnings</Text>
+  </Inline>
+</Stack>
+
+// Category indicators in a grid
+<Grid gap="space.200" templateColumns="repeat(auto-fit, minmax(120px, 1fr))">
+  <Stack space="space.100" alignBlock="center">
+    <IconTile 
+      icon={BugIcon} 
+      label="Bugs" 
+      appearance="red" 
+      shape="square" 
+      size="32" 
+    />
+    <Text size="small">Bugs</Text>
+  </Stack>
+  
+  <Stack space="space.100" alignBlock="center">
+    <IconTile 
+      icon={FeatureIcon} 
+      label="Features" 
+      appearance="blue" 
+      shape="square" 
+      size="32" 
+    />
+    <Text size="small">Features</Text>
+  </Stack>
+</Grid>
+```
+
+### IconTile vs IconButton Comparison
+```tsx
+import { IconTile } from '@atlaskit/icon';
+import { IconButton } from '@atlaskit/button/new';
+import AddIcon from '@atlaskit/icon/core/add';
+import CheckMarkIcon from '@atlaskit/icon/core/check-mark';
+
+// ✅ CORRECT - IconTile for status/category indicators (non-interactive)
+<IconTile 
+  icon={CheckMarkIcon} 
+  label="Success status" 
+  appearance="green" 
+  shape="circle" 
+  size="24" 
+/>
+
+// ✅ CORRECT - IconButton for interactive actions
+<IconButton 
+  icon={AddIcon} 
+  label="Add new item" 
+/>
+
+// ❌ WRONG - Don't use IconButton for status indicators
+<IconButton 
+  icon={CheckMarkIcon} 
+  label="Success"
+  style={{ 
+    backgroundColor: token('color.background.accent.green'),
+    borderRadius: '50%'
+  }}
+/>
+
+// ❌ WRONG - Don't use IconTile for interactive buttons
+<IconTile 
+  icon={AddIcon} 
+  label="Add"
+  appearance="blue" 
+  shape="circle" 
+  size="24"
+  onClick={() => {}} // IconTile is not interactive
+/>
+```
+
+### IconTile in Cards and Panels
+```tsx
+import { IconTile } from '@atlaskit/icon';
+import { Stack, Inline } from '@atlaskit/primitives';
+import Heading from '@atlaskit/heading';
+import { Text } from '@atlaskit/primitives';
+import AutomationIcon from '@atlaskit/icon/core/automation';
+import BugIcon from '@atlaskit/icon/core/bug';
+import FeatureIcon from '@atlaskit/icon/core/component';
+
+// Feature card with IconTile
+<div style={{
+  backgroundColor: token('color.background.neutral'),
+  border: `1px solid ${token('color.border')}`,
+  borderRadius: token('border.radius.200'),
+  padding: token('space.300'),
+}}>
+  <Stack space="space.200">
+    <Inline space="space.200" alignBlock="center">
+      <IconTile 
+        icon={AutomationIcon} 
+        label="Automation feature" 
+        appearance="blueBold" 
+        shape="circle" 
+        size="40" 
+      />
+      <Heading size="medium">Automation Rules</Heading>
+    </Inline>
+    
+    <Text size="medium">
+      Create automated workflows to streamline your processes.
+    </Text>
+  </Stack>
+</div>
+
+// Status panel with multiple IconTiles
+<div style={{
+  backgroundColor: token('color.background.neutral'),
+  border: `1px solid ${token('color.border')}`,
+  borderRadius: token('border.radius.200'),
+  padding: token('space.300'),
+}}>
+  <Stack space="space.200">
+    <Heading size="medium">Project Status</Heading>
+    
+    <Inline space="space.200">
+      <Stack space="space.100" alignBlock="center">
+        <IconTile 
+          icon={CheckMarkIcon} 
+          label="Completed tasks" 
+          appearance="green" 
+          shape="circle" 
+          size="24" 
+        />
+        <Text size="small">12 Completed</Text>
+      </Stack>
+      
+      <Stack space="space.100" alignBlock="center">
+        <IconTile 
+          icon={BugIcon} 
+          label="Open bugs" 
+          appearance="red" 
+          shape="circle" 
+          size="24" 
+        />
+        <Text size="small">3 Open</Text>
+      </Stack>
+      
+      <Stack space="space.100" alignBlock="center">
+        <IconTile 
+          icon={FeatureIcon} 
+          label="In progress" 
+          appearance="blue" 
+          shape="circle" 
+          size="24" 
+        />
+        <Text size="small">5 In Progress</Text>
+      </Stack>
+    </Inline>
+  </Stack>
+</div>
+```
+
+### IconTile Best Practices
+```tsx
+// ✅ Good - Use appropriate sizes
+<IconTile size="16" /> // Small status indicators
+<IconTile size="24" /> // Standard tiles
+<IconTile size="40" /> // Feature highlights
+
+// ✅ Good - Use meaningful labels
+<IconTile 
+  icon={CheckMarkIcon} 
+  label="Task completed successfully" 
+  appearance="green" 
+  shape="circle" 
+  size="24" 
+/>
+
+// ✅ Good - Use appropriate appearances
+<IconTile appearance="green" />   // Success states
+<IconTile appearance="red" />     // Error states
+<IconTile appearance="yellow" />  // Warning states
+<IconTile appearance="blue" />    // Information states
+
+// ❌ Avoid - Don't make IconTile interactive
+<IconTile 
+  icon={AddIcon} 
+  label="Add"
+  appearance="blue" 
+  shape="circle" 
+  size="24"
+  onClick={() => {}} // IconTile should not be interactive
+/>
+
+// ❌ Avoid - Don't use for navigation
+<IconTile 
+  icon={HomeIcon} 
+  label="Home"
+  appearance="blue" 
+  shape="circle" 
+  size="24"
+  href="/home" // Use IconButton for navigation
+/>
 ```
