@@ -1,0 +1,40 @@
+/* REQUIRED: Navigation System Overrides - CRITICAL FOR PROPER DISPLAY */
+/* ._1e0cglyw {
+  display: inherit !important;
+} */
+
+._1e0cglyw._1m0a19ly {
+  display: none !important;
+}
+
+._1o9zidpf {
+  align-items: center !important;
+}
+
+/* ._bozg1crf {
+  display: none;
+} */
+
+._dm2518uv {
+  display: initial;
+}
+
+/* REQUIRED: Search container */
+._mizu194a._1ah31bk5._ra3xnqa1._128m1bk5 {
+  display: inherit !important;
+}
+
+/* REQUIRED: Right nav items */
+._zulp1b66._4cvr1h6o._1e0cglyw._181n1txw {
+  display: inherit !important;
+}
+
+/* REQUIRED: Expandable menu item closed */
+div[role="list"]._bozg1crf._1e0cglyw {
+  display: none;
+}
+
+/* REQUIRED: Expandable menu item open */
+div[role="list"]._bozg1crf {
+  display: inherit;
+}
