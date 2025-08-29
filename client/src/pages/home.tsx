@@ -11,6 +11,7 @@ import { Stack, Text } from "@atlaskit/primitives";
 import { ThemeWrapper } from "../lib/ThemeWrapper";
 import { token } from "@atlaskit/tokens";
 import { Code } from "@atlaskit/code";
+import Button from "@atlaskit/button/new";
 
 import { setBooleanFeatureFlagResolver } from "@atlaskit/platform-feature-flags";
 
