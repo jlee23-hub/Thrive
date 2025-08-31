@@ -35,105 +35,113 @@ import LinkExternalIcon from "@atlaskit/icon/core/link-external";
 
 export function SideNavigation({ isCollapsed }: any) {
   return (
-    <SideNav id="uid14" defaultCollapsed={isCollapsed}>
-      <SideNavContent>
-        <MenuList>
-          <LinkMenuItem
-            isSelected
-            href="/"
-            elemBefore={<PersonAvatarIcon label="" />}
-          >
-            For you
-          </LinkMenuItem>
-          <FlyoutMenuItem>
-            <FlyoutMenuItemTrigger elemBefore={<StarUnstarredIcon label="" />}>
-              Starred
-            </FlyoutMenuItemTrigger>
-            <FlyoutMenuItemContent>Insert content here</FlyoutMenuItemContent>
-          </FlyoutMenuItem>
-          <FlyoutMenuItem>
-            <FlyoutMenuItemTrigger elemBefore={<ClockIcon label="" />}>
-              Recent
-            </FlyoutMenuItemTrigger>
-            <FlyoutMenuItemContent>Insert content here</FlyoutMenuItemContent>
-          </FlyoutMenuItem>
-          <FlyoutMenuItem>
-            <FlyoutMenuItemTrigger elemBefore={<GlobeIcon label="" />}>
-              Spaces
-            </FlyoutMenuItemTrigger>
-            <FlyoutMenuItemContent>Insert content here</FlyoutMenuItemContent>
-          </FlyoutMenuItem>
-          <ExpandableMenuItem>
-            <ExpandableMenuItemTrigger
-              elemBefore={
-                <ProjectIcon label="" color="currentColor" spacing="spacious" />
-              }
+    !isCollapsed && (
+      <SideNav id="uid14">
+        <SideNavContent>
+          <MenuList>
+            <LinkMenuItem
+              isSelected
+              href="/"
+              elemBefore={<PersonAvatarIcon label="" />}
             >
-              Projects
-            </ExpandableMenuItemTrigger>
-            <ExpandableMenuItemContent>
-              <MenuSection isMenuListItem>
-                <MenuSectionHeading>Starred</MenuSectionHeading>
-                <LinkMenuItem
-                  href=""
-                  elemBefore={
-                    <Avatar label="" size="xsmall" appearance="square" />
-                  }
-                >
-                  Teams
-                </LinkMenuItem>
-              </MenuSection>
-              <MenuSection isMenuListItem>
-                <MenuSectionHeading>Recent</MenuSectionHeading>
-                <LinkMenuItem
-                  href=""
-                  elemBefore={
-                    <Avatar label="" size="xsmall" appearance="square" />
-                  }
-                >
-                  Teams
-                </LinkMenuItem>
-              </MenuSection>
-            </ExpandableMenuItemContent>
-          </ExpandableMenuItem>
-          <LinkMenuItem href="" elemBefore={<TeamsIcon label="" />}>
-            Teams
-          </LinkMenuItem>
+              For you
+            </LinkMenuItem>
+            <FlyoutMenuItem>
+              <FlyoutMenuItemTrigger
+                elemBefore={<StarUnstarredIcon label="" />}
+              >
+                Starred
+              </FlyoutMenuItemTrigger>
+              <FlyoutMenuItemContent>Insert content here</FlyoutMenuItemContent>
+            </FlyoutMenuItem>
+            <FlyoutMenuItem>
+              <FlyoutMenuItemTrigger elemBefore={<ClockIcon label="" />}>
+                Recent
+              </FlyoutMenuItemTrigger>
+              <FlyoutMenuItemContent>Insert content here</FlyoutMenuItemContent>
+            </FlyoutMenuItem>
+            <FlyoutMenuItem>
+              <FlyoutMenuItemTrigger elemBefore={<GlobeIcon label="" />}>
+                Spaces
+              </FlyoutMenuItemTrigger>
+              <FlyoutMenuItemContent>Insert content here</FlyoutMenuItemContent>
+            </FlyoutMenuItem>
+            <ExpandableMenuItem>
+              <ExpandableMenuItemTrigger
+                elemBefore={
+                  <ProjectIcon
+                    label=""
+                    color="currentColor"
+                    spacing="spacious"
+                  />
+                }
+              >
+                Projects
+              </ExpandableMenuItemTrigger>
+              <ExpandableMenuItemContent>
+                <MenuSection isMenuListItem>
+                  <MenuSectionHeading>Starred</MenuSectionHeading>
+                  <LinkMenuItem
+                    href=""
+                    elemBefore={
+                      <Avatar label="" size="xsmall" appearance="square" />
+                    }
+                  >
+                    Teams
+                  </LinkMenuItem>
+                </MenuSection>
+                <MenuSection isMenuListItem>
+                  <MenuSectionHeading>Recent</MenuSectionHeading>
+                  <LinkMenuItem
+                    href=""
+                    elemBefore={
+                      <Avatar label="" size="xsmall" appearance="square" />
+                    }
+                  >
+                    Teams
+                  </LinkMenuItem>
+                </MenuSection>
+              </ExpandableMenuItemContent>
+            </ExpandableMenuItem>
+            <LinkMenuItem href="" elemBefore={<TeamsIcon label="" />}>
+              Teams
+            </LinkMenuItem>
+            <TopLevelSpacer />
+            <LinkMenuItem
+              href=""
+              elemBefore={
+                <HubIcon label="" size="xsmall" shouldUseNewLogoDesign />
+              }
+              elemAfter={<LinkExternalIcon label="" size="small" />}
+            >
+              G'Day
+            </LinkMenuItem>
+            <LinkMenuItem
+              href=""
+              elemBefore={
+                <JiraIcon label="" size="xsmall" shouldUseNewLogoDesign />
+              }
+              elemAfter={<LinkExternalIcon label="" size="small" />}
+            >
+              Jira
+            </LinkMenuItem>
+            <LinkMenuItem
+              href=""
+              elemBefore={
+                <LoomIcon label="" size="xsmall" shouldUseNewLogoDesign />
+              }
+              elemAfter={<LinkExternalIcon label="" size="small" />}
+            >
+              Loom
+            </LinkMenuItem>
+          </MenuList>
           <TopLevelSpacer />
-          <LinkMenuItem
-            href=""
-            elemBefore={
-              <HubIcon label="" size="xsmall" shouldUseNewLogoDesign />
-            }
-            elemAfter={<LinkExternalIcon label="" size="small" />}
-          >
-            G'Day
-          </LinkMenuItem>
-          <LinkMenuItem
-            href=""
-            elemBefore={
-              <JiraIcon label="" size="xsmall" shouldUseNewLogoDesign />
-            }
-            elemAfter={<LinkExternalIcon label="" size="small" />}
-          >
-            Jira
-          </LinkMenuItem>
-          <LinkMenuItem
-            href=""
-            elemBefore={
-              <LoomIcon label="" size="xsmall" shouldUseNewLogoDesign />
-            }
-            elemAfter={<LinkExternalIcon label="" size="small" />}
-          >
-            Loom
-          </LinkMenuItem>
-        </MenuList>
-        <TopLevelSpacer />
-        <ButtonMenuItem elemBefore={<CustomizeIcon label="" />}>
-          Customize sidebar
-        </ButtonMenuItem>
-      </SideNavContent>
-      <SideNavFooter>Footer</SideNavFooter>
-    </SideNav>
+          <ButtonMenuItem elemBefore={<CustomizeIcon label="" />}>
+            Customize sidebar
+          </ButtonMenuItem>
+        </SideNavContent>
+        <SideNavFooter>Footer</SideNavFooter>
+      </SideNav>
+    )
   );
 }
