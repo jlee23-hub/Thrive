@@ -53,7 +53,7 @@ export default function Home() {
       <ThemeWrapper>
         <PageLayoutRoot>
           <TopNavigation
-            onToggleSidebar={toggleSidebar}
+            toggleSidebar={toggleSidebar}
             isCollapsed={isCollapsed}
           />
           <SideNavigation isCollapsed={isCollapsed} />
