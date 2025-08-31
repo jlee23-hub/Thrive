@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import AppProvider from "@atlaskit/app-provider";
 
@@ -6,8 +5,6 @@ import { Root as PageLayoutRoot } from "@atlaskit/navigation-system/layout/root"
 import { Main } from "@atlaskit/navigation-system/layout/main";
 import { TopNavigation } from "../components/TopNavigation";
 import { SideNavigation } from "../components/SideNavigation";
-
-import { ThemeWrapper } from "../lib/ThemeWrapper";
 
 import { setBooleanFeatureFlagResolver } from "@atlaskit/platform-feature-flags";
 
@@ -47,21 +44,20 @@ export default function Home() {
 
   return (
     <AppProvider
+      defaultColorMode="light"
       defaultTheme={{
         typography: "typography-refreshed",
         shape: "shape",
       }}
     >
-      <ThemeWrapper>
-        <PageLayoutRoot>
-          <TopNavigation
-            toggleSidebar={toggleSidebar}
-            isCollapsed={isCollapsed}
-          />
-          <SideNavigation isCollapsed={isCollapsed} />
-          <Main>Add content here</Main>
-        </PageLayoutRoot>
-      </ThemeWrapper>
+      <PageLayoutRoot>
+        <TopNavigation
+          toggleSidebar={toggleSidebar}
+          isCollapsed={isCollapsed}
+        />
+        <SideNavigation isCollapsed={isCollapsed} />
+        <Main>Add content here</Main>
+      </PageLayoutRoot>
     </AppProvider>
   );
 }
