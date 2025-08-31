@@ -23,7 +23,6 @@ import AiChatIcon from "@atlaskit/icon/core/ai-chat";
 import SidebarCollapseIcon from "@atlaskit/icon/core/sidebar-collapse";
 import SidebarExpandIcon from "@atlaskit/icon/core/sidebar-expand";
 import AppSwitcherIcon from "@atlaskit/icon/core/app-switcher";
-import { useSidebar } from "../pages/home";
 
 // Configuration for Confluence navigation
 const navConfig = {
@@ -48,9 +47,7 @@ const navConfig = {
   sideNavDefaultWidth: 280,
 };
 
-export function TopNavigation() {
-  const { isCollapsed, toggleSidebar } = useSidebar();
-
+export function TopNavigation({ toggleSidebar, isCollapsed }: any) {
   return (
     <TopNav>
       <TopNavStart>

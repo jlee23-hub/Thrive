@@ -32,11 +32,8 @@ import CustomizeIcon from "@atlaskit/icon/core/customize";
 import PersonAvatarIcon from "@atlaskit/icon/core/person-avatar";
 import StarUnstarredIcon from "@atlaskit/icon/core/star-unstarred";
 import LinkExternalIcon from "@atlaskit/icon/core/link-external";
-import { useSidebar } from "../pages/home";
 
-export function SideNavigation() {
-  const { isCollapsed } = useSidebar();
-
+export function SideNavigation({ isCollapsed }: any) {
   return (
     <SideNav id="uid14" defaultCollapsed={isCollapsed}>
       <SideNavContent>
