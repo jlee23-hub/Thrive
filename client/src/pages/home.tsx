@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+
+import React, { useState } from "react";
 import AppProvider from "@atlaskit/app-provider";
 
 import { Root as PageLayoutRoot } from "@atlaskit/navigation-system/layout/root";
@@ -27,13 +28,14 @@ const defaultFeatureFlags = [
  * Update the feature flag resolver to resolve new feature flags (as well as root defined flags)
  * This could accept feature flags at runtime, but not doing that.
  */
-export const resolveFeatureFlags = (featureFlags: string[] = []) => {
+const resolveFeatureFlags = (featureFlags: string[] = []) => {
   const flags = [...featureFlags, ...defaultFeatureFlags];
   setBooleanFeatureFlagResolver((flagKey) => {
     return flags.includes(flagKey);
   });
 };
 
+// Initialize feature flags once at module level
 resolveFeatureFlags();
 
 export default function Home() {
