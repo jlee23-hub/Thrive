@@ -7,6 +7,7 @@ import { TopNavigation } from "../components/TopNavigation";
 import { SideNavigation } from "../components/SideNavigation";
 
 import { setBooleanFeatureFlagResolver } from "@atlaskit/platform-feature-flags";
+import { token } from "@atlaskit/tokens";
 
 /**
  * List of default feature flags to enable:
@@ -36,12 +37,6 @@ const resolveFeatureFlags = (featureFlags: string[] = []) => {
 resolveFeatureFlags();
 
 export default function Home() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
   return (
     <AppProvider
       defaultColorMode="light"
@@ -50,14 +45,7 @@ export default function Home() {
         shape: "shape",
       }}
     >
-      <PageLayoutRoot>
-        <TopNavigation
-          toggleSidebar={toggleSidebar}
-          isCollapsed={isCollapsed}
-        />
-        <SideNavigation isCollapsed={isCollapsed} />
-        <Main>Add content here</Main>
-      </PageLayoutRoot>
+      <div style={{ padding: token("space.400") }}>Add content here</div>
     </AppProvider>
   );
 }

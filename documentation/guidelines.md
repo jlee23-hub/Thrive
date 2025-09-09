@@ -498,6 +498,128 @@ import ChevronDownIcon from '@atlaskit/icon/core/chevron-down';
 
 ---
 
+## banner-guidelines
+
+# Banner Component Guidelines
+
+## Overview
+The Banner component displays important system-level messages and announcements that require user attention in the Atlassian Design System.
+
+## Package
+```tsx
+import Banner from '@atlaskit/banner';
+```
+
+## Use Cases
+- **System announcements** - Important updates or maintenance notices
+- **Critical warnings** - Data loss or security alerts
+- **Error notifications** - System-wide error messages
+- **Feature announcements** - New functionality or changes
+- **Maintenance notices** - Scheduled downtime or updates
+
+## Prop Guidance
+- **appearance** - Visual style: announcement, error, warning
+- **isOpen** - Control visibility of the banner
+- **icon** - Optional icon to accompany the message
+- **children** - Banner content (text or JSX)
+
+## Content Guidelines
+- Use for critical system-level messaging only
+- Keep messages concise and actionable
+- Use sentence case
+- Include clear calls to action when needed
+- Reserve for information that affects all users
+- Use appropriate appearance for message severity
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic banner
+<div className="bg-blue-100 border-l-4 border-blue-500 p-4 mb-4">
+  <div className="flex">
+    <div className="ml-3">
+      <p className="text-sm text-blue-700">
+        Important system announcement
+      </p>
+    </div>
+  </div>
+</div>
+
+// Error banner
+<div className="bg-red-100 border-l-4 border-red-500 p-4 mb-4">
+  <div className="flex">
+    <div className="ml-3">
+      <p className="text-sm text-red-700">
+        System error occurred
+      </p>
+    </div>
+  </div>
+</div>
+```
+
+### ✅ After (ADS)
+```tsx
+import Banner from '@atlaskit/banner';
+
+// Announcement banner
+<Banner appearance="announcement" isOpen={true}>
+  Important system announcement
+</Banner>
+
+// Error banner
+<Banner appearance="error" isOpen={true}>
+  System error occurred
+</Banner>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Banners for Non-Critical Information
+```tsx
+// ❌ Wrong - Not critical enough for banner
+<Banner appearance="announcement" isOpen={true}>
+  Welcome to our new feature!
+</Banner>
+
+// ✅ Correct - Use section message or inline message
+<SectionMessage appearance="information">
+  Welcome to our new feature!
+</SectionMessage>
+```
+
+### ❌ Don't Leave Banners Open Indefinitely
+```tsx
+// ❌ Wrong - Banner always visible
+<Banner appearance="announcement" isOpen={true}>
+  System maintenance scheduled
+</Banner>
+
+// ✅ Correct - Control visibility
+<Banner 
+  appearance="announcement" 
+  isOpen={showMaintenanceBanner}
+>
+  System maintenance scheduled
+</Banner>
+```
+
+### ❌ Don't Use Wrong Appearance
+```tsx
+// ❌ Wrong - Error appearance for non-error
+<Banner appearance="error" isOpen={true}>
+  New feature available
+</Banner>
+
+// ✅ Correct - Use appropriate appearance
+<Banner appearance="announcement" isOpen={true}>
+  New feature available
+</Banner>
+```
+
+
+---
+
 ## badge-guidelines
 
 # Badge Component Guidelines
@@ -598,6 +720,635 @@ import Badge from '@atlaskit/badge';
 // ✅ Correct - Specific and descriptive
 <Badge appearance="primary">Draft</Badge>
 ```
+
+---
+
+## checkbox-guidelines
+
+# Checkbox Component Guidelines
+
+## Overview
+The Checkbox component allows users to select one or more options from a set of choices in the Atlassian Design System.
+
+## Package
+```tsx
+import { Checkbox } from '@atlaskit/checkbox';
+```
+
+## Use Cases
+- **Form inputs** - Allow multiple selections in forms
+- **Settings toggles** - Enable/disable features or options
+- **List selections** - Select multiple items from a list
+- **Agreement acceptance** - Terms and conditions, privacy policy
+- **Filter options** - Enable/disable filter criteria
+
+## Prop Guidance
+- **label** - Text label for the checkbox
+- **value** - Value when checked
+- **name** - Name attribute for form submission
+- **isChecked** - Controlled checked state
+- **defaultChecked** - Initial checked state (uncontrolled)
+- **isDisabled** - Disable the checkbox
+- **isInvalid** - Show error state
+- **isIndeterminate** - Show indeterminate state
+- **onChange** - Change handler function
+
+## Content Guidelines
+- Use clear, descriptive labels
+- Use sentence case for labels
+- Group related checkboxes together
+- Provide clear visual hierarchy
+- Use indeterminate state for "select all" functionality
+- Always provide labels for accessibility
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic checkbox
+<label className="flex items-center">
+  <input 
+    type="checkbox" 
+    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+  />
+  <span className="ml-2 text-sm text-gray-900">Option 1</span>
+</label>
+
+// Disabled checkbox
+<label className="flex items-center">
+  <input 
+    type="checkbox" 
+    disabled
+    className="h-4 w-4 text-gray-400 border-gray-300 rounded"
+  />
+  <span className="ml-2 text-sm text-gray-500">Disabled option</span>
+</label>
+```
+
+### ✅ After (ADS)
+```tsx
+import { Checkbox } from '@atlaskit/checkbox';
+
+// Basic checkbox
+<Checkbox
+  label="Option 1"
+  value="option1"
+  name="options"
+  onChange={handleChange}
+/>
+
+// Disabled checkbox
+<Checkbox
+  label="Disabled option"
+  value="disabled"
+  name="options"
+  isDisabled
+  onChange={handleChange}
+/>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Checkboxes for Single Selection
+```tsx
+// ❌ Wrong - Use radio buttons for single selection
+<div>
+  <Checkbox label="Option A" name="single" />
+  <Checkbox label="Option B" name="single" />
+  <Checkbox label="Option C" name="single" />
+</div>
+
+// ✅ Correct - Use radio buttons
+<RadioGroup
+  options={[
+    { name: 'single', value: 'a', label: 'Option A' },
+    { name: 'single', value: 'b', label: 'Option B' },
+    { name: 'single', value: 'c', label: 'Option C' }
+  ]}
+/>
+```
+
+### ❌ Don't Forget Labels
+```tsx
+// ❌ Wrong - No label for accessibility
+<Checkbox value="option1" onChange={handleChange} />
+
+// ✅ Correct - Always provide labels
+<Checkbox 
+  label="Option 1" 
+  value="option1" 
+  onChange={handleChange} 
+/>
+```
+
+### ❌ Don't Use Checkboxes for Actions
+```tsx
+// ❌ Wrong - Checkbox used for action
+<Checkbox 
+  label="Delete item" 
+  onChange={handleDelete} 
+/>
+
+// ✅ Correct - Use button for actions
+<Button appearance="danger" onClick={handleDelete}>
+  Delete item
+</Button>
+```
+
+
+---
+
+## progress-bar-guidelines
+
+# Progress Bar Component Guidelines
+
+## Overview
+The Progress Bar component provides visual feedback for ongoing processes and task completion status in the Atlassian Design System.
+
+## Package
+```tsx
+import ProgressBar from '@atlaskit/progress-bar';
+```
+
+## Use Cases
+- **Loading states** - Show progress during data fetching or processing
+- **Task completion** - Display completion percentage of multi-step processes
+- **File uploads** - Indicate upload progress
+- **Form submission** - Show processing status
+- **Installation/Setup** - Guide users through setup processes
+
+## Prop Guidance
+- **value** - Progress value between 0 and 1 (0 = 0%, 1 = 100%)
+- **isIndeterminate** - Show indeterminate loading state when true
+- **appearance** - Visual style: default, success, inverse
+- **ariaLabel** - Accessibility label for screen readers
+- **testId** - Testing identifier
+
+## Content Guidelines
+- Always provide meaningful ariaLabel for accessibility
+- Use determinate progress when you know the total progress
+- Use indeterminate progress when progress is unknown
+- Show success appearance when task is complete
+- Use inverse appearance on dark backgrounds
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic progress bar
+<div className="w-full bg-gray-200 rounded-full h-2.5">
+  <div 
+    className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+    style={{ width: '45%' }}
+  ></div>
+</div>
+
+// Indeterminate progress
+<div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+  <div className="bg-blue-600 h-2.5 rounded-full animate-pulse"></div>
+</div>
+```
+
+### ✅ After (ADS)
+```tsx
+import ProgressBar from '@atlaskit/progress-bar';
+
+// Determinate progress
+<ProgressBar 
+  value={0.45} 
+  ariaLabel="Upload progress: 45% complete" 
+/>
+
+// Indeterminate progress
+<ProgressBar 
+  isIndeterminate 
+  ariaLabel="Loading content" 
+/>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Progress Bars for Static Information
+```tsx
+// ❌ Wrong - Static information
+<ProgressBar value={1} ariaLabel="User profile complete" />
+
+// ✅ Correct - Use badges or status indicators
+<Badge appearance="success">Profile Complete</Badge>
+```
+
+### ❌ Don't Forget Accessibility Labels
+```tsx
+// ❌ Wrong - No accessibility information
+<ProgressBar value={0.75} />
+
+// ✅ Correct - Descriptive aria label
+<ProgressBar 
+  value={0.75} 
+  ariaLabel="File upload progress: 75% complete" 
+/>
+```
+
+### ❌ Don't Use Indeterminate for Known Progress
+```tsx
+// ❌ Wrong - Known progress shown as indeterminate
+<ProgressBar isIndeterminate ariaLabel="Processing 3 of 10 items" />
+
+// ✅ Correct - Show actual progress
+<ProgressBar 
+  value={0.3} 
+  ariaLabel="Processing 3 of 10 items: 30% complete" 
+/>
+```
+
+
+---
+
+## radio-guidelines
+
+# Radio Component Guidelines
+
+## Overview
+The Radio component allows users to select a single option from a set of mutually exclusive choices in the Atlassian Design System.
+
+## Package
+```tsx
+import { Radio, RadioGroup } from '@atlaskit/radio';
+```
+
+## Use Cases
+- **Form inputs** - Single selection from multiple options
+- **Settings choices** - Choose one option from available settings
+- **Filter selection** - Select one filter criteria
+- **Preference selection** - Choose user preferences
+- **Category selection** - Select one category from a list
+
+## Prop Guidance
+- **value** - Value of the radio input
+- **label** - Label text for the radio input
+- **name** - Name attribute for grouping radio buttons
+- **isChecked** - Whether the radio is checked
+- **isDisabled** - Whether the radio is disabled
+- **isInvalid** - Whether the radio shows an error state
+- **isRequired** - Whether the radio is required in a form
+- **onChange** - Handler called when selection changes
+
+## Content Guidelines
+- Use clear, descriptive labels
+- Use sentence case for labels
+- Group related radio buttons with the same name
+- Provide clear visual hierarchy
+- Always provide labels for accessibility
+- Use radio groups for better organization
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic radio button
+<label className="flex items-center">
+  <input 
+    type="radio" 
+    name="color" 
+    value="red"
+    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+  />
+  <span className="ml-2 text-sm text-gray-900">Red</span>
+</label>
+
+// Radio group
+<div>
+  <label className="flex items-center">
+    <input type="radio" name="size" value="small" className="h-4 w-4" />
+    <span className="ml-2">Small</span>
+  </label>
+  <label className="flex items-center">
+    <input type="radio" name="size" value="medium" className="h-4 w-4" />
+    <span className="ml-2">Medium</span>
+  </label>
+  <label className="flex items-center">
+    <input type="radio" name="size" value="large" className="h-4 w-4" />
+    <span className="ml-2">Large</span>
+  </label>
+</div>
+```
+
+### ✅ After (ADS)
+```tsx
+import { Radio, RadioGroup } from '@atlaskit/radio';
+
+// Single radio button
+<Radio
+  value="red"
+  label="Red"
+  name="color"
+  onChange={handleChange}
+/>
+
+// Radio group
+<RadioGroup
+  options={[
+    { name: 'size', value: 'small', label: 'Small' },
+    { name: 'size', value: 'medium', label: 'Medium' },
+    { name: 'size', value: 'large', label: 'Large' }
+  ]}
+  onChange={handleChange}
+/>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Radio Buttons for Multiple Selection
+```tsx
+// ❌ Wrong - Use checkboxes for multiple selection
+<RadioGroup
+  options={[
+    { name: 'features', value: 'email', label: 'Email' },
+    { name: 'features', value: 'sms', label: 'SMS' },
+    { name: 'features', value: 'push', label: 'Push' }
+  ]}
+/>
+
+// ✅ Correct - Use checkboxes for multiple selection
+<div>
+  <Checkbox label="Email" value="email" name="features" />
+  <Checkbox label="SMS" value="sms" name="features" />
+  <Checkbox label="Push" value="push" name="features" />
+</div>
+```
+
+### ❌ Don't Forget to Group Radio Buttons
+```tsx
+// ❌ Wrong - Different names prevent grouping
+<Radio value="a" label="Option A" name="group1" />
+<Radio value="b" label="Option B" name="group2" />
+
+// ✅ Correct - Same name for grouping
+<Radio value="a" label="Option A" name="group" />
+<Radio value="b" label="Option B" name="group" />
+```
+
+### ❌ Don't Use Radio Buttons for Actions
+```tsx
+// ❌ Wrong - Radio button used for action
+<Radio 
+  value="delete" 
+  label="Delete item" 
+  onChange={handleDelete} 
+/>
+
+// ✅ Correct - Use button for actions
+<Button appearance="danger" onClick={handleDelete}>
+  Delete item
+</Button>
+```
+
+
+---
+
+## tabs-guidelines
+
+# Tabs Component Guidelines
+
+## Overview
+The Tabs component provides a way to organize content into multiple panels that can be switched between in the Atlassian Design System.
+
+## Package
+```tsx
+import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
+```
+
+## Use Cases
+- **Content organization** - Group related content into sections
+- **Settings panels** - Organize different setting categories
+- **Data views** - Switch between different data representations
+- **Form sections** - Break long forms into manageable sections
+- **Feature navigation** - Navigate between different features
+
+## Prop Guidance
+- **selected** - Index of the currently selected tab
+- **onChange** - Handler called when tab selection changes
+- **children** - Tab content (TabList and TabPanel components)
+
+## Content Guidelines
+- Use clear, descriptive tab labels
+- Keep tab labels short (1-3 words)
+- Use sentence case for tab labels
+- Group related content under each tab
+- Provide clear visual hierarchy
+- Consider the number of tabs (avoid too many)
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic tabs with custom styling
+<div>
+  <div className="border-b border-gray-200">
+    <nav className="-mb-px flex space-x-8">
+      <button className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+        Tab 1
+      </button>
+      <button className="border-blue-500 text-blue-600 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+        Tab 2
+      </button>
+    </nav>
+  </div>
+  <div className="mt-4">
+    <div>Tab 1 content</div>
+  </div>
+</div>
+```
+
+### ✅ After (ADS)
+```tsx
+import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
+
+<Tabs>
+  <TabList>
+    <Tab>Tab 1</Tab>
+    <Tab>Tab 2</Tab>
+  </TabList>
+  <TabPanel>Tab 1 content</TabPanel>
+  <TabPanel>Tab 2 content</TabPanel>
+</Tabs>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Tabs for Navigation
+```tsx
+// ❌ Wrong - Use navigation components for navigation
+<Tabs>
+  <TabList>
+    <Tab>Home</Tab>
+    <Tab>About</Tab>
+    <Tab>Contact</Tab>
+  </TabList>
+</Tabs>
+
+// ✅ Correct - Use navigation components
+<NavigationSystem>
+  <NavigationContent>
+    <PrimaryButton>Home</PrimaryButton>
+    <PrimaryButton>About</PrimaryButton>
+    <PrimaryButton>Contact</PrimaryButton>
+  </NavigationContent>
+</NavigationSystem>
+```
+
+### ❌ Don't Use Too Many Tabs
+```tsx
+// ❌ Wrong - Too many tabs
+<Tabs>
+  <TabList>
+    <Tab>Tab 1</Tab>
+    <Tab>Tab 2</Tab>
+    <Tab>Tab 3</Tab>
+    <Tab>Tab 4</Tab>
+    <Tab>Tab 5</Tab>
+    <Tab>Tab 6</Tab>
+    <Tab>Tab 7</Tab>
+  </TabList>
+</Tabs>
+
+// ✅ Correct - Use fewer tabs or consider other patterns
+<Tabs>
+  <TabList>
+    <Tab>Overview</Tab>
+    <Tab>Details</Tab>
+    <Tab>Settings</Tab>
+  </TabList>
+</Tabs>
+```
+
+### ❌ Don't Use Tabs for Actions
+```tsx
+// ❌ Wrong - Tabs used for actions
+<Tabs>
+  <TabList>
+    <Tab>Save</Tab>
+    <Tab>Delete</Tab>
+    <Tab>Edit</Tab>
+  </TabList>
+</Tabs>
+
+// ✅ Correct - Use buttons for actions
+<div>
+  <Button>Save</Button>
+  <Button appearance="danger">Delete</Button>
+  <Button>Edit</Button>
+</div>
+```
+
+
+---
+
+## tooltip-guidelines
+
+# Tooltip Component Guidelines
+
+## Overview
+Tooltips provide additional context or information when users hover over or focus on an element.
+
+## Package
+```tsx
+import Tooltip from '@atlaskit/tooltip';
+```
+
+## Use Cases
+- **Helpful hints** - Explain functionality or provide context
+- **Additional information** - Show details without permanent display
+- **Accessibility enhancement** - Provide context for screen readers
+- **User guidance** - Help users understand complex interfaces
+
+## Prop Guidance
+- **content** - Tooltip text or JSX content
+- **position** - Tooltip position (top, bottom, left, right)
+- **delay** - Delay before showing tooltip (default 300ms)
+- **testId** - Testing identifier
+
+## Content Guidelines
+- Keep content brief (ideally 1-3 words, max 8 words)
+- Use sentence case
+- No punctuation at the end
+- Use clear, direct language
+- Avoid technical jargon
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic tooltip (requires custom JavaScript)
+<div className="relative group">
+  <button className="px-4 py-2 bg-blue-500 text-white rounded">
+    Hover me
+  </button>
+  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 text-sm text-white bg-gray-900 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+    Tooltip content
+    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+  </div>
+</div>
+```
+
+### ✅ After (ADS)
+```tsx
+import Tooltip from '@atlaskit/tooltip';
+
+// Basic tooltip
+<Tooltip content="Tooltip content">
+  <button>Hover me</button>
+</Tooltip>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Tooltips for Critical Information
+```tsx
+// ❌ Wrong - Critical info hidden in tooltip
+<Tooltip content="This button will delete your entire account permanently">
+  <Button appearance="danger">Delete</Button>
+</Tooltip>
+
+// ✅ Correct - Critical info visible
+<Button appearance="danger">
+  Delete Account
+</Button>
+<p style={{ fontSize: '12px', color: token('color.text.warning') }}>
+  This action cannot be undone
+</p>
+```
+
+### ❌ Don't Make Tooltips Too Long
+```tsx
+// ❌ Wrong - Too verbose
+<Tooltip content="This button will save all the changes you have made to the current document and store them in the database for future reference">
+  <Button>Save</Button>
+</Tooltip>
+
+// ✅ Correct - Concise and clear
+<Tooltip content="Save changes">
+  <Button>Save</Button>
+</Tooltip>
+```
+
+### ❌ Don't Use Tooltips for Everything
+```tsx
+// ❌ Wrong - Overuse of tooltips
+<div>
+  <Tooltip content="Click to submit"><Button>Submit</Button></Tooltip>
+  <Tooltip content="Click to cancel"><Button>Cancel</Button></Tooltip>
+  <Tooltip content="Click to reset"><Button>Reset</Button></Tooltip>
+</div>
+
+// ✅ Correct - Use tooltips sparingly
+<div>
+  <Button>Submit</Button>
+  <Button>Cancel</Button>
+  <Button>Reset</Button>
+</div>
+```
+
 
 ---
 
@@ -1177,6 +1928,464 @@ import CheckMarkIcon from '@atlaskit/icon/core/check-mark';
 
 // ✅ Correct - Use Badge for text labels
 <Badge appearance="primary">Important Information</Badge>
+```
+
+
+---
+
+## skeleton-guidelines
+
+# Skeleton Component Guidelines
+
+## Overview
+The Skeleton component provides loading placeholders that mimic the structure of content while it's being loaded in the Atlassian Design System.
+
+## Package
+```tsx
+import Skeleton from '@atlaskit/skeleton';
+```
+
+## Use Cases
+- **Content loading** - Show placeholder while data is being fetched
+- **Layout preservation** - Maintain page structure during loading
+- **User experience** - Provide visual feedback that content is loading
+- **Performance perception** - Make loading feel faster and more responsive
+
+## Prop Guidance
+- **height** - Height of the skeleton (string or number)
+- **width** - Width of the skeleton (string or number)
+- **isShimmering** - Enable shimmer animation effect (default: true)
+
+## Content Guidelines
+- Match the dimensions of the actual content being loaded
+- Use shimmer animation for better visual feedback
+- Group related skeleton elements together
+- Don't overuse - only show when content is actually loading
+- Consider the layout structure when placing skeletons
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic skeleton with custom CSS
+<div className="animate-pulse">
+  <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+</div>
+
+// Card skeleton
+<div className="animate-pulse">
+  <div className="h-48 bg-gray-300 rounded mb-4"></div>
+  <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+</div>
+```
+
+### ✅ After (ADS)
+```tsx
+import Skeleton from '@atlaskit/skeleton';
+
+// Basic skeleton
+<Skeleton height="16px" width="200px" />
+
+// Card skeleton
+<div>
+  <Skeleton height="192px" width="100%" />
+  <Skeleton height="16px" width="75%" />
+  <Skeleton height="16px" width="50%" />
+</div>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Skeletons for Static Content
+```tsx
+// ❌ Wrong - Static content doesn't need skeleton
+<Skeleton height="20px" width="100px" />
+<span>This text is always visible</span>
+
+// ✅ Correct - Only for loading content
+{isLoading ? (
+  <Skeleton height="20px" width="100px" />
+) : (
+  <span>Dynamic content here</span>
+)}
+```
+
+### ❌ Don't Make Skeletons Too Small or Too Large
+```tsx
+// ❌ Wrong - Skeleton doesn't match content size
+<Skeleton height="5px" width="50px" />
+<div style={{ height: '100px', width: '300px' }}>Large content</div>
+
+// ✅ Correct - Match actual content dimensions
+<Skeleton height="100px" width="300px" />
+<div style={{ height: '100px', width: '300px' }}>Large content</div>
+```
+
+### ❌ Don't Forget to Remove Skeletons
+```tsx
+// ❌ Wrong - Skeleton never gets replaced
+<Skeleton height="20px" width="100px" />
+
+// ✅ Correct - Replace with actual content
+{isLoading ? (
+  <Skeleton height="20px" width="100px" />
+) : (
+  <div>Loaded content</div>
+)}
+```
+
+
+---
+
+## tag-guidelines
+
+# Tag Component Guidelines
+
+## Overview
+The Tag component displays labels or categories to help users identify and organize content in the Atlassian Design System.
+
+## Package
+```tsx
+import Tag from '@atlaskit/tag';
+```
+
+## Use Cases
+- **Content categorization** - Label content with categories or types
+- **Status indicators** - Show current state or status
+- **Filtering** - Allow users to filter by tags
+- **Metadata display** - Show additional information about items
+- **User-generated labels** - Allow users to create custom tags
+
+## Prop Guidance
+- **text** - Text content of the tag
+- **appearance** - Visual style: default, rounded
+- **color** - Custom color for the tag
+- **isRemovable** - Allow tag to be removed (if supported)
+
+## Content Guidelines
+- Keep tag text short and descriptive (1-3 words)
+- Use sentence case
+- Be consistent with tag naming conventions
+- Use colors meaningfully (not just for decoration)
+- Group related tags together
+- Consider accessibility when choosing colors
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic tag
+<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+  React
+</span>
+
+// Colored tag
+<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+  Completed
+</span>
+
+// Rounded tag
+<span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+  Design
+</span>
+```
+
+### ✅ After (ADS)
+```tsx
+import Tag from '@atlaskit/tag';
+
+// Basic tag
+<Tag text="React" />
+
+// Rounded appearance
+<Tag text="Design" appearance="rounded" />
+
+// Colored tag
+<Tag text="Completed" color="green" />
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Tags for Actions
+```tsx
+// ❌ Wrong - Tag used as button
+<Tag text="Click to edit" onClick={handleEdit} />
+
+// ✅ Correct - Use button for actions
+<Button appearance="subtle" onClick={handleEdit}>
+  Edit
+</Button>
+```
+
+### ❌ Don't Make Tags Too Long
+```tsx
+// ❌ Wrong - Too verbose
+<Tag text="This is a very long tag that contains too much information" />
+
+// ✅ Correct - Concise and clear
+<Tag text="Important" />
+```
+
+### ❌ Don't Use Too Many Colors
+```tsx
+// ❌ Wrong - Inconsistent color usage
+<div>
+  <Tag text="Bug" color="red" />
+  <Tag text="Feature" color="blue" />
+  <Tag text="Enhancement" color="green" />
+  <Tag text="Documentation" color="purple" />
+</div>
+
+// ✅ Correct - Use colors meaningfully
+<div>
+  <Tag text="Bug" color="red" />
+  <Tag text="Feature" color="blue" />
+  <Tag text="Enhancement" />
+  <Tag text="Documentation" />
+</div>
+```
+
+
+---
+
+## textarea-guidelines
+
+# TextArea Component Guidelines
+
+## Overview
+The TextArea component allows users to input and edit multi-line text content with proper validation and error handling in the Atlassian Design System.
+
+## Package
+```tsx
+import TextArea from '@atlaskit/textarea';
+```
+
+## Use Cases
+- **Long-form input** - Comments, descriptions, notes
+- **Form submissions** - Feedback, reviews, messages
+- **Content editing** - Rich text input areas
+- **Data entry** - Multi-line text fields
+- **User feedback** - Support tickets, bug reports
+
+## Prop Guidance
+- **placeholder** - Placeholder text when empty
+- **resize** - Resize behavior: auto, vertical, horizontal, none
+- **maxHeight** - Maximum height before scrolling
+- **name** - Name attribute for form submission
+- **defaultValue** - Initial value for uncontrolled component
+- **isDisabled** - Disable the textarea
+- **isRequired** - Mark field as required
+
+## Content Guidelines
+- Use clear, descriptive placeholder text
+- Provide helpful hints about expected content
+- Use sentence case for labels and placeholders
+- Consider character limits for long content
+- Provide clear validation messages
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic textarea
+<textarea
+  placeholder="Enter your message"
+  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+  rows={4}
+/>
+
+// Resizable textarea
+<textarea
+  placeholder="Enter your message"
+  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
+  rows={4}
+/>
+
+// Disabled textarea
+<textarea
+  placeholder="Enter your message"
+  disabled
+  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500 resize-none"
+  rows={4}
+/>
+```
+
+### ✅ After (ADS)
+```tsx
+import TextArea from '@atlaskit/textarea';
+
+// Basic textarea
+<TextArea
+  placeholder="Enter your message"
+  resize="none"
+  rows={4}
+/>
+
+// Resizable textarea
+<TextArea
+  placeholder="Enter your message"
+  resize="auto"
+  rows={4}
+/>
+
+// Disabled textarea
+<TextArea
+  placeholder="Enter your message"
+  isDisabled
+  rows={4}
+/>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use TextArea for Single Line Input
+```tsx
+// ❌ Wrong - Use TextField for single line
+<TextArea placeholder="Enter your name" rows={1} />
+
+// ✅ Correct - Use TextField for single line
+<TextField placeholder="Enter your name" />
+```
+
+### ❌ Don't Forget to Handle Resize
+```tsx
+// ❌ Wrong - No resize control
+<TextArea placeholder="Enter message" />
+
+// ✅ Correct - Specify resize behavior
+<TextArea 
+  placeholder="Enter message" 
+  resize="auto" 
+  maxHeight="200px" 
+/>
+```
+
+### ❌ Don't Use Generic Placeholders
+```tsx
+// ❌ Wrong - Too generic
+<TextArea placeholder="Enter text" />
+
+// ✅ Correct - Specific and helpful
+<TextArea placeholder="Describe the issue you're experiencing" />
+```
+
+
+---
+
+## toggle-guidelines
+
+# Toggle Component Guidelines
+
+## Overview
+The Toggle component provides an on/off switch for enabling or disabling features, settings, or options in the Atlassian Design System.
+
+## Package
+```tsx
+import Toggle from '@atlaskit/toggle';
+```
+
+## Use Cases
+- **Settings toggles** - Enable/disable features or preferences
+- **Form controls** - Toggle form options on/off
+- **Feature flags** - Control feature availability
+- **Notification settings** - Turn notifications on/off
+- **Mode switching** - Toggle between different modes
+
+## Prop Guidance
+- **id** - Unique identifier for the toggle
+- **label** - Descriptive label for the toggle
+- **isChecked** - Current checked state
+- **onChange** - Handler called when toggle state changes
+- **isDisabled** - Disable the toggle
+
+## Content Guidelines
+- Use clear, descriptive labels
+- Use sentence case for labels
+- Be specific about what the toggle controls
+- Use positive language (e.g., "Enable notifications" not "Disable notifications")
+- Group related toggles together
+
+## Migration from Tailwind
+
+### ❌ Before (Tailwind)
+```tsx
+// Basic toggle switch
+<label className="relative inline-flex items-center cursor-pointer">
+  <input type="checkbox" className="sr-only peer" />
+  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+  <span className="ml-3 text-sm font-medium text-gray-900">Enable notifications</span>
+</label>
+
+// Disabled toggle
+<label className="relative inline-flex items-center cursor-not-allowed opacity-50">
+  <input type="checkbox" disabled className="sr-only peer" />
+  <div className="w-11 h-6 bg-gray-200 rounded-full peer"></div>
+  <span className="ml-3 text-sm font-medium text-gray-500">Disabled option</span>
+</label>
+```
+
+### ✅ After (ADS)
+```tsx
+import Toggle from '@atlaskit/toggle';
+
+// Basic toggle
+<Toggle
+  id="notifications"
+  label="Enable notifications"
+  isChecked={isEnabled}
+  onChange={handleToggle}
+/>
+
+// Disabled toggle
+<Toggle
+  id="disabled"
+  label="Disabled option"
+  isDisabled
+  onChange={handleToggle}
+/>
+```
+
+## Common Mistakes
+
+### ❌ Don't Use Toggles for Multiple Choice
+```tsx
+// ❌ Wrong - Use radio buttons for multiple choice
+<div>
+  <Toggle label="Option A" />
+  <Toggle label="Option B" />
+  <Toggle label="Option C" />
+</div>
+
+// ✅ Correct - Use radio buttons for multiple choice
+<RadioGroup
+  options={[
+    { name: 'choice', value: 'a', label: 'Option A' },
+    { name: 'choice', value: 'b', label: 'Option B' },
+    { name: 'choice', value: 'c', label: 'Option C' }
+  ]}
+/>
+```
+
+### ❌ Don't Use Negative Labels
+```tsx
+// ❌ Wrong - Negative language
+<Toggle label="Disable notifications" />
+
+// ✅ Correct - Positive language
+<Toggle label="Enable notifications" />
+```
+
+### ❌ Don't Use Toggles for Actions
+```tsx
+// ❌ Wrong - Toggle used for action
+<Toggle label="Delete item" onChange={handleDelete} />
+
+// ✅ Correct - Use button for actions
+<Button appearance="danger" onClick={handleDelete}>
+  Delete item
+</Button>
 ```
 
 

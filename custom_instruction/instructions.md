@@ -41,11 +41,6 @@
 - **Always** import from `@atlaskit/button/new`
 - **Instead**: use Button for buttons with text and icons, use IconButon for icon only buttons without a label, and use DropdownMenu for buttons with a chevron appended
 
-### 🧭 **Navigation Systems**
-- **Template Pre-configured**: Navigation system (top header + side nav) is already set up in the template
-- **DO NOT MODIFY**: Keep the existing TopNavigation and SideNavigation components as-is
-- **Focus Area**: Only modify the main content area inside the navigation shell
-
 ### 📐 **Layout & Structure**
 - **Always**: Use divs with inline styles and spacing tokens for anything autolayout or layout
 
@@ -59,6 +54,66 @@
 - **NEVER** invent or guess icon names
 - **ALWAYS** verify the exact icon name exists
 
+### 📊 **Progress Bar**
+- **Never** use custom progress implementations with Tailwind
+- **Always** import from `@atlaskit/progress-bar`
+- **Use cases**: Loading states, completion tracking, file uploads
+- **Key props**: `value` (0-100), `isIndeterminate`, `appearance`
+
+### 🗂️ **Drawer**
+- **Never** use custom drawer/modal implementations with Tailwind
+- **Always** import from `@atlaskit/drawer`
+- **Use cases**: Side panels, detailed views, secondary content
+- **Key props**: `isOpen`, `onClose`, `width`, `placement`
+
+### ☑️ **Checkbox**
+- **Never** use native `<input type="checkbox">` elements with Tailwind classes
+- **Always** import from `@atlaskit/checkbox`
+- **Use cases**: Form selections, multi-select lists, settings toggles
+- **Key props**: `isChecked`, `onChange`, `isIndeterminate`, `isDisabled`
+
+### 🚨 **Banner**
+- **Never** use custom alert/notification implementations with Tailwind
+- **Always** import from `@atlaskit/banner`
+- **Use cases**: System messages, warnings, announcements, errors
+- **Key props**: `appearance` (error, warning, announcement), `isOpen`, `onClose`
+
+### 🔄 **Toggle**
+- **Never** use custom toggle/switch implementations with Tailwind
+- **Always** import from `@atlaskit/toggle`
+- **Use cases**: Settings switches, feature toggles, on/off states
+- **Key props**: `isChecked`, `onChange`, `isDisabled`, `size`
+
+### 🏷️ **Tag**
+- **Never** use custom tag implementations with Tailwind
+- **Always** import from `@atlaskit/tag`
+- **Use cases**: Labels, categories, filters, removable items
+- **Key props**: `text`, `color`, `removeButtonLabel`, `onRemove`
+
+### 📝 **Textarea**
+- **Never** use native `<textarea>` elements with Tailwind classes
+- **Always** import from `@atlaskit/textarea`
+- **Use cases**: Multi-line text input, comments, descriptions
+- **Key props**: `value`, `onChange`, `placeholder`, `isDisabled`, `isRequired`
+
+### 📑 **Tabs**
+- **Never** use custom tab implementations with Tailwind
+- **Always** import from `@atlaskit/tabs`
+- **Use cases**: Content organization, navigation within sections
+- **Key props**: `tabs`, `selected`, `onChange`, `isDisabled`
+
+### 💀 **Skeleton**
+- **Never** use custom loading skeleton implementations with Tailwind
+- **Always** import from `@atlaskit/skeleton`
+- **Use cases**: Loading states, content placeholders, progressive loading
+- **Key props**: `width`, `height`, `isShimmering`, `testId`
+
+### 🔘 **Radio**
+- **Never** use native `<input type="radio">` elements with Tailwind classes
+- **Always** import from `@atlaskit/radio`
+- **Use cases**: Single selection from multiple options, form choices
+- **Key props**: `isChecked`, `onChange`, `isDisabled`, `value`
+
 ## Decision Tree
 
 ```
@@ -71,8 +126,6 @@ Need UI Element?
 
 ## Key Reminders
 
-1. **Top Navigation is locked** - Only modify `navigationConfig`, don't modify the React elements
-2. **Side Navigation outer shell is locked** - Only modify what is inside `<SideNavContent>`
 3. **Always start with ADS** - Don't assume something isn't available
 4. **Use the guidelines** - They contain working examples and best practices
 5. **Tokens over hardcoded values** - Always prefer design tokens
