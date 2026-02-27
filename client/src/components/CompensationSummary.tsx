@@ -97,7 +97,7 @@ export default function CompensationSummary() {
               <Lozenge appearance="new" isBold>P50</Lozenge>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginTop: token("space.200") }}>
-              <Text size="medium" weight="medium">Your Annual Compensation</Text>
+              <Text size="large" weight="medium">Your Annual Compensation</Text>
               <Tooltip content="Total annual compensation including base salary, bonus target, and RSU value">
                 <span style={{ display: "inline-flex", cursor: "help" }}>
                   <InformationIcon label="info" />
