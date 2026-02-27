@@ -91,16 +91,32 @@ export default function CompensationSummary() {
         <div style={{ display: "flex", gap: token("space.400"), alignItems: "flex-start" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <Heading size="large">Total Compensation Summary</Heading>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginTop: token("space.200") }}>
-              <Text size="medium" weight="medium">Your Annual Compensation</Text>
-              <Tooltip content="Total annual compensation including base salary, bonus target, and RSU value">
-                <span style={{ display: "inline-flex", cursor: "help" }}>
-                  <InformationIcon label="info" />
-                </span>
-              </Tooltip>
-            </div>
-            <div style={{ marginTop: token("space.050") }}>
-              <Heading size="xxlarge">{formatCurrency(adjustedData.total)}</Heading>
+            <div style={{ display: "flex", gap: token("space.600"), marginTop: token("space.300") }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                  <Text size="medium" weight="medium">Your Annual Compensation</Text>
+                  <Tooltip content="Total annual compensation including base salary, bonus target, and RSU value">
+                    <span style={{ display: "inline-flex", cursor: "help" }}>
+                      <InformationIcon label="info" />
+                    </span>
+                  </Tooltip>
+                </div>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Heading size="xxlarge">{formatCurrency(adjustedData.total)}</Heading>
+                </div>
+              </div>
+              <div>
+                <Text size="medium" weight="medium">Job Role</Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Heading size="small">Senior Engineer</Heading>
+                </div>
+              </div>
+              <div>
+                <Text size="medium" weight="medium">Job Level</Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Heading size="small">P50</Heading>
+                </div>
+              </div>
             </div>
 
             <div style={{ marginTop: token("space.600"), display: "flex", flexDirection: "column", gap: token("space.300") }}>
