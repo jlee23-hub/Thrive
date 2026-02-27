@@ -88,10 +88,10 @@ export default function CompensationSummary() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={cardStyle}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div style={{ flex: 1 }}>
-            <Heading size="large">Total Compensation Summary</Heading>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginTop: token("space.200") }}>
+        <Heading size="large">Total Compensation Summary</Heading>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: token("space.300") }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
               <Text size="medium" weight="medium">Your Annual Compensation</Text>
               <Tooltip content="Total annual compensation including base salary, bonus target, and RSU value">
                 <span style={{ display: "inline-flex", cursor: "help" }}>
@@ -102,25 +102,25 @@ export default function CompensationSummary() {
             <div style={{ marginTop: token("space.050") }}>
               <Heading size="xlarge">{formatCurrency(adjustedData.total)}</Heading>
             </div>
+          </div>
 
-            <div style={{ marginTop: token("space.300"), display: "flex", flexDirection: "column", gap: token("space.150") }}>
-              {pieData.map((item) => (
-                <div key={item.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 340 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                    <div
-                      style={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: token("border.radius.050"),
-                        backgroundColor: item.color,
-                      }}
-                    />
-                    <Text size="medium">{item.name}</Text>
-                  </div>
-                  <Text size="medium" weight="bold">{formatCurrency(item.value)}</Text>
+          <div style={{ display: "flex", flexDirection: "column", gap: token("space.150") }}>
+            {pieData.map((item) => (
+              <div key={item.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", minWidth: 300, gap: token("space.400") }}>
+                <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                  <div
+                    style={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: token("border.radius.050"),
+                      backgroundColor: item.color,
+                    }}
+                  />
+                  <Text size="medium">{item.name}</Text>
                 </div>
-              ))}
-            </div>
+                <Text size="medium" weight="bold">{formatCurrency(item.value)}</Text>
+              </div>
+            ))}
           </div>
 
           <div style={{ width: 240, height: 240, position: "relative" }}>
