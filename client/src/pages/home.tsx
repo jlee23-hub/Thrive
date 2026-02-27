@@ -1,9 +1,29 @@
 import React, { useState } from "react";
 import AppProvider from "@atlaskit/app-provider";
-import Heading from "@atlaskit/heading";
-import { Text } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
 import { setBooleanFeatureFlagResolver } from "@atlaskit/platform-feature-flags";
+
+import { Root } from "@atlaskit/navigation-system/layout/root";
+import { TopNav, TopNavStart, TopNavMiddle, TopNavEnd } from "@atlaskit/navigation-system/layout/top-nav";
+import { SideNav, SideNavContent } from "@atlaskit/navigation-system/layout/side-nav";
+import { Main } from "@atlaskit/navigation-system/layout/main";
+
+import {
+  AppSwitcher,
+  Search,
+  CreateButton,
+  ChatButton,
+  Notifications,
+  Help,
+  Settings,
+  Profile,
+  AppLogo,
+  CustomTitle,
+} from "@atlaskit/navigation-system/top-nav-items";
+
+import { LinkMenuItem } from "@atlaskit/navigation-system/side-nav-items/link-menu-item";
+import { MenuList } from "@atlaskit/navigation-system/side-nav-items/menu-list";
+import { MenuSection } from "@atlaskit/navigation-system/side-nav-items/menu-section";
 
 import CompensationSummary from "../components/CompensationSummary";
 import RSUDetails from "../components/RSUDetails";
@@ -12,6 +32,7 @@ import AboutUs from "../components/AboutUs";
 import DashboardIcon from "@atlaskit/icon/core/dashboard";
 import ChartTrendIcon from "@atlaskit/icon/core/chart-trend";
 import InformationIcon from "@atlaskit/icon/core/information";
+import HomeIcon from "@atlaskit/icon/core/home";
 
 const defaultFeatureFlags = [
   "platform_design_system_team_portal_logic_r18_fix",
@@ -31,29 +52,20 @@ resolveFeatureFlags();
 
 type NavItem = "compensation" | "rsus" | "about";
 
-interface NavItemConfig {
-  id: NavItem;
-  label: string;
-  icon: React.ReactNode;
+function CompViewIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="4" fill="url(#compview-gradient)" />
+      <text x="14" y="19" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" fontFamily="sans-serif">C</text>
+      <defs>
+        <linearGradient id="compview-gradient" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#1868DB" />
+          <stop offset="1" stopColor="#36B37E" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
 }
-
-const navItems: NavItemConfig[] = [
-  {
-    id: "compensation",
-    label: "Total Compensation Summary",
-    icon: <DashboardIcon label="compensation" />,
-  },
-  {
-    id: "rsus",
-    label: "RSUs",
-    icon: <ChartTrendIcon label="rsus" />,
-  },
-  {
-    id: "about",
-    label: "About Us",
-    icon: <InformationIcon label="about" />,
-  },
-];
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState<NavItem>("compensation");
@@ -72,105 +84,66 @@ export default function Home() {
   };
 
   return (
-    <AppProvider
-      defaultColorMode="light"
-      
-    >
-      <div
-        style={{
-          display: "flex",
-          minHeight: "100vh",
-          backgroundColor: token("elevation.surface.sunken"),
-        }}
-      >
-        <nav
-          style={{
-            width: 260,
-            minHeight: "100vh",
-            backgroundColor: token("elevation.surface"),
-            borderRight: `1px solid ${token("color.border")}`,
-            padding: `${token("space.300")} 0`,
-            flexShrink: 0,
-          }}
-        >
-          <div style={{ padding: `0 ${token("space.300")}`, marginBottom: token("space.400") }}>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
-              <div
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: token("border.radius.100"),
-                  background: "linear-gradient(135deg, #1868DB, #36B37E)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Text size="medium" weight="bold" color="color.text.inverse">C</Text>
-              </div>
-              <Heading size="xsmall">CompView</Heading>
-            </div>
-          </div>
+    <AppProvider defaultColorMode="light">
+      <Root>
+        <TopNav>
+          <TopNavStart>
+            <AppSwitcher label="App Switcher" />
+            <HomeIcon label="Home" />
+            <CustomTitle>CompView</CustomTitle>
+          </TopNavStart>
+          <TopNavMiddle>
+            <Search label="Search" />
+            <CreateButton>Create</CreateButton>
+          </TopNavMiddle>
+          <TopNavEnd>
+            <ChatButton>Chat</ChatButton>
+            <Notifications label="Notifications" badge={() => null} />
+            <Help label="Help" />
+            <Settings label="Settings" />
+            <Profile label="Your profile" />
+          </TopNavEnd>
+        </TopNav>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
-            {navItems.map((item) => {
-              const isActive = activeNav === item.id;
-              return (
-                <div
-                  key={item.id}
-                  onClick={() => setActiveNav(item.id)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: token("space.150"),
-                    padding: `${token("space.100")} ${token("space.300")}`,
-                    cursor: "pointer",
-                    backgroundColor: isActive
-                      ? token("color.background.selected")
-                      : "transparent",
-                    borderLeft: isActive
-                      ? `3px solid ${token("color.border.selected")}`
-                      : "3px solid transparent",
-                    transition: "background-color 0.15s ease, border-color 0.15s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = token("color.background.neutral.subtle.hovered");
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }
-                  }}
+        <SideNav label="CompView Navigation">
+          <SideNavContent>
+            <MenuSection>
+              <MenuList>
+                <LinkMenuItem
+                  href="#compensation"
+                  elemBefore={<DashboardIcon label="" color="currentColor" />}
+                  isSelected={activeNav === "compensation"}
+                  onClick={(e) => { e.preventDefault(); setActiveNav("compensation"); }}
                 >
-                  <span style={{ color: isActive ? token("color.icon.selected") : token("color.icon") }}>
-                    {item.icon}
-                  </span>
-                  <Text
-                    size="medium"
-                    weight={isActive ? "bold" : "regular"}
-                    color={isActive ? "color.text.selected" : "color.text"}
-                  >
-                    {item.label}
-                  </Text>
-                </div>
-              );
-            })}
-          </div>
-        </nav>
+                  Total Compensation Summary
+                </LinkMenuItem>
+                <LinkMenuItem
+                  href="#rsus"
+                  elemBefore={<ChartTrendIcon label="" color="currentColor" />}
+                  isSelected={activeNav === "rsus"}
+                  onClick={(e) => { e.preventDefault(); setActiveNav("rsus"); }}
+                >
+                  RSUs
+                </LinkMenuItem>
+                <LinkMenuItem
+                  href="#about"
+                  elemBefore={<InformationIcon label="" color="currentColor" />}
+                  isSelected={activeNav === "about"}
+                  onClick={(e) => { e.preventDefault(); setActiveNav("about"); }}
+                >
+                  About Us
+                </LinkMenuItem>
+              </MenuList>
+            </MenuSection>
+          </SideNavContent>
+        </SideNav>
 
-        <main
-          style={{
-            flex: 1,
-            padding: token("space.500"),
-            maxWidth: 960,
-            overflowY: "auto",
-          }}
-        >
-          {renderContent()}
-        </main>
-      </div>
+        <Main>
+          <div style={{ padding: token("space.500"), maxWidth: 960 }}>
+            {renderContent()}
+          </div>
+        </Main>
+      </Root>
     </AppProvider>
   );
 }
