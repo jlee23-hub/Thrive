@@ -29,6 +29,13 @@ const COLORS = {
   rsus: "#36B37E",
 };
 
+const cardStyle: React.CSSProperties = {
+  backgroundColor: token("elevation.surface.raised"),
+  borderRadius: token("border.radius.200"),
+  padding: token("space.400"),
+  boxShadow: token("elevation.shadow.raised"),
+};
+
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -80,14 +87,7 @@ export default function CompensationSummary() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
-      <div
-        style={{
-          backgroundColor: token("elevation.surface"),
-          borderRadius: token("border.radius.200"),
-          padding: token("space.400"),
-          border: `1px solid ${token("color.border")}`,
-        }}
-      >
+      <div style={cardStyle}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div style={{ flex: 1 }}>
             <Heading size="large">Total Compensation Summary</Heading>
@@ -158,14 +158,7 @@ export default function CompensationSummary() {
         </div>
       </div>
 
-      <div
-        style={{
-          backgroundColor: token("elevation.surface"),
-          borderRadius: token("border.radius.200"),
-          padding: token("space.400"),
-          border: `1px solid ${token("color.border")}`,
-        }}
-      >
+      <div style={cardStyle}>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.050") }}>
           <Text size="medium" weight="medium">Model your target compensation by share price</Text>
           <Tooltip content="Adjust the share price to see how it affects your total compensation">
@@ -205,14 +198,7 @@ export default function CompensationSummary() {
         </div>
       </div>
 
-      <div
-        style={{
-          backgroundColor: token("elevation.surface"),
-          borderRadius: token("border.radius.200"),
-          padding: token("space.400"),
-          border: `1px solid ${token("color.border")}`,
-        }}
-      >
+      <div style={cardStyle}>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
           <div
             style={{

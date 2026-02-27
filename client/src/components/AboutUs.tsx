@@ -8,17 +8,17 @@ import GlobeIcon from "@atlaskit/icon/core/globe";
 import OfficeIcon from "@atlaskit/icon/core/office-building";
 import Button from "@atlaskit/button/new";
 
+const cardStyle: React.CSSProperties = {
+  backgroundColor: token("elevation.surface.raised"),
+  borderRadius: token("border.radius.200"),
+  padding: token("space.400"),
+  boxShadow: token("elevation.shadow.raised"),
+};
+
 export default function AboutUs() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
-      <div
-        style={{
-          backgroundColor: token("elevation.surface"),
-          borderRadius: token("border.radius.200"),
-          padding: token("space.400"),
-          border: `1px solid ${token("color.border")}`,
-        }}
-      >
+      <div style={cardStyle}>
         <Heading size="large">About Your Compensation</Heading>
         <div style={{ marginTop: token("space.300") }}>
           <Text size="medium">
@@ -28,14 +28,7 @@ export default function AboutUs() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300") }}>
-        <div
-          style={{
-            backgroundColor: token("elevation.surface"),
-            borderRadius: token("border.radius.200"),
-            padding: token("space.400"),
-            border: `1px solid ${token("color.border")}`,
-          }}
-        >
+        <div style={cardStyle}>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.150"), marginBottom: token("space.200") }}>
             <div
               style={{
@@ -57,14 +50,7 @@ export default function AboutUs() {
           </Text>
         </div>
 
-        <div
-          style={{
-            backgroundColor: token("elevation.surface"),
-            borderRadius: token("border.radius.200"),
-            padding: token("space.400"),
-            border: `1px solid ${token("color.border")}`,
-          }}
-        >
+        <div style={cardStyle}>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.150"), marginBottom: token("space.200") }}>
             <div
               style={{
@@ -86,14 +72,7 @@ export default function AboutUs() {
           </Text>
         </div>
 
-        <div
-          style={{
-            backgroundColor: token("elevation.surface"),
-            borderRadius: token("border.radius.200"),
-            padding: token("space.400"),
-            border: `1px solid ${token("color.border")}`,
-          }}
-        >
+        <div style={cardStyle}>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.150"), marginBottom: token("space.200") }}>
             <div
               style={{
@@ -115,14 +94,7 @@ export default function AboutUs() {
           </Text>
         </div>
 
-        <div
-          style={{
-            backgroundColor: token("elevation.surface"),
-            borderRadius: token("border.radius.200"),
-            padding: token("space.400"),
-            border: `1px solid ${token("color.border")}`,
-          }}
-        >
+        <div style={cardStyle}>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.150"), marginBottom: token("space.200") }}>
             <div
               style={{
@@ -148,13 +120,7 @@ export default function AboutUs() {
         </div>
       </div>
 
-      <div
-        style={{
-          backgroundColor: token("color.background.neutral"),
-          borderRadius: token("border.radius.200"),
-          padding: token("space.300"),
-        }}
-      >
+      <div style={cardStyle}>
         <Text size="small" color="color.text.subtlest">
           Disclaimer: The information presented in this tool is for informational purposes only and does not constitute financial advice. Actual compensation may vary. Stock prices are subject to market fluctuations. Please consult with a financial advisor for personalized guidance.
         </Text>

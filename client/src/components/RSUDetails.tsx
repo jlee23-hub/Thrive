@@ -44,14 +44,18 @@ const formatCurrencyDecimal = (value: number) =>
     maximumFractionDigits: 2,
   }).format(value);
 
+const cardStyle: React.CSSProperties = {
+  backgroundColor: token("elevation.surface.raised"),
+  borderRadius: token("border.radius.200"),
+  padding: token("space.400"),
+  boxShadow: token("elevation.shadow.raised"),
+};
+
 function GrantCard({ grant }: { grant: Grant }) {
   return (
     <div
       style={{
-        backgroundColor: token("elevation.surface"),
-        borderRadius: token("border.radius.200"),
-        padding: token("space.300"),
-        border: `1px solid ${token("color.border")}`,
+        ...cardStyle,
         marginBottom: token("space.200"),
       }}
     >
@@ -86,14 +90,7 @@ function GrantDetails({ grant }: { grant: Grant }) {
   const vestingData = useMemo(() => getGrantVestingData(grant), [grant]);
 
   return (
-    <div
-      style={{
-        backgroundColor: token("elevation.surface"),
-        borderRadius: token("border.radius.200"),
-        padding: token("space.400"),
-        border: `1px solid ${token("color.border")}`,
-      }}
-    >
+    <div style={cardStyle}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.200"), marginBottom: token("space.400") }}>
         <Heading size="medium">Grant Details For</Heading>
         <div
@@ -255,14 +252,7 @@ export default function RSUDetails() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
-      <div
-        style={{
-          backgroundColor: token("elevation.surface"),
-          borderRadius: token("border.radius.200"),
-          padding: token("space.400"),
-          border: `1px solid ${token("color.border")}`,
-        }}
-      >
+      <div style={cardStyle}>
         <Heading size="large">Equity Summary</Heading>
         <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.300") }}>
           <div style={{ flex: 1 }}>
