@@ -10,7 +10,6 @@ import { Main } from "@atlaskit/navigation-system/layout/main";
 
 import {
   AppSwitcher,
-  CreateButton,
   ChatButton,
   Notifications,
   Help,
@@ -75,9 +74,7 @@ export default function Home() {
             <HomeIcon label="Home" />
             <CustomTitle>CompView</CustomTitle>
           </TopNavStart>
-          <TopNavMiddle>
-            <CreateButton>Create</CreateButton>
-          </TopNavMiddle>
+          <TopNavMiddle />
           <TopNavEnd>
             <ChatButton>Chat</ChatButton>
             <Notifications label="Notifications" badge={() => null} />
