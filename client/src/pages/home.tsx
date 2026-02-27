@@ -71,7 +71,9 @@ export default function Home() {
         <TopNav>
           <TopNavStart>
             <AppSwitcher label="App Switcher" />
-            <SpreadsheetIcon label="Thrive" color={token("color.icon.brand")} />
+            <span style={{ display: "inline-flex", transform: "scale(1.4)" }}>
+              <SpreadsheetIcon label="Thrive" color={token("color.icon.brand")} />
+            </span>
             <CustomTitle><span style={{ color: token("color.text"), fontWeight: 800 }}>Thrive</span></CustomTitle>
           </TopNavStart>
           <TopNavMiddle />
