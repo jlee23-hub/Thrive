@@ -123,15 +123,15 @@ export default function CompensationSummary() {
             </div>
           </div>
 
-          <div style={{ width: 240, height: 240, position: "relative" }}>
+          <div style={{ width: 280, height: 300, position: "relative" }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={1}>
               <PieChart>
                 <Pie
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={70}
-                  outerRadius={100}
+                  innerRadius={85}
+                  outerRadius={120}
                   paddingAngle={2}
                   dataKey="value"
                   stroke="none"
