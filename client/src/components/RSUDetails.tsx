@@ -263,6 +263,15 @@ function GrantDetails({ grant }: { grant: Grant }) {
 export default function RSUDetails() {
   const [selectedGrant, setSelectedGrant] = useState<Grant>(grants[0]);
 
+  const selectedChartData = useMemo(() => {
+    const data = getGrantVestingData(selectedGrant);
+    return data.map((d) => ({
+      date: d.date,
+      vested: d.vested,
+      unvested: d.total - d.vested,
+    }));
+  }, [selectedGrant]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={cardStyle}>
@@ -282,7 +291,7 @@ export default function RSUDetails() {
 
           <div style={{ flex: 1, height: 600, minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={1}>
-              <AreaChart data={vestingScheduleData}>
+              <AreaChart data={selectedChartData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
                 <XAxis
                   dataKey="date"
