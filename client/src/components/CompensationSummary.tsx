@@ -100,7 +100,7 @@ export default function CompensationSummary() {
               </Tooltip>
             </div>
             <div style={{ marginTop: token("space.050") }}>
-              <Heading size="xlarge">{formatCurrency(adjustedData.total)}</Heading>
+              <Heading size="xxlarge">{formatCurrency(adjustedData.total)}</Heading>
             </div>
 
             <div style={{ marginTop: token("space.600"), display: "flex", flexDirection: "column", gap: token("space.300") }}>
