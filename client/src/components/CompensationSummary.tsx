@@ -123,15 +123,15 @@ export default function CompensationSummary() {
             ))}
           </div>
 
-          <div style={{ width: 240, height: 240, position: "relative" }}>
+          <div style={{ width: 180, height: 180, position: "relative" }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={1}>
               <PieChart>
                 <Pie
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={70}
-                  outerRadius={100}
+                  innerRadius={50}
+                  outerRadius={75}
                   paddingAngle={2}
                   dataKey="value"
                   stroke="none"
@@ -151,7 +151,7 @@ export default function CompensationSummary() {
                 textAlign: "center",
               }}
             >
-              <Heading size="medium">{formatCurrency(adjustedData.total)}</Heading>
+              <Heading size="small">{formatCurrency(adjustedData.total)}</Heading>
               <Text size="small" color="color.text.subtlest">per year</Text>
             </div>
           </div>
