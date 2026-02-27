@@ -117,7 +117,7 @@ export default function CompensationSummary() {
                     />
                     <Text size="large">{item.name}</Text>
                   </div>
-                  <Heading size="small">{formatCurrency(item.value)}</Heading>
+                  <Heading size="medium">{formatCurrency(item.value)}</Heading>
                 </div>
               ))}
             </div>
