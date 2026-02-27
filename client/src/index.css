@@ -18,3 +18,7 @@ body {
   width: 100%;
   min-height: 100vh;
 }
+
+.bold-nav-items span {
+  font-weight: 600 !important;
+}

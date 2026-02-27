@@ -86,6 +86,7 @@ export default function Home() {
 
         <SideNav label="CompView Navigation">
           <SideNavContent>
+            <div className="bold-nav-items">
             <MenuSection>
               <MenuList>
                 <LinkMenuItem
@@ -114,6 +115,7 @@ export default function Home() {
                 </LinkMenuItem>
               </MenuList>
             </MenuSection>
+            </div>
           </SideNavContent>
         </SideNav>
 
