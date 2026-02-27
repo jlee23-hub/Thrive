@@ -100,13 +100,15 @@ export default function CompensationSummary() {
                   </span>
                 </Tooltip>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                <Text size="medium" weight="medium">Job Role:</Text>
-                <Text size="medium" weight="bold">Senior Engineer</Text>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                <Text size="medium" weight="medium">Level:</Text>
-                <Text size="medium" weight="bold">P50</Text>
+              <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
+                <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                  <Text size="medium" weight="medium">Job Role:</Text>
+                  <Text size="medium" weight="bold">Senior Engineer</Text>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                  <Text size="medium" weight="medium">Level:</Text>
+                  <Text size="medium" weight="bold">P50</Text>
+                </div>
               </div>
             </div>
             <div style={{ marginTop: token("space.050") }}>
