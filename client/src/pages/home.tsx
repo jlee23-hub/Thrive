@@ -29,7 +29,7 @@ import AboutUs from "../components/AboutUs";
 import DashboardIcon from "@atlaskit/icon/core/dashboard";
 import ChartTrendIcon from "@atlaskit/icon/core/chart-trend";
 import InformationIcon from "@atlaskit/icon/core/information";
-import HomeIcon from "@atlaskit/icon/core/home";
+import SpreadsheetIcon from "@atlaskit/icon/core/spreadsheet";
 
 const defaultFeatureFlags = [
   "platform_design_system_team_portal_logic_r18_fix",
@@ -71,7 +71,7 @@ export default function Home() {
         <TopNav>
           <TopNavStart>
             <AppSwitcher label="App Switcher" />
-            <HomeIcon label="Home" />
+            <SpreadsheetIcon label="Thrive" color={token("color.icon.brand")} />
             <CustomTitle><span style={{ color: token("color.text"), fontWeight: 800 }}>Thrive</span></CustomTitle>
           </TopNavStart>
           <TopNavMiddle />
