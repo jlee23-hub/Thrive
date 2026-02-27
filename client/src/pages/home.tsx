@@ -72,7 +72,7 @@ export default function Home() {
           <TopNavStart>
             <AppSwitcher label="App Switcher" />
             <HomeIcon label="Home" />
-            <CustomTitle>CompView</CustomTitle>
+            <CustomTitle><span style={{ color: token("color.text"), fontWeight: 800 }}>Thrive</span></CustomTitle>
           </TopNavStart>
           <TopNavMiddle />
           <TopNavEnd>
