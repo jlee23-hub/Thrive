@@ -160,7 +160,7 @@ export default function CompensationSummary() {
 
       <div style={cardStyle}>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.050") }}>
-          <Text size="medium" weight="medium">Model your target compensation by share price</Text>
+          <Heading size="small">Model your target compensation by share price</Heading>
           <Tooltip content="Adjust the share price to see how it affects your total compensation">
             <span style={{ display: "inline-flex", cursor: "help" }}>
               <InformationIcon label="info" />
