@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import AppProvider from "@atlaskit/app-provider";
 import { token } from "@atlaskit/tokens";
 import { setBooleanFeatureFlagResolver } from "@atlaskit/platform-feature-flags";
@@ -31,9 +31,6 @@ import DashboardIcon from "@atlaskit/icon/core/dashboard";
 import ChartTrendIcon from "@atlaskit/icon/core/chart-trend";
 import InformationIcon from "@atlaskit/icon/core/information";
 import HomeIcon from "@atlaskit/icon/core/home";
-import SearchIcon from "@atlaskit/icon/core/search";
-import { Text } from "@atlaskit/primitives";
-import Heading from "@atlaskit/heading";
 
 const defaultFeatureFlags = [
   "platform_design_system_team_portal_logic_r18_fix",
@@ -53,94 +50,8 @@ resolveFeatureFlags();
 
 type NavItem = "compensation" | "rsus" | "about";
 
-function ContentSearchBar({
-  onFocus,
-  inputRef,
-  query,
-  onQueryChange,
-  isFocused,
-  onBlur,
-}: {
-  onFocus: () => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  query: string;
-  onQueryChange: (val: string) => void;
-  isFocused: boolean;
-  onBlur: () => void;
-}) {
-  return (
-    <div
-      style={{
-        width: "100%",
-        padding: `${token("space.200")} 0`,
-      }}
-    >
-      <div
-        style={{
-          position: "relative",
-          height: 48,
-          width: "100%",
-          border: isFocused
-            ? `2px solid ${token("color.border.focused")}`
-            : `1px solid ${token("color.border.input")}`,
-          borderRadius: token("border.radius.100"),
-          backgroundColor: token("color.background.input"),
-          display: "flex",
-          alignItems: "center",
-          transition: "border-color 0.15s ease",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 40,
-            flexShrink: 0,
-          }}
-        >
-          <SearchIcon label="" color={token("color.icon.subtle")} />
-        </div>
-        <input
-          ref={inputRef}
-          type="text"
-          value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          placeholder="Search CompView"
-          style={{
-            flex: 1,
-            border: "none",
-            outline: "none",
-            backgroundColor: "transparent",
-            font: token("font.body"),
-            color: token("color.text"),
-            padding: 0,
-            height: "100%",
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
 export default function Home() {
   const [activeNav, setActiveNav] = useState<NavItem>("compensation");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchFocused, setSearchFocused] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "/" && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   const renderContent = () => {
     switch (activeNav) {
@@ -210,18 +121,8 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          <div style={{ maxWidth: 960, padding: `0 ${token("space.500")}` }}>
-            <ContentSearchBar
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-              inputRef={searchInputRef}
-              query={searchQuery}
-              onQueryChange={setSearchQuery}
-              isFocused={searchFocused}
-            />
-            <div style={{ paddingBottom: token("space.500") }}>
-              {renderContent()}
-            </div>
+          <div style={{ padding: token("space.500"), maxWidth: 960 }}>
+            {renderContent()}
           </div>
         </Main>
       </Root>
