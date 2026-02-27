@@ -10,7 +10,7 @@ import Button from "@atlaskit/button/new";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.200"),
+  borderRadius: token("border.radius.300"),
   padding: token("space.400"),
   boxShadow: token("elevation.shadow.raised"),
 };
