@@ -103,7 +103,7 @@ export default function CompensationSummary() {
               <Heading size="xlarge">{formatCurrency(adjustedData.total)}</Heading>
             </div>
 
-            <div style={{ marginTop: token("space.400"), display: "flex", flexDirection: "column", gap: token("space.300") }}>
+            <div style={{ marginTop: token("space.600"), display: "flex", flexDirection: "column", gap: token("space.300") }}>
               {pieData.map((item) => (
                 <div key={item.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 400 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
