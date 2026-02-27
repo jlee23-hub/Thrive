@@ -267,7 +267,7 @@ export default function RSUDetails() {
             ))}
           </div>
 
-          <div style={{ flex: 1, height: 350, minWidth: 0 }}>
+          <div style={{ flex: 1, height: 500, minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={1}>
               <AreaChart data={vestingScheduleData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
