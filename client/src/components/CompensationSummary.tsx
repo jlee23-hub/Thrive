@@ -4,7 +4,6 @@ import { Text } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
 import Range from "@atlaskit/range";
 import Tooltip from "@atlaskit/tooltip";
-import Lozenge from "@atlaskit/lozenge";
 import InformationIcon from "@atlaskit/icon/core/information";
 import {
   PieChart,
@@ -91,13 +90,9 @@ export default function CompensationSummary() {
       <div style={cardStyle}>
         <div style={{ display: "flex", gap: token("space.400"), alignItems: "flex-start" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <Heading size="xlarge">Total Compensation Summary</Heading>
-            <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.200") }}>
-              <Lozenge appearance="inprogress" isBold>Senior Engineer</Lozenge>
-              <Lozenge appearance="new" isBold>P50</Lozenge>
-            </div>
+            <Heading size="large">Total Compensation Summary</Heading>
             <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginTop: token("space.200") }}>
-              <Text size="large" weight="medium">Your Annual Compensation</Text>
+              <Text size="medium" weight="medium">Your Annual Compensation</Text>
               <Tooltip content="Total annual compensation including base salary, bonus target, and RSU value">
                 <span style={{ display: "inline-flex", cursor: "help" }}>
                   <InformationIcon label="info" />
@@ -165,7 +160,7 @@ export default function CompensationSummary() {
 
       <div style={cardStyle}>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.050") }}>
-          <Heading size="small">Model your target compensation by share price</Heading>
+          <Text size="medium" weight="medium">Model your target compensation by share price</Text>
           <Tooltip content="Adjust the share price to see how it affects your total compensation">
             <span style={{ display: "inline-flex", cursor: "help" }}>
               <InformationIcon label="info" />
