@@ -10,14 +10,12 @@ import { Main } from "@atlaskit/navigation-system/layout/main";
 
 import {
   AppSwitcher,
-  Search,
   CreateButton,
   ChatButton,
   Notifications,
   Help,
   Settings,
   Profile,
-  AppLogo,
   CustomTitle,
 } from "@atlaskit/navigation-system/top-nav-items";
 
@@ -35,6 +33,7 @@ import InformationIcon from "@atlaskit/icon/core/information";
 import HomeIcon from "@atlaskit/icon/core/home";
 import SearchIcon from "@atlaskit/icon/core/search";
 import { Text } from "@atlaskit/primitives";
+import Heading from "@atlaskit/heading";
 
 const defaultFeatureFlags = [
   "platform_design_system_team_portal_logic_r18_fix",
@@ -54,168 +53,94 @@ resolveFeatureFlags();
 
 type NavItem = "compensation" | "rsus" | "about";
 
-function SearchShortcutHint() {
+function ContentSearchBar({
+  onFocus,
+  inputRef,
+  query,
+  onQueryChange,
+  isFocused,
+  onBlur,
+}: {
+  onFocus: () => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  query: string;
+  onQueryChange: (val: string) => void;
+  isFocused: boolean;
+  onBlur: () => void;
+}) {
   return (
     <div
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 20,
-        height: 20,
-        borderRadius: 3,
-        border: `1px solid ${token("color.border")}`,
-        backgroundColor: token("elevation.surface"),
+        width: "100%",
+        padding: `${token("space.200")} 0`,
       }}
     >
-      <Text size="small" color="color.text.subtlest">/</Text>
-    </div>
-  );
-}
-
-function SearchDialog({
-  isOpen,
-  onClose,
-  query,
-  onQueryChange,
-  inputRef,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  query: string;
-  onQueryChange: (val: string) => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-}) {
-  if (!isOpen) return null;
-
-  return (
-    <>
-      <div
-        onClick={onClose}
-        style={{
-          position: "fixed",
-          inset: 0,
-          backgroundColor: token("color.blanket"),
-          zIndex: 500,
-        }}
-      />
       <div
         style={{
-          position: "fixed",
-          top: 48,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 600,
-          maxWidth: "calc(100vw - 32px)",
-          backgroundColor: token("elevation.surface.overlay"),
-          borderRadius: 8,
-          boxShadow: token("elevation.shadow.overlay"),
-          zIndex: 510,
-          overflow: "hidden",
+          position: "relative",
+          height: 48,
+          width: "100%",
+          border: isFocused
+            ? `2px solid ${token("color.border.focused")}`
+            : `1px solid ${token("color.border.input")}`,
+          borderRadius: token("border.radius.100"),
+          backgroundColor: token("color.background.input"),
+          display: "flex",
+          alignItems: "center",
+          transition: "border-color 0.15s ease",
         }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: token("space.100"),
-            padding: `${token("space.150")} ${token("space.200")}`,
-            borderBottom: `1px solid ${token("color.border")}`,
+            justifyContent: "center",
+            width: 40,
+            flexShrink: 0,
           }}
         >
           <SearchIcon label="" color={token("color.icon.subtle")} />
-          <input
-            ref={inputRef}
-            type="text"
-            value={query}
-            onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Search CompView"
-            style={{
-              flex: 1,
-              border: "none",
-              outline: "none",
-              backgroundColor: "transparent",
-              font: token("font.body"),
-              color: token("color.text"),
-              padding: 0,
-            }}
-          />
-          <div
-            onClick={onClose}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: `${token("space.025")} ${token("space.075")}`,
-              borderRadius: 3,
-              border: `1px solid ${token("color.border")}`,
-              backgroundColor: token("elevation.surface"),
-              cursor: "pointer",
-            }}
-          >
-            <Text size="small" color="color.text.subtlest">Esc</Text>
-          </div>
         </div>
-        <div
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={(e) => onQueryChange(e.target.value)}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          placeholder="Search CompView"
           style={{
-            padding: `${token("space.300")} ${token("space.200")}`,
-            textAlign: "center",
+            flex: 1,
+            border: "none",
+            outline: "none",
+            backgroundColor: "transparent",
+            font: token("font.body"),
+            color: token("color.text"),
+            padding: 0,
+            height: "100%",
           }}
-        >
-          <Text color="color.text.subtlest">
-            {query ? `No results found for "${query}"` : "Start typing to search"}
-          </Text>
-        </div>
+        />
       </div>
-    </>
-  );
-}
-
-function CompViewIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="4" fill="url(#compview-gradient)" />
-      <text x="14" y="19" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" fontFamily="sans-serif">C</text>
-      <defs>
-        <linearGradient id="compview-gradient" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#1868DB" />
-          <stop offset="1" stopColor="#36B37E" />
-        </linearGradient>
-      </defs>
-    </svg>
+    </div>
   );
 }
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState<NavItem>("compensation");
-  const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  const openSearch = useCallback(() => {
-    setSearchOpen(true);
-    setSearchQuery("");
-    setTimeout(() => searchInputRef.current?.focus(), 50);
-  }, []);
-
-  const closeSearch = useCallback(() => {
-    setSearchOpen(false);
-    setSearchQuery("");
-  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "/" && !searchOpen && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
+      if (e.key === "/" && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
         e.preventDefault();
-        openSearch();
-      }
-      if (e.key === "Escape" && searchOpen) {
-        closeSearch();
+        searchInputRef.current?.focus();
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [searchOpen, openSearch, closeSearch]);
+  }, []);
 
   const renderContent = () => {
     switch (activeNav) {
@@ -240,11 +165,6 @@ export default function Home() {
             <CustomTitle>CompView</CustomTitle>
           </TopNavStart>
           <TopNavMiddle>
-            <Search
-              label="Search"
-              onClick={openSearch}
-              elemAfter={<SearchShortcutHint />}
-            />
             <CreateButton>Create</CreateButton>
           </TopNavMiddle>
           <TopNavEnd>
@@ -255,14 +175,6 @@ export default function Home() {
             <Profile label="Your profile" />
           </TopNavEnd>
         </TopNav>
-
-        <SearchDialog
-          isOpen={searchOpen}
-          onClose={closeSearch}
-          query={searchQuery}
-          onQueryChange={setSearchQuery}
-          inputRef={searchInputRef}
-        />
 
         <SideNav label="CompView Navigation">
           <SideNavContent>
@@ -298,8 +210,18 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          <div style={{ padding: token("space.500"), maxWidth: 960 }}>
-            {renderContent()}
+          <div style={{ maxWidth: 960, padding: `0 ${token("space.500")}` }}>
+            <ContentSearchBar
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+              inputRef={searchInputRef}
+              query={searchQuery}
+              onQueryChange={setSearchQuery}
+              isFocused={searchFocused}
+            />
+            <div style={{ paddingBottom: token("space.500") }}>
+              {renderContent()}
+            </div>
           </div>
         </Main>
       </Root>
