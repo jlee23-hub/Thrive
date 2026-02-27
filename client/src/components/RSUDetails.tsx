@@ -254,7 +254,7 @@ export default function RSUDetails() {
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={cardStyle}>
         <Heading size="large">Equity Summary</Heading>
-        <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.300") }}>
+        <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.300"), alignItems: "center" }}>
           <div style={{ flex: 1 }}>
             {grants.map((grant) => (
               <div
@@ -267,7 +267,7 @@ export default function RSUDetails() {
             ))}
           </div>
 
-          <div style={{ flex: 1, height: 500, minWidth: 0 }}>
+          <div style={{ flex: 1, height: 600, minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={1}>
               <AreaChart data={vestingScheduleData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
