@@ -103,21 +103,21 @@ export default function CompensationSummary() {
               <Heading size="xlarge">{formatCurrency(adjustedData.total)}</Heading>
             </div>
 
-            <div style={{ marginTop: token("space.300"), display: "flex", flexDirection: "column", gap: token("space.150") }}>
+            <div style={{ marginTop: token("space.400"), display: "flex", flexDirection: "column", gap: token("space.300") }}>
               {pieData.map((item) => (
-                <div key={item.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 340 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                <div key={item.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 400 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
                     <div
                       style={{
-                        width: 12,
-                        height: 12,
+                        width: 14,
+                        height: 14,
                         borderRadius: token("border.radius.050"),
                         backgroundColor: item.color,
                       }}
                     />
-                    <Text size="medium">{item.name}</Text>
+                    <Text size="large">{item.name}</Text>
                   </div>
-                  <Text size="medium" weight="bold">{formatCurrency(item.value)}</Text>
+                  <Text size="large" weight="bold">{formatCurrency(item.value)}</Text>
                 </div>
               ))}
             </div>
