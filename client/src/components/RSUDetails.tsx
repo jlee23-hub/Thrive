@@ -51,12 +51,25 @@ const cardStyle: React.CSSProperties = {
   boxShadow: token("elevation.shadow.raised"),
 };
 
-function GrantCard({ grant }: { grant: Grant }) {
+function GrantCard({ grant, isSelected }: { grant: Grant; isSelected: boolean }) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         ...cardStyle,
         marginBottom: token("space.200"),
+        border: isSelected
+          ? `2px solid ${token("color.border.selected")}`
+          : `2px solid transparent`,
+        backgroundColor: isSelected
+          ? token("color.background.selected")
+          : isHovered
+            ? token("color.background.neutral.hovered")
+            : token("elevation.surface.raised"),
+        transition: "background-color 0.15s ease, border-color 0.15s ease",
       }}
     >
       <Text size="medium" weight="bold">{grant.grantDate} Grant</Text>
@@ -262,7 +275,7 @@ export default function RSUDetails() {
                 onClick={() => setSelectedGrant(grant)}
                 style={{ cursor: "pointer" }}
               >
-                <GrantCard grant={grant} />
+                <GrantCard grant={grant} isSelected={selectedGrant.id === grant.id} />
               </div>
             ))}
           </div>
