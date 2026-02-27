@@ -91,13 +91,23 @@ export default function CompensationSummary() {
         <div style={{ display: "flex", gap: token("space.400"), alignItems: "flex-start" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <Heading size="large">Total Compensation Summary</Heading>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginTop: token("space.200") }}>
-              <Text size="medium" weight="medium">Your Annual Compensation</Text>
-              <Tooltip content="Total annual compensation including base salary, bonus target, and RSU value">
-                <span style={{ display: "inline-flex", cursor: "help" }}>
-                  <InformationIcon label="info" />
-                </span>
-              </Tooltip>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.400"), marginTop: token("space.200") }}>
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                <Text size="medium" weight="medium">Your Annual Compensation</Text>
+                <Tooltip content="Total annual compensation including base salary, bonus target, and RSU value">
+                  <span style={{ display: "inline-flex", cursor: "help" }}>
+                    <InformationIcon label="info" />
+                  </span>
+                </Tooltip>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                <Text size="medium" weight="medium">Job Role:</Text>
+                <Text size="medium" weight="bold">Senior Engineer</Text>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                <Text size="medium" weight="medium">Level:</Text>
+                <Text size="medium" weight="bold">P50</Text>
+              </div>
             </div>
             <div style={{ marginTop: token("space.050") }}>
               <Heading size="xxlarge">{formatCurrency(adjustedData.total)}</Heading>
