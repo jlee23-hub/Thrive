@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import AppProvider from "@atlaskit/app-provider";
 import { token } from "@atlaskit/tokens";
 import { setBooleanFeatureFlagResolver } from "@atlaskit/platform-feature-flags";
@@ -33,6 +33,8 @@ import DashboardIcon from "@atlaskit/icon/core/dashboard";
 import ChartTrendIcon from "@atlaskit/icon/core/chart-trend";
 import InformationIcon from "@atlaskit/icon/core/information";
 import HomeIcon from "@atlaskit/icon/core/home";
+import SearchIcon from "@atlaskit/icon/core/search";
+import { Text } from "@atlaskit/primitives";
 
 const defaultFeatureFlags = [
   "platform_design_system_team_portal_logic_r18_fix",
@@ -52,6 +54,123 @@ resolveFeatureFlags();
 
 type NavItem = "compensation" | "rsus" | "about";
 
+function SearchShortcutHint() {
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 20,
+        height: 20,
+        borderRadius: 3,
+        border: `1px solid ${token("color.border")}`,
+        backgroundColor: token("elevation.surface"),
+      }}
+    >
+      <Text size="small" color="color.text.subtlest">/</Text>
+    </div>
+  );
+}
+
+function SearchDialog({
+  isOpen,
+  onClose,
+  query,
+  onQueryChange,
+  inputRef,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  query: string;
+  onQueryChange: (val: string) => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed",
+          inset: 0,
+          backgroundColor: token("color.blanket"),
+          zIndex: 500,
+        }}
+      />
+      <div
+        style={{
+          position: "fixed",
+          top: 48,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 600,
+          maxWidth: "calc(100vw - 32px)",
+          backgroundColor: token("elevation.surface.overlay"),
+          borderRadius: 8,
+          boxShadow: token("elevation.shadow.overlay"),
+          zIndex: 510,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: token("space.100"),
+            padding: `${token("space.150")} ${token("space.200")}`,
+            borderBottom: `1px solid ${token("color.border")}`,
+          }}
+        >
+          <SearchIcon label="" color={token("color.icon.subtle")} />
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => onQueryChange(e.target.value)}
+            placeholder="Search CompView"
+            style={{
+              flex: 1,
+              border: "none",
+              outline: "none",
+              backgroundColor: "transparent",
+              font: token("font.body"),
+              color: token("color.text"),
+              padding: 0,
+            }}
+          />
+          <div
+            onClick={onClose}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: `${token("space.025")} ${token("space.075")}`,
+              borderRadius: 3,
+              border: `1px solid ${token("color.border")}`,
+              backgroundColor: token("elevation.surface"),
+              cursor: "pointer",
+            }}
+          >
+            <Text size="small" color="color.text.subtlest">Esc</Text>
+          </div>
+        </div>
+        <div
+          style={{
+            padding: `${token("space.300")} ${token("space.200")}`,
+            textAlign: "center",
+          }}
+        >
+          <Text color="color.text.subtlest">
+            {query ? `No results found for "${query}"` : "Start typing to search"}
+          </Text>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function CompViewIcon() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
@@ -69,6 +188,34 @@ function CompViewIcon() {
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState<NavItem>("compensation");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const openSearch = useCallback(() => {
+    setSearchOpen(true);
+    setSearchQuery("");
+    setTimeout(() => searchInputRef.current?.focus(), 50);
+  }, []);
+
+  const closeSearch = useCallback(() => {
+    setSearchOpen(false);
+    setSearchQuery("");
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "/" && !searchOpen && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === "Escape" && searchOpen) {
+        closeSearch();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [searchOpen, openSearch, closeSearch]);
 
   const renderContent = () => {
     switch (activeNav) {
@@ -93,7 +240,11 @@ export default function Home() {
             <CustomTitle>CompView</CustomTitle>
           </TopNavStart>
           <TopNavMiddle>
-            <Search label="Search" />
+            <Search
+              label="Search"
+              onClick={openSearch}
+              elemAfter={<SearchShortcutHint />}
+            />
             <CreateButton>Create</CreateButton>
           </TopNavMiddle>
           <TopNavEnd>
@@ -104,6 +255,14 @@ export default function Home() {
             <Profile label="Your profile" />
           </TopNavEnd>
         </TopNav>
+
+        <SearchDialog
+          isOpen={searchOpen}
+          onClose={closeSearch}
+          query={searchQuery}
+          onQueryChange={setSearchQuery}
+          inputRef={searchInputRef}
+        />
 
         <SideNav label="CompView Navigation">
           <SideNavContent>
