@@ -118,7 +118,7 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          <div style={{ padding: token("space.500"), maxWidth: 960 }}>
+          <div style={{ padding: token("space.500") }}>
             {renderContent()}
           </div>
         </Main>
