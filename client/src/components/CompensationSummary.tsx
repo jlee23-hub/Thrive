@@ -105,7 +105,7 @@ export default function CompensationSummary() {
 
             <div style={{ marginTop: token("space.300"), display: "flex", flexDirection: "column", gap: token("space.150") }}>
               {pieData.map((item) => (
-                <div key={item.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div key={item.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 340 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
                     <div
                       style={{
