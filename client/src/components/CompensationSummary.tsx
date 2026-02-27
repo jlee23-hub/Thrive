@@ -4,6 +4,7 @@ import { Text } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
 import Range from "@atlaskit/range";
 import Tooltip from "@atlaskit/tooltip";
+import Lozenge from "@atlaskit/lozenge";
 import InformationIcon from "@atlaskit/icon/core/information";
 import {
   PieChart,
@@ -91,6 +92,10 @@ export default function CompensationSummary() {
         <div style={{ display: "flex", gap: token("space.400"), alignItems: "flex-start" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <Heading size="large">Total Compensation Summary</Heading>
+            <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.200") }}>
+              <Lozenge appearance="inprogress" isBold>Senior Engineer</Lozenge>
+              <Lozenge appearance="new" isBold>P50</Lozenge>
+            </div>
             <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginTop: token("space.200") }}>
               <Text size="medium" weight="medium">Your Annual Compensation</Text>
               <Tooltip content="Total annual compensation including base salary, bonus target, and RSU value">
