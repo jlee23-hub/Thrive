@@ -56,12 +56,11 @@ function GrantCard({ grant }: { grant: Grant }) {
     <div
       style={{
         ...cardStyle,
-        padding: token("space.200"),
-        marginBottom: token("space.100"),
+        marginBottom: token("space.200"),
       }}
     >
-      <Text size="small" weight="bold">{grant.grantDate} Grant</Text>
-      <div style={{ marginTop: token("space.100"), marginBottom: token("space.075") }}>
+      <Text size="medium" weight="bold">{grant.grantDate} Grant</Text>
+      <div style={{ marginTop: token("space.150"), marginBottom: token("space.100") }}>
         <ProgressBar
           appearance="success"
           value={grant.vestingProgress / 100}
