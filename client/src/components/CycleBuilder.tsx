@@ -2532,7 +2532,7 @@ function FieldPermissionsStep({
         <Heading size="medium">Field Permissions</Heading>
       </div>
 
-      <div>
+      <div style={{ maxWidth: 240 }}>
         <LabelText>Role</LabelText>
         <Select
           options={roleOptions}
