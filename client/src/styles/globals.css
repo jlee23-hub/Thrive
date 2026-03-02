@@ -39,9 +39,14 @@ div[role="list"]._bozg1crf {
   display: inherit;
 }
 
-[role="dialog"]._kqsw1n9t._1e02ze3t {
-  inset-inline-start: auto !important;
-  inset-inline-end: 0 !important;
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 .no-last-row-border table tbody tr:last-child td {

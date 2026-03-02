@@ -12,7 +12,6 @@ import SectionMessage from "@atlaskit/section-message";
 import InlineMessage from "@atlaskit/inline-message";
 import Checkbox from "@atlaskit/checkbox";
 import Toggle from "@atlaskit/toggle";
-import Drawer from "@atlaskit/drawer";
 
 import PageIcon from "@atlaskit/icon/core/page";
 import AddIcon from "@atlaskit/icon/core/add";
@@ -2579,90 +2578,101 @@ function UsersRolesStep() {
         <UsersTabContent />
       )}
 
-      <Drawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        width="medium"
-        label="Edit User"
-        enterFrom="right"
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.300") }}>
-          <Heading size="medium">Edit User</Heading>
-
-          <div>
-            <LabelText>Display Name</LabelText>
-            <Textfield
-              value={editForm.name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEditForm({ ...editForm, name: e.target.value })
-              }
-            />
+      {drawerOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            height: "100vh",
+            width: 480,
+            backgroundColor: token("elevation.surface.overlay"),
+            boxShadow: token("elevation.shadow.overlay"),
+            zIndex: 500,
+            overflowY: "auto",
+            animation: "slideInRight 200ms ease-out",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: `${token("space.300")} ${token("space.400")}`, borderBottom: `1px solid ${token("color.border")}` }}>
+            <Heading size="medium">Edit User</Heading>
+            <IconButton icon={CrossIcon} label="Close" appearance="subtle" onClick={() => setDrawerOpen(false)} />
           </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.400") }}>
+            <div>
+              <LabelText>Display Name</LabelText>
+              <Textfield
+                value={editForm.name}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setEditForm({ ...editForm, name: e.target.value })
+                }
+              />
+            </div>
 
-          <div>
-            <LabelText>Username</LabelText>
-            <Textfield
-              value={editForm.username}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEditForm({ ...editForm, username: e.target.value })
-              }
-            />
-          </div>
+            <div>
+              <LabelText>Username</LabelText>
+              <Textfield
+                value={editForm.username}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setEditForm({ ...editForm, username: e.target.value })
+                }
+              />
+            </div>
 
-          <div>
-            <LabelText>Email</LabelText>
-            <Textfield
-              value={editForm.email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEditForm({ ...editForm, email: e.target.value })
-              }
-            />
-          </div>
+            <div>
+              <LabelText>Email</LabelText>
+              <Textfield
+                value={editForm.email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setEditForm({ ...editForm, email: e.target.value })
+                }
+              />
+            </div>
 
-          <div>
-            <LabelText>Role</LabelText>
-            <Select
-              options={roleOptions}
-              value={roleOptions.find((o) => o.value === editForm.role)}
-              onChange={(opt) => opt && setEditForm({ ...editForm, role: opt.value })}
-            />
-          </div>
+            <div>
+              <LabelText>Role</LabelText>
+              <Select
+                options={roleOptions}
+                value={roleOptions.find((o) => o.value === editForm.role)}
+                onChange={(opt) => opt && setEditForm({ ...editForm, role: opt.value })}
+              />
+            </div>
 
-          <div>
-            <LabelText>People and Groups</LabelText>
-            <Textfield
-              value={editForm.peopleGroups}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEditForm({ ...editForm, peopleGroups: e.target.value })
-              }
-              placeholder="Search and add people or groups..."
-            />
-          </div>
+            <div>
+              <LabelText>People and Groups</LabelText>
+              <Textfield
+                value={editForm.peopleGroups}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setEditForm({ ...editForm, peopleGroups: e.target.value })
+                }
+                placeholder="Search and add people or groups..."
+              />
+            </div>
 
-          <div>
-            <LabelText>Permissions</LabelText>
-            <Select
-              options={permissionOptions}
-              value={permissionOptions.find((o) => o.value === editForm.permissions)}
-              onChange={(opt) => opt && setEditForm({ ...editForm, permissions: opt.value })}
-            />
-          </div>
+            <div>
+              <LabelText>Permissions</LabelText>
+              <Select
+                options={permissionOptions}
+                value={permissionOptions.find((o) => o.value === editForm.permissions)}
+                onChange={(opt) => opt && setEditForm({ ...editForm, permissions: opt.value })}
+              />
+            </div>
 
-          <div>
-            <LabelText>Employee Link</LabelText>
-            <Select
-              options={employeeLinkOptions}
-              value={employeeLinkOptions.find((o) => o.value === editForm.linked)}
-              onChange={(opt) => opt && setEditForm({ ...editForm, linked: opt.value })}
-            />
-          </div>
+            <div>
+              <LabelText>Employee Link</LabelText>
+              <Select
+                options={employeeLinkOptions}
+                value={employeeLinkOptions.find((o) => o.value === editForm.linked)}
+                onChange={(opt) => opt && setEditForm({ ...editForm, linked: opt.value })}
+              />
+            </div>
 
-          <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.200") }}>
-            <Button appearance="primary" onClick={() => setDrawerOpen(false)}>Save</Button>
-            <Button appearance="subtle" onClick={() => setDrawerOpen(false)}>Cancel</Button>
+            <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.200") }}>
+              <Button appearance="primary" onClick={() => setDrawerOpen(false)}>Save</Button>
+              <Button appearance="subtle" onClick={() => setDrawerOpen(false)}>Cancel</Button>
+            </div>
           </div>
         </div>
-      </Drawer>
+      )}
     </div>
   );
 }
