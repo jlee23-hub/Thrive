@@ -39,11 +39,9 @@ div[role="list"]._bozg1crf {
   display: inherit;
 }
 
-.drawer-right [role="dialog"] {
+[role="dialog"]._kqsw1n9t._1e02ze3t {
   inset-inline-start: auto !important;
   inset-inline-end: 0 !important;
-  right: 0 !important;
-  left: auto !important;
 }
 
 .no-last-row-border table tbody tr:last-child td {
