@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { token } from "@atlaskit/tokens";
 import Heading from "@atlaskit/heading";
 import { Text } from "@atlaskit/primitives";
@@ -272,8 +272,205 @@ const fxChangeHistory = [
   { date: "2024-01-08 16:42:18", user: "Sarah Chen", action: "Updated INR Rate", details: "Changed from 82.45 to 83.12", source: "Manual Edit" },
 ];
 
+function SuccessAnimation({ onDone }: { onDone: () => void }) {
+  const [phase, setPhase] = useState<"circle" | "check" | "text" | "confetti" | "done">("circle");
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setPhase("check"), 500);
+    const t2 = setTimeout(() => setPhase("confetti"), 1000);
+    const t3 = setTimeout(() => setPhase("text"), 1600);
+    const t4 = setTimeout(() => setPhase("done"), 2200);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+  }, []);
+
+  const confettiColors = [
+    token("color.background.brand.bold"),
+    token("color.background.success.bold"),
+    token("color.background.warning.bold"),
+    token("color.background.danger.bold"),
+    token("color.background.discovery.bold"),
+    token("color.background.information.bold"),
+  ];
+
+  const [particles] = useState(() =>
+    Array.from({ length: 40 }, (_, i) => {
+      const angle = (i / 40) * 360;
+      const distance = 80 + Math.random() * 160;
+      const size = 4 + Math.random() * 8;
+      const color = confettiColors[i % confettiColors.length];
+      const delay = Math.random() * 0.3;
+      const isRect = i % 3 !== 0;
+      return { angle, distance, size, color, delay, isRect };
+    })
+  );
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 100,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: token("elevation.surface"),
+        animation: "fadeIn 0.3s ease-out",
+      }}
+    >
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes circleScale {
+          0% { transform: scale(0); opacity: 0; }
+          60% { transform: scale(1.15); }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes drawCheck {
+          0% { stroke-dashoffset: 48; }
+          100% { stroke-dashoffset: 0; }
+        }
+        @keyframes circleStroke {
+          0% { stroke-dashoffset: 283; }
+          100% { stroke-dashoffset: 0; }
+        }
+        @keyframes pulseRing {
+          0% { transform: scale(1); opacity: 0.4; }
+          100% { transform: scale(2.5); opacity: 0; }
+        }
+      `}</style>
+
+      <div style={{ position: "relative", width: 200, height: 200 }}>
+        {(phase === "confetti" || phase === "text" || phase === "done") && (
+          <div style={{ position: "absolute", top: "50%", left: "50%", width: 0, height: 0 }}>
+            {particles.map((p, i) => {
+              const radians = (p.angle * Math.PI) / 180;
+              const tx = Math.cos(radians) * p.distance;
+              const ty = Math.sin(radians) * p.distance;
+              const name = `confetti-${i}`;
+              return (
+                <React.Fragment key={i}>
+                  <style>{`
+                    @keyframes ${name} {
+                      0% { transform: translate(0, 0) scale(0); opacity: 1; }
+                      50% { opacity: 1; }
+                      100% { transform: translate(${tx}px, ${ty}px) scale(1); opacity: 0; }
+                    }
+                  `}</style>
+                  <div
+                    style={{
+                      position: "absolute",
+                      width: p.size,
+                      height: p.isRect ? p.size * 0.4 : p.size,
+                      borderRadius: p.isRect ? 2 : "50%",
+                      backgroundColor: p.color,
+                      animation: `${name} 0.9s ${p.delay}s ease-out forwards`,
+                      opacity: 0,
+                    }}
+                  />
+                </React.Fragment>
+              );
+            })}
+          </div>
+        )}
+
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: "50%",
+            border: `3px solid ${token("color.border.success")}`,
+            animation: phase !== "circle" ? "pulseRing 1s ease-out forwards" : "none",
+            opacity: phase !== "circle" ? 0.4 : 0,
+          }}
+        />
+
+        <svg
+          viewBox="0 0 100 100"
+          style={{
+            width: 200,
+            height: 200,
+            animation: "circleScale 0.5s ease-out forwards",
+          }}
+        >
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke={token("color.border.success")}
+            strokeWidth="3"
+            strokeDasharray="283"
+            strokeDashoffset="283"
+            strokeLinecap="round"
+            style={{
+              animation: "circleStroke 0.7s 0.1s ease-out forwards",
+              transformOrigin: "center",
+              transform: "rotate(-90deg)",
+            }}
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="42"
+            fill={token("color.background.success")}
+            opacity={phase !== "circle" ? 1 : 0}
+            style={{ transition: "opacity 0.4s ease" }}
+          />
+          {(phase === "check" || phase === "confetti" || phase === "text" || phase === "done") && (
+            <polyline
+              points="30,52 44,66 70,38"
+              fill="none"
+              stroke={token("color.icon.success")}
+              strokeWidth="5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="48"
+              strokeDashoffset="48"
+              style={{ animation: "drawCheck 0.4s 0.1s ease-out forwards" }}
+            />
+          )}
+        </svg>
+      </div>
+
+      <div
+        style={{
+          marginTop: token("space.400"),
+          textAlign: "center",
+          opacity: phase === "text" || phase === "done" ? 1 : 0,
+          transform: phase === "text" || phase === "done" ? "translateY(0)" : "translateY(20px)",
+          transition: "all 0.5s ease-out",
+        }}
+      >
+        <Heading size="large">Cycle Finalized</Heading>
+        <div style={{ marginTop: token("space.100"), maxWidth: 400 }}>
+          <Text size="medium" color="color.text.subtlest">
+            Your compensation cycle has been successfully created and is ready for activation.
+          </Text>
+        </div>
+      </div>
+
+      <div
+        style={{
+          marginTop: token("space.400"),
+          opacity: phase === "done" ? 1 : 0,
+          transform: phase === "done" ? "translateY(0)" : "translateY(12px)",
+          transition: "all 0.4s ease-out",
+        }}
+      >
+        <Button appearance="primary" onClick={onDone}>
+          Go to Dashboard
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export default function CycleBuilder({ onBack }: CycleBuilderProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const [showComplete, setShowComplete] = useState(false);
   const [expandedErrorFile, setExpandedErrorFile] = useState<number | null>(null);
   const [workdayExpanded, setWorkdayExpanded] = useState(true);
   const [shareworksExpanded, setShareworksExpanded] = useState(false);
@@ -303,7 +500,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
     if (currentStep < STEPS.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      onBack();
+      setShowComplete(true);
     }
   };
 
@@ -385,8 +582,10 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
         borderRadius: token("border.radius.300"),
         boxShadow: token("elevation.shadow.raised"),
         overflow: "hidden",
+        position: "relative",
       }}
     >
+      {showComplete && <SuccessAnimation onDone={onBack} />}
       <div
         style={{
           display: "flex",
