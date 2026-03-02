@@ -718,7 +718,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
 
                       <div style={{ paddingTop: token("space.025") }}>
                         <Text
-                          size="small"
+                          size="medium"
                           weight="semibold"
                           color={isActive ? "color.text.brand" : "color.text"}
                         >
