@@ -2593,11 +2593,11 @@ function UsersRolesStep() {
             animation: "slideInRight 200ms ease-out",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: `${token("space.300")} ${token("space.400")}`, borderBottom: `1px solid ${token("color.border")}` }}>
-            <Heading size="medium">Edit Role</Heading>
+          <div style={{ position: "absolute", top: token("space.200"), right: token("space.200"), zIndex: 1 }}>
             <IconButton icon={CrossIcon} label="Close" appearance="subtle" onClick={() => setDrawerOpen(false)} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.400") }}>
+            <Heading size="large">Edit Role</Heading>
             <div>
               <LabelText>Display Name</LabelText>
               <Textfield
