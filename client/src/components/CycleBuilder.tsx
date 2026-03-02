@@ -1746,7 +1746,7 @@ function BudgetFxStep() {
           </tbody>
         </table>
 
-        <div style={{ marginTop: token("space.300"), borderTop: `1px solid ${token("color.border")}`, paddingTop: token("space.200") }}>
+        <div style={{ marginTop: token("space.300"), paddingTop: token("space.200") }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.150") }}>
             <Text size="small" weight="bold">Recent Changes</Text>
             <Button appearance="link" spacing="none">View All History</Button>
