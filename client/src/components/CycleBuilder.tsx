@@ -42,6 +42,7 @@ import InformationIcon from "@atlaskit/icon/core/information";
 import PeopleGroupIcon from "@atlaskit/icon/core/people-group";
 import EyeOpenIcon from "@atlaskit/icon/core/eye-open";
 import SpreadsheetIcon from "@atlaskit/icon/core/spreadsheet";
+import { RadioGroup } from "@atlaskit/radio";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
@@ -1409,6 +1410,46 @@ function EligibilityRulesStep() {
 }
 
 function BudgetFxStep() {
+  const budgetsList = [
+    { id: 1, name: "Broad-based APEX Equity", lastUpdated: "Aug 09, 2025" },
+    { id: 2, name: "L100+ APEX Equity", lastUpdated: "Aug 08, 2025" },
+    { id: 3, name: "Broad-based Special Equity", lastUpdated: "Aug 08, 2025" },
+    { id: 4, name: "L100+ Retention Equity", lastUpdated: "Aug 08, 2025" },
+    { id: 5, name: "TOTAL- Broad-based APEX + Special Equity", lastUpdated: "Aug 08, 2025" },
+    { id: 6, name: "TOTAL L100+ APEX + Retention Equity", lastUpdated: "Aug 09, 2025" },
+  ];
+
+  const columnOptions = [
+    { id: "salary-increase", label: "Salary Increase", checked: false },
+    { id: "new-commission", label: "New Commission", checked: false },
+    { id: "special-equity", label: "Special Equity - Budget", checked: true },
+    { id: "modeled-equity", label: "Modeled Equity Broad-base Value - Budget", checked: true },
+    { id: "retention-equity", label: "Retention Equity - Budget", checked: false },
+    { id: "promotion-equity", label: "Promotion Equity - Budget", checked: false },
+    { id: "modeled-exec", label: "Modeled Equity Exec Value - Budget", checked: false },
+  ];
+
+  const calcMethodOptions = [
+    { name: "calc-method", value: "percentage", label: "Apply a percentage of Current Pay", description: "Define your budget as a percentage of a specified pay type" },
+    { name: "calc-method", value: "sum-column", label: "Sum values stored in a column", description: "Define your budget using the values stored in another column" },
+    { name: "calc-method", value: "sum-target", label: "Sum target recommendation values", description: "Define your budget using the sum of target recommendation values for this column" },
+    { name: "calc-method", value: "sum-uploaded", label: "Sum uploaded values", description: "Define your budget using uploaded values via Data Upload" },
+  ];
+
+  const [selectedBudgetId, setSelectedBudgetId] = useState(5);
+  const [budgetTab, setBudgetTab] = useState<"general" | "permissions">("general");
+  const [budgetType, setBudgetType] = useState("equity");
+  const [budgetCreation, setBudgetCreation] = useState("bottoms-up");
+  const [budgetLimit, setBudgetLimit] = useState("yes");
+  const [columnChecks, setColumnChecks] = useState(columnOptions);
+  const [calcMethods, setCalcMethods] = useState<Record<string, string>>({
+    "special-equity": "sum-uploaded",
+    "modeled-equity": "sum-uploaded",
+  });
+
+  const selectedBudget = budgetsList.find((b) => b.id === selectedBudgetId)!;
+  const selectedColumns = columnChecks.filter((c) => c.checked);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
@@ -1430,6 +1471,209 @@ function BudgetFxStep() {
           <div>
             <LabelText>Total Equity Budget</LabelText>
             <Textfield value="$0" isReadOnly />
+          </div>
+        </div>
+      </div>
+
+      <div style={cardStyle}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
+          <div>
+            <Heading size="xsmall">Budgets</Heading>
+            <Text size="small" color="color.text.subtlest">
+              Create budgets that your planners will see and have their changes compared against.
+            </Text>
+          </div>
+          <Button appearance="primary">Create a Budget</Button>
+        </div>
+
+        <div style={{ display: "flex", border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.200"), overflow: "hidden" }}>
+          <div
+            style={{
+              width: 280,
+              borderRight: `1px solid ${token("color.border")}`,
+              flexShrink: 0,
+            }}
+          >
+            {budgetsList.map((budget) => (
+              <div
+                key={budget.id}
+                onClick={() => setSelectedBudgetId(budget.id)}
+                style={{
+                  padding: `${token("space.150")} ${token("space.200")}`,
+                  cursor: "pointer",
+                  borderBottom: `1px solid ${token("color.border")}`,
+                  borderLeft: selectedBudgetId === budget.id ? `3px solid ${token("color.border.selected")}` : "3px solid transparent",
+                  backgroundColor: selectedBudgetId === budget.id ? token("color.background.selected") : "transparent",
+                }}
+              >
+                <Text size="small" weight={selectedBudgetId === budget.id ? "semibold" : "regular"}>
+                  {budget.id}. {budget.name}
+                </Text>
+                <div>
+                  <Text size="UNSAFE_small" color="color.text.subtlest">Last Updated: {budget.lastUpdated}</Text>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ flex: 1, padding: token("space.300") }}>
+            <Heading size="small">Editing {selectedBudget.id}. {selectedBudget.name}</Heading>
+
+            <div style={{ display: "flex", gap: token("space.300"), marginTop: token("space.200"), marginBottom: token("space.300") }}>
+              {(["general", "permissions"] as const).map((tab) => (
+                <div
+                  key={tab}
+                  onClick={() => setBudgetTab(tab)}
+                  style={{
+                    paddingBottom: token("space.100"),
+                    cursor: "pointer",
+                    borderBottom: budgetTab === tab ? `2px solid ${token("color.border.selected")}` : "2px solid transparent",
+                  }}
+                >
+                  <Text
+                    size="small"
+                    weight="semibold"
+                    color={budgetTab === tab ? "color.text.selected" : "color.text.subtlest"}
+                  >
+                    {tab === "general" ? "General" : "Permissions"}
+                  </Text>
+                </div>
+              ))}
+            </div>
+
+            {budgetTab === "general" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
+                <div>
+                  <LabelText>Budget Name</LabelText>
+                  <Textfield defaultValue={`${selectedBudget.id}. ${selectedBudget.name}`} />
+                </div>
+
+                <div>
+                  <Text size="small" weight="semibold">What type of budget do you want to create?</Text>
+                  <div style={{ marginTop: token("space.150") }}>
+                    <RadioGroup
+                      options={[
+                        { name: "budget-type", value: "cash", label: "Cash" },
+                        { name: "budget-type", value: "equity", label: "Equity" },
+                      ]}
+                      value={budgetType}
+                      onChange={(e) => setBudgetType(e.target.value)}
+                    />
+                  </div>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">
+                      {budgetType === "cash"
+                        ? "Cash can include salary, as well as other pay types such as bonuses and variable raises"
+                        : "Equity includes performance, promotion, and refresher shares"}
+                    </Text>
+                  </div>
+                </div>
+
+                <div>
+                  <Text size="small" weight="semibold">Which columns should contribute to this budget?</Text>
+                  <div style={{ display: "flex", flexDirection: "column", gap: token("space.100"), marginTop: token("space.150") }}>
+                    {columnChecks.map((col) => (
+                      <Checkbox
+                        key={col.id}
+                        isChecked={col.checked}
+                        onChange={() =>
+                          setColumnChecks((prev) =>
+                            prev.map((c) => (c.id === col.id ? { ...c, checked: !c.checked } : c))
+                          )
+                        }
+                        label={col.label}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <Text size="small" weight="semibold">How would you like to create your budget?</Text>
+                  <div style={{ marginTop: token("space.150") }}>
+                    <RadioGroup
+                      options={[
+                        { name: "budget-creation", value: "bottoms-up", label: "Bottoms Up Budget" },
+                        { name: "budget-creation", value: "award", label: "Award Budget" },
+                      ]}
+                      value={budgetCreation}
+                      onChange={(e) => setBudgetCreation(e.target.value)}
+                    />
+                  </div>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">
+                      {budgetCreation === "bottoms-up"
+                        ? "These budgets are assigned on the employee level and calculated based on their current pay"
+                        : "These budgets simply display the sum of the specified columns"}
+                    </Text>
+                  </div>
+                </div>
+
+                <div>
+                  <Text size="small" weight="semibold">Do you want to set a limit for this budget?</Text>
+                  <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.150") }}>
+                    <RadioGroup
+                      options={[
+                        { name: "budget-limit", value: "yes", label: "Yes" },
+                        { name: "budget-limit", value: "no", label: "No" },
+                      ]}
+                      value={budgetLimit}
+                      onChange={(e) => setBudgetLimit(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {selectedColumns.length > 0 && (
+                  <div>
+                    <Text size="small" color="color.text.subtlest">
+                      For each column selected, specify how budget should be calculated on a per-employee basis
+                    </Text>
+                    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), marginTop: token("space.200") }}>
+                      {selectedColumns.map((col) => (
+                        <div
+                          key={col.id}
+                          style={{
+                            border: `1px solid ${token("color.border")}`,
+                            borderRadius: token("border.radius.200"),
+                            padding: token("space.300"),
+                          }}
+                        >
+                          <Heading size="xsmall">{col.label}</Heading>
+                          <div style={{ marginTop: token("space.150") }}>
+                            <Text size="small" weight="semibold">Calculation Method</Text>
+                            <div style={{ marginTop: token("space.100") }}>
+                              <RadioGroup
+                                options={calcMethodOptions.map((opt) => ({
+                                  ...opt,
+                                  name: `calc-${col.id}`,
+                                }))}
+                                value={calcMethods[col.id] || "sum-uploaded"}
+                                onChange={(e) =>
+                                  setCalcMethods((prev) => ({ ...prev, [col.id]: e.target.value }))
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {budgetTab === "permissions" && (
+              <div style={{ textAlign: "center", padding: token("space.600") }}>
+                <ShieldIcon label="" color={token("color.icon.disabled")} />
+                <div style={{ marginTop: token("space.200") }}>
+                  <Text weight="semibold">Budget Permissions</Text>
+                </div>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Text size="small" color="color.text.subtlest">
+                    Configure who can view and edit this budget
+                  </Text>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
