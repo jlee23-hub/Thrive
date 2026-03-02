@@ -22,3 +22,8 @@ body {
 .bold-nav-items span {
   font-weight: 600 !important;
 }
+
+div[id^="cycle-details-tabs-"][id$="-tab"] {
+  max-width: none !important;
+  width: 100% !important;
+}
