@@ -155,14 +155,6 @@ export default function Home() {
             Dashboard
           </LinkMenuItem>
           <LinkMenuItem
-            href="#merit-matrix"
-            elemBefore={<ChartMatrixIcon label="" color="currentColor" />}
-            isSelected={activeNav === "merit-matrix"}
-            onClick={(e) => { e.preventDefault(); setActiveNav("merit-matrix"); }}
-          >
-            Merit Matrix
-          </LinkMenuItem>
-          <LinkMenuItem
             href="#groups"
             elemBefore={<ShieldIcon label="" color="currentColor" />}
             isSelected={activeNav === "groups"}
