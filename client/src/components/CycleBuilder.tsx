@@ -624,106 +624,118 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             flexDirection: "column",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              flex: 1,
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
-            {STEPS.map((step, index) => {
-              const isActive = index === currentStep;
-              const isCompleted = index < currentStep;
-              const circleSize = 28;
-              const circleCenter = circleSize / 2;
-
-              return (
+          {(() => {
+            const circleSize = 28;
+            const circleCenter = circleSize / 2;
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  flex: 1,
+                  position: "relative",
+                }}
+              >
                 <div
-                  key={step.id}
                   style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: token("space.100"),
-                    cursor: "pointer",
+                    position: "absolute",
+                    left: circleCenter - 1,
+                    top: circleCenter,
+                    bottom: circleCenter,
+                    width: 2,
+                    backgroundColor: token("color.border"),
+                    zIndex: 0,
                   }}
-                  onClick={() => setCurrentStep(index)}
-                >
-                  {index !== STEPS.length - 1 && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        left: circleCenter - 1,
-                        top: circleSize,
-                        height: 200,
-                        width: 2,
-                        backgroundColor: isCompleted
-                          ? token("color.border.brand")
-                          : token("color.border"),
-                      }}
-                    />
-                  )}
-
+                />
+                {currentStep > 0 && (
                   <div
                     style={{
-                      position: "relative",
-                      zIndex: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: circleSize,
-                      height: circleSize,
-                      borderRadius: "50%",
-                      border: `2px solid ${
-                        isActive
-                          ? token("color.border.brand")
-                          : isCompleted
-                          ? token("color.border.brand")
-                          : token("color.border")
-                      }`,
-                      backgroundColor: isCompleted
-                        ? token("color.background.brand.bold")
-                        : isActive
-                        ? token("color.background.selected")
-                        : token("elevation.surface"),
-                      color: isCompleted
-                        ? token("color.text.inverse")
-                        : isActive
-                        ? token("color.text.brand")
-                        : token("color.text.subtlest"),
-                      flexShrink: 0,
-                      fontSize: 12,
-                      fontWeight: 600,
+                      position: "absolute",
+                      left: circleCenter - 1,
+                      top: circleCenter,
+                      height: `${((currentStep) / (STEPS.length - 1)) * 100}%`,
+                      width: 2,
+                      backgroundColor: token("color.border.brand"),
+                      zIndex: 0,
                     }}
-                  >
-                    {isCompleted ? (
-                      <CheckMarkIcon label="" color={token("color.icon.inverse")} />
-                    ) : (
-                      <span>{index + 1}</span>
-                    )}
-                  </div>
+                  />
+                )}
+                {STEPS.map((step, index) => {
+                  const isActive = index === currentStep;
+                  const isCompleted = index < currentStep;
 
-                  <div style={{ paddingTop: token("space.025") }}>
-                    <Text
-                      size="UNSAFE_small"
-                      weight="semibold"
-                      color={isActive ? "color.text.brand" : "color.text"}
+                  return (
+                    <div
+                      key={step.id}
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: token("space.100"),
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setCurrentStep(index)}
                     >
-                      {step.title}
-                    </Text>
-                    <div style={{ lineHeight: 1.2 }}>
-                      <Text size="UNSAFE_small" color="color.text.subtlest">
-                        {step.description}
-                      </Text>
+                      <div
+                        style={{
+                          position: "relative",
+                          zIndex: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: circleSize,
+                          height: circleSize,
+                          borderRadius: "50%",
+                          border: `2px solid ${
+                            isActive
+                              ? token("color.border.brand")
+                              : isCompleted
+                              ? token("color.border.brand")
+                              : token("color.border")
+                          }`,
+                          backgroundColor: isCompleted
+                            ? token("color.background.brand.bold")
+                            : isActive
+                            ? token("color.background.selected")
+                            : token("elevation.surface"),
+                          color: isCompleted
+                            ? token("color.text.inverse")
+                            : isActive
+                            ? token("color.text.brand")
+                            : token("color.text.subtlest"),
+                          flexShrink: 0,
+                          fontSize: 12,
+                          fontWeight: 600,
+                        }}
+                      >
+                        {isCompleted ? (
+                          <CheckMarkIcon label="" color={token("color.icon.inverse")} />
+                        ) : (
+                          <span>{index + 1}</span>
+                        )}
+                      </div>
+
+                      <div style={{ paddingTop: token("space.025") }}>
+                        <Text
+                          size="UNSAFE_small"
+                          weight="semibold"
+                          color={isActive ? "color.text.brand" : "color.text"}
+                        >
+                          {step.title}
+                        </Text>
+                        <div style={{ lineHeight: 1.2 }}>
+                          <Text size="UNSAFE_small" color="color.text.subtlest">
+                            {step.description}
+                          </Text>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
 
         <div
