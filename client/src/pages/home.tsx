@@ -5,7 +5,8 @@ import { setBooleanFeatureFlagResolver } from "@atlaskit/platform-feature-flags"
 
 import { Root } from "@atlaskit/navigation-system/layout/root";
 import { TopNav, TopNavStart, TopNavMiddle, TopNavEnd } from "@atlaskit/navigation-system/layout/top-nav";
-import { SideNav, SideNavContent } from "@atlaskit/navigation-system/layout/side-nav";
+import { SideNav, SideNavContent, SideNavToggleButton } from "@atlaskit/navigation-system/layout/side-nav";
+import { PanelSplitter } from "@atlaskit/navigation-system/layout/panel-splitter";
 import { Main } from "@atlaskit/navigation-system/layout/main";
 
 import {
@@ -311,6 +312,11 @@ export default function Home() {
             </MenuSection>
             </div>
           </SideNavContent>
+          <SideNavToggleButton
+            expandLabel="Expand navigation"
+            collapseLabel="Collapse navigation"
+          />
+          <PanelSplitter label="Resize navigation" />
         </SideNav>
 
         <Main>
