@@ -1670,19 +1670,19 @@ function SalaryBandsStep() {
           <tbody>
             {salaryBands.map((band, idx) => (
               <tr key={idx} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                <td style={{ padding: `${token("space.050")} ${token("space.200")}` }}>
+                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                   <Textfield defaultValue={band.level} isCompact />
                 </td>
-                <td style={{ padding: `${token("space.050")} ${token("space.200")}` }}>
+                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                   <Textfield defaultValue={band.srp} isCompact />
                 </td>
-                <td style={{ padding: `${token("space.050")} ${token("space.200")}` }}>
+                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                   <Textfield defaultValue={band.rangeMax} isCompact />
                 </td>
-                <td style={{ padding: `${token("space.050")} ${token("space.200")}` }}>
+                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                   <Textfield defaultValue={band.equityMax} isCompact />
                 </td>
-                <td style={{ padding: `${token("space.050")} ${token("space.200")}`, textAlign: "right" }}>
+                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right" }}>
                   <IconButton icon={DeleteIcon} label="Delete" appearance="subtle" spacing="compact" />
                 </td>
               </tr>
