@@ -2594,7 +2594,7 @@ function UsersRolesStep() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: `${token("space.300")} ${token("space.400")}`, borderBottom: `1px solid ${token("color.border")}` }}>
-            <Heading size="medium">Edit User</Heading>
+            <Heading size="medium">Edit Role</Heading>
             <IconButton icon={CrossIcon} label="Close" appearance="subtle" onClick={() => setDrawerOpen(false)} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.400") }}>
