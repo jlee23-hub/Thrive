@@ -902,12 +902,14 @@ function IntegrationCard({
   lastSynced,
   iconColor,
   icon,
+  isFile,
 }: {
   name: string;
   rows?: string;
   lastSynced: string;
   iconColor: string;
   icon: React.ReactNode;
+  isFile?: boolean;
 }) {
   return (
     <div style={cardStyle}>
@@ -928,18 +930,22 @@ function IntegrationCard({
           </div>
           <div>
             <Text size="small" weight="bold">{name}</Text>
-            <div>
-              <Lozenge appearance="success">Active</Lozenge>
-            </div>
+            {!isFile && (
+              <div>
+                <Lozenge appearance="success">Connected</Lozenge>
+              </div>
+            )}
           </div>
         </div>
-        <Button appearance="link" spacing="none">
-          Sync now
-        </Button>
+        {!isFile && (
+          <Button appearance="link" spacing="none">
+            Sync now
+          </Button>
+        )}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: token("space.025") }}>
         {rows && <Text size="UNSAFE_small" color="color.text.subtlest">{rows}</Text>}
-        <Text size="UNSAFE_small" color="color.text.subtlest">Last synced: {lastSynced}</Text>
+        <Text size="UNSAFE_small" color="color.text.subtlest">{isFile ? "Uploaded" : "Last synced"}: {lastSynced}</Text>
       </div>
     </div>
   );
@@ -1033,6 +1039,7 @@ function DataIntegrationsStep({
           lastSynced="02/20/26 10:34 PM PST"
           iconColor={token("color.background.success.bold")}
           icon={<SpreadsheetIcon label="" color={token("color.icon.inverse")} />}
+          isFile
         />
       </div>
 
