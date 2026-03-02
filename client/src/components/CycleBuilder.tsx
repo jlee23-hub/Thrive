@@ -1237,7 +1237,10 @@ function EligibilityRulesStep() {
             >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.100") }}>
                 <Text size="small" weight="bold">{rule.name}</Text>
-                <Lozenge appearance="success">Active</Lozenge>
+                <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                  <Lozenge appearance="success">Active</Lozenge>
+                  <Button appearance="subtle" spacing="compact">Edit</Button>
+                </div>
               </div>
               <div style={{ display: "flex", gap: token("space.200"), alignItems: "center" }}>
                 <Text size="UNSAFE_small" color="color.text.subtlest">{rule.field}</Text>
