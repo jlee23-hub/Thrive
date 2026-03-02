@@ -2582,9 +2582,9 @@ function UsersRolesStep() {
         <div
           style={{
             position: "fixed",
-            top: 56,
+            top: "calc(var(--n_bnrM, 0px) + var(--n_tNvM, 0px))",
             right: 0,
-            height: "calc(100vh - 56px)",
+            height: "calc(100vh - var(--n_bnrM, 0px) - var(--n_tNvM, 0px))",
             width: 480,
             backgroundColor: token("elevation.surface.overlay"),
             boxShadow: token("elevation.shadow.overlay"),
