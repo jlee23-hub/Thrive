@@ -288,7 +288,7 @@ export default function DataManagement() {
                         <Button appearance="primary" iconBefore={CheckCircleIcon} shouldFitContainer>
                           Test Connection
                         </Button>
-                        <Button appearance="default" iconBefore={DownloadIcon}>
+                        <Button appearance="default" iconBefore={DownloadIcon} shouldFitContainer>
                           Save
                         </Button>
                       </div>
