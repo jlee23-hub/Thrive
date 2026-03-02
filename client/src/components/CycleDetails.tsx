@@ -274,7 +274,7 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: "#cycle-details-tabs div[id$='-tab'] { max-width: none !important; width: 100% !important; }" }} />
+      <style dangerouslySetInnerHTML={{ __html: "#cycle-details-tabs [role='tabpanel'] { max-width: none !important; width: 100% !important; } #cycle-details-tabs div[id$='-tab'] { max-width: none !important; width: 100% !important; } #cycle-details-tabs [role='tabpanel'] > div { max-width: none !important; width: 100% !important; }" }} />
       <Tabs id="cycle-details-tabs">
         <TabList>
           <Tab>Cycle Details</Tab>
