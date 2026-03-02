@@ -2584,6 +2584,7 @@ function UsersRolesStep() {
         onClose={() => setDrawerOpen(false)}
         width="medium"
         label="Edit User"
+        enterFrom="right"
       >
         <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.300") }}>
           <Heading size="medium">Edit User</Heading>
