@@ -42,3 +42,13 @@ div[role="list"]._bozg1crf {
 .no-last-row-border table tbody tr:last-child td {
   border-bottom: none !important;
 }
+
+.no-last-row-border table tfoot td,
+.no-last-row-border table tfoot tr {
+  border: none !important;
+}
+
+.no-last-row-border > div > div:last-child,
+.no-last-row-border > div > div > nav {
+  border-top: none !important;
+}
