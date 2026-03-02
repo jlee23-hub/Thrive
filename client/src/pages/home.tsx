@@ -10,7 +10,6 @@ import { Main } from "@atlaskit/navigation-system/layout/main";
 
 import {
   AppSwitcher,
-  ChatButton,
   Notifications,
   Help,
   Settings,
@@ -23,7 +22,8 @@ import { MenuSection } from "@atlaskit/navigation-system/side-nav-items/menu-sec
 
 import Popup from "@atlaskit/popup";
 import { ButtonItem, MenuGroup, Section } from "@atlaskit/menu";
-import { IconButton } from "@atlaskit/button/new";
+import Button, { IconButton } from "@atlaskit/button/new";
+import AtlassianIntelligenceIcon from "@atlaskit/icon/core/atlassian-intelligence";
 
 import CompensationSummary from "../components/CompensationSummary";
 import RSUDetails from "../components/RSUDetails";
@@ -260,7 +260,7 @@ export default function Home() {
           </TopNavStart>
           <TopNavMiddle />
           <TopNavEnd>
-            <ChatButton>Chat</ChatButton>
+            <Button appearance="default" iconBefore={AtlassianIntelligenceIcon}>Ask Rovo</Button>
             <Notifications label="Notifications" badge={() => null} />
             <Help label="Help" />
             <Settings label="Settings" />
