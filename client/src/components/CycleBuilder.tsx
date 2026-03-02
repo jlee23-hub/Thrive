@@ -2582,7 +2582,7 @@ function UsersRolesStep() {
       <Drawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        width="medium"
+        width="full"
         label="Edit User"
       >
         <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.300") }}>
