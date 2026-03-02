@@ -31,6 +31,11 @@ import AboutUs from "../components/AboutUs";
 import TeamOverview from "../components/TeamOverview";
 import CyclesDashboard from "../components/CyclesDashboard";
 import CycleBuilder from "../components/CycleBuilder";
+import MeritMatrix from "../components/MeritMatrix";
+import GroupsManagement from "../components/GroupsManagement";
+import SalaryBands from "../components/SalaryBands";
+import DataManagement from "../components/DataManagement";
+import SystemSettings from "../components/SystemSettings";
 
 import DashboardIcon from "@atlaskit/icon/core/dashboard";
 import ChartTrendIcon from "@atlaskit/icon/core/chart-trend";
@@ -40,6 +45,10 @@ import PeopleGroupIcon from "@atlaskit/icon/core/people-group";
 import PersonIcon from "@atlaskit/icon/core/person";
 import ShieldIcon from "@atlaskit/icon/core/shield";
 import ListBulletedIcon from "@atlaskit/icon/core/list-bulleted";
+import ChartMatrixIcon from "@atlaskit/icon/core/chart-matrix";
+import CashIcon from "@atlaskit/icon/core/cash";
+import DatabaseIcon from "@atlaskit/icon/core/database";
+import SettingsIcon from "@atlaskit/icon/core/settings";
 
 const defaultFeatureFlags = [
   "platform_design_system_team_portal_logic_r18_fix",
@@ -58,7 +67,7 @@ const resolveFeatureFlags = (featureFlags: string[] = []) => {
 resolveFeatureFlags();
 
 type Persona = "employee" | "manager" | "comp-admin";
-type NavItem = "compensation" | "rsus" | "about" | "team-overview" | "cycles-dashboard" | "cycle-builder";
+type NavItem = "compensation" | "rsus" | "about" | "team-overview" | "cycles-dashboard" | "cycle-builder" | "merit-matrix" | "groups" | "salary-bands" | "data-management" | "system-settings";
 
 export default function Home() {
   const [persona, setPersona] = useState<Persona>("employee");
@@ -91,6 +100,16 @@ export default function Home() {
         return <CyclesDashboard onCreateCycle={() => setActiveNav("cycle-builder")} />;
       case "cycle-builder":
         return <CycleBuilder onBack={() => setActiveNav("cycles-dashboard")} />;
+      case "merit-matrix":
+        return <MeritMatrix />;
+      case "groups":
+        return <GroupsManagement />;
+      case "salary-bands":
+        return <SalaryBands />;
+      case "data-management":
+        return <DataManagement />;
+      case "system-settings":
+        return <SystemSettings />;
       default:
         return <CompensationSummary />;
     }
@@ -102,19 +121,51 @@ export default function Home() {
         <MenuList>
           <LinkMenuItem
             href="#cycles-dashboard"
-            elemBefore={<ListBulletedIcon label="" color="currentColor" />}
+            elemBefore={<DashboardIcon label="" color="currentColor" />}
             isSelected={activeNav === "cycles-dashboard"}
             onClick={(e) => { e.preventDefault(); setActiveNav("cycles-dashboard"); }}
           >
-            Cycles Dashboard
+            Dashboard
           </LinkMenuItem>
           <LinkMenuItem
-            href="#about"
-            elemBefore={<InformationIcon label="" color="currentColor" />}
-            isSelected={activeNav === "about"}
-            onClick={(e) => { e.preventDefault(); setActiveNav("about"); }}
+            href="#merit-matrix"
+            elemBefore={<ChartMatrixIcon label="" color="currentColor" />}
+            isSelected={activeNav === "merit-matrix"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("merit-matrix"); }}
           >
-            About Us
+            Merit Matrix
+          </LinkMenuItem>
+          <LinkMenuItem
+            href="#groups"
+            elemBefore={<ShieldIcon label="" color="currentColor" />}
+            isSelected={activeNav === "groups"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("groups"); }}
+          >
+            Groups
+          </LinkMenuItem>
+          <LinkMenuItem
+            href="#salary-bands"
+            elemBefore={<CashIcon label="" color="currentColor" />}
+            isSelected={activeNav === "salary-bands"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("salary-bands"); }}
+          >
+            Salary Bands
+          </LinkMenuItem>
+          <LinkMenuItem
+            href="#data-management"
+            elemBefore={<DatabaseIcon label="" color="currentColor" />}
+            isSelected={activeNav === "data-management"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("data-management"); }}
+          >
+            Data Management
+          </LinkMenuItem>
+          <LinkMenuItem
+            href="#system-settings"
+            elemBefore={<SettingsIcon label="" color="currentColor" />}
+            isSelected={activeNav === "system-settings"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("system-settings"); }}
+          >
+            Settings
           </LinkMenuItem>
         </MenuList>
       );
@@ -244,9 +295,13 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          <div style={{ padding: token("space.500") }}>
-            {renderContent()}
-          </div>
+          {persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands" ? (
+            renderContent()
+          ) : (
+            <div style={{ padding: token("space.500") }}>
+              {renderContent()}
+            </div>
+          )}
         </Main>
       </Root>
     </AppProvider>
