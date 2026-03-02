@@ -279,28 +279,30 @@ export default function CyclesDashboard({ onCreateCycle, onSelectCycle }: Cycles
         />
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: token("space.300") }}>
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: token("space.100"),
-            marginBottom: token("space.400"),
+            marginBottom: token("space.200"),
           }}
         >
           <PageIcon label="" color={token("color.icon")} />
           <Heading size="medium">All Cycles</Heading>
         </div>
 
-        <DynamicTable
-          head={head}
-          rows={buildRows(onSelectCycle)}
-          rowsPerPage={10}
-          defaultPage={1}
-          isFixedSize
-          defaultSortKey="name"
-          defaultSortOrder="ASC"
-        />
+        <div className="no-last-row-border">
+          <DynamicTable
+            head={head}
+            rows={buildRows(onSelectCycle)}
+            rowsPerPage={10}
+            defaultPage={1}
+            isFixedSize
+            defaultSortKey="name"
+            defaultSortOrder="ASC"
+          />
+        </div>
       </div>
     </div>
   );

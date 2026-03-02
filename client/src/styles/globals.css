@@ -38,3 +38,7 @@ div[role="list"]._bozg1crf._1e0cglyw {
 div[role="list"]._bozg1crf {
   display: inherit;
 }
+
+.no-last-row-border table tbody tr:last-child td {
+  border-bottom: none !important;
+}
