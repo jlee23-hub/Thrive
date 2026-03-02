@@ -2579,6 +2579,7 @@ function UsersRolesStep() {
         <UsersTabContent />
       )}
 
+      <div className="drawer-right">
       <Drawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
@@ -2663,6 +2664,7 @@ function UsersRolesStep() {
           </div>
         </div>
       </Drawer>
+      </div>
     </div>
   );
 }
