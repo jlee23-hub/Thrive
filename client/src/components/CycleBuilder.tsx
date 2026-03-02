@@ -1170,13 +1170,15 @@ function EmployeeDataGridStep() {
       </div>
 
       <div style={{ ...cardStyle, padding: 0, overflow: "hidden" }}>
-        <DynamicTable
-          head={head}
-          rows={rows}
-          isFixedSize
-          defaultSortKey="id"
-          defaultSortOrder="ASC"
-        />
+        <div style={{ padding: `0 ${token("space.200")}` }}>
+          <DynamicTable
+            head={head}
+            rows={rows}
+            isFixedSize
+            defaultSortKey="id"
+            defaultSortOrder="ASC"
+          />
+        </div>
         <div
           style={{
             backgroundColor: token("elevation.surface.sunken"),
