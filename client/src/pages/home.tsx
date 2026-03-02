@@ -22,13 +22,14 @@ import { MenuList } from "@atlaskit/navigation-system/side-nav-items/menu-list";
 import { MenuSection } from "@atlaskit/navigation-system/side-nav-items/menu-section";
 
 import Popup from "@atlaskit/popup";
-import { ButtonItem, MenuGroup } from "@atlaskit/menu";
+import { ButtonItem, MenuGroup, Section } from "@atlaskit/menu";
 import { IconButton } from "@atlaskit/button/new";
 
 import CompensationSummary from "../components/CompensationSummary";
 import RSUDetails from "../components/RSUDetails";
 import AboutUs from "../components/AboutUs";
 import TeamOverview from "../components/TeamOverview";
+import CyclesDashboard from "../components/CyclesDashboard";
 
 import DashboardIcon from "@atlaskit/icon/core/dashboard";
 import ChartTrendIcon from "@atlaskit/icon/core/chart-trend";
@@ -36,6 +37,8 @@ import InformationIcon from "@atlaskit/icon/core/information";
 import SpreadsheetIcon from "@atlaskit/icon/core/spreadsheet";
 import PeopleGroupIcon from "@atlaskit/icon/core/people-group";
 import PersonIcon from "@atlaskit/icon/core/person";
+import ShieldIcon from "@atlaskit/icon/core/shield";
+import ListBulletedIcon from "@atlaskit/icon/core/list-bulleted";
 
 const defaultFeatureFlags = [
   "platform_design_system_team_portal_logic_r18_fix",
@@ -53,10 +56,8 @@ const resolveFeatureFlags = (featureFlags: string[] = []) => {
 
 resolveFeatureFlags();
 
-type Persona = "employee" | "manager";
-type EmployeeNavItem = "compensation" | "rsus" | "about";
-type ManagerNavItem = "team-overview";
-type NavItem = EmployeeNavItem | ManagerNavItem;
+type Persona = "employee" | "manager" | "comp-admin";
+type NavItem = "compensation" | "rsus" | "about" | "team-overview" | "cycles-dashboard";
 
 export default function Home() {
   const [persona, setPersona] = useState<Persona>("employee");
@@ -67,6 +68,8 @@ export default function Home() {
     setPersona(newPersona);
     if (newPersona === "manager") {
       setActiveNav("team-overview");
+    } else if (newPersona === "comp-admin") {
+      setActiveNav("cycles-dashboard");
     } else {
       setActiveNav("compensation");
     }
@@ -83,12 +86,37 @@ export default function Home() {
         return <AboutUs />;
       case "team-overview":
         return <TeamOverview />;
+      case "cycles-dashboard":
+        return <CyclesDashboard />;
       default:
         return <CompensationSummary />;
     }
   };
 
   const renderSideNav = () => {
+    if (persona === "comp-admin") {
+      return (
+        <MenuList>
+          <LinkMenuItem
+            href="#cycles-dashboard"
+            elemBefore={<ListBulletedIcon label="" color="currentColor" />}
+            isSelected={activeNav === "cycles-dashboard"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("cycles-dashboard"); }}
+          >
+            Cycles Dashboard
+          </LinkMenuItem>
+          <LinkMenuItem
+            href="#about"
+            elemBefore={<InformationIcon label="" color="currentColor" />}
+            isSelected={activeNav === "about"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("about"); }}
+          >
+            About Us
+          </LinkMenuItem>
+        </MenuList>
+      );
+    }
+
     if (persona === "manager") {
       return (
         <MenuList>
@@ -163,20 +191,29 @@ export default function Home() {
               placement="bottom-end"
               content={() => (
                 <MenuGroup>
-                  <ButtonItem
-                    iconBefore={<PersonIcon label="" />}
-                    onClick={() => switchPersona("employee")}
-                    isSelected={persona === "employee"}
-                  >
-                    Employee View
-                  </ButtonItem>
-                  <ButtonItem
-                    iconBefore={<PeopleGroupIcon label="" />}
-                    onClick={() => switchPersona("manager")}
-                    isSelected={persona === "manager"}
-                  >
-                    Manager View
-                  </ButtonItem>
+                  <Section title="Switch View">
+                    <ButtonItem
+                      iconBefore={<PersonIcon label="" />}
+                      onClick={() => switchPersona("employee")}
+                      isSelected={persona === "employee"}
+                    >
+                      Employee View
+                    </ButtonItem>
+                    <ButtonItem
+                      iconBefore={<PeopleGroupIcon label="" />}
+                      onClick={() => switchPersona("manager")}
+                      isSelected={persona === "manager"}
+                    >
+                      Manager View
+                    </ButtonItem>
+                    <ButtonItem
+                      iconBefore={<ShieldIcon label="" />}
+                      onClick={() => switchPersona("comp-admin")}
+                      isSelected={persona === "comp-admin"}
+                    >
+                      Comp Admin
+                    </ButtonItem>
+                  </Section>
                 </MenuGroup>
               )}
               trigger={(triggerProps) => (
