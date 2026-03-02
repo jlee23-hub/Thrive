@@ -157,82 +157,88 @@ const head = {
   ],
 };
 
-const rows = cycles.map((cycle) => ({
-  key: cycle.id,
-  cells: [
-    {
-      key: cycle.name,
-      content: (
-        <div>
-          <Text size="medium" weight="bold">{cycle.name}</Text>
-          <div>
-            <Text size="small" color="color.text.subtlest">{cycle.subtitle}</Text>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: cycle.type,
-      content: <Text size="small">{cycle.type}</Text>,
-    },
-    {
-      key: cycle.status,
-      content: <StatusLozenge status={cycle.status} />,
-    },
-    {
-      key: cycle.timeline,
-      content: (
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-          <CalendarIcon label="" color={token("color.icon.subtle")} />
-          <Text size="small">{cycle.timeline}</Text>
-        </div>
-      ),
-    },
-    {
-      key: cycle.participants,
-      content: (
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-          <PeopleGroupIcon label="" color={token("color.icon.subtle")} />
-          <Text size="small">{cycle.participants.toLocaleString()}</Text>
-        </div>
-      ),
-    },
-    {
-      key: cycle.budget,
-      content: <Text size="small" weight="bold">{cycle.budget}</Text>,
-    },
-    {
-      key: cycle.progress,
-      content: (
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), minWidth: 120 }}>
-          <div style={{ flex: 1 }}>
-            <ProgressBar
-              appearance={cycle.progress === 100 ? "success" : "default"}
-              value={cycle.progress / 100}
-            />
-          </div>
-          <Text size="small" color="color.text.subtlest">{cycle.progress}%</Text>
-        </div>
-      ),
-    },
-    {
-      key: "actions",
-      content: (
-        <IconButton
-          icon={ShowMoreVerticalIcon}
-          label="More actions"
-          appearance="subtle"
-        />
-      ),
-    },
-  ],
-}));
-
 interface CyclesDashboardProps {
   onCreateCycle?: () => void;
+  onSelectCycle?: (cycle: Cycle) => void;
 }
 
-export default function CyclesDashboard({ onCreateCycle }: CyclesDashboardProps) {
+function buildRows(onSelectCycle?: (cycle: Cycle) => void) {
+  return cycles.map((cycle) => ({
+    key: cycle.id,
+    cells: [
+      {
+        key: cycle.name,
+        content: (
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() => onSelectCycle?.(cycle)}
+          >
+            <Text size="medium" weight="bold" color="color.link">{cycle.name}</Text>
+            <div>
+              <Text size="small" color="color.text.subtlest">{cycle.subtitle}</Text>
+            </div>
+          </div>
+        ),
+      },
+      {
+        key: cycle.type,
+        content: <Text size="small">{cycle.type}</Text>,
+      },
+      {
+        key: cycle.status,
+        content: <StatusLozenge status={cycle.status} />,
+      },
+      {
+        key: cycle.timeline,
+        content: (
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
+            <CalendarIcon label="" color={token("color.icon.subtle")} />
+            <Text size="small">{cycle.timeline}</Text>
+          </div>
+        ),
+      },
+      {
+        key: cycle.participants,
+        content: (
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
+            <PeopleGroupIcon label="" color={token("color.icon.subtle")} />
+            <Text size="small">{cycle.participants.toLocaleString()}</Text>
+          </div>
+        ),
+      },
+      {
+        key: cycle.budget,
+        content: <Text size="small" weight="bold">{cycle.budget}</Text>,
+      },
+      {
+        key: cycle.progress,
+        content: (
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), minWidth: 120 }}>
+            <div style={{ flex: 1 }}>
+              <ProgressBar
+                appearance={cycle.progress === 100 ? "success" : "default"}
+                value={cycle.progress / 100}
+              />
+            </div>
+            <Text size="small" color="color.text.subtlest">{cycle.progress}%</Text>
+          </div>
+        ),
+      },
+      {
+        key: "actions",
+        content: (
+          <IconButton
+            icon={ShowMoreVerticalIcon}
+            label="More actions"
+            appearance="subtle"
+          />
+        ),
+      },
+    ],
+  }));
+}
+
+export default function CyclesDashboard({ onCreateCycle, onSelectCycle }: CyclesDashboardProps) {
   const activeCycles = cycles.filter((c) => c.status === "Active").length;
   const inactiveCycles = cycles.filter((c) => c.status === "Planning").length;
 
@@ -288,7 +294,7 @@ export default function CyclesDashboard({ onCreateCycle }: CyclesDashboardProps)
 
         <DynamicTable
           head={head}
-          rows={rows}
+          rows={buildRows(onSelectCycle)}
           rowsPerPage={10}
           defaultPage={1}
           isFixedSize

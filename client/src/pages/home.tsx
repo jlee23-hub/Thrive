@@ -31,6 +31,7 @@ import AboutUs from "../components/AboutUs";
 import TeamOverview from "../components/TeamOverview";
 import CyclesDashboard from "../components/CyclesDashboard";
 import CycleBuilder from "../components/CycleBuilder";
+import CycleDetails from "../components/CycleDetails";
 import MeritMatrix from "../components/MeritMatrix";
 import GroupsManagement from "../components/GroupsManagement";
 import SalaryBands from "../components/SalaryBands";
@@ -67,12 +68,13 @@ const resolveFeatureFlags = (featureFlags: string[] = []) => {
 resolveFeatureFlags();
 
 type Persona = "employee" | "manager" | "comp-admin";
-type NavItem = "compensation" | "rsus" | "about" | "team-overview" | "cycles-dashboard" | "cycle-builder" | "merit-matrix" | "groups" | "salary-bands" | "data-management" | "system-settings";
+type NavItem = "compensation" | "rsus" | "about" | "team-overview" | "cycles-dashboard" | "cycle-builder" | "cycle-details" | "merit-matrix" | "groups" | "salary-bands" | "data-management" | "system-settings";
 
 export default function Home() {
   const [persona, setPersona] = useState<Persona>("employee");
   const [activeNav, setActiveNav] = useState<NavItem>("compensation");
   const [profileOpen, setProfileOpen] = useState(false);
+  const [selectedCycle, setSelectedCycle] = useState<{ id: string; name: string; type: string; status: "Active" | "Planning" | "Completed"; timeline: string; participants: number; budget: string; progress: number } | null>(null);
 
   const switchPersona = (newPersona: Persona) => {
     setPersona(newPersona);
@@ -97,9 +99,32 @@ export default function Home() {
       case "team-overview":
         return <TeamOverview />;
       case "cycles-dashboard":
-        return <CyclesDashboard onCreateCycle={() => setActiveNav("cycle-builder")} />;
+        return (
+          <CyclesDashboard
+            onCreateCycle={() => setActiveNav("cycle-builder")}
+            onSelectCycle={(cycle) => {
+              setSelectedCycle(cycle);
+              setActiveNav("cycle-details");
+            }}
+          />
+        );
       case "cycle-builder":
         return <CycleBuilder onBack={() => setActiveNav("cycles-dashboard")} />;
+      case "cycle-details":
+        return selectedCycle ? (
+          <CycleDetails
+            cycle={selectedCycle}
+            onBack={() => setActiveNav("cycles-dashboard")}
+          />
+        ) : (
+          <CyclesDashboard
+            onCreateCycle={() => setActiveNav("cycle-builder")}
+            onSelectCycle={(cycle) => {
+              setSelectedCycle(cycle);
+              setActiveNav("cycle-details");
+            }}
+          />
+        );
       case "merit-matrix":
         return <MeritMatrix />;
       case "groups":
@@ -295,7 +320,7 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          {persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands" ? (
+          {persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands" && activeNav !== "cycle-details" ? (
             renderContent()
           ) : (
             <div style={{ padding: token("space.500") }}>
