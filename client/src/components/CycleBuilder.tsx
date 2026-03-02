@@ -1107,17 +1107,52 @@ function FieldMappingTable({ fields }: { fields: typeof workdayFields }) {
 }
 
 function EmployeeDataGridStep() {
-  const ratingColor = (rating: string) => {
-    if (rating === "Exceeds Expectations") return token("color.background.success");
-    if (rating === "Meets Expectations") return token("color.background.information");
-    return token("color.background.danger");
+  const levelAppearance = (level: string): "inprogress" | "success" | "moved" => {
+    if (level.startsWith("P")) return "inprogress";
+    if (level.startsWith("M")) return "success";
+    return "moved";
   };
 
-  const levelBorderColor = (level: string) => {
-    if (level.startsWith("P")) return token("color.border.information");
-    if (level.startsWith("M")) return token("color.border.success");
-    return token("color.border.warning");
+  const ratingAppearance = (rating: string): "success" | "inprogress" | "removed" => {
+    if (rating === "Exceeds Expectations") return "success";
+    if (rating === "Meets Expectations") return "inprogress";
+    return "removed";
   };
+
+  const head = {
+    cells: [
+      { key: "id", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Employee ID</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "firstName", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">First Name</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "lastName", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Last Name</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "title", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Job Title</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "level", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Level</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "dept", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Job Family</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "location", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Location</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "rating", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Performance Rating</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "salary", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Base Salary</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "commission", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Commission %</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "bonus", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Bonus %</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
+      { key: "equity", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Current Equity $</Text><div style={{ color: token("color.text.success"), fontSize: 11 }}>Shareworks</div></div> },
+    ],
+  };
+
+  const rows = employeeData.map((emp, i) => ({
+    key: `row-${i}`,
+    cells: [
+      { key: "id", content: <Text size="small"><code style={{ fontFamily: "monospace", fontSize: 12 }}>{emp.id}</code></Text> },
+      { key: "firstName", content: <Text size="small" weight="medium">{emp.firstName}</Text> },
+      { key: "lastName", content: <Text size="small" weight="medium">{emp.lastName}</Text> },
+      { key: "title", content: <Text size="small" color="color.text.subtle">{emp.title}</Text> },
+      { key: "level", content: <Lozenge appearance={levelAppearance(emp.level)}>{emp.level}</Lozenge> },
+      { key: "dept", content: <Text size="small" color="color.text.subtle">{emp.dept}</Text> },
+      { key: "location", content: <Text size="small" color="color.text.subtle">{emp.location}</Text> },
+      { key: "rating", content: <Lozenge appearance={ratingAppearance(emp.rating)}>{emp.rating}</Lozenge> },
+      { key: "salary", content: <Text size="small">${emp.salary.toLocaleString()}</Text> },
+      { key: "commission", content: <Text size="small" color={emp.commission ? "color.text" : "color.text.disabled"}>{emp.commission ? `${emp.commission.toFixed(1)}%` : "—"}</Text> },
+      { key: "bonus", content: <Text size="small">{emp.bonus.toFixed(1)}%</Text> },
+      { key: "equity", content: <Text size="small" color={emp.equity ? "color.text" : "color.text.disabled"}>{emp.equity ? `$${emp.equity.toLocaleString()}` : "—"}</Text> },
+    ],
+  }));
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
@@ -1134,131 +1169,14 @@ function EmployeeDataGridStep() {
         </div>
       </div>
 
-      <div style={{ overflowX: "auto", ...cardStyle, padding: 0 }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
-          <thead>
-            <tr>
-              {[
-                { label: "Employee ID", source: "Workday" },
-                { label: "First Name", source: "Workday" },
-                { label: "Last Name", source: "Workday" },
-                { label: "Job Title", source: "Workday" },
-                { label: "Level", source: "Workday" },
-                { label: "Job Family", source: "Workday" },
-                { label: "Location", source: "Workday" },
-                { label: "Performance Rating", source: "Workday" },
-                { label: "Base Salary", source: "Workday", align: "right" as const },
-                { label: "Commission Target %", source: "Workday", align: "right" as const },
-                { label: "Bonus Target %", source: "Workday", align: "right" as const },
-                { label: "Current Equity $", source: "Shareworks", align: "right" as const },
-              ].map((col) => (
-                <th
-                  key={col.label}
-                  style={{
-                    padding: token("space.100"),
-                    textAlign: col.align || "left",
-                    borderBottom: `2px solid ${token("color.border")}`,
-                    whiteSpace: "nowrap",
-                    backgroundColor: token("elevation.surface"),
-                    position: "sticky",
-                    top: 0,
-                    zIndex: 1,
-                  }}
-                >
-                  <div style={{ fontSize: 12, fontWeight: 600, color: token("color.text.subtlest") }}>
-                    {col.label}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 600,
-                      color:
-                        col.source === "Shareworks"
-                          ? token("color.text.success")
-                          : token("color.text.information"),
-                      marginTop: 2,
-                    }}
-                  >
-                    {col.source}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {employeeData.map((emp, i) => (
-              <tr
-                key={i}
-                style={{ borderBottom: `1px solid ${token("color.border")}` }}
-              >
-                <td style={{ padding: token("space.100"), fontFamily: "monospace", color: token("color.text") }}>
-                  {emp.id}
-                </td>
-                <td style={{ padding: token("space.100"), fontWeight: 500, color: token("color.text") }}>
-                  {emp.firstName}
-                </td>
-                <td style={{ padding: token("space.100"), fontWeight: 500, color: token("color.text") }}>
-                  {emp.lastName}
-                </td>
-                <td style={{ padding: token("space.100"), color: token("color.text.subtle") }}>
-                  {emp.title}
-                </td>
-                <td style={{ padding: token("space.100") }}>
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      padding: `0 ${token("space.050")}`,
-                      borderRadius: token("border.radius.050"),
-                      fontSize: 11,
-                      fontWeight: 650,
-                      textTransform: "uppercase",
-                      border: `1px solid ${levelBorderColor(emp.level)}`,
-                      color: token("color.text"),
-                    }}
-                  >
-                    {emp.level}
-                  </span>
-                </td>
-                <td style={{ padding: token("space.100"), color: token("color.text.subtle") }}>
-                  {emp.dept}
-                </td>
-                <td style={{ padding: token("space.100"), color: token("color.text.subtle") }}>
-                  {emp.location}
-                </td>
-                <td style={{ padding: token("space.100") }}>
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      padding: `0 ${token("space.050")}`,
-                      borderRadius: token("border.radius.050"),
-                      fontSize: 11,
-                      fontWeight: 600,
-                      textTransform: "uppercase",
-                      backgroundColor: ratingColor(emp.rating),
-                      color: token("color.text"),
-                    }}
-                  >
-                    {emp.rating.split(" ")[0]}
-                  </span>
-                </td>
-                <td style={{ padding: token("space.100"), textAlign: "right", fontFamily: "monospace", color: token("color.text") }}>
-                  ${emp.salary.toLocaleString()}
-                </td>
-                <td style={{ padding: token("space.100"), textAlign: "right", fontFamily: "monospace", color: token("color.text") }}>
-                  {emp.commission ? `${emp.commission.toFixed(1)}%` : <span style={{ color: token("color.text.disabled") }}>—</span>}
-                </td>
-                <td style={{ padding: token("space.100"), textAlign: "right", fontFamily: "monospace", color: token("color.text") }}>
-                  {emp.bonus.toFixed(1)}%
-                </td>
-                <td style={{ padding: token("space.100"), textAlign: "right", fontFamily: "monospace", color: token("color.text") }}>
-                  {emp.equity ? `$${emp.equity.toLocaleString()}` : <span style={{ color: token("color.text.disabled") }}>—</span>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div style={{ ...cardStyle, padding: 0, overflow: "hidden" }}>
+        <DynamicTable
+          head={head}
+          rows={rows}
+          isFixedSize
+          defaultSortKey="id"
+          defaultSortOrder="ASC"
+        />
         <div
           style={{
             backgroundColor: token("elevation.surface.sunken"),
