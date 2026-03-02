@@ -12,6 +12,7 @@ import SectionMessage from "@atlaskit/section-message";
 import InlineMessage from "@atlaskit/inline-message";
 import Checkbox from "@atlaskit/checkbox";
 import Toggle from "@atlaskit/toggle";
+import Drawer from "@atlaskit/drawer";
 
 import PageIcon from "@atlaskit/icon/core/page";
 import AddIcon from "@atlaskit/icon/core/add";
@@ -2425,6 +2426,53 @@ function UsersTabContent() {
 
 function UsersRolesStep() {
   const [activeTab, setActiveTab] = useState<"roles" | "users">("roles");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<typeof users[0] | null>(null);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    username: "",
+    email: "",
+    role: "",
+    peopleGroups: "",
+    permissions: "",
+    linked: "",
+  });
+
+  const roleOptions = [
+    { label: "admin", value: "admin" },
+    { label: "manager", value: "manager" },
+    { label: "leader", value: "leader" },
+    { label: "planner", value: "planner" },
+    { label: "hrbp", value: "hrbp" },
+    { label: "employee", value: "employee" },
+  ];
+
+  const permissionOptions = [
+    { label: "APEX System Admin | Comp", value: "APEX System Admin | Comp" },
+    { label: "APEX Executive Planner", value: "APEX Executive Planner" },
+    { label: "APEX Planner + Full Budget View", value: "APEX Planner + Full Budget View" },
+    { label: "APEX System Admin | HRBP", value: "APEX System Admin | HRBP" },
+    { label: "None", value: "" },
+  ];
+
+  const employeeLinkOptions = users.map((u) => ({
+    label: u.linked,
+    value: u.linked,
+  }));
+
+  const openEditDrawer = (user: typeof users[0]) => {
+    setEditingUser(user);
+    setEditForm({
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      peopleGroups: "",
+      permissions: user.permissions,
+      linked: user.linked,
+    });
+    setDrawerOpen(true);
+  };
 
   const tabStyle = (isActive: boolean): React.CSSProperties => ({
     padding: `${token("space.100")} ${token("space.200")}`,
@@ -2440,6 +2488,12 @@ function UsersRolesStep() {
     borderBottomWidth: 2,
     borderBottomColor: isActive ? token("color.border.brand") : "transparent",
   });
+
+  const LabelText = ({ children }: { children: React.ReactNode }) => (
+    <div style={{ marginBottom: token("space.050") }}>
+      <Text size="small" weight="semibold">{children}</Text>
+    </div>
+  );
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
@@ -2511,7 +2565,7 @@ function UsersRolesStep() {
                     </Text>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                    <Button appearance="default" spacing="compact">Edit</Button>
+                    <IconButton icon={EditIcon} label="Edit" appearance="subtle" spacing="compact" onClick={() => openEditDrawer(user)} />
                     <IconButton icon={DeleteIcon} label="Delete" appearance="subtle" spacing="compact" />
                   </div>
                 </div>
@@ -2524,6 +2578,90 @@ function UsersRolesStep() {
       {activeTab === "users" && (
         <UsersTabContent />
       )}
+
+      <Drawer
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        width="medium"
+        label="Edit User"
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.300") }}>
+          <Heading size="medium">Edit User</Heading>
+
+          <div>
+            <LabelText>Display Name</LabelText>
+            <Textfield
+              value={editForm.name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEditForm({ ...editForm, name: e.target.value })
+              }
+            />
+          </div>
+
+          <div>
+            <LabelText>Username</LabelText>
+            <Textfield
+              value={editForm.username}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEditForm({ ...editForm, username: e.target.value })
+              }
+            />
+          </div>
+
+          <div>
+            <LabelText>Email</LabelText>
+            <Textfield
+              value={editForm.email}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEditForm({ ...editForm, email: e.target.value })
+              }
+            />
+          </div>
+
+          <div>
+            <LabelText>Role</LabelText>
+            <Select
+              options={roleOptions}
+              value={roleOptions.find((o) => o.value === editForm.role)}
+              onChange={(opt) => opt && setEditForm({ ...editForm, role: opt.value })}
+            />
+          </div>
+
+          <div>
+            <LabelText>People and Groups</LabelText>
+            <Textfield
+              value={editForm.peopleGroups}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEditForm({ ...editForm, peopleGroups: e.target.value })
+              }
+              placeholder="Search and add people or groups..."
+            />
+          </div>
+
+          <div>
+            <LabelText>Permissions</LabelText>
+            <Select
+              options={permissionOptions}
+              value={permissionOptions.find((o) => o.value === editForm.permissions)}
+              onChange={(opt) => opt && setEditForm({ ...editForm, permissions: opt.value })}
+            />
+          </div>
+
+          <div>
+            <LabelText>Employee Link</LabelText>
+            <Select
+              options={employeeLinkOptions}
+              value={employeeLinkOptions.find((o) => o.value === editForm.linked)}
+              onChange={(opt) => opt && setEditForm({ ...editForm, linked: opt.value })}
+            />
+          </div>
+
+          <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.200") }}>
+            <Button appearance="primary" onClick={() => setDrawerOpen(false)}>Save</Button>
+            <Button appearance="subtle" onClick={() => setDrawerOpen(false)}>Cancel</Button>
+          </div>
+        </div>
+      </Drawer>
     </div>
   );
 }
