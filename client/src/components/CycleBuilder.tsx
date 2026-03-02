@@ -1330,6 +1330,14 @@ function FieldMappingTable({ fields }: { fields: typeof workdayFields }) {
   );
 }
 
+const truncStyle: React.CSSProperties = {
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  maxWidth: 0,
+  width: "100%",
+};
+
 function EmployeeDataGridStep() {
   const levelAppearance = (level: string): "inprogress" | "success" | "moved" => {
     if (level.startsWith("P")) return "inprogress";
@@ -1365,18 +1373,18 @@ function EmployeeDataGridStep() {
   const rows = employeeData.map((emp, i) => ({
     key: `row-${i}`,
     cells: [
-      { key: "id", content: <Text size="small"><code style={{ fontFamily: "monospace", fontSize: 12 }}>{emp.id}</code></Text> },
-      { key: "firstName", content: <Text size="small" weight="medium">{emp.firstName}</Text> },
-      { key: "lastName", content: <Text size="small" weight="medium">{emp.lastName}</Text> },
-      { key: "title", content: <Text size="small" color="color.text.subtle">{emp.title}</Text> },
+      { key: "id", content: <div style={truncStyle}><Text size="small"><code style={{ fontFamily: "monospace", fontSize: 12 }}>{emp.id}</code></Text></div> },
+      { key: "firstName", content: <div style={truncStyle}><Text size="small" weight="medium">{emp.firstName}</Text></div> },
+      { key: "lastName", content: <div style={truncStyle}><Text size="small" weight="medium">{emp.lastName}</Text></div> },
+      { key: "title", content: <div style={truncStyle}><Text size="small" color="color.text.subtle">{emp.title}</Text></div> },
       { key: "level", content: <Lozenge appearance={levelAppearance(emp.level)}>{emp.level}</Lozenge> },
-      { key: "dept", content: <Text size="small" color="color.text.subtle">{emp.dept}</Text> },
-      { key: "location", content: <Text size="small" color="color.text.subtle">{emp.location}</Text> },
+      { key: "dept", content: <div style={truncStyle}><Text size="small" color="color.text.subtle">{emp.dept}</Text></div> },
+      { key: "location", content: <div style={truncStyle}><Text size="small" color="color.text.subtle">{emp.location}</Text></div> },
       { key: "rating", content: <Lozenge appearance={ratingAppearance(emp.rating)}>{emp.rating}</Lozenge> },
-      { key: "salary", content: <Text size="small">${emp.salary.toLocaleString()}</Text> },
-      { key: "commission", content: <Text size="small" color={emp.commission ? "color.text" : "color.text.disabled"}>{emp.commission ? `${emp.commission.toFixed(1)}%` : "—"}</Text> },
-      { key: "bonus", content: <Text size="small">{emp.bonus.toFixed(1)}%</Text> },
-      { key: "equity", content: <Text size="small" color={emp.equity ? "color.text" : "color.text.disabled"}>{emp.equity ? `$${emp.equity.toLocaleString()}` : "—"}</Text> },
+      { key: "salary", content: <div style={truncStyle}><Text size="small">${emp.salary.toLocaleString()}</Text></div> },
+      { key: "commission", content: <div style={truncStyle}><Text size="small" color={emp.commission ? "color.text" : "color.text.disabled"}>{emp.commission ? `${emp.commission.toFixed(1)}%` : "—"}</Text></div> },
+      { key: "bonus", content: <div style={truncStyle}><Text size="small">{emp.bonus.toFixed(1)}%</Text></div> },
+      { key: "equity", content: <div style={truncStyle}><Text size="small" color={emp.equity ? "color.text" : "color.text.disabled"}>{emp.equity ? `$${emp.equity.toLocaleString()}` : "—"}</Text></div> },
     ],
   }));
 
@@ -1396,14 +1404,16 @@ function EmployeeDataGridStep() {
       </div>
 
       <div style={{ ...cardStyle, padding: 0, overflow: "hidden" }}>
-        <div style={{ padding: `0 ${token("space.200")}` }}>
-          <DynamicTable
-            head={head}
-            rows={rows}
-            isFixedSize
-            defaultSortKey="id"
-            defaultSortOrder="ASC"
-          />
+        <div style={{ overflowX: "auto", padding: `0 ${token("space.200")}` }}>
+          <div style={{ minWidth: 1200 }}>
+            <DynamicTable
+              head={head}
+              rows={rows}
+              isFixedSize
+              defaultSortKey="id"
+              defaultSortOrder="ASC"
+            />
+          </div>
         </div>
         <div
           style={{
