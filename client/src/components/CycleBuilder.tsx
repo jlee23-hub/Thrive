@@ -479,7 +479,6 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
   const [workdayExpanded, setWorkdayExpanded] = useState(true);
   const [shareworksExpanded, setShareworksExpanded] = useState(false);
   const [selectedRole, setSelectedRole] = useState("Admin");
-  const [selectedContext, setSelectedContext] = useState("Planning Grid");
   const [fieldPermissions, setFieldPermissions] = useState(fieldPermissionsData);
   const [selectedTemplate, setSelectedTemplate] = useState("standard");
   const [includePerformance, setIncludePerformance] = useState(true);
@@ -550,8 +549,6 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
           <FieldPermissionsStep
             selectedRole={selectedRole}
             setSelectedRole={setSelectedRole}
-            selectedContext={selectedContext}
-            setSelectedContext={setSelectedContext}
             fieldPermissions={fieldPermissions}
             toggleFieldPermission={toggleFieldPermission}
           />
@@ -2511,15 +2508,11 @@ function UsersRolesStep() {
 function FieldPermissionsStep({
   selectedRole,
   setSelectedRole,
-  selectedContext,
-  setSelectedContext,
   fieldPermissions,
   toggleFieldPermission,
 }: {
   selectedRole: string;
   setSelectedRole: (v: string) => void;
-  selectedContext: string;
-  setSelectedContext: (v: string) => void;
   fieldPermissions: typeof fieldPermissionsData;
   toggleFieldPermission: (id: string, type: "visible" | "editable") => void;
 }) {
@@ -2532,12 +2525,6 @@ function FieldPermissionsStep({
     { label: "Employee", value: "Employee" },
   ];
 
-  const contextOptions = [
-    { label: "Planning Grid", value: "Planning Grid" },
-    { label: "Employee View", value: "Employee View" },
-    { label: "Reports", value: "Reports" },
-  ];
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
@@ -2545,23 +2532,13 @@ function FieldPermissionsStep({
         <Heading size="medium">Field Permissions</Heading>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300") }}>
-        <div>
-          <LabelText>Role</LabelText>
-          <Select
-            options={roleOptions}
-            value={roleOptions.find((o) => o.value === selectedRole)}
-            onChange={(opt) => opt && setSelectedRole(opt.value)}
-          />
-        </div>
-        <div>
-          <LabelText>Context</LabelText>
-          <Select
-            options={contextOptions}
-            value={contextOptions.find((o) => o.value === selectedContext)}
-            onChange={(opt) => opt && setSelectedContext(opt.value)}
-          />
-        </div>
+      <div>
+        <LabelText>Role</LabelText>
+        <Select
+          options={roleOptions}
+          value={roleOptions.find((o) => o.value === selectedRole)}
+          onChange={(opt) => opt && setSelectedRole(opt.value)}
+        />
       </div>
 
       <div style={cardStyle}>
