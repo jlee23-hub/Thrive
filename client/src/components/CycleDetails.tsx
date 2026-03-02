@@ -223,70 +223,83 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
   }));
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-        <Text size="small" color="color.text.subtlest">
-          <span
-            style={{ cursor: "pointer", textDecoration: "underline" }}
-            onClick={onBack}
-          >
-            Home
-          </span>
-        </Text>
-        <Text size="small" color="color.text.subtlest">/</Text>
-        <Text size="small" color="color.text.subtlest">
-          <span
-            style={{ cursor: "pointer", textDecoration: "underline" }}
-            onClick={onBack}
-          >
-            Cycles
-          </span>
-        </Text>
-        <Text size="small" color="color.text.subtlest">/</Text>
-        <Text size="small" weight="bold">{breadcrumbName}</Text>
-      </div>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+          backgroundColor: token("elevation.surface"),
+          borderBottom: `1px solid ${token("color.border")}`,
+          paddingTop: token("space.300"),
+          paddingLeft: token("space.400"),
+          paddingRight: token("space.400"),
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.050") }}>
+          <Text size="small" color="color.text.subtlest">
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={onBack}
+            >
+              Home
+            </span>
+          </Text>
+          <Text size="small" color="color.text.subtlest">/</Text>
+          <Text size="small" color="color.text.subtlest">
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={onBack}
+            >
+              Cycles
+            </span>
+          </Text>
+          <Text size="small" color="color.text.subtlest">/</Text>
+          <Text size="small" weight="bold">{breadcrumbName}</Text>
+        </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
-          <div
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: token("border.radius.100"),
-              backgroundColor: token("color.background.brand.bold"),
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <PageIcon label="" color={token("color.text.inverse")} />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: token("space.200") }}>
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+            <div
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: token("border.radius.circle"),
+                backgroundColor: token("color.background.brand.bold"),
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <PageIcon label="" color={token("color.text.inverse")} LEGACY_size="small" />
+            </div>
+            <Heading size="large">{breadcrumbName}</Heading>
           </div>
-          <Heading size="large">{breadcrumbName}</Heading>
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
+            <Button appearance="default" iconBefore={DownloadIcon}>
+              Export
+            </Button>
+            <IconButton
+              icon={ShowMoreVerticalIcon}
+              label="More actions"
+              appearance="subtle"
+            />
+          </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <Button appearance="default" iconBefore={DownloadIcon}>
-            Export
-          </Button>
-          <IconButton
-            icon={ShowMoreVerticalIcon}
-            label="More actions"
-            appearance="subtle"
-          />
-        </div>
+
+        <Tabs id="cycle-details-tabs" onChange={setSelectedTab} selected={selectedTab}>
+          <TabList>
+            <Tab>Cycle Details</Tab>
+            <Tab>Data Sources</Tab>
+            <Tab>Employee Data</Tab>
+            <Tab>Eligibility Rules</Tab>
+            <Tab>User Role Permissions</Tab>
+            <Tab>Field Permissions</Tab>
+          </TabList>
+        </Tabs>
       </div>
 
-      <Tabs id="cycle-details-tabs" onChange={setSelectedTab} selected={selectedTab}>
-        <TabList>
-          <Tab>Cycle Details</Tab>
-          <Tab>Data Sources</Tab>
-          <Tab>Employee Data</Tab>
-          <Tab>Eligibility Rules</Tab>
-          <Tab>User Role Permissions</Tab>
-          <Tab>Field Permissions</Tab>
-        </TabList>
-      </Tabs>
-
-      <div style={{ paddingTop: token("space.300"), width: "100%" }}>
+      <div style={{ padding: token("space.400"), width: "100%" }}>
         {selectedTab === 0 && (
           <div style={cardStyle}>
             <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>

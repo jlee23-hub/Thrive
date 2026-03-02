@@ -320,7 +320,7 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          {persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands" && activeNav !== "cycle-details" ? (
+          {persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands" ? (
             renderContent()
           ) : (
             <div style={{ padding: token("space.500") }}>
