@@ -1261,10 +1261,23 @@ function EligibilityRulesStep() {
 
       <div style={cardStyle}>
         <Heading size="xsmall">New Eligibility Rule</Heading>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginTop: token("space.200") }}>
+
+        <SectionMessage appearance="information">
+          <Text size="small" weight="bold">Note: </Text>
+          <Text size="small">
+            Employee type is used for overall APEX and comp eligibility.
+          </Text>
+          <div style={{ marginTop: token("space.050") }}>
+            <Text size="UNSAFE_small" color="color.text.subtlest">
+              You can combine multiple conditions with AND logic (e.g., Start Date &lt; 31 March 2026 AND Employee Type = Regular or Definite)
+            </Text>
+          </div>
+        </SectionMessage>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.300") }}>
           <div>
             <LabelText required>Rule Name</LabelText>
-            <Textfield placeholder="e.g., Location Filter" />
+            <Textfield placeholder="e.g., Full-time employees only" />
           </div>
           <div>
             <LabelText required>Field</LabelText>
@@ -1279,6 +1292,8 @@ function EligibilityRulesStep() {
               placeholder="Select field..."
             />
           </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.300") }}>
           <div>
             <LabelText required>Operator</LabelText>
             <Select
@@ -1294,11 +1309,20 @@ function EligibilityRulesStep() {
               placeholder="Select operator..."
             />
           </div>
+          <div>
+            <LabelText required>Value</LabelText>
+            <Textfield placeholder="Value" />
+          </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: token("space.200") }}>
-          <Button appearance="primary" iconBefore={AddIcon}>
-            Add Rule
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: token("space.300"), paddingTop: token("space.200"), borderTop: `1px solid ${token("color.border")}` }}>
+          <Button appearance="subtle" iconBefore={AddIcon}>
+            Add AND Condition
           </Button>
+          <div style={{ display: "flex", gap: token("space.100") }}>
+            <Button appearance="subtle">Cancel</Button>
+            <Button appearance="primary">Save Rule</Button>
+          </div>
         </div>
       </div>
 
