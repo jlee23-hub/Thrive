@@ -59,16 +59,16 @@ type Step = {
 };
 
 const STEPS: Step[] = [
-  { id: "details", title: "Cycle Details", description: "Define cycle name, type, timeline, and effective dates for this compensation period" },
-  { id: "import", title: "Data Integrations", description: "Connect and sync employee data from Workday, Shareworks, and CSV uploads" },
-  { id: "columns", title: "Employee Data Grid", description: "Review unified employee records with field-level data source attribution" },
-  { id: "eligibility", title: "Eligibility Rules", description: "Set rules to determine which employees qualify for this compensation cycle" },
-  { id: "budget", title: "Configure Budget & FX Rates", description: "Allocate budgets by type, set currency exchange rates, and define calculation methods" },
-  { id: "salary-bands", title: "Salary Bands & Equity Targets", description: "Upload and manage salary range structures and equity grant targets by level" },
-  { id: "users", title: "Users & Role Permissions", description: "Assign users to roles and control access to cycle planning and approvals" },
-  { id: "field-permissions", title: "Field Permissions", description: "Configure which fields are visible or editable per role and planning context" },
-  { id: "reward-letter", title: "Reward Letter", description: "Customize the employee reward letter template, content options, and messaging" },
-  { id: "review", title: "Review & Finalize", description: "Review all cycle settings, validate configuration, and launch the compensation cycle" },
+  { id: "details", title: "Cycle Details", description: "Name, year, and type" },
+  { id: "import", title: "Data Integrations", description: "Employee and comp data" },
+  { id: "columns", title: "Employee data grid", description: "Configure data fields" },
+  { id: "eligibility", title: "Eligibility Rules", description: "Define participation criteria" },
+  { id: "budget", title: "Configure budget & FX rates", description: "Set budget and exchange rates" },
+  { id: "salary-bands", title: "Salary Bands & Equity Targets", description: "Upload and manage salary bands" },
+  { id: "users", title: "Users & Role Permissions", description: "Manage user access" },
+  { id: "field-permissions", title: "Field Permissions", description: "Configure field access" },
+  { id: "reward-letter", title: "Reward Letter", description: "Configure reward letters" },
+  { id: "review", title: "Review & Finalize", description: "Review all settings" },
 ];
 
 interface CycleBuilderProps {
