@@ -228,7 +228,11 @@ const rows = cycles.map((cycle) => ({
   ],
 }));
 
-export default function CyclesDashboard() {
+interface CyclesDashboardProps {
+  onCreateCycle?: () => void;
+}
+
+export default function CyclesDashboard({ onCreateCycle }: CyclesDashboardProps) {
   const activeCycles = cycles.filter((c) => c.status === "Active").length;
   const inactiveCycles = cycles.filter((c) => c.status === "Planning").length;
 
@@ -243,7 +247,7 @@ export default function CyclesDashboard() {
             </Text>
           </div>
         </div>
-        <Button appearance="primary" iconBefore={AddIcon}>
+        <Button appearance="primary" iconBefore={AddIcon} onClick={onCreateCycle}>
           Create New Cycle
         </Button>
       </div>

@@ -30,6 +30,7 @@ import RSUDetails from "../components/RSUDetails";
 import AboutUs from "../components/AboutUs";
 import TeamOverview from "../components/TeamOverview";
 import CyclesDashboard from "../components/CyclesDashboard";
+import CycleBuilder from "../components/CycleBuilder";
 
 import DashboardIcon from "@atlaskit/icon/core/dashboard";
 import ChartTrendIcon from "@atlaskit/icon/core/chart-trend";
@@ -57,7 +58,7 @@ const resolveFeatureFlags = (featureFlags: string[] = []) => {
 resolveFeatureFlags();
 
 type Persona = "employee" | "manager" | "comp-admin";
-type NavItem = "compensation" | "rsus" | "about" | "team-overview" | "cycles-dashboard";
+type NavItem = "compensation" | "rsus" | "about" | "team-overview" | "cycles-dashboard" | "cycle-builder";
 
 export default function Home() {
   const [persona, setPersona] = useState<Persona>("employee");
@@ -87,7 +88,9 @@ export default function Home() {
       case "team-overview":
         return <TeamOverview />;
       case "cycles-dashboard":
-        return <CyclesDashboard />;
+        return <CyclesDashboard onCreateCycle={() => setActiveNav("cycle-builder")} />;
+      case "cycle-builder":
+        return <CycleBuilder onBack={() => setActiveNav("cycles-dashboard")} />;
       default:
         return <CompensationSummary />;
     }
