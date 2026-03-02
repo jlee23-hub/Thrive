@@ -1843,7 +1843,7 @@ function FieldPermissionsStep({
                   key={h}
                   style={{
                     padding: `${token("space.100")} ${token("space.200")}`,
-                    textAlign: h === "Field" ? "left" : "center",
+                    textAlign: "left",
                     fontSize: 11,
                     fontWeight: 600,
                     color: token("color.text.subtlest"),
@@ -1861,14 +1861,14 @@ function FieldPermissionsStep({
                 <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                   <Text size="small">{field.name}</Text>
                 </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "center" }}>
+                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                   <Checkbox
                     isChecked={field.visible}
                     onChange={() => toggleFieldPermission(field.id, "visible")}
                     label=""
                   />
                 </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "center" }}>
+                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                   <Checkbox
                     isChecked={field.editable}
                     onChange={() => toggleFieldPermission(field.id, "editable")}
