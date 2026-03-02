@@ -9,6 +9,7 @@ import Select from "@atlaskit/select";
 import Lozenge from "@atlaskit/lozenge";
 import DynamicTable from "@atlaskit/dynamic-table";
 import SectionMessage from "@atlaskit/section-message";
+import InlineMessage from "@atlaskit/inline-message";
 import Checkbox from "@atlaskit/checkbox";
 import Toggle from "@atlaskit/toggle";
 
@@ -1380,15 +1381,9 @@ function EligibilityRulesStep() {
                   </Lozenge>
                 </td>
                 <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: token("space.050") }}>
-                    <ErrorIcon label="" color={token("color.icon.danger")} />
-                    <div>
-                      <Text size="small" color="color.text.danger">{emp.reason}</Text>
-                      <div>
-                        <Text size="UNSAFE_small" color="color.text.subtlest">{emp.detail}</Text>
-                      </div>
-                    </div>
-                  </div>
+                  <InlineMessage appearance="error" title={emp.reason}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{emp.detail}</Text>
+                  </InlineMessage>
                 </td>
                 <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right" }}>
                   <Button appearance="subtle" spacing="compact">
