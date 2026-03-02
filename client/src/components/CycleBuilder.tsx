@@ -2126,85 +2126,181 @@ function SalaryBandsStep() {
 }
 
 function UsersRolesStep() {
+  const [activeTab, setActiveTab] = useState<"roles" | "users">("roles");
+
+  const tabStyle = (isActive: boolean): React.CSSProperties => ({
+    padding: `${token("space.100")} ${token("space.200")}`,
+    cursor: "pointer",
+    borderBottom: isActive ? `2px solid ${token("color.border.brand")}` : `2px solid transparent`,
+    color: isActive ? token("color.text.brand") : token("color.text.subtlest"),
+    fontWeight: isActive ? 600 : 400,
+    fontSize: 14,
+    background: "none",
+    border: "none",
+    borderBottomStyle: "solid" as const,
+    borderBottomWidth: 2,
+    borderBottomColor: isActive ? token("color.border.brand") : "transparent",
+  });
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <PeopleGroupIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Users & Role Permissions</Heading>
-        </div>
-        <Button appearance="primary" iconBefore={AddIcon}>
-          Add User
-        </Button>
+      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+        <PeopleGroupIcon label="" color={token("color.icon.brand")} />
+        <Heading size="medium">Users & Role Permissions</Heading>
       </div>
 
-      <div style={cardStyle}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-              {["User", "Email", "Linked Employee", "Role", "Permissions", "Active", "Actions"].map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: `${token("space.100")} ${token("space.200")}`,
-                    textAlign: "left",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: token("color.text.subtlest"),
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, i) => (
-              <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small" weight="semibold">{user.name}</Text>
-                  <div>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">{user.username}</Text>
-                  </div>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small" color="color.text.subtlest">{user.email}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small">{user.linked}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Lozenge
-                    appearance={
-                      user.role === "admin"
-                        ? "removed"
-                        : user.role === "manager"
-                        ? "success"
-                        : user.role === "leader"
-                        ? "inprogress"
-                        : "default"
-                    }
-                  >
-                    {user.role}
-                  </Lozenge>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="UNSAFE_small" color="color.text.subtlest">{user.permissions || "—"}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Lozenge appearance={user.active ? "success" : "default"}>
-                    {user.active ? "Active" : "Inactive"}
-                  </Lozenge>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <IconButton icon={EditIcon} label="Edit" appearance="subtle" spacing="compact" />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div style={{ display: "flex", gap: token("space.200"), borderBottom: `1px solid ${token("color.border")}` }}>
+        <button style={tabStyle(activeTab === "roles")} onClick={() => setActiveTab("roles")}>
+          Roles
+        </button>
+        <button style={tabStyle(activeTab === "users")} onClick={() => setActiveTab("users")}>
+          Users
+        </button>
       </div>
+
+      {activeTab === "roles" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Heading size="small">Role Permissions</Heading>
+            <Button appearance="primary" iconBefore={PeopleGroupIcon}>
+              Add Role
+            </Button>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+            {users.map((user, i) => (
+              <div
+                key={i}
+                style={{
+                  border: `1px solid ${token("color.border")}`,
+                  borderRadius: token("border.radius.200"),
+                  padding: token("space.300"),
+                  backgroundColor: token("elevation.surface"),
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), flexWrap: "wrap" }}>
+                      <Text size="medium" weight="bold">{user.name}</Text>
+                      <Lozenge
+                        appearance={
+                          user.role === "admin"
+                            ? "removed"
+                            : user.role === "manager"
+                            ? "success"
+                            : user.role === "leader"
+                            ? "inprogress"
+                            : user.role === "hrbp"
+                            ? "moved"
+                            : "default"
+                        }
+                      >
+                        {user.role}
+                      </Lozenge>
+                      {user.permissions && (
+                        <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
+                          <ShieldIcon label="" color={token("color.icon.subtle")} />
+                          <Text size="small" color="color.text.subtlest">{user.permissions}</Text>
+                        </div>
+                      )}
+                    </div>
+                    <Text size="small" color="color.text.subtlest">
+                      {user.username} · {user.email}
+                    </Text>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">
+                      Linked: {user.linked}
+                    </Text>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                    <Button appearance="default" spacing="compact">Edit</Button>
+                    <IconButton icon={DeleteIcon} label="Delete" appearance="subtle" spacing="compact" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === "users" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Heading size="small">User Management</Heading>
+            <Button appearance="primary" iconBefore={AddIcon}>
+              Add User
+            </Button>
+          </div>
+          <div style={cardStyle}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
+                  {["User", "Email", "Linked Employee", "Role", "Active", "Actions"].map((h) => (
+                    <th
+                      key={h}
+                      style={{
+                        padding: `${token("space.100")} ${token("space.200")}`,
+                        textAlign: "left",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: token("color.text.subtlest"),
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user, i) => (
+                  <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Text size="small" weight="semibold">{user.name}</Text>
+                      <div>
+                        <Text size="UNSAFE_small" color="color.text.subtlest">{user.username}</Text>
+                      </div>
+                    </td>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Text size="small" color="color.text.subtlest">{user.email}</Text>
+                    </td>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Text size="small">{user.linked}</Text>
+                    </td>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Lozenge
+                        appearance={
+                          user.role === "admin"
+                            ? "removed"
+                            : user.role === "manager"
+                            ? "success"
+                            : user.role === "leader"
+                            ? "inprogress"
+                            : user.role === "hrbp"
+                            ? "moved"
+                            : "default"
+                        }
+                      >
+                        {user.role}
+                      </Lozenge>
+                    </td>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Lozenge appearance={user.active ? "success" : "default"}>
+                        {user.active ? "Active" : "Inactive"}
+                      </Lozenge>
+                    </td>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <div style={{ display: "flex", gap: token("space.050") }}>
+                        <IconButton icon={EditIcon} label="Edit" appearance="subtle" spacing="compact" />
+                        <IconButton icon={DeleteIcon} label="Delete" appearance="subtle" spacing="compact" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
