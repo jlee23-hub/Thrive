@@ -248,7 +248,7 @@ export default function Home() {
 
   return (
     <AppProvider defaultColorMode="light">
-      <Root>
+      <Root defaultSideNavCollapsed={false}>
         <TopNav>
           <TopNavStart>
             <SideNavToggleButton
@@ -314,7 +314,7 @@ export default function Home() {
           </TopNavEnd>
         </TopNav>
 
-        <SideNav label="Thrive Navigation">
+        <SideNav label="Thrive Navigation" defaultWidth={280}>
           <SideNavContent>
             <div className="bold-nav-items">
             <MenuSection>

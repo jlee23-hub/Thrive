@@ -40,6 +40,10 @@ div[role="list"]._bozg1crf {
 }
 
 
+._181n1ule {
+  display: block !important;
+}
+
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
