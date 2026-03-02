@@ -4,7 +4,7 @@ import { Text } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
 import Button from "@atlaskit/button/new";
 import { IconButton } from "@atlaskit/button/new";
-import Tabs, { Tab, TabList, TabPanel } from "@atlaskit/tabs";
+import Tabs, { Tab, TabList } from "@atlaskit/tabs";
 import Textfield from "@atlaskit/textfield";
 import Select from "@atlaskit/select";
 import Textarea from "@atlaskit/textarea";
@@ -143,6 +143,7 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
   const [endDate, setEndDate] = useState(dates.end);
   const [description, setDescription] = useState("");
   const [rules, setRules] = useState(eligibilityRules);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const shortName = cycle.name.replace(/^FY\d{4}\s+/, "").replace(/\s+Cycle$/, "");
   const breadcrumbName = shortName || cycle.name;
@@ -274,7 +275,7 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
         </div>
       </div>
 
-      <Tabs id="cycle-details-tabs">
+      <Tabs id="cycle-details-tabs" onChange={setSelectedTab} selected={selectedTab}>
         <TabList>
           <Tab>Cycle Details</Tab>
           <Tab>Data Sources</Tab>
@@ -283,261 +284,251 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
           <Tab>User Role Permissions</Tab>
           <Tab>Field Permissions</Tab>
         </TabList>
+      </Tabs>
 
-        <TabPanel>
-          <div style={{ paddingTop: token("space.300") }}>
-            <div style={cardStyle}>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-                <PageIcon label="" color={token("color.icon.brand")} />
-                <Heading size="small">Cycle Details</Heading>
-              </div>
+      <div style={{ paddingTop: token("space.300"), width: "100%" }}>
+        {selectedTab === 0 && (
+          <div style={cardStyle}>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
+              <PageIcon label="" color={token("color.icon.brand")} />
+              <Heading size="small">Cycle Details</Heading>
+            </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
-                <div>
-                  <Text size="small" weight="bold" color="color.text.subtlest">
-                    <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Cycle Name</span>
-                  </Text>
-                  <div style={{ marginTop: token("space.050") }}>
-                    <Textfield
-                      placeholder="Enter cycle name"
-                      value={cycleName}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCycleName(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Text size="small" weight="bold" color="color.text.subtlest">
-                    <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Fiscal Year</span>
-                  </Text>
-                  <div style={{ marginTop: token("space.050") }}>
-                    <Select
-                      options={fiscalYearOptions}
-                      value={fiscalYear}
-                      onChange={(val: any) => val && setFiscalYear(val)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Text size="small" weight="bold" color="color.text.subtlest">
-                    <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Cycle Type</span>
-                  </Text>
-                  <div style={{ marginTop: token("space.050") }}>
-                    <Select
-                      options={cycleTypeOptions}
-                      value={cycleType}
-                      onChange={(val: any) => val && setCycleType(val)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
-                <div>
-                  <Text size="small" weight="bold" color="color.text.subtlest">
-                    <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Status</span>
-                  </Text>
-                  <div style={{ marginTop: token("space.050") }}>
-                    <Select
-                      options={statusOptions}
-                      value={status}
-                      onChange={(val: any) => val && setStatus(val)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Text size="small" weight="bold" color="color.text.subtlest">
-                    <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Start Date</span>
-                  </Text>
-                  <div style={{ marginTop: token("space.050") }}>
-                    <Textfield
-                      placeholder="mm/dd/yyyy"
-                      value={startDate}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Text size="small" weight="bold" color="color.text.subtlest">
-                    <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>End Date</span>
-                  </Text>
-                  <div style={{ marginTop: token("space.050") }}>
-                    <Textfield
-                      placeholder="mm/dd/yyyy"
-                      value={endDate}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
               <div>
                 <Text size="small" weight="bold" color="color.text.subtlest">
-                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Description</span>
+                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Cycle Name</span>
                 </Text>
                 <div style={{ marginTop: token("space.050") }}>
-                  <Textarea
-                    placeholder="Enter cycle description..."
-                    value={description}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
-                    minimumRows={4}
+                  <Textfield
+                    placeholder="Enter cycle name"
+                    value={cycleName}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCycleName(e.target.value)}
                   />
                 </div>
               </div>
-
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.400") }}>
-                <Button appearance="subtle" onClick={onBack}>Cancel</Button>
-                <Button appearance="primary" iconBefore={PageIcon}>Save Changes</Button>
-              </div>
-            </div>
-          </div>
-        </TabPanel>
-
-        <TabPanel>
-          <div style={{ paddingTop: token("space.300") }}>
-            <div style={cardStyle}>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-                <DatabaseIcon label="" color={token("color.icon.brand")} />
-                <Heading size="small">Connected Data Sources</Heading>
-              </div>
-              <DynamicTable
-                head={dsHead}
-                rows={dsRows}
-                isFixedSize
-              />
-            </div>
-          </div>
-        </TabPanel>
-
-        <TabPanel>
-          <div style={{ paddingTop: token("space.300") }}>
-            <div style={cardStyle}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.300") }}>
-                <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                  <PersonIcon label="" color={token("color.icon.brand")} />
-                  <Heading size="small">Employee Data Fields</Heading>
-                </div>
-                <Text size="small" color="color.text.subtlest">
-                  {employeeFields.filter((f) => f.required).length} required · {employeeFields.length} total fields
+              <div>
+                <Text size="small" weight="bold" color="color.text.subtlest">
+                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Fiscal Year</span>
                 </Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Select
+                    options={fiscalYearOptions}
+                    value={fiscalYear}
+                    onChange={(val: any) => val && setFiscalYear(val)}
+                  />
+                </div>
               </div>
-              <DynamicTable
-                head={empHead}
-                rows={empRows}
-                isFixedSize
-              />
+              <div>
+                <Text size="small" weight="bold" color="color.text.subtlest">
+                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Cycle Type</span>
+                </Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Select
+                    options={cycleTypeOptions}
+                    value={cycleType}
+                    onChange={(val: any) => val && setCycleType(val)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
+              <div>
+                <Text size="small" weight="bold" color="color.text.subtlest">
+                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Status</span>
+                </Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Select
+                    options={statusOptions}
+                    value={status}
+                    onChange={(val: any) => val && setStatus(val)}
+                  />
+                </div>
+              </div>
+              <div>
+                <Text size="small" weight="bold" color="color.text.subtlest">
+                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Start Date</span>
+                </Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Textfield
+                    placeholder="mm/dd/yyyy"
+                    value={startDate}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div>
+                <Text size="small" weight="bold" color="color.text.subtlest">
+                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>End Date</span>
+                </Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Textfield
+                    placeholder="mm/dd/yyyy"
+                    value={endDate}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <Text size="small" weight="bold" color="color.text.subtlest">
+                <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Description</span>
+              </Text>
+              <div style={{ marginTop: token("space.050") }}>
+                <Textarea
+                  placeholder="Enter cycle description..."
+                  value={description}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
+                  minimumRows={4}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.400") }}>
+              <Button appearance="subtle" onClick={onBack}>Cancel</Button>
+              <Button appearance="primary" iconBefore={PageIcon}>Save Changes</Button>
             </div>
           </div>
-        </TabPanel>
+        )}
 
-        <TabPanel>
-          <div style={{ paddingTop: token("space.300") }}>
-            <div style={cardStyle}>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-                <CheckCircleIcon label="" color={token("color.icon.brand")} />
-                <Heading size="small">Eligibility Rules</Heading>
+        {selectedTab === 1 && (
+          <div style={cardStyle}>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
+              <DatabaseIcon label="" color={token("color.icon.brand")} />
+              <Heading size="small">Connected Data Sources</Heading>
+            </div>
+            <DynamicTable
+              head={dsHead}
+              rows={dsRows}
+              isFixedSize
+            />
+          </div>
+        )}
+
+        {selectedTab === 2 && (
+          <div style={cardStyle}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.300") }}>
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                <PersonIcon label="" color={token("color.icon.brand")} />
+                <Heading size="small">Employee Data Fields</Heading>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
-                {rules.map((rule) => (
-                  <div
-                    key={rule.id}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: token("space.200"),
-                      borderRadius: token("border.radius.200"),
-                      border: `1px solid ${token("color.border")}`,
-                      backgroundColor: rule.enabled ? token("elevation.surface") : token("elevation.surface.sunken"),
-                    }}
-                  >
-                    <div>
-                      <Text weight="semibold">{rule.name}</Text>
-                      <div style={{ marginTop: token("space.025") }}>
-                        <Text size="small" color="color.text.subtlest">{rule.description}</Text>
-                      </div>
+              <Text size="small" color="color.text.subtlest">
+                {employeeFields.filter((f) => f.required).length} required · {employeeFields.length} total fields
+              </Text>
+            </div>
+            <DynamicTable
+              head={empHead}
+              rows={empRows}
+              isFixedSize
+            />
+          </div>
+        )}
+
+        {selectedTab === 3 && (
+          <div style={cardStyle}>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
+              <CheckCircleIcon label="" color={token("color.icon.brand")} />
+              <Heading size="small">Eligibility Rules</Heading>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+              {rules.map((rule) => (
+                <div
+                  key={rule.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: token("space.200"),
+                    borderRadius: token("border.radius.200"),
+                    border: `1px solid ${token("color.border")}`,
+                    backgroundColor: rule.enabled ? token("elevation.surface") : token("elevation.surface.sunken"),
+                  }}
+                >
+                  <div>
+                    <Text weight="semibold">{rule.name}</Text>
+                    <div style={{ marginTop: token("space.025") }}>
+                      <Text size="small" color="color.text.subtlest">{rule.description}</Text>
                     </div>
-                    <Toggle
-                      isChecked={rule.enabled}
-                      onChange={() => toggleRule(rule.id)}
-                    />
                   </div>
-                ))}
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.300") }}>
-                <Button appearance="subtle">Reset</Button>
-                <Button appearance="primary">Save Rules</Button>
-              </div>
+                  <Toggle
+                    isChecked={rule.enabled}
+                    onChange={() => toggleRule(rule.id)}
+                  />
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.300") }}>
+              <Button appearance="subtle">Reset</Button>
+              <Button appearance="primary">Save Rules</Button>
             </div>
           </div>
-        </TabPanel>
+        )}
 
-        <TabPanel>
-          <div style={{ paddingTop: token("space.300") }}>
-            <div style={cardStyle}>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-                <ShieldIcon label="" color={token("color.icon.brand")} />
-                <Heading size="small">User Role Permissions</Heading>
-              </div>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-                    <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Role</th>
-                    <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>View</th>
-                    <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Edit</th>
-                    <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Approve</th>
-                    <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Export</th>
+        {selectedTab === 4 && (
+          <div style={cardStyle}>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
+              <ShieldIcon label="" color={token("color.icon.brand")} />
+              <Heading size="small">User Role Permissions</Heading>
+            </div>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Role</th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>View</th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Edit</th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Approve</th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Export</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rolePermissions.map((rp, i) => (
+                  <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
+                    <td style={{ padding: `${token("space.150")} ${token("space.200")}` }}>
+                      <Text weight="semibold">{rp.role}</Text>
+                    </td>
+                    <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}>
+                      <Toggle isChecked={rp.view} onChange={() => {}} size="regular" />
+                    </td>
+                    <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}>
+                      <Toggle isChecked={rp.edit} onChange={() => {}} size="regular" />
+                    </td>
+                    <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}>
+                      <Toggle isChecked={rp.approve} onChange={() => {}} size="regular" />
+                    </td>
+                    <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}>
+                      <Toggle isChecked={rp.export} onChange={() => {}} size="regular" />
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {rolePermissions.map((rp, i) => (
-                    <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                      <td style={{ padding: `${token("space.150")} ${token("space.200")}` }}>
-                        <Text weight="semibold">{rp.role}</Text>
-                      </td>
-                      <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}>
-                        <Toggle isChecked={rp.view} onChange={() => {}} size="regular" />
-                      </td>
-                      <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}>
-                        <Toggle isChecked={rp.edit} onChange={() => {}} size="regular" />
-                      </td>
-                      <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}>
-                        <Toggle isChecked={rp.approve} onChange={() => {}} size="regular" />
-                      </td>
-                      <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}>
-                        <Toggle isChecked={rp.export} onChange={() => {}} size="regular" />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.300") }}>
-                <Button appearance="subtle">Reset</Button>
-                <Button appearance="primary">Save Permissions</Button>
-              </div>
+                ))}
+              </tbody>
+            </table>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.300") }}>
+              <Button appearance="subtle">Reset</Button>
+              <Button appearance="primary">Save Permissions</Button>
             </div>
           </div>
-        </TabPanel>
+        )}
 
-        <TabPanel>
-          <div style={{ paddingTop: token("space.300") }}>
-            <div style={cardStyle}>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-                <ShieldIcon label="" color={token("color.icon.brand")} />
-                <Heading size="small">Field-Level Permissions</Heading>
-              </div>
-              <DynamicTable
-                head={fpHead}
-                rows={fpRows}
-                isFixedSize
-              />
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.300") }}>
-                <Button appearance="subtle">Reset</Button>
-                <Button appearance="primary">Save Permissions</Button>
-              </div>
+        {selectedTab === 5 && (
+          <div style={cardStyle}>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
+              <ShieldIcon label="" color={token("color.icon.brand")} />
+              <Heading size="small">Field-Level Permissions</Heading>
+            </div>
+            <DynamicTable
+              head={fpHead}
+              rows={fpRows}
+              isFixedSize
+            />
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.300") }}>
+              <Button appearance="subtle">Reset</Button>
+              <Button appearance="primary">Save Permissions</Button>
             </div>
           </div>
-        </TabPanel>
-      </Tabs>
+        )}
+      </div>
     </div>
   );
 }
