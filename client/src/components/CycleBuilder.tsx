@@ -619,10 +619,10 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             width: 250,
             backgroundColor: token("elevation.surface.sunken"),
             borderRight: `1px solid ${token("color.border")}`,
-            padding: `${token("space.300")} ${token("space.300")}`,
+            padding: `${token("space.150")} ${token("space.300")}`,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "space-between",
           }}
         >
           {STEPS.map((step, index) => {
