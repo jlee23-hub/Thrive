@@ -289,6 +289,24 @@
     react-uid "^2.2.0"
     tiny-invariant "^1.2.0"
 
+"@atlaskit/dynamic-table@^18.3.19":
+  version "18.3.19"
+  resolved "https://registry.npmjs.org/@atlaskit/dynamic-table/-/dynamic-table-18.3.19.tgz"
+  integrity sha512-nIkRaZ8ZWne/qs9EXBkbnXtlfL8SO02nB0sWklrmhWkb7qWLv3EqQpF6BRqZwLnYgq8KFF9JaGpFoAPH00goWg==
+  dependencies:
+    "@atlaskit/analytics-next" "^11.1.0"
+    "@atlaskit/css" "^0.19.0"
+    "@atlaskit/ds-lib" "^5.3.0"
+    "@atlaskit/icon" "^32.0.0"
+    "@atlaskit/pagination" "^16.2.0"
+    "@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration" "^2.0.0"
+    "@atlaskit/primitives" "^18.0.0"
+    "@atlaskit/spinner" "^19.0.0"
+    "@atlaskit/tokens" "^11.0.0"
+    "@atlaskit/tooltip" "^20.14.0"
+    "@babel/runtime" "^7.0.0"
+    "@compiled/react" "^0.18.6"
+
 "@atlaskit/feature-gate-js-client@^5.5.0":
   version "5.5.7"
   resolved "https://registry.npmjs.org/@atlaskit/feature-gate-js-client/-/feature-gate-js-client-5.5.7.tgz"
@@ -604,7 +622,7 @@
     "@babel/runtime" "^7.0.0"
     "@compiled/react" "^0.18.3"
 
-"@atlaskit/pagination@^16.1.10":
+"@atlaskit/pagination@^16.1.10", "@atlaskit/pagination@^16.2.0":
   version "16.2.5"
   resolved "https://registry.npmjs.org/@atlaskit/pagination/-/pagination-16.2.5.tgz"
   integrity sha512-gWsd4OQ3oaRMg2oUKLteNlFZ6IGhhTB7pWyuXh5PzMRe7ijnpEtzGnrtUErMGFKtM1oymHp5ujLTO/+Zwf1ThQ==
@@ -674,6 +692,29 @@
   dependencies:
     "@atlaskit/pragmatic-drag-and-drop" "^1.6.0"
     "@babel/runtime" "^7.0.0"
+
+"@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-autoscroll@^2.0.0":
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-autoscroll/-/pragmatic-drag-and-drop-react-beautiful-dnd-autoscroll-2.0.2.tgz"
+  integrity sha512-lo4x9p7DAq3WeCknHXqkCNmzSMvyKfucl1BFF6K22BjdiRd+DavBwt4aGUQBGnIPGwZgNKrjmwAFj9xuYdLZDQ==
+  dependencies:
+    "@atlaskit/pragmatic-drag-and-drop" "^1.7.0"
+    "@babel/runtime" "^7.0.0"
+    css-box-model "^1.2.0"
+
+"@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration@^2.0.0":
+  version "2.0.14"
+  resolved "https://registry.npmjs.org/@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration/-/pragmatic-drag-and-drop-react-beautiful-dnd-migration-2.0.14.tgz"
+  integrity sha512-UdEe7oMY1ElMiOGJpB5UD1+KfBLCfQTW7VovtP25OzvWEhedY7Q0Z8ysF278Mqrtu6S48ckfD63hhzDnDYzjWw==
+  dependencies:
+    "@atlaskit/pragmatic-drag-and-drop" "^1.7.0"
+    "@atlaskit/pragmatic-drag-and-drop-hitbox" "^1.1.0"
+    "@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-autoscroll" "^2.0.0"
+    "@atlaskit/tokens" "^11.0.0"
+    "@babel/runtime" "^7.0.0"
+    "@emotion/react" "^11.7.1"
+    bind-event-listener "^3.0.0"
+    tiny-invariant "^1.2.0"
 
 "@atlaskit/pragmatic-drag-and-drop-react-drop-indicator@^3.2.0":
   version "3.2.12"
@@ -2196,6 +2237,13 @@ cosmiconfig@^7.0.0:
     parse-json "^5.0.0"
     path-type "^4.0.0"
     yaml "^1.10.0"
+
+css-box-model@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/css-box-model/-/css-box-model-1.2.1.tgz"
+  integrity sha512-a7Vr4Q/kd/aw96bnJG332W9V9LkJO69JRcaCYDUqjp6/z0w6VcZjgAcTbgFxEPfBgdnAwlh3iwu+hLopa+flJw==
+  dependencies:
+    tiny-invariant "^1.0.6"
 
 csstype@^3.0.2, csstype@^3.1.3:
   version "3.1.3"
@@ -3800,7 +3848,7 @@ tabbable@^1.0.3:
   resolved "https://registry.npmjs.org/tabbable/-/tabbable-1.1.3.tgz"
   integrity sha512-nOWwx35/JuDI4ONuF0ZTo6lYvI0fY0tZCH1ErzY2EXfu4az50ZyiUX8X073FLiZtmWUVlkRnuXsehjJgCw9tYg==
 
-tiny-invariant@^1.2.0, tiny-invariant@^1.3.3:
+tiny-invariant@^1.0.6, tiny-invariant@^1.2.0, tiny-invariant@^1.3.3:
   version "1.3.3"
   resolved "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.3.3.tgz"
   integrity sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==

@@ -21,6 +21,7 @@
     "@atlaskit/code": "^17.2.3",
     "@atlaskit/drawer": "^11.0.28",
     "@atlaskit/dropdown-menu": "^16.3.6",
+    "@atlaskit/dynamic-table": "^18.3.19",
     "@atlaskit/flag": "^17.3.3",
     "@atlaskit/form": "^12.2.2",
     "@atlaskit/grid": "^0.18.5",
