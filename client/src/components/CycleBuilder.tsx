@@ -616,19 +616,20 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         <div
           style={{
-            width: 260,
+            width: 250,
             backgroundColor: token("elevation.surface.sunken"),
             borderRight: `1px solid ${token("color.border")}`,
-            padding: token("space.400"),
+            padding: `${token("space.300")} ${token("space.300")}`,
             display: "flex",
             flexDirection: "column",
-            gap: token("space.300"),
-            overflowY: "auto",
+            justifyContent: "center",
           }}
         >
           {STEPS.map((step, index) => {
             const isActive = index === currentStep;
             const isCompleted = index < currentStep;
+            const circleSize = 28;
+            const circleCenter = circleSize / 2;
 
             return (
               <div
@@ -637,8 +638,9 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
                   position: "relative",
                   display: "flex",
                   alignItems: "flex-start",
-                  gap: token("space.150"),
+                  gap: token("space.100"),
                   cursor: "pointer",
+                  paddingBottom: index !== STEPS.length - 1 ? token("space.150") : 0,
                 }}
                 onClick={() => setCurrentStep(index)}
               >
@@ -646,9 +648,9 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
                   <div
                     style={{
                       position: "absolute",
-                      left: 15,
-                      top: 32,
-                      bottom: -16,
+                      left: circleCenter - 1,
+                      top: circleSize,
+                      bottom: 0,
                       width: 2,
                       backgroundColor: isCompleted
                         ? token("color.border.brand")
@@ -664,8 +666,8 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    width: 32,
-                    height: 32,
+                    width: circleSize,
+                    height: circleSize,
                     borderRadius: "50%",
                     border: `2px solid ${
                       isActive
@@ -685,7 +687,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
                       ? token("color.text.brand")
                       : token("color.text.subtlest"),
                     flexShrink: 0,
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: 600,
                   }}
                 >
@@ -696,15 +698,15 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
                   )}
                 </div>
 
-                <div style={{ paddingTop: token("space.050") }}>
+                <div style={{ paddingTop: token("space.025") }}>
                   <Text
-                    size="small"
+                    size="UNSAFE_small"
                     weight="semibold"
                     color={isActive ? "color.text.brand" : "color.text"}
                   >
                     {step.title}
                   </Text>
-                  <div>
+                  <div style={{ lineHeight: 1.2 }}>
                     <Text size="UNSAFE_small" color="color.text.subtlest">
                       {step.description}
                     </Text>
