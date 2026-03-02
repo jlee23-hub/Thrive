@@ -401,7 +401,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
           <Heading size="large">Cycle Builder</Heading>
           <div style={{ marginTop: token("space.050") }}>
             <Text size="medium" color="color.text.subtlest">
-              Set up your compensation cycle step by step
+              Configure cycle details, integrate data sources, define eligibility rules, set budgets and FX rates, manage salary bands, assign user permissions, and finalize reward letters — all in one guided workflow.
             </Text>
           </div>
         </div>
