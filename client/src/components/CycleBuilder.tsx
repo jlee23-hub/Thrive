@@ -43,6 +43,10 @@ import InformationIcon from "@atlaskit/icon/core/information";
 import PeopleGroupIcon from "@atlaskit/icon/core/people-group";
 import EyeOpenIcon from "@atlaskit/icon/core/eye-open";
 import SpreadsheetIcon from "@atlaskit/icon/core/spreadsheet";
+import FilterIcon from "@atlaskit/icon/core/filter";
+import SortAscendingIcon from "@atlaskit/icon/core/sort-ascending";
+import TableColumnsDistributeIcon from "@atlaskit/icon/core/table-columns-distribute";
+import PersonAddIcon from "@atlaskit/icon/core/person-add";
 import { RadioGroup } from "@atlaskit/radio";
 
 const cardStyle: React.CSSProperties = {
@@ -2125,19 +2129,294 @@ function SalaryBandsStep() {
   );
 }
 
+const cityMap: Record<string, string> = {
+  "Zone A USA": "San Francisco",
+  "Zone B USA": "Seattle",
+  "Zone C USA": "Boston",
+};
+
+const userRoleAssignments: Record<string, string> = {
+  "EMP-00001": "APEX System Admin | Comp",
+  "EMP-00002": "APEX Executive Planner",
+  "EMP-00003": "APEX Planner",
+  "EMP-00004": "APEX Planner",
+  "EMP-00005": "APEX Planner",
+  "EMP-00006": "APEX Planner + Full Budget View",
+  "EMP-00007": "APEX Planner",
+  "EMP-00008": "APEX Planner",
+  "EMP-00009": "APEX Planner",
+  "EMP-00010": "APEX System Admin | HRBP",
+  "EMP-00011": "APEX Planner",
+  "EMP-00012": "APEX Planner",
+};
+
+const TOTAL_USERS = 13128;
+
+function UsersTabContent() {
+  const [usersSubTab, setUsersSubTab] = useState<"users" | "guests">("users");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const perPage = 10;
+
+  const filteredEmployees = employeeData.filter((emp) => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(q) ||
+      `${emp.firstName.toLowerCase().charAt(0)}.${emp.lastName.toLowerCase()}@company.com`.includes(q)
+    );
+  });
+
+  const subTabStyle = (isActive: boolean): React.CSSProperties => ({
+    padding: `${token("space.050")} ${token("space.150")}`,
+    cursor: "pointer",
+    background: "none",
+    border: isActive ? `1px solid ${token("color.border")}` : `1px solid transparent`,
+    borderRadius: token("border.radius.100"),
+    color: isActive ? token("color.text") : token("color.text.subtlest"),
+    fontWeight: isActive ? 600 : 400,
+    fontSize: 14,
+    backgroundColor: isActive ? token("elevation.surface.raised") : "transparent",
+  });
+
+  const avatarColors = [
+    token("color.background.accent.blue.subtler"),
+    token("color.background.accent.green.subtler"),
+    token("color.background.accent.orange.subtler"),
+    token("color.background.accent.purple.subtler"),
+    token("color.background.accent.teal.subtler"),
+  ];
+
+  const avatarTextColors = [
+    token("color.text.accent.blue"),
+    token("color.text.accent.green"),
+    token("color.text.accent.orange"),
+    token("color.text.accent.purple"),
+    token("color.text.accent.teal"),
+  ];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: token("space.200") }}>
+        <div style={{ flex: 1, maxWidth: 400 }}>
+          <Textfield
+            placeholder={`Search ${TOTAL_USERS.toLocaleString()} users by name or email`}
+            elemBeforeInput={
+              <div style={{ paddingLeft: token("space.100"), display: "flex", alignItems: "center" }}>
+                <SearchIcon label="" color={token("color.icon.subtle")} />
+              </div>
+            }
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <Button appearance="subtle" iconBefore={ChevronDownIcon}>
+            1 sort
+          </Button>
+          <Button appearance="subtle" iconBefore={TableColumnsDistributeIcon}>
+            Columns
+          </Button>
+          <Button appearance="subtle" iconBefore={FilterIcon}>
+            Filters
+          </Button>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", gap: token("space.100") }}>
+          <button style={subTabStyle(usersSubTab === "users")} onClick={() => setUsersSubTab("users")}>
+            Users
+          </button>
+          <button style={subTabStyle(usersSubTab === "guests")} onClick={() => setUsersSubTab("guests")}>
+            Guests
+          </button>
+        </div>
+        <div style={{ display: "flex", gap: token("space.100") }}>
+          <Button appearance="default" iconBefore={PersonAddIcon}>
+            Add guest
+          </Button>
+          <Button appearance="default" iconBefore={DownloadIcon}>
+            Download CSV
+          </Button>
+        </div>
+      </div>
+
+      {usersSubTab === "users" && (
+        <>
+          <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.200"), overflow: "hidden" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ backgroundColor: token("elevation.surface.sunken") }}>
+                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, width: 40, textAlign: "center" }}>
+                    <Checkbox label="" />
+                  </th>
+                  {["USER", "DEPARTMENT", "TITLE", "LEVEL", "CITY", "ROLES"].map((h) => (
+                    <th
+                      key={h}
+                      style={{
+                        padding: `${token("space.100")} ${token("space.150")}`,
+                        textAlign: "left",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: token("color.text.subtlest"),
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredEmployees.map((emp, i) => {
+                  const email = `${emp.firstName.toLowerCase()}.${emp.lastName.charAt(0).toLowerCase()}@company.com`;
+                  const city = cityMap[emp.location] || "Austin";
+                  const roleLabel = userRoleAssignments[emp.id] || "APEX Planner";
+                  const colorIdx = i % avatarColors.length;
+                  const isManagerLevel = emp.level.startsWith("M");
+
+                  return (
+                    <tr
+                      key={emp.id}
+                      style={{
+                        borderTop: `1px solid ${token("color.border")}`,
+                      }}
+                    >
+                      <td style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "center" }}>
+                        <Checkbox label="" />
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                          <div
+                            style={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: "50%",
+                              backgroundColor: avatarColors[colorIdx],
+                              color: avatarTextColors[colorIdx],
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 13,
+                              fontWeight: 600,
+                              flexShrink: 0,
+                            }}
+                          >
+                            {emp.firstName.charAt(0)}
+                          </div>
+                          <div>
+                            <Text size="small" weight="semibold">{emp.firstName} {emp.lastName}</Text>
+                            <div>
+                              <Text size="UNSAFE_small" color="color.text.subtlest">{email}</Text>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
+                        <Text size="small">{emp.dept}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
+                        <Text size="small">{emp.title}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
+                        <Lozenge appearance={isManagerLevel ? "success" : "inprogress"}>
+                          {emp.level}
+                        </Lozenge>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
+                        <Text size="small">{city}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                          <Lozenge appearance="default">{roleLabel}</Lozenge>
+                          <Button appearance="link" spacing="none">
+                            + Add role
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Text size="small" color="color.text.subtlest">
+              Showing <Text size="small" weight="bold" as="span">1-{filteredEmployees.length}</Text> of <Text size="small" weight="bold" as="span">{TOTAL_USERS.toLocaleString()}</Text> users
+            </Text>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
+              <Button appearance="subtle" spacing="compact" isDisabled>
+                Previous
+              </Button>
+              {[1, 2, 3].map((p) => (
+                <Button
+                  key={p}
+                  appearance={currentPage === p ? "primary" : "subtle"}
+                  spacing="compact"
+                  onClick={() => setCurrentPage(p)}
+                >
+                  {p}
+                </Button>
+              ))}
+              <Text size="small" color="color.text.subtlest">...</Text>
+              <Button appearance="subtle" spacing="compact" onClick={() => setCurrentPage(1313)}>
+                1313
+              </Button>
+              <Button appearance="subtle" spacing="compact">
+                Next
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {usersSubTab === "guests" && (
+        <div
+          style={{
+            border: `1px solid ${token("color.border")}`,
+            borderRadius: token("border.radius.200"),
+            padding: token("space.500"),
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            gap: token("space.200"),
+          }}
+        >
+          <PersonAddIcon label="" color={token("color.icon.subtle")} />
+          <Heading size="xsmall">No guests yet</Heading>
+          <Text size="small" color="color.text.subtlest">
+            Invite external collaborators to participate in compensation cycles with limited access.
+          </Text>
+          <Button appearance="primary" iconBefore={PersonAddIcon}>
+            Add guest
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function UsersRolesStep() {
   const [activeTab, setActiveTab] = useState<"roles" | "users">("roles");
 
   const tabStyle = (isActive: boolean): React.CSSProperties => ({
     padding: `${token("space.100")} ${token("space.200")}`,
     cursor: "pointer",
-    borderBottom: isActive ? `2px solid ${token("color.border.brand")}` : `2px solid transparent`,
     color: isActive ? token("color.text.brand") : token("color.text.subtlest"),
     fontWeight: isActive ? 600 : 400,
     fontSize: 14,
     background: "none",
-    border: "none",
-    borderBottomStyle: "solid" as const,
+    borderTop: "none",
+    borderLeft: "none",
+    borderRight: "none",
+    borderBottomStyle: "solid",
     borderBottomWidth: 2,
     borderBottomColor: isActive ? token("color.border.brand") : "transparent",
   });
@@ -2223,83 +2502,7 @@ function UsersRolesStep() {
       )}
 
       {activeTab === "users" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <Heading size="small">User Management</Heading>
-            <Button appearance="primary" iconBefore={AddIcon}>
-              Add User
-            </Button>
-          </div>
-          <div style={cardStyle}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-                  {["User", "Email", "Linked Employee", "Role", "Active", "Actions"].map((h) => (
-                    <th
-                      key={h}
-                      style={{
-                        padding: `${token("space.100")} ${token("space.200")}`,
-                        textAlign: "left",
-                        fontSize: 11,
-                        fontWeight: 600,
-                        color: token("color.text.subtlest"),
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user, i) => (
-                  <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                      <Text size="small" weight="semibold">{user.name}</Text>
-                      <div>
-                        <Text size="UNSAFE_small" color="color.text.subtlest">{user.username}</Text>
-                      </div>
-                    </td>
-                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                      <Text size="small" color="color.text.subtlest">{user.email}</Text>
-                    </td>
-                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                      <Text size="small">{user.linked}</Text>
-                    </td>
-                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                      <Lozenge
-                        appearance={
-                          user.role === "admin"
-                            ? "removed"
-                            : user.role === "manager"
-                            ? "success"
-                            : user.role === "leader"
-                            ? "inprogress"
-                            : user.role === "hrbp"
-                            ? "moved"
-                            : "default"
-                        }
-                      >
-                        {user.role}
-                      </Lozenge>
-                    </td>
-                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                      <Lozenge appearance={user.active ? "success" : "default"}>
-                        {user.active ? "Active" : "Inactive"}
-                      </Lozenge>
-                    </td>
-                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                      <div style={{ display: "flex", gap: token("space.050") }}>
-                        <IconButton icon={EditIcon} label="Edit" appearance="subtle" spacing="compact" />
-                        <IconButton icon={DeleteIcon} label="Delete" appearance="subtle" spacing="compact" />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <UsersTabContent />
       )}
     </div>
   );
