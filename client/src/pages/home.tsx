@@ -256,8 +256,12 @@ export default function Home() {
               collapseLabel="Collapse navigation"
             />
             <AppSwitcher label="App Switcher" />
-            <SpreadsheetIcon label="Thrive" color={token("color.icon.brand")} />
-            <CustomTitle><span style={{ color: token("color.text"), fontWeight: 800 }}>Thrive</span></CustomTitle>
+            <CustomTitle>
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                <SpreadsheetIcon label="Thrive" color={token("color.icon.brand")} />
+                <span style={{ color: token("color.text"), fontWeight: 800 }}>Thrive</span>
+              </div>
+            </CustomTitle>
           </TopNavStart>
           <TopNavMiddle />
           <TopNavEnd>
