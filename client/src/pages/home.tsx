@@ -59,6 +59,8 @@ const defaultFeatureFlags = [
   "analytics-next-use-modern-context_jira",
   "platform-component-visual-refresh",
   "platform-default-typography-modernized",
+  "navx-full-height-sidebar",
+  "platform_dst_nav4_full_height_sidebar_api_changes",
 ];
 
 const resolveFeatureFlags = (featureFlags: string[] = []) => {
@@ -249,6 +251,10 @@ export default function Home() {
       <Root>
         <TopNav>
           <TopNavStart>
+            <SideNavToggleButton
+              expandLabel="Expand navigation"
+              collapseLabel="Collapse navigation"
+            />
             <AppSwitcher label="App Switcher" />
             <SpreadsheetIcon label="Thrive" color={token("color.icon.brand")} />
             <CustomTitle><span style={{ color: token("color.text"), fontWeight: 800 }}>Thrive</span></CustomTitle>
@@ -312,10 +318,6 @@ export default function Home() {
             </MenuSection>
             </div>
           </SideNavContent>
-          <SideNavToggleButton
-            expandLabel="Expand navigation"
-            collapseLabel="Collapse navigation"
-          />
           <PanelSplitter label="Resize navigation" />
         </SideNav>
 
