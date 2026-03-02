@@ -285,10 +285,10 @@ export default function DataManagement() {
                         </div>
                       </div>
                       <div style={{ display: "flex", gap: token("space.100"), marginTop: token("space.100") }}>
-                        <Button appearance="primary" iconBefore={CheckCircleIcon} shouldFitContainer>
+                        <Button appearance="primary" iconBefore={CheckCircleIcon}>
                           Test Connection
                         </Button>
-                        <Button appearance="default" iconBefore={DownloadIcon} shouldFitContainer>
+                        <Button appearance="default">
                           Save
                         </Button>
                       </div>
