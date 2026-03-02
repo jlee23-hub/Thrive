@@ -172,18 +172,18 @@ const shareworksFields = [
 ];
 
 const employeeData = [
-  { id: "EMP-00001", firstName: "Sarah", lastName: "Chen", title: "VP of Compensation", level: "M90", dept: "HR", location: "Zone A USA", rating: "Exceeds Expectations", salary: 180000, commission: null as number | null, bonus: 20.0, equity: null as number | null },
-  { id: "EMP-00002", firstName: "Michael", lastName: "Johnson", title: "SVP of Engineering", level: "M100", dept: "Engineering", location: "Zone B USA", rating: "Exceeds Expectations", salary: 220000, commission: null, bonus: 30.0, equity: 150000 },
-  { id: "EMP-00003", firstName: "Lisa", lastName: "Patel", title: "Director of Product", level: "M60", dept: "Product", location: "Zone A USA", rating: "Meets Expectations", salary: 175000, commission: null, bonus: 20.0, equity: 75000 },
-  { id: "EMP-00004", firstName: "James", lastName: "Anderson", title: "Senior Product Manager", level: "M50", dept: "Product", location: "Zone C USA", rating: "Exceeds Expectations", salary: 155000, commission: null, bonus: 15.0, equity: 50000 },
-  { id: "EMP-00005", firstName: "Emily", lastName: "Williams", title: "Engineering Manager", level: "M50", dept: "Engineering", location: "Zone A USA", rating: "Meets Expectations", salary: 165000, commission: null, bonus: 15.0, equity: 60000 },
-  { id: "EMP-00006", firstName: "David", lastName: "Martinez", title: "Staff Engineer", level: "P70", dept: "Engineering", location: "Zone B USA", rating: "Exceeds Expectations", salary: 190000, commission: null, bonus: 15.0, equity: 80000 },
-  { id: "EMP-00007", firstName: "Jessica", lastName: "Brown", title: "Senior Designer", level: "P60", dept: "Design", location: "Zone A USA", rating: "Meets Expectations", salary: 145000, commission: null, bonus: 10.0, equity: null },
-  { id: "EMP-00008", firstName: "Robert", lastName: "Davis", title: "Senior Software Engineer", level: "P60", dept: "Engineering", location: "Zone B USA", rating: "Meets Expectations", salary: 160000, commission: null, bonus: 10.0, equity: 45000 },
-  { id: "EMP-00009", firstName: "Amanda", lastName: "Wilson", title: "Product Marketing Manager", level: "P50", dept: "Marketing", location: "Zone C USA", rating: "Below Expectations", salary: 130000, commission: null, bonus: 10.0, equity: null },
-  { id: "EMP-00010", firstName: "Christopher", lastName: "Taylor", title: "HR Business Partner", level: "P50", dept: "HR", location: "Zone C USA", rating: "Meets Expectations", salary: 120000, commission: null, bonus: 10.0, equity: null },
-  { id: "EMP-00011", firstName: "Jennifer", lastName: "Moore", title: "Data Scientist", level: "P60", dept: "Data Science", location: "Zone A USA", rating: "Exceeds Expectations", salary: 170000, commission: null, bonus: 10.0, equity: 55000 },
-  { id: "EMP-00012", firstName: "Daniel", lastName: "Jackson", title: "Sales Director", level: "M60", dept: "Sales", location: "Zone B USA", rating: "Exceeds Expectations", salary: 165000, commission: 40.0, bonus: 25.0, equity: null },
+  { id: "EMP-00001", firstName: "Sarah", lastName: "Chen", title: "VP of Compensation", level: "M90", dept: "HR", location: "Zone A USA", rating: "Greatly Exceeded", salary: 180000, commission: null as number | null, bonus: 20.0, equity: null as number | null },
+  { id: "EMP-00002", firstName: "Michael", lastName: "Johnson", title: "SVP of Engineering", level: "M100", dept: "Engineering", location: "Zone B USA", rating: "Exceeded", salary: 220000, commission: null, bonus: 30.0, equity: 150000 },
+  { id: "EMP-00003", firstName: "Lisa", lastName: "Patel", title: "Director of Product", level: "M60", dept: "Product", location: "Zone A USA", rating: "Met", salary: 175000, commission: null, bonus: 20.0, equity: 75000 },
+  { id: "EMP-00004", firstName: "James", lastName: "Anderson", title: "Senior Product Manager", level: "M50", dept: "Product", location: "Zone C USA", rating: "Exceeded", salary: 155000, commission: null, bonus: 15.0, equity: 50000 },
+  { id: "EMP-00005", firstName: "Emily", lastName: "Williams", title: "Engineering Manager", level: "M50", dept: "Engineering", location: "Zone A USA", rating: "Met", salary: 165000, commission: null, bonus: 15.0, equity: 60000 },
+  { id: "EMP-00006", firstName: "David", lastName: "Martinez", title: "Staff Engineer", level: "P70", dept: "Engineering", location: "Zone B USA", rating: "Greatly Exceeded", salary: 190000, commission: null, bonus: 15.0, equity: 80000 },
+  { id: "EMP-00007", firstName: "Jessica", lastName: "Brown", title: "Senior Designer", level: "P60", dept: "Design", location: "Zone A USA", rating: "Met Some", salary: 145000, commission: null, bonus: 10.0, equity: null },
+  { id: "EMP-00008", firstName: "Robert", lastName: "Davis", title: "Senior Software Engineer", level: "P60", dept: "Engineering", location: "Zone B USA", rating: "Met", salary: 160000, commission: null, bonus: 10.0, equity: 45000 },
+  { id: "EMP-00009", firstName: "Amanda", lastName: "Wilson", title: "Product Marketing Manager", level: "P50", dept: "Marketing", location: "Zone C USA", rating: "Did Not Meet", salary: 130000, commission: null, bonus: 10.0, equity: null },
+  { id: "EMP-00010", firstName: "Christopher", lastName: "Taylor", title: "HR Business Partner", level: "P50", dept: "HR", location: "Zone C USA", rating: "Met", salary: 120000, commission: null, bonus: 10.0, equity: null },
+  { id: "EMP-00011", firstName: "Jennifer", lastName: "Moore", title: "Data Scientist", level: "P60", dept: "Data Science", location: "Zone A USA", rating: "Exceeded", salary: 170000, commission: null, bonus: 10.0, equity: 55000 },
+  { id: "EMP-00012", firstName: "Daniel", lastName: "Jackson", title: "Sales Director", level: "M60", dept: "Sales", location: "Zone B USA", rating: "Exceeded", salary: 165000, commission: 40.0, bonus: 25.0, equity: null },
 ];
 
 const excludedEmployees = [
@@ -1114,9 +1114,11 @@ function EmployeeDataGridStep() {
     return "moved";
   };
 
-  const ratingAppearance = (rating: string): "success" | "inprogress" | "removed" => {
-    if (rating === "Exceeds Expectations") return "success";
-    if (rating === "Meets Expectations") return "inprogress";
+  const ratingAppearance = (rating: string): "success" | "inprogress" | "removed" | "moved" | "default" => {
+    if (rating === "Greatly Exceeded") return "success";
+    if (rating === "Exceeded") return "inprogress";
+    if (rating === "Met") return "default";
+    if (rating === "Met Some") return "moved";
     return "removed";
   };
 
