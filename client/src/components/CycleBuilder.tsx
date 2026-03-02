@@ -1257,7 +1257,9 @@ function EligibilityRulesStep() {
       </div>
 
       <div style={cardStyle}>
-        <Heading size="xsmall">New Eligibility Rule</Heading>
+        <div style={{ marginBottom: token("space.200") }}>
+          <Heading size="xsmall">New Eligibility Rule</Heading>
+        </div>
 
         <SectionMessage appearance="information">
           <Text size="small" weight="bold">Note: </Text>
