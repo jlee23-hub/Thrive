@@ -1254,12 +1254,6 @@ function EligibilityRulesStep() {
         </div>
       </div>
 
-      <SectionMessage appearance="information">
-        <Text size="small">
-          Employee type is used for overall APEX and comp eligibility. The Eligibility Engine runs all rules against your employee data set and excludes employees who do not meet the criteria.
-        </Text>
-      </SectionMessage>
-
       <div style={cardStyle}>
         <Heading size="xsmall">New Eligibility Rule</Heading>
 
