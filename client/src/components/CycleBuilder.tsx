@@ -619,10 +619,11 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             width: 250,
             backgroundColor: token("elevation.surface.sunken"),
             borderRight: `1px solid ${token("color.border")}`,
-            padding: `${token("space.150")} ${token("space.300")}`,
+            padding: `${token("space.300")} ${token("space.300")}`,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            overflow: "hidden",
           }}
         >
           {STEPS.map((step, index) => {
@@ -640,7 +641,6 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
                   alignItems: "flex-start",
                   gap: token("space.100"),
                   cursor: "pointer",
-                  paddingBottom: index !== STEPS.length - 1 ? token("space.150") : 0,
                 }}
                 onClick={() => setCurrentStep(index)}
               >
@@ -650,7 +650,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
                       position: "absolute",
                       left: circleCenter - 1,
                       top: circleSize,
-                      bottom: 0,
+                      height: "calc(100% + 100px)",
                       width: 2,
                       backgroundColor: isCompleted
                         ? token("color.border.brand")
