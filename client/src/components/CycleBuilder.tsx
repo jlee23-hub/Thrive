@@ -803,7 +803,7 @@ function CycleDetailsStep({
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <PageIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Cycle Details</Heading>
+        <Heading size="large">Cycle Details</Heading>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
@@ -964,7 +964,7 @@ function DataIntegrationsStep({
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <UploadIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Data Integrations</Heading>
+        <Heading size="large">Data Integrations</Heading>
       </div>
 
       <Heading size="small">Data Upload</Heading>
@@ -1383,7 +1383,7 @@ function EmployeeDataGridStep() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div>
-        <Heading size="medium">Employee Data</Heading>
+        <Heading size="large">Employee Data</Heading>
         <Text size="small" color="color.text.subtlest">
           Unified view of all employee fields with data source attribution
         </Text>
@@ -1438,7 +1438,7 @@ function EligibilityRulesStep() {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
           <LockLockedIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Eligibility Rules</Heading>
+          <Heading size="large">Eligibility Rules</Heading>
         </div>
         <Button appearance="primary" iconBefore={AddIcon}>
           New Rule
@@ -1665,7 +1665,7 @@ function BudgetFxStep() {
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <CreditCardIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Configure budget & FX rates</Heading>
+        <Heading size="large">Configure budget & FX rates</Heading>
       </div>
 
       <div style={cardStyle}>
@@ -2064,7 +2064,7 @@ function SalaryBandsStep() {
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <SpreadsheetIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Salary Bands</Heading>
+        <Heading size="large">Salary Bands</Heading>
       </div>
 
       <Text size="small" color="color.text.subtlest">
@@ -2498,7 +2498,7 @@ function UsersRolesStep() {
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <PeopleGroupIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Users & Role Permissions</Heading>
+        <Heading size="large">Users & Role Permissions</Heading>
       </div>
 
       <div style={{ display: "flex", gap: token("space.200"), borderBottom: `1px solid ${token("color.border")}` }}>
@@ -2701,7 +2701,7 @@ function FieldPermissionsStep({
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <EyeOpenIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Field Permissions</Heading>
+        <Heading size="large">Field Permissions</Heading>
       </div>
 
       <div style={{ maxWidth: 240 }}>
@@ -2795,7 +2795,7 @@ function RewardLetterStep({
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <EmailIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Reward Letter</Heading>
+        <Heading size="large">Reward Letter</Heading>
       </div>
 
       <div style={cardStyle}>
@@ -2908,7 +2908,7 @@ function ReviewFinalizeStep({
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <CheckCircleIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Review & Finalize</Heading>
+        <Heading size="large">Review & Finalize</Heading>
       </div>
 
       <SectionMessage appearance="information">
