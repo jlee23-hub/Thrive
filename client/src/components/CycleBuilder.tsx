@@ -275,6 +275,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [expandedErrorFile, setExpandedErrorFile] = useState<number | null>(null);
   const [workdayExpanded, setWorkdayExpanded] = useState(true);
+  const [shareworksExpanded, setShareworksExpanded] = useState(false);
   const [selectedRole, setSelectedRole] = useState("Admin");
   const [selectedContext, setSelectedContext] = useState("Planning Grid");
   const [fieldPermissions, setFieldPermissions] = useState(fieldPermissionsData);
@@ -328,6 +329,8 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             setExpandedErrorFile={setExpandedErrorFile}
             workdayExpanded={workdayExpanded}
             setWorkdayExpanded={setWorkdayExpanded}
+            shareworksExpanded={shareworksExpanded}
+            setShareworksExpanded={setShareworksExpanded}
           />
         );
       case 2:
@@ -723,11 +726,15 @@ function DataIntegrationsStep({
   setExpandedErrorFile,
   workdayExpanded,
   setWorkdayExpanded,
+  shareworksExpanded,
+  setShareworksExpanded,
 }: {
   expandedErrorFile: number | null;
   setExpandedErrorFile: (v: number | null) => void;
   workdayExpanded: boolean;
   setWorkdayExpanded: (v: boolean) => void;
+  shareworksExpanded: boolean;
+  setShareworksExpanded: (v: boolean) => void;
 }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
@@ -988,7 +995,48 @@ function DataIntegrationsStep({
 
             <FieldMappingTable fields={workdayFields} />
 
-            <Heading size="xsmall">Shareworks Fields</Heading>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Button appearance="primary">Sync now</Button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={cardStyle}>
+        <div
+          onClick={() => setShareworksExpanded(!shareworksExpanded)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            cursor: "pointer",
+            marginBottom: shareworksExpanded ? token("space.200") : 0,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+            <CreditCardIcon label="" color={token("color.icon.success")} />
+            <Text size="small" weight="bold">Shareworks</Text>
+          </div>
+          {shareworksExpanded ? (
+            <ChevronUpIcon label="" color={token("color.icon.subtle")} />
+          ) : (
+            <ChevronDownIcon label="" color={token("color.icon.subtle")} />
+          )}
+        </div>
+        {shareworksExpanded && (
+          <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div>
+                <Text size="small" weight="bold">Shareworks Field Mapping</Text>
+                <div>
+                  <Text size="UNSAFE_small" color="color.text.subtlest">
+                    {shareworksFields.length} fields - Equity and stock data from Shareworks
+                  </Text>
+                </div>
+              </div>
+              <Lozenge appearance="success">Shareworks</Lozenge>
+            </div>
+
             <FieldMappingTable fields={shareworksFields} />
 
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
