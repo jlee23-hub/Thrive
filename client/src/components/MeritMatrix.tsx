@@ -111,7 +111,7 @@ export default function MeritMatrix() {
       </div>
 
       <div style={{ flex: 1, overflow: "auto", padding: token("space.400") }}>
-        <div style={{ maxWidth: "960px" }}>
+        <div style={{ width: "100%" }}>
           <div style={{ marginBottom: token("space.300"), maxWidth: "320px" }}>
             <Text size="small" weight="semibold">Cycle</Text>
             <div style={{ marginTop: token("space.100") }}>
