@@ -2110,7 +2110,7 @@ function SalaryBandsStep() {
         Upload salary band data via CSV or update bands individually.
       </Text>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div
           style={{
             border: `2px dashed ${token("color.border")}`,
@@ -2130,7 +2130,7 @@ function SalaryBandsStep() {
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
           <Heading size="xsmall">Current Bands ({salaryBands.length})</Heading>
           <div style={{ display: "flex", gap: token("space.100") }}>
