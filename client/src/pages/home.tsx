@@ -264,11 +264,11 @@ export default function Home() {
                 <span style={{ color: token("color.text"), fontWeight: 800 }}>Thrive</span>
               </div>
             </CustomTitle>
+            <Search label="Search" />
+            <CreateButton onClick={() => setActiveNav("cycle-builder")}>Create</CreateButton>
           </TopNavStart>
           <TopNavMiddle />
           <TopNavEnd>
-            <Search label="Search" />
-            <CreateButton onClick={() => setActiveNav("cycle-builder")}>Create</CreateButton>
             <Button appearance="default" iconBefore={() => <ColoredRovoIcon />}>Ask Rovo</Button>
             <Notifications label="Notifications" badge={() => null} />
             <Help label="Help" />
