@@ -41,12 +41,25 @@ div[role="list"]._bozg1crf {
   display: block !important;
 }
 
-/* REQUIRED: Position selected notch at left edge of menu item background */
+/* REQUIRED: Hide default notch and use custom left-edge indicator */
 div[aria-hidden="true"]._bfhk1o0g {
-  inset-inline-start: -4px !important;
-  height: 16px !important;
+  display: none !important;
+}
+
+/* Custom selected indicator on the menu item wrapper */
+._bfhkfg4m._kqswh2mm {
+  position: relative !important;
+}
+._bfhkfg4m._kqswh2mm::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
   width: 3px !important;
+  height: 16px !important;
   border-radius: 0 2px 2px 0 !important;
+  background-color: var(--ds-background-selected-bold, #0c66e4) !important;
 }
 
 
