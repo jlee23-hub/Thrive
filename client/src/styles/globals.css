@@ -44,6 +44,11 @@ div[role="list"]._bozg1crf {
   display: block !important;
 }
 
+/* REQUIRED: Force Search bar visible in top nav */
+._2rko12b0._1e0cglyw {
+  display: grid !important;
+}
+
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
