@@ -201,16 +201,6 @@ const dataSources: DataSource[] = [
           { field: "Plan Assignment Date", column: "Plan_Assignment_Date", desc: "Date employee was assigned to plan" },
         ],
       },
-    ],
-  },
-  {
-    id: "workday-inbound",
-    name: "Workday Inbound",
-    type: "Studio Integrations — Writeback",
-    status: "connected",
-    color: token("color.chart.blue.bolder"),
-    lastSync: "02/20/26 11:30 AM",
-    tables: [
       {
         id: "int-parent",
         name: "INT_WD_Pave_Integration_Inbound",
@@ -372,7 +362,7 @@ export default function DataManagement() {
   };
 
   const selectedSourceData = sources.find((s) => s.id === selectedSource);
-  const currentFieldMappings = selectedSource === "workday" || selectedSource === "workday-inbound" ? workdayFieldMappings : selectedSource === "shareworks" ? shareworksFieldMappings : [];
+  const currentFieldMappings = selectedSource === "workday" ? workdayFieldMappings : selectedSource === "shareworks" ? shareworksFieldMappings : [];
 
   const filteredErrors = errors.filter((e) => {
     if (errorFilter === "unresolved") return !e.resolved;
@@ -416,7 +406,7 @@ export default function DataManagement() {
       </div>
 
       <div style={{ maxWidth: "1400px", margin: "0 auto", padding: token("space.400") }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.400") }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.400") }}>
           {sources.map((source) => (
             <div
               key={source.id}
