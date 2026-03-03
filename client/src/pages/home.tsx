@@ -267,6 +267,8 @@ export default function Home() {
           </TopNavStart>
           <TopNavMiddle />
           <TopNavEnd>
+            <Search label="Search" />
+            <CreateButton onClick={() => setActiveNav("cycle-builder")}>Create</CreateButton>
             <Button appearance="default" iconBefore={() => <ColoredRovoIcon />}>Ask Rovo</Button>
             <Notifications label="Notifications" badge={() => null} />
             <Help label="Help" />
