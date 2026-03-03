@@ -1233,9 +1233,7 @@ function DataIntegrationsStep({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <span style={{ display: "inline-flex", transform: "scale(1.4)", transformOrigin: "center" }}>
-              <PageIcon label="" color={token("color.icon.brand")} LEGACY_size="large" />
-            </span>
+            <PageIcon label="" color={token("color.icon.brand")} />
             <Text size="medium" weight="bold">Workday</Text>
           </div>
           {workdayExpanded ? (
