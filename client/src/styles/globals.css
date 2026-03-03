@@ -57,6 +57,10 @@ div[role="list"]._bozg1crf {
   border-bottom: none !important;
 }
 
+.no-last-row-border table {
+  border-bottom: none !important;
+}
+
 .no-last-row-border table tfoot td,
 .no-last-row-border table tfoot tr {
   border: none !important;
