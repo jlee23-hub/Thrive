@@ -612,7 +612,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
         flexDirection: "column",
         height: "100%",
         backgroundColor: token("elevation.surface"),
-        borderRadius: "6px",
+        borderRadius: "0 0 6px 6px",
         border: `1px solid ${token("color.border")}`,
         overflow: "hidden",
         position: "relative",
