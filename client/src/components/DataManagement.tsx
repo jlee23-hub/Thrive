@@ -154,7 +154,6 @@ const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
   borderRadius: token("border.radius.400"),
   border: `1px solid ${token("color.border")}`,
-  boxShadow: token("elevation.shadow.raised"),
   overflow: "hidden",
 };
 

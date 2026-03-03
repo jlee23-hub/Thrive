@@ -53,7 +53,7 @@ const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
   borderRadius: token("border.radius.400"),
   padding: token("space.400"),
-  boxShadow: token("elevation.shadow.raised"),
+  border: `1px solid ${token("color.border")}`,
 };
 
 type Step = {
@@ -613,7 +613,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
         height: "100%",
         backgroundColor: token("elevation.surface"),
         borderRadius: token("border.radius.400"),
-        boxShadow: token("elevation.shadow.raised"),
+        border: `1px solid ${token("color.border")}`,
         overflow: "hidden",
         position: "relative",
       }}

@@ -17,7 +17,7 @@ const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
   borderRadius: token("border.radius.400"),
   padding: token("space.400"),
-  boxShadow: token("elevation.shadow.raised"),
+  border: `1px solid ${token("color.border")}`,
 };
 
 interface Cycle {

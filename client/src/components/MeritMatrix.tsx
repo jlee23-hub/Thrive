@@ -182,7 +182,6 @@ export default function MeritMatrix() {
               backgroundColor: token("elevation.surface.raised"),
               borderRadius: token("border.radius.300"),
               border: `1px solid ${token("color.border")}`,
-              boxShadow: token("elevation.shadow.raised"),
               overflow: "hidden",
             }}
           >
