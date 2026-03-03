@@ -46,7 +46,7 @@ const formatCurrencyDecimal = (value: number) =>
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.400"),
+  borderRadius: "6px",
   padding: token("space.400"),
   border: `1px solid ${token("color.border")}`,
 };
@@ -109,7 +109,7 @@ function GrantDetails({ grant }: { grant: Grant }) {
         <div
           style={{
             backgroundColor: token("color.background.neutral"),
-            borderRadius: token("border.radius.200"),
+            borderRadius: "6px",
             padding: `${token("space.050")} ${token("space.200")}`,
             display: "flex",
             alignItems: "center",
@@ -151,7 +151,7 @@ function GrantDetails({ grant }: { grant: Grant }) {
           <div
             style={{
               backgroundColor: token("color.background.neutral"),
-              borderRadius: token("border.radius.300"),
+              borderRadius: "6px",
               padding: token("space.300"),
             }}
           >

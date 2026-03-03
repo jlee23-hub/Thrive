@@ -15,7 +15,7 @@ import { IconButton } from "@atlaskit/button/new";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.400"),
+  borderRadius: "6px",
   padding: token("space.400"),
   border: `1px solid ${token("color.border")}`,
 };

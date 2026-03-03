@@ -152,7 +152,7 @@ const dataSources: DataSource[] = [
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.400"),
+  borderRadius: "6px",
   border: `1px solid ${token("color.border")}`,
   overflow: "hidden",
 };
@@ -237,7 +237,7 @@ export default function DataManagement() {
                     key={api.name}
                     style={{
                       padding: token("space.300"),
-                      borderRadius: token("border.radius.300"),
+                      borderRadius: "6px",
                       border: `1px solid ${token("color.border")}`,
                       backgroundColor: token("elevation.surface.sunken"),
                     }}
@@ -247,7 +247,7 @@ export default function DataManagement() {
                         style={{
                           width: "40px",
                           height: "40px",
-                          borderRadius: token("border.radius.300"),
+                          borderRadius: "6px",
                           backgroundColor: api.bgColor,
                           display: "flex",
                           alignItems: "center",
@@ -329,7 +329,7 @@ export default function DataManagement() {
                     style={{
                       width: "40px",
                       height: "40px",
-                      borderRadius: token("border.radius.300"),
+                      borderRadius: "6px",
                       backgroundColor: source.color,
                       display: "flex",
                       alignItems: "center",

@@ -180,7 +180,7 @@ export default function MeritMatrix() {
           <div
             style={{
               backgroundColor: token("elevation.surface.raised"),
-              borderRadius: token("border.radius.300"),
+              borderRadius: "6px",
               border: `1px solid ${token("color.border")}`,
               overflow: "hidden",
             }}
@@ -279,7 +279,7 @@ export default function MeritMatrix() {
             style={{
               marginTop: token("space.400"),
               backgroundColor: token("elevation.surface.sunken"),
-              borderRadius: token("border.radius.300"),
+              borderRadius: "6px",
               border: `1px solid ${token("color.border")}`,
               padding: token("space.300"),
             }}

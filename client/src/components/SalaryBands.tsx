@@ -63,7 +63,7 @@ const formatCurrency = (value: number) =>
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.400"),
+  borderRadius: "6px",
   padding: token("space.300"),
   border: `1px solid ${token("color.border")}`,
   marginBottom: token("space.300"),
@@ -140,7 +140,7 @@ export default function SalaryBands() {
                 contentStyle={{
                   backgroundColor: token("elevation.surface.overlay"),
                   border: `1px solid ${token("color.border")}`,
-                  borderRadius: token("border.radius.200"),
+                  borderRadius: "6px",
                   fontSize: "12px",
                 }}
               />
@@ -179,7 +179,7 @@ export default function SalaryBands() {
                 contentStyle={{
                   backgroundColor: token("elevation.surface.overlay"),
                   border: `1px solid ${token("color.border")}`,
-                  borderRadius: token("border.radius.200"),
+                  borderRadius: "6px",
                   fontSize: "12px",
                 }}
               />

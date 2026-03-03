@@ -23,7 +23,7 @@ import SearchIcon from "@atlaskit/icon/core/search";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.400"),
+  borderRadius: "6px",
   padding: token("space.400"),
   border: `1px solid ${token("color.border")}`,
 };
@@ -454,7 +454,7 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                     alignItems: "center",
                     justifyContent: "space-between",
                     padding: token("space.200"),
-                    borderRadius: token("border.radius.300"),
+                    borderRadius: "6px",
                     border: `1px solid ${token("color.border")}`,
                     backgroundColor: rule.enabled ? token("elevation.surface") : token("elevation.surface.sunken"),
                   }}

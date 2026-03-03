@@ -10,7 +10,7 @@ import Button from "@atlaskit/button/new";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.400"),
+  borderRadius: "6px",
   padding: token("space.400"),
   border: `1px solid ${token("color.border")}`,
 };
@@ -34,7 +34,7 @@ export default function AboutUs() {
               style={{
                 width: 40,
                 height: 40,
-                borderRadius: token("border.radius.200"),
+                borderRadius: "6px",
                 backgroundColor: token("color.background.discovery"),
                 display: "flex",
                 alignItems: "center",
@@ -56,7 +56,7 @@ export default function AboutUs() {
               style={{
                 width: 40,
                 height: 40,
-                borderRadius: token("border.radius.200"),
+                borderRadius: "6px",
                 backgroundColor: token("color.background.success"),
                 display: "flex",
                 alignItems: "center",
@@ -78,7 +78,7 @@ export default function AboutUs() {
               style={{
                 width: 40,
                 height: 40,
-                borderRadius: token("border.radius.200"),
+                borderRadius: "6px",
                 backgroundColor: token("color.background.warning"),
                 display: "flex",
                 alignItems: "center",
@@ -100,7 +100,7 @@ export default function AboutUs() {
               style={{
                 width: 40,
                 height: 40,
-                borderRadius: token("border.radius.200"),
+                borderRadius: "6px",
                 backgroundColor: token("color.background.information"),
                 display: "flex",
                 alignItems: "center",
