@@ -70,7 +70,7 @@ const STEPS: Step[] = [
   { id: "budget", title: "Configure budget & FX rates", description: "Set budget and exchange rates" },
   { id: "salary-bands", title: "Salary Bands & Equity Targets", description: "Upload and manage salary bands" },
   { id: "users", title: "Users & Role Permissions", description: "Manage user access" },
-  { id: "field-permissions", title: "Field Permissions", description: "Configure field access" },
+  { id: "field-permissions", title: "Column Permissions", description: "Configure field access" },
   { id: "reward-letter", title: "Reward Letter", description: "Configure reward letters" },
   { id: "review", title: "Review & Finalize", description: "Review all settings" },
 ];
@@ -3320,7 +3320,7 @@ function ReviewFinalizeStep({
         { step: 4, label: "Budget & FX Rates", status: "Budget and 6 FX rates configured" },
         { step: 5, label: "Salary Bands", status: "7 bands configured" },
         { step: 6, label: "Users & Roles", status: "6 users configured" },
-        { step: 7, label: "Field Permissions", status: "30 fields configured" },
+        { step: 7, label: "Column Permissions", status: "30 fields configured" },
         { step: 8, label: "Reward Letter", status: "Template selected" },
       ].map((section) => (
         <div key={section.step} style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
