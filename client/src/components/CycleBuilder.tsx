@@ -2785,18 +2785,18 @@ function FieldPermissionsStep({
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: token("space.100") }}>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
           {selectedRows.size > 0 && (
-            <>
-              <Text size="small" weight="semibold">{selectedRows.size} selected</Text>
-              <Button appearance="warning" iconBefore={DeleteIcon}>
-                Delete
-              </Button>
-              <Button appearance="default" iconBefore={DownloadIcon}>
-                Export
-              </Button>
-              <Button appearance="subtle" onClick={() => setSelectedRows(new Set())}>
-                Clear selection
-              </Button>
-            </>
+            <Text size="small" weight="semibold">{selectedRows.size} selected</Text>
+          )}
+          <Button appearance="warning" iconBefore={DeleteIcon} isDisabled={selectedRows.size === 0}>
+            Delete
+          </Button>
+          <Button appearance="default" iconBefore={DownloadIcon} isDisabled={selectedRows.size === 0}>
+            Export
+          </Button>
+          {selectedRows.size > 0 && (
+            <Button appearance="subtle" onClick={() => setSelectedRows(new Set())}>
+              Clear selection
+            </Button>
           )}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
