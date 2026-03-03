@@ -3215,7 +3215,7 @@ function ReviewFinalizeStep({
         </Text>
       </SectionMessage>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
         <div
           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
           onClick={() => setCurrentStep(0)}
@@ -3268,7 +3268,7 @@ function ReviewFinalizeStep({
         { step: 7, label: "Field Permissions", status: "30 fields configured" },
         { step: 8, label: "Reward Letter", status: "Template selected" },
       ].map((section) => (
-        <div key={section.step} style={cardStyle}>
+        <div key={section.step} style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
           <div
             style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
             onClick={() => setCurrentStep(section.step)}
