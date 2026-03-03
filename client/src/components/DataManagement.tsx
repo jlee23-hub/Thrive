@@ -140,7 +140,7 @@ const dataSources: DataSource[] = [
   {
     id: "workday",
     name: "Workday",
-    type: "HRIS — RaaS & Studio Integrations",
+    type: "HRIS",
     status: "connected",
     color: token("color.chart.blue.bold"),
     lastSync: "02/25/26 3:45 PM",
@@ -431,10 +431,8 @@ export default function DataManagement() {
                       justifyContent: "center",
                     }}
                   >
-                    {source.type.includes("RaaS") ? (
+                    {source.type === "HRIS" ? (
                       <DatabaseIcon label="" color={token("color.text.inverse")} />
-                    ) : source.type.includes("Studio") ? (
-                      <UploadIcon label="" color={token("color.text.inverse")} />
                     ) : source.type === "Equity Management" ? (
                       <ChartTrendIcon label="" color={token("color.text.inverse")} />
                     ) : (
