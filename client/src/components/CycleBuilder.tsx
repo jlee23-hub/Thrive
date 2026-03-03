@@ -944,7 +944,7 @@ function IntegrationCard({
   isFile?: boolean;
 }) {
   return (
-    <div style={cardStyle}>
+    <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: token("space.150") }}>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
           <div
