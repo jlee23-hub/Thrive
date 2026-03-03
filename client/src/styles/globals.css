@@ -49,6 +49,11 @@ div[role="list"]._bozg1crf {
   display: grid !important;
 }
 
+/* REQUIRED: Center-align TopNavMiddle content */
+._yyhycs5v._1bahh9n0 {
+  justify-content: center !important;
+}
+
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
