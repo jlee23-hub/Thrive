@@ -12,7 +12,7 @@ Milestone 1 delivers the foundational employee compensation experience in Thrive
 - **Total Rewards View** (Employee): A personal compensation summary pulling base salary from Workday and RSU/equity data from Shareworks.
 - **RSU Modeling** (Employee): Interactive equity grant viewer with vesting projections, powered by Shareworks data.
 - **Team View** (Manager): A filterable, sortable, pinnable grid of direct and indirect (skip-level) reports with compensation and cycle planning fields sourced from Workday.
-- **Permissioning** (Admin): Role-based access control so Employees see only their own data, Managers see their team, and Admins see all employees.
+- **Permissions** (Admin): Simple role-based access control — Employees view their own data, Managers view their direct reports, Admins access Data Management and the Permissions table, Data Integration Engineers access only Data Management.
 - **Data Ingestion** (Admin / Data Integration Engineer): Workday and Shareworks API configuration, field mapping, sync status monitoring, error tracking, and sync history.
 
 ### Out of Scope (This Milestone)
@@ -100,15 +100,15 @@ Milestone 1 delivers the foundational employee compensation experience in Thrive
 | M-7 | As a manager, I can see employees who report to me directly or indirectly (full org tree below me). Terminated employees are excluded from the Manager grid. | P0 | Recursive filter: traverse `Manager_Reference` hierarchy starting from `current_user.Worker_ID`; exclude `Worker_Status = "Terminated"` |
 | M-8 | As a manager, the grid is entirely read-only in Milestone 1 — no inline editing of compensation fields. | P0 | Editable fields (New Salary, New SRP %, Bonus, New Equity) display values from imports but cannot be modified until Milestone 2 |
 
-### 3.4 Admin — Permissioning
+### 3.4 Admin — Permissions
 
 | # | Requirement | Priority | Data/Integration Detail |
 |---|---|---|---|
-| A-1 | As an admin, I can configure that Employees can only see their own compensation data. | P0 | Access filter: `Worker_ID = authenticated_user.Worker_ID` |
-| A-2 | As an admin, I can configure that Managers can see their own data and their direct and indirect (skip-level) reports' data. | P0 | Access filter: `Worker_ID = authenticated_user.Worker_ID OR Manager_Reference hierarchy includes authenticated_user.Worker_ID` (recursive org tree traversal) |
-| A-3 | As an admin, I can see compensation data for all employees across the organization. | P0 | No access filter applied for Admin role |
-| A-4 | As an admin, I can assign roles (Employee, Manager, Admin, Data Integration Engineer) to users. | P1 | Role stored against Okta user profile or Thrive user table |
-| A-5 | Role assignment is initially derived from Workday org hierarchy (`Manager_Reference` determines manager role). | P0 | If a `Worker_ID` appears as any employee's `Manager_Reference`, user gets Manager role |
+| A-1 | Employees can view their own compensation data (Total Rewards and RSUs). They have no access to Team Overview, Data Management, or Permissions. | P0 | Access filter: `Worker_ID = authenticated_user.Worker_ID` |
+| A-2 | Managers can view their own data (Total Rewards and RSUs) and their direct reports' data in Team Overview. They have no access to Data Management or Permissions. | P0 | Access filter: `Worker_ID = authenticated_user.Worker_ID OR Manager_Reference = authenticated_user.Worker_ID` |
+| A-3 | Comp Admins have full access to all areas: all employee data, Data Management, and the Permissions table. | P0 | No access filter applied for Admin role |
+| A-4 | Data Integration Engineers have access to Data Management only. They have no access to Total Rewards, RSUs, Team Overview, or Permissions. | P0 | Scoped to integration configuration and sync metadata only |
+| A-5 | The Permissions page displays a read-only summary of the four roles and what each role can access. | P0 | Rendered as role cards with area-level permission indicators |
 
 ### 3.5 Admin — Data Ingestion
 
@@ -228,7 +228,7 @@ Thrive App (Okta SSO)
 │   ├── Groups
 │   ├── Salary Bands
 │   ├── Data Management
-│   └── Settings
+│   └── Permissions
 └── Data Integration View
     └── Data Management
         ├── Connections & API Setup
@@ -280,11 +280,11 @@ Thrive App (Okta SSO)
 - Rate limit: "API rate limit exceeded. Wait 60 seconds before retrying."
 - Missing required field: "3 records skipped — missing required Manager_Reference field."
 
-#### Flow 4: Admin Verifies Permissions
+#### Flow 4: Admin Reviews Permissions
 1. Admin logs in → sees full employee list across all orgs.
-2. Admin navigates to Settings → Permission Management.
-3. Verifies that Manager_Reference hierarchy correctly determines who is a Manager (including skip-level visibility).
-4. Can override roles manually (e.g., promote a user to Admin).
+2. Admin navigates to Permissions page from the side nav.
+3. Sees four role cards (Employee, Manager, Comp Admin, Data Integration Engineer) with a summary of what each role can access.
+4. Permissions page is read-only — it displays the access model, not a configuration tool.
 5. Users with multiple roles (e.g., a Manager who is also an Admin) use the persona switcher in production to toggle between their assigned views. Server-side role enforcement ensures users can only switch to roles they are authorized for.
 
 ---
