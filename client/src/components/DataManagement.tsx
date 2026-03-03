@@ -305,7 +305,7 @@ const dataSources: DataSource[] = [
     id: "csv-upload",
     name: "CSV Upload",
     type: "Manual Upload",
-    status: "disconnected",
+    status: "connected",
     color: token("color.chart.purple.bold"),
     tables: [],
   },
