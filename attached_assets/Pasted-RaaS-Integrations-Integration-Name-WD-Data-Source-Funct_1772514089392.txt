@@ -1,0 +1,84 @@
+RaaS Integrations
+
+Integration Name
+
+WD Data Source
+
+Function
+
+Data Selection & Sorting Criteria
+
+CRINT Pave Employee Compensation Records
+
+All Active and Terminated Workers
+
+RaaS report that delivers required demographic and compensation fields for cycle planning
+
+Active and eligible employees
+
+No intern and casual employee types
+
+CRINT Pave-Compensation History
+
+Compensation Changes
+
+RaaS report that delivers compensation history for eligible employees. This report captures compensation changes to salary and bonus
+
+Active and eligible employees
+
+No intern and casual employee types
+
+2-year lookback period for Compensation History
+
+Salary and bonus change events
+
+CRINT Pave-Employee Eligible Earnings
+
+All Eligible Earnings Overrides
+
+RaaS report that delivers eligible earnings and bonus plan details
+
+Active and eligible employees
+
+No intern and casual employee types
+
+Current Eligible Earnings Override Period
+
+INT_WD_Pave_Integration_Inbound
+
+
+
+Parent studio integration that processes inbound zip file from Pave. This integration loads in files for Change Job, Add Stock Grant, Request Comp Change, and Add Bonus Payment operations for all records in the file and submits the API requests to add finalized comp cycle planning data to Workday.
+
+Aggregates files for Change Job operation to load in promotion data.
+
+
+
+INT_WD_Pave_Bonus_Inbound
+
+
+
+Child studio integration that loads bonus payments into Workday. Called by INT_WD_Pave_Integration_Inbound for bonus payment file. 
+
+Can be individually run to manually upload and reprocess a correction file for bonus payment errors
+
+
+
+INT_WD_Pave_Add_Stock_Grant
+
+
+
+Child studio integration that loads stock grants into Workday. Called by INT_WD_Pave_Integration_Inbound for stock grant file.
+
+Can be individually run to to manually upload and reprocess a correction file for add stock grant errors
+
+
+
+INT_WD_PAVE_RequestComp_Inbound
+
+
+
+Child studio integration that loads compensation changes into Workday. Called by INT_WD_Pave_Integration_Inbound for compensation change file.
+
+Can be individually run to to manually upload and reprocess a correction file for request compensation change errors
+

@@ -91,6 +91,8 @@ const workdayFieldMappings: FieldMapping[] = [
   { sourceField: "Annual_Base_Pay", thriveField: "currentSalary", dataType: "Currency", isRequired: true, isMapped: true, transform: "toCents" },
   { sourceField: "Bonus_Plan_Percent", thriveField: "bonusTarget", dataType: "Decimal", isRequired: false, isMapped: true },
   { sourceField: "Review_Rating", thriveField: "performanceRating", dataType: "String", isRequired: false, isMapped: true },
+  { sourceField: "Employee_Type", thriveField: "employeeType", dataType: "String", isRequired: true, isMapped: true, transform: "filterInternCasual" },
+  { sourceField: "Worker_Status", thriveField: "status", dataType: "String", isRequired: true, isMapped: true },
   { sourceField: "Cost_Center_Code", thriveField: "", dataType: "String", isRequired: false, isMapped: false },
   { sourceField: "FTE_Percent", thriveField: "", dataType: "Decimal", isRequired: false, isMapped: false },
 ];
@@ -109,85 +111,162 @@ const shareworksFieldMappings: FieldMapping[] = [
 ];
 
 const syncHistory: SyncHistoryEntry[] = [
-  { id: "sh-1", source: "Workday", table: "Employee Data", timestamp: "02/25/26 3:45 PM", status: "success", recordsSynced: 1247, recordsFailed: 0, duration: "2m 14s", initiatedBy: "Scheduled" },
+  { id: "sh-1", source: "Workday RaaS", table: "CRINT Pave Employee Compensation Records", timestamp: "02/25/26 3:45 PM", status: "success", recordsSynced: 1247, recordsFailed: 0, duration: "2m 14s", initiatedBy: "Scheduled" },
   { id: "sh-2", source: "Shareworks", table: "Equity Grants", timestamp: "02/25/26 3:42 PM", status: "success", recordsSynced: 456, recordsFailed: 0, duration: "58s", initiatedBy: "Scheduled" },
-  { id: "sh-3", source: "Workday", table: "Organization Structure", timestamp: "02/25/26 3:45 PM", status: "success", recordsSynced: 89, recordsFailed: 0, duration: "12s", initiatedBy: "Scheduled" },
+  { id: "sh-3", source: "Workday RaaS", table: "CRINT Pave-Employee Eligible Earnings", timestamp: "02/25/26 3:45 PM", status: "success", recordsSynced: 1198, recordsFailed: 0, duration: "48s", initiatedBy: "Scheduled" },
   { id: "sh-4", source: "Shareworks", table: "Vesting Schedule", timestamp: "02/25/26 3:42 PM", status: "partial", recordsSynced: 884, recordsFailed: 8, duration: "1m 32s", initiatedBy: "Scheduled", errorMessage: "8 records had invalid vesting dates" },
-  { id: "sh-5", source: "Workday", table: "Employee Data", timestamp: "02/24/26 3:45 PM", status: "success", recordsSynced: 1245, recordsFailed: 0, duration: "2m 08s", initiatedBy: "Scheduled" },
-  { id: "sh-6", source: "Workday", table: "Compensation History", timestamp: "02/24/26 3:45 PM", status: "failed", recordsSynced: 0, recordsFailed: 3421, duration: "0s", initiatedBy: "Manual — jdoe@company.com", errorMessage: "API rate limit exceeded. Retry after 60 seconds." },
-  { id: "sh-7", source: "Shareworks", table: "Equity Grants", timestamp: "02/24/26 3:42 PM", status: "success", recordsSynced: 454, recordsFailed: 0, duration: "55s", initiatedBy: "Scheduled" },
-  { id: "sh-8", source: "Workday", table: "Employee Data", timestamp: "02/23/26 3:45 PM", status: "success", recordsSynced: 1243, recordsFailed: 0, duration: "2m 11s", initiatedBy: "Scheduled" },
-  { id: "sh-9", source: "Workday", table: "Employee Data", timestamp: "02/22/26 3:45 PM", status: "partial", recordsSynced: 1240, recordsFailed: 3, duration: "2m 22s", initiatedBy: "Scheduled", errorMessage: "3 records missing required Manager_Reference field" },
-  { id: "sh-10", source: "Shareworks", table: "Vesting Schedule", timestamp: "02/22/26 3:42 PM", status: "success", recordsSynced: 880, recordsFailed: 0, duration: "1m 28s", initiatedBy: "Scheduled" },
+  { id: "sh-5", source: "Workday RaaS", table: "CRINT Pave-Compensation History", timestamp: "02/25/26 3:45 PM", status: "success", recordsSynced: 3421, recordsFailed: 0, duration: "3m 45s", initiatedBy: "Scheduled" },
+  { id: "sh-6", source: "Workday Studio", table: "INT_WD_Pave_Integration_Inbound", timestamp: "02/20/26 11:30 AM", status: "success", recordsSynced: 342, recordsFailed: 0, duration: "5m 12s", initiatedBy: "Manual — jdoe@company.com" },
+  { id: "sh-7", source: "Workday Studio", table: "INT_WD_Pave_Bonus_Inbound", timestamp: "02/20/26 11:32 AM", status: "partial", recordsSynced: 86, recordsFailed: 3, duration: "1m 08s", initiatedBy: "INT_WD_Pave_Integration_Inbound", errorMessage: "3 bonus payments failed: invalid Bonus_Plan reference for WK-00891, WK-01044, WK-01203" },
+  { id: "sh-8", source: "Workday Studio", table: "INT_WD_Pave_Add_Stock_Grant", timestamp: "02/20/26 11:34 AM", status: "success", recordsSynced: 156, recordsFailed: 0, duration: "2m 20s", initiatedBy: "INT_WD_Pave_Integration_Inbound" },
+  { id: "sh-9", source: "Workday Studio", table: "INT_WD_PAVE_RequestComp_Inbound", timestamp: "02/20/26 11:36 AM", status: "success", recordsSynced: 97, recordsFailed: 0, duration: "1m 44s", initiatedBy: "INT_WD_Pave_Integration_Inbound" },
+  { id: "sh-10", source: "Workday RaaS", table: "CRINT Pave Employee Compensation Records", timestamp: "02/24/26 3:45 PM", status: "success", recordsSynced: 1245, recordsFailed: 0, duration: "2m 08s", initiatedBy: "Scheduled" },
+  { id: "sh-11", source: "Workday RaaS", table: "CRINT Pave-Compensation History", timestamp: "02/24/26 3:45 PM", status: "failed", recordsSynced: 0, recordsFailed: 3421, duration: "0s", initiatedBy: "Manual — jdoe@company.com", errorMessage: "RaaS API rate limit exceeded. Retry after 60 seconds." },
+  { id: "sh-12", source: "Shareworks", table: "Equity Grants", timestamp: "02/24/26 3:42 PM", status: "success", recordsSynced: 454, recordsFailed: 0, duration: "55s", initiatedBy: "Scheduled" },
+  { id: "sh-13", source: "Workday RaaS", table: "CRINT Pave Employee Compensation Records", timestamp: "02/22/26 3:45 PM", status: "partial", recordsSynced: 1240, recordsFailed: 3, duration: "2m 22s", initiatedBy: "Scheduled", errorMessage: "3 records missing required Manager_Reference field" },
 ];
 
 const errors: ErrorEntry[] = [
   { id: "e-1", source: "Shareworks", type: "sync", severity: "warning", message: "8 vesting records have dates outside the expected range (2024-2030)", timestamp: "02/25/26 3:43 PM", resolved: false, details: "Records with Participant_IDs: SW-1042, SW-1055, SW-1089, SW-1102, SW-1134, SW-1167, SW-1190, SW-1203 have vesting dates before 2024 or after 2030. These records were skipped during sync." },
-  { id: "e-2", source: "Workday", type: "auth", severity: "info", message: "API token will expire in 14 days", timestamp: "02/25/26 12:00 AM", resolved: false, details: "The current Workday API token was issued on 01/25/26 and expires on 03/11/26. Generate a new token before expiry to avoid sync interruptions." },
-  { id: "e-3", source: "Workday", type: "sync", severity: "critical", message: "Compensation History sync failed — API rate limit exceeded", timestamp: "02/24/26 3:45 PM", resolved: true, details: "Manual sync of Compensation History table triggered rate limiting on Workday API. The scheduled sync at the next interval completed successfully. Consider spacing out manual syncs." },
-  { id: "e-4", source: "Workday", type: "mapping", severity: "warning", message: "3 employee records missing required Manager_Reference field", timestamp: "02/22/26 3:47 PM", resolved: true, details: "Employee IDs: WK-00412, WK-00789, WK-01102 have null Manager_Reference values. These employees were synced with empty manager fields. Verify in Workday if these are new hires awaiting manager assignment." },
-  { id: "e-5", source: "Shareworks", type: "connection", severity: "info", message: "Shareworks API response time elevated (avg 2.8s vs normal 0.8s)", timestamp: "02/21/26 2:15 PM", resolved: true, details: "Shareworks API experienced higher than normal latency. This may be due to maintenance on their end. Performance returned to normal by 02/21/26 4:00 PM." },
+  { id: "e-2", source: "Workday RaaS", type: "auth", severity: "info", message: "Workday RaaS API token will expire in 14 days", timestamp: "02/25/26 12:00 AM", resolved: false, details: "The current Workday RaaS API token was issued on 01/25/26 and expires on 03/11/26. Generate a new token in Workday Admin before expiry to avoid disruption to CRINT Pave reports." },
+  { id: "e-3", source: "Workday Studio", type: "sync", severity: "warning", message: "INT_WD_Pave_Bonus_Inbound — 3 bonus payments failed with invalid Bonus_Plan reference", timestamp: "02/20/26 11:33 AM", resolved: false, details: "Workers WK-00891, WK-01044, and WK-01203 have Bonus_Plan values that do not match any active plan in Workday. This child integration can be re-run individually with a correction file after fixing the Bonus_Plan references." },
+  { id: "e-4", source: "Workday RaaS", type: "sync", severity: "critical", message: "CRINT Pave-Compensation History sync failed — RaaS API rate limit exceeded", timestamp: "02/24/26 3:45 PM", resolved: true, details: "Manual sync of CRINT Pave-Compensation History triggered rate limiting on the Workday RaaS endpoint. The 2-year lookback period pulls a large volume of salary and bonus change events. The scheduled sync at the next interval completed successfully. Consider spacing out manual syncs." },
+  { id: "e-5", source: "Workday RaaS", type: "mapping", severity: "warning", message: "CRINT Pave Employee Compensation Records — 3 records missing Manager_Reference", timestamp: "02/22/26 3:47 PM", resolved: true, details: "Employee IDs: WK-00412, WK-00789, WK-01102 have null Manager_Reference values in the RaaS report. These active workers were synced with empty manager fields. Verify in Workday if these are new hires awaiting manager assignment. Data selection excludes intern and casual employee types, so these are regular employees." },
+  { id: "e-6", source: "Shareworks", type: "connection", severity: "info", message: "Shareworks API response time elevated (avg 2.8s vs normal 0.8s)", timestamp: "02/21/26 2:15 PM", resolved: true, details: "Shareworks API experienced higher than normal latency. This may be due to maintenance on their end. Performance returned to normal by 02/21/26 4:00 PM." },
+  { id: "e-7", source: "Workday Studio", type: "sync", severity: "info", message: "INT_WD_Pave_Integration_Inbound completed — promotion file aggregated via Change Job operation", timestamp: "02/20/26 11:38 AM", resolved: true, details: "Parent studio integration successfully processed inbound zip file. Change Job (promotions), Add Stock Grant, Request Comp Change, and Add Bonus Payment operations were submitted via Workday API. 3 bonus payment errors were routed to INT_WD_Pave_Bonus_Inbound for correction file reprocessing." },
 ];
 
 const dataSources: DataSource[] = [
   {
     id: "workday",
     name: "Workday",
-    type: "HRIS Integration",
+    type: "HRIS — RaaS & Studio Integrations",
     status: "connected",
     color: token("color.chart.blue.bold"),
     lastSync: "02/25/26 3:45 PM",
     tables: [
       {
-        id: "emp-1",
-        name: "Employee Data",
+        id: "raas-emp",
+        name: "CRINT Pave Employee Compensation Records",
         records: 1247,
         lastUpdated: "02/25/26 3:45 PM",
         syncEnabled: true,
         fields: [
-          { field: "Employee ID", column: "employeeWkRef", desc: "Unique identifier from Workday" },
-          { field: "First Name", column: "firstName", desc: "Legal first name" },
-          { field: "Last Name", column: "lastName", desc: "Legal last name" },
-          { field: "Email", column: "email", desc: "Corporate email address", isUpdated: true },
-          { field: "Job Title", column: "title", desc: "Current job title" },
-          { field: "Level", column: "level", desc: "Job level (IC1-VP)", isUpdated: true },
-          { field: "Department", column: "department", desc: "Organizational department" },
-          { field: "Location", column: "location", desc: "Primary work location", isUpdated: true },
-          { field: "Manager", column: "managerId", desc: "Reporting manager reference" },
-          { field: "Hire Date", column: "hireDate", desc: "Original hire date" },
-          { field: "Base Salary", column: "currentSalary", desc: "Current annual base salary", isUpdated: true },
-          { field: "Bonus Target %", column: "bonusTarget", desc: "Target bonus percentage" },
-          { field: "Performance Rating", column: "performanceRating", desc: "Latest annual rating" },
+          { field: "Worker ID", column: "Worker_ID", desc: "Unique worker identifier from Workday" },
+          { field: "Legal First Name", column: "Legal_First_Name", desc: "Legal first name" },
+          { field: "Legal Last Name", column: "Legal_Last_Name", desc: "Legal last name" },
+          { field: "Email Address", column: "Email_Address", desc: "Corporate email address", isUpdated: true },
+          { field: "Business Title", column: "Business_Title", desc: "Current job title" },
+          { field: "Job Profile Level", column: "Job_Profile_Level", desc: "Job level (P20, P30, P40, etc.)", isUpdated: true },
+          { field: "Supervisory Organization", column: "Supervisory_Organization", desc: "Department / org unit" },
+          { field: "Primary Work Address", column: "Primary_Work_Address", desc: "Primary work location", isUpdated: true },
+          { field: "Manager Reference", column: "Manager_Reference", desc: "Reporting manager worker reference" },
+          { field: "Hire Date", column: "Hire_Date", desc: "Original hire date" },
+          { field: "Annual Base Pay", column: "Annual_Base_Pay", desc: "Current annual base salary", isUpdated: true },
+          { field: "Bonus Plan Percent", column: "Bonus_Plan_Percent", desc: "Target bonus percentage" },
+          { field: "Review Rating", column: "Review_Rating", desc: "Latest annual performance rating" },
+          { field: "Employee Type", column: "Employee_Type", desc: "Employee type (excludes intern/casual)" },
+          { field: "Worker Status", column: "Worker_Status", desc: "Active or terminated status" },
         ],
       },
       {
-        id: "org-1",
-        name: "Organization Structure",
-        records: 89,
+        id: "raas-comp",
+        name: "CRINT Pave-Compensation History",
+        records: 3421,
         lastUpdated: "02/25/26 3:45 PM",
         syncEnabled: true,
         fields: [
-          { field: "Organization ID", column: "organizationId", desc: "Unique organization identifier" },
-          { field: "Organization Name", column: "organizationName", desc: "Name of the organization unit" },
-          { field: "Parent Organization", column: "parentOrganizationId", desc: "Parent organization reference" },
-          { field: "Org Level", column: "organizationLevel", desc: "Hierarchy level in organization" },
-          { field: "Cost Center", column: "costCenter", desc: "Associated cost center code" },
-          { field: "Headcount", column: "headcount", desc: "Total headcount in organization" },
+          { field: "Worker ID", column: "Worker_ID", desc: "Employee reference" },
+          { field: "Effective Date", column: "Effective_Date", desc: "Date compensation change became effective" },
+          { field: "Comp Change Reason", column: "Compensation_Change_Reason", desc: "Reason for compensation change" },
+          { field: "Previous Base Salary", column: "Previous_Base_Salary", desc: "Base salary before change" },
+          { field: "New Base Salary", column: "New_Base_Salary", desc: "Base salary after change" },
+          { field: "Salary Change %", column: "Salary_Change_Percent", desc: "Percentage salary increase" },
+          { field: "Previous Bonus Target", column: "Previous_Bonus_Target", desc: "Bonus target before change" },
+          { field: "New Bonus Target", column: "New_Bonus_Target", desc: "Bonus target after change" },
         ],
       },
       {
-        id: "comp-1",
-        name: "Compensation History",
-        records: 3421,
+        id: "raas-earnings",
+        name: "CRINT Pave-Employee Eligible Earnings",
+        records: 1198,
         lastUpdated: "02/25/26 3:45 PM",
-        syncEnabled: false,
+        syncEnabled: true,
         fields: [
-          { field: "Employee ID", column: "employeeId", desc: "Employee reference" },
-          { field: "Effective Date", column: "effectiveDate", desc: "Date compensation change became effective" },
-          { field: "Comp Change Reason", column: "compensationChangeReason", desc: "Reason for compensation change" },
-          { field: "Previous Base Salary", column: "previousBaseSalary", desc: "Base salary before change" },
-          { field: "New Base Salary", column: "newBaseSalary", desc: "Base salary after change" },
-          { field: "Salary Change %", column: "salaryChangePercent", desc: "Percentage salary increase" },
+          { field: "Worker ID", column: "Worker_ID", desc: "Employee reference" },
+          { field: "Eligible Earnings Override", column: "Eligible_Earnings_Override", desc: "Current eligible earnings override amount" },
+          { field: "Bonus Plan Name", column: "Bonus_Plan_Name", desc: "Name of the bonus plan" },
+          { field: "Bonus Target Amount", column: "Bonus_Target_Amount", desc: "Target bonus amount for the period" },
+          { field: "Override Period", column: "Override_Period", desc: "Current eligible earnings override period" },
+          { field: "Plan Assignment Date", column: "Plan_Assignment_Date", desc: "Date employee was assigned to plan" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "workday-inbound",
+    name: "Workday Inbound",
+    type: "Studio Integrations — Writeback",
+    status: "connected",
+    color: token("color.chart.blue.bolder"),
+    lastSync: "02/20/26 11:30 AM",
+    tables: [
+      {
+        id: "int-parent",
+        name: "INT_WD_Pave_Integration_Inbound",
+        records: 342,
+        lastUpdated: "02/20/26 11:30 AM",
+        syncEnabled: true,
+        fields: [
+          { field: "Operation Type", column: "Operation_Type", desc: "Change Job, Add Stock Grant, Request Comp Change, or Add Bonus Payment" },
+          { field: "Worker ID", column: "Worker_ID", desc: "Target employee for the operation" },
+          { field: "Effective Date", column: "Effective_Date", desc: "Effective date of the change" },
+          { field: "File Name", column: "Source_File", desc: "Source zip file containing inbound records" },
+          { field: "Submission Status", column: "Submission_Status", desc: "API request submission status" },
+          { field: "Error Message", column: "Error_Message", desc: "Error details if submission failed" },
+        ],
+      },
+      {
+        id: "int-bonus",
+        name: "INT_WD_Pave_Bonus_Inbound",
+        records: 89,
+        lastUpdated: "02/20/26 11:30 AM",
+        syncEnabled: true,
+        fields: [
+          { field: "Worker ID", column: "Worker_ID", desc: "Target employee for bonus payment" },
+          { field: "Bonus Amount", column: "Bonus_Amount", desc: "Bonus payment amount" },
+          { field: "Bonus Plan", column: "Bonus_Plan", desc: "Bonus plan name" },
+          { field: "Payment Date", column: "Payment_Date", desc: "Scheduled payment date" },
+          { field: "Submission Status", column: "Submission_Status", desc: "API request submission status" },
+        ],
+      },
+      {
+        id: "int-stock",
+        name: "INT_WD_Pave_Add_Stock_Grant",
+        records: 156,
+        lastUpdated: "02/20/26 11:30 AM",
+        syncEnabled: true,
+        fields: [
+          { field: "Worker ID", column: "Worker_ID", desc: "Target employee for stock grant" },
+          { field: "Grant Type", column: "Grant_Type", desc: "RSU, ISO, NSO, etc." },
+          { field: "Shares Granted", column: "Shares_Granted", desc: "Number of shares/units" },
+          { field: "Grant Date", column: "Grant_Date", desc: "Date of stock grant" },
+          { field: "Vesting Schedule", column: "Vesting_Schedule", desc: "Vesting schedule type" },
+          { field: "Submission Status", column: "Submission_Status", desc: "API request submission status" },
+        ],
+      },
+      {
+        id: "int-comp",
+        name: "INT_WD_PAVE_RequestComp_Inbound",
+        records: 97,
+        lastUpdated: "02/20/26 11:30 AM",
+        syncEnabled: true,
+        fields: [
+          { field: "Worker ID", column: "Worker_ID", desc: "Target employee for comp change" },
+          { field: "New Base Salary", column: "New_Base_Salary", desc: "New annual base salary" },
+          { field: "Comp Change Reason", column: "Compensation_Change_Reason", desc: "Reason for compensation change" },
+          { field: "Effective Date", column: "Effective_Date", desc: "Date change takes effect" },
+          { field: "Submission Status", column: "Submission_Status", desc: "API request submission status" },
         ],
       },
     ],
@@ -207,13 +286,14 @@ const dataSources: DataSource[] = [
         lastUpdated: "02/25/26 3:42 PM",
         syncEnabled: true,
         fields: [
-          { field: "Grant Date", column: "grantDate", desc: "Date equity was granted" },
-          { field: "Grant Type", column: "grantType", desc: "RSU, ISO, NSO, etc." },
-          { field: "Total Units", column: "totalUnits", desc: "Total shares/units granted" },
-          { field: "Vested Units", column: "vestedUnits", desc: "Units vested to date" },
-          { field: "Vesting Schedule", column: "vestingSchedule", desc: "Vesting cadence" },
-          { field: "Grant Price", column: "grantPrice", desc: "Price at grant date" },
-          { field: "Current Price", column: "currentPrice", desc: "Current share price" },
+          { field: "Participant ID", column: "Participant_ID", desc: "Employee identifier in Shareworks" },
+          { field: "Grant Date", column: "Grant_Date", desc: "Date equity was granted" },
+          { field: "Award Type", column: "Award_Type", desc: "RSU, ISO, NSO, etc." },
+          { field: "Total Shares Granted", column: "Total_Shares_Granted", desc: "Total shares/units granted" },
+          { field: "Shares Vested", column: "Shares_Vested", desc: "Units vested to date" },
+          { field: "Vesting Schedule Type", column: "Vesting_Schedule_Type", desc: "Vesting cadence" },
+          { field: "Grant Price (USD)", column: "Grant_Price_USD", desc: "Price at grant date" },
+          { field: "Current FMV", column: "Current_FMV", desc: "Current fair market value" },
         ],
       },
       {
@@ -223,10 +303,10 @@ const dataSources: DataSource[] = [
         lastUpdated: "02/25/26 3:42 PM",
         syncEnabled: true,
         fields: [
-          { field: "Grant ID", column: "grantId", desc: "Reference to equity grant" },
-          { field: "Vesting Date", column: "vestingDate", desc: "Date shares vest" },
-          { field: "Shares to Vest", column: "sharesToVest", desc: "Number of shares vesting this period" },
-          { field: "Vesting Status", column: "vestingStatus", desc: "Pending, vested, or forfeited" },
+          { field: "Grant ID", column: "Grant_ID", desc: "Reference to equity grant" },
+          { field: "Vesting Date", column: "Vesting_Date", desc: "Date shares vest" },
+          { field: "Shares to Vest", column: "Shares_To_Vest", desc: "Number of shares vesting this period" },
+          { field: "Vesting Status", column: "Vesting_Status", desc: "Pending, vested, or forfeited" },
         ],
       },
     ],
@@ -292,7 +372,7 @@ export default function DataManagement() {
   };
 
   const selectedSourceData = sources.find((s) => s.id === selectedSource);
-  const currentFieldMappings = selectedSource === "workday" ? workdayFieldMappings : selectedSource === "shareworks" ? shareworksFieldMappings : [];
+  const currentFieldMappings = selectedSource === "workday" || selectedSource === "workday-inbound" ? workdayFieldMappings : selectedSource === "shareworks" ? shareworksFieldMappings : [];
 
   const filteredErrors = errors.filter((e) => {
     if (errorFilter === "unresolved") return !e.resolved;
@@ -336,7 +416,7 @@ export default function DataManagement() {
       </div>
 
       <div style={{ maxWidth: "1400px", margin: "0 auto", padding: token("space.400") }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.400") }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.400") }}>
           {sources.map((source) => (
             <div
               key={source.id}
@@ -361,8 +441,10 @@ export default function DataManagement() {
                       justifyContent: "center",
                     }}
                   >
-                    {source.type === "HRIS Integration" ? (
+                    {source.type.includes("RaaS") ? (
                       <DatabaseIcon label="" color={token("color.text.inverse")} />
+                    ) : source.type.includes("Studio") ? (
+                      <UploadIcon label="" color={token("color.text.inverse")} />
                     ) : source.type === "Equity Management" ? (
                       <ChartTrendIcon label="" color={token("color.text.inverse")} />
                     ) : (
@@ -438,7 +520,7 @@ export default function DataManagement() {
                   <div style={{ padding: token("space.300") }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300") }}>
                       {[
-                        { key: "workday" as const, name: "Workday API", subtitle: "HRIS Integration", icon: <DatabaseIcon label="" color={token("color.text.inverse")} />, bgColor: token("color.background.brand.bold"), test: workdayTest },
+                        { key: "workday" as const, name: "Workday API", subtitle: "RaaS & Studio Integrations", icon: <DatabaseIcon label="" color={token("color.text.inverse")} />, bgColor: token("color.background.brand.bold"), test: workdayTest },
                         { key: "shareworks" as const, name: "Shareworks API", subtitle: "Equity Management", icon: <ChartTrendIcon label="" color={token("color.text.inverse")} />, bgColor: token("color.background.success.bold"), test: shareworksTest },
                       ].map((api) => (
                         <div
@@ -549,11 +631,10 @@ export default function DataManagement() {
 
                     <div style={{ marginTop: token("space.300") }}>
                       <SectionMessage appearance="information">
-                        <Text size="small" weight="semibold">Admin Access Required</Text>
+                        <Text size="small" weight="semibold">Workday Admin & Shareworks Admin Access Required</Text>
                         <div style={{ marginTop: token("space.050") }}>
                           <Text size="small" color="color.text.subtlest">
-                            You need Workday Admin and Shareworks Admin credentials to configure these connections.
-                            Test the connection after entering credentials to verify access before enabling syncs.
+                            Workday API powers the CRINT Pave RaaS reports (outbound) and Studio integrations (inbound writeback for comp changes, stock grants, bonus payments, and promotions). Shareworks API provides equity grant and vesting data. Test connections after entering credentials to verify access before enabling syncs.
                           </Text>
                         </div>
                       </SectionMessage>
@@ -753,10 +834,10 @@ export default function DataManagement() {
 
                   <div style={{ marginTop: token("space.300") }}>
                     <SectionMessage appearance="information">
-                      <Text size="small" weight="semibold">Field Mapping Guide</Text>
+                      <Text size="small" weight="semibold">Field Mapping & Data Selection</Text>
                       <div style={{ marginTop: token("space.050") }}>
                         <Text size="small" color="color.text.subtlest">
-                          Required fields (marked with *) must be mapped before syncing. Transforms are applied automatically during sync — for example, "ISO8601" converts date formats and "toCents" converts currency to base units. Unmapped fields from the source will be ignored during sync.
+                          Required fields (marked with *) must be mapped before syncing. Transforms are applied automatically — "ISO8601" converts dates, "toCents" converts currency, "filterInternCasual" excludes intern and casual employee types, and "mapToP-Level" converts job profiles to P-level format. RaaS reports pull active and eligible employees only. Compensation History uses a 2-year lookback for salary and bonus change events.
                         </Text>
                       </div>
                     </SectionMessage>
