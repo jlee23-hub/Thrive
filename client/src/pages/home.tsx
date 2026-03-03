@@ -15,6 +15,8 @@ import {
   Help,
   Settings,
   CustomTitle,
+  Search,
+  CreateButton,
 } from "@atlaskit/navigation-system/top-nav-items";
 
 import { LinkMenuItem } from "@atlaskit/navigation-system/side-nav-items/link-menu-item";
