@@ -11,7 +11,7 @@ Milestone 1 delivers the foundational employee compensation experience in Thrive
 ### In Scope
 - **Total Rewards View** (Employee): A personal compensation summary pulling base salary from Workday and RSU/equity data from Shareworks.
 - **RSU Modeling** (Employee): Interactive equity grant viewer with vesting projections, powered by Shareworks data.
-- **Team View** (Manager): A filterable, sortable, pinnable grid of direct reports with compensation and cycle planning fields sourced from Workday.
+- **Team View** (Manager): A filterable, sortable, pinnable grid of direct and indirect (skip-level) reports with compensation and cycle planning fields sourced from Workday.
 - **Permissioning** (Admin): Role-based access control so Employees see only their own data, Managers see their team, and Admins see all employees.
 - **Data Ingestion** (Admin / Data Integration Engineer): Workday and Shareworks API configuration, field mapping, sync status monitoring, error tracking, and sync history.
 
@@ -35,11 +35,11 @@ Milestone 1 delivers the foundational employee compensation experience in Thrive
 | Verify my data is current | See when my compensation data was last synced from Workday/Shareworks |
 
 ### Manager
-**Description:** A people manager who needs visibility into their direct reports' compensation data to make informed planning decisions during comp cycles.
+**Description:** A people manager who needs visibility into their direct and indirect reports' compensation data to make informed planning decisions during comp cycles.
 
 | Job to Be Done | Detail |
 |---|---|
-| Review my team's compensation | See a grid of direct reports with current salary, SRP %, equity, performance ratings, and job levels |
+| Review my team's compensation | See a grid of direct and indirect (skip-level) reports with current salary, SRP %, equity, performance ratings, and job levels |
 | Prepare for comp planning | Filter, sort, and pin employees in the grid to focus on specific cases (e.g., under-SRP, high performers, promotion candidates) |
 | Identify compensation risks | Quickly spot employees below SRP, approaching band limits, or with equity cliffs |
 
@@ -91,20 +91,21 @@ Milestone 1 delivers the foundational employee compensation experience in Thrive
 
 | # | Requirement | Priority | Data/Integration Detail |
 |---|---|---|---|
-| M-1 | As a manager, I can see a grid of my direct reports with the following columns: Name, Job Profile, Level, Promotion (true/false), Performance Rating, Current Salary, SRP %, New Salary (Annualized), New SRP %, Bonus, New Equity. | P0 | Workday → `CRINT Pave Employee Compensation Records`: `Legal_First_Name`, `Legal_Last_Name`, `Business_Title`, `Job_Profile_Level`, `Annual_Base_Pay`, `Review_Rating`; SRP from Salary Bands config; Promotion derived from cycle data |
+| M-1 | As a manager, I can see a read-only grid of my direct and indirect (skip-level) reports with the following columns: Name, Job Profile, Level, Promotion (true/false), Performance Rating, Current Salary, SRP %, New Salary (Annualized), New SRP %, Bonus, New Equity. All fields are read-only in Milestone 1. | P0 | Workday → `CRINT Pave Employee Compensation Records`: `Legal_First_Name`, `Legal_Last_Name`, `Business_Title`, `Job_Profile_Level`, `Annual_Base_Pay`, `Review_Rating`; SRP from Salary Bands config; Promotion is a boolean flag from the Workday data import |
 | M-2 | As a manager, I can filter employees in the grid by any column (e.g., level, performance, promotion status). | P0 | Client-side filtering on grid data |
 | M-3 | As a manager, I can sort the grid by any column in ascending or descending order. | P0 | Client-side sort |
 | M-4 | As a manager, I can pin/freeze rows to keep specific employees visible while scrolling. | P1 | Sticky row implementation in grid |
 | M-5 | As a manager, I can see the SRP % for each employee calculated as `Current_Salary / SRP_Minimum × 100`. | P0 | SRP minimum from Salary Bands; `Annual_Base_Pay` from Workday |
 | M-6 | As a manager, I can see equity allocations (current RSUs) for each direct report. | P1 | Shareworks → `Equity Grants` joined by `Worker_ID` / `Participant_ID` |
-| M-7 | As a manager, I can only see employees who report to me (based on `Manager_Reference` from Workday). | P0 | Filter by `Manager_Reference = current_user.Worker_ID` |
+| M-7 | As a manager, I can see employees who report to me directly or indirectly (full org tree below me). Terminated employees are excluded from the Manager grid. | P0 | Recursive filter: traverse `Manager_Reference` hierarchy starting from `current_user.Worker_ID`; exclude `Worker_Status = "Terminated"` |
+| M-8 | As a manager, the grid is entirely read-only in Milestone 1 — no inline editing of compensation fields. | P0 | Editable fields (New Salary, New SRP %, Bonus, New Equity) display values from imports but cannot be modified until Milestone 2 |
 
 ### 3.4 Admin — Permissioning
 
 | # | Requirement | Priority | Data/Integration Detail |
 |---|---|---|---|
 | A-1 | As an admin, I can configure that Employees can only see their own compensation data. | P0 | Access filter: `Worker_ID = authenticated_user.Worker_ID` |
-| A-2 | As an admin, I can configure that Managers can see their own data and their direct reports' data. | P0 | Access filter: `Worker_ID = authenticated_user.Worker_ID OR Manager_Reference = authenticated_user.Worker_ID` |
+| A-2 | As an admin, I can configure that Managers can see their own data and their direct and indirect (skip-level) reports' data. | P0 | Access filter: `Worker_ID = authenticated_user.Worker_ID OR Manager_Reference hierarchy includes authenticated_user.Worker_ID` (recursive org tree traversal) |
 | A-3 | As an admin, I can see compensation data for all employees across the organization. | P0 | No access filter applied for Admin role |
 | A-4 | As an admin, I can assign roles (Employee, Manager, Admin, Data Integration Engineer) to users. | P1 | Role stored against Okta user profile or Thrive user table |
 | A-5 | Role assignment is initially derived from Workday org hierarchy (`Manager_Reference` determines manager role). | P0 | If a `Worker_ID` appears as any employee's `Manager_Reference`, user gets Manager role |
@@ -310,21 +311,24 @@ Thrive App (Okta SSO)
 2. Thrive resolves `Worker_ID` from Okta profile → fetches compensation data from Workday sync cache.
 3. Fetches equity data from Shareworks sync cache (joined on `Worker_ID` ↔ `Participant_ID`).
 4. Total Rewards page renders: base salary, bonus target, equity value, total compensation, and breakdown chart.
-5. Employee navigates to RSUs tab → sees grant list, vesting timeline, and can adjust share price slider.
+5. If Shareworks data is unavailable (e.g., new hire with no grants), the equity section displays an error message: "Equity data is currently unavailable. Please contact your administrator." — it does not show $0 or hide the section.
+6. Employee navigates to RSUs tab → sees grant list, vesting timeline, and can adjust share price slider.
 
 #### Flow 2: Manager Reviews Team
 1. Manager logs in via Okta SSO.
-2. Thrive resolves `Worker_ID` → queries all employees where `Manager_Reference = current_user.Worker_ID`.
-3. Team grid renders with columns: Name, Job Profile, Level, Promotion, Performance, Current Salary, SRP %, New Salary, New SRP %, Bonus, New Equity.
+2. Thrive resolves `Worker_ID` → recursively queries all employees in the org tree below the manager (direct and indirect/skip-level reports). Terminated employees are excluded.
+3. Team grid renders (read-only) with columns: Name, Job Profile, Level, Promotion, Performance, Current Salary, SRP %, New Salary, New SRP %, Bonus, New Equity.
 4. Manager uses column header controls to filter (e.g., Level = P40+), sort (e.g., SRP % ascending), or pin rows.
-5. Grid supports horizontal scroll for all columns; Name column is sticky.
+5. Grid supports horizontal scroll for all columns; Name column is sticky. All fields are read-only in Milestone 1.
 
 **Grid Behavior:**
 - Filter: Dropdown per column header with available values.
 - Sort: Click column header to toggle ASC/DESC/none.
 - Pin: Right-click row or use row action menu to pin to top.
 - SRP %: Calculated as `Current_Salary / SRP_Minimum × 100`; values below 100% shown in red.
-- Promotion: Boolean column; `true` if employee has a pending Change Job operation.
+- Promotion: Boolean flag from Workday data import; `true` if the imported record has the promotion flag set.
+- Terminated: Excluded from Manager grid entirely; visible in Admin data management views only.
+- Read-only: No inline editing in Milestone 1; editing deferred to Milestone 2.
 
 #### Flow 3: Data Integration Engineer Configures Workday
 1. Engineer switches to Data Integration view.
@@ -346,9 +350,9 @@ Thrive App (Okta SSO)
 #### Flow 4: Admin Verifies Permissions
 1. Admin logs in → sees full employee list across all orgs.
 2. Admin navigates to Settings → Permission Management.
-3. Verifies that Manager_Reference hierarchy correctly determines who is a Manager.
+3. Verifies that Manager_Reference hierarchy correctly determines who is a Manager (including skip-level visibility).
 4. Can override roles manually (e.g., promote a user to Admin).
-5. Can verify an Employee only sees their own record by using the persona switcher (dev/staging only).
+5. Users with multiple roles (e.g., a Manager who is also an Admin) use the persona switcher in production to toggle between their assigned views. Server-side role enforcement ensures users can only switch to roles they are authorized for.
 
 ---
 
@@ -418,11 +422,16 @@ Thrive App (Okta SSO)
 | A3 | The Workday RaaS reports (CRINT Pave) are already configured and accessible via the tenant's RaaS API endpoint. |
 | A4 | Shareworks API is REST-based and supports per-participant grant and vesting queries. |
 | A5 | SRP (Salary Reference Point) minimum values are pre-configured in Thrive's Salary Bands; they are not sourced from Workday in this milestone. |
-| A6 | "Promotion" in the Manager grid is derived from a pending `Change Job` operation in `INT_WD_Pave_Integration_Inbound`, or from a boolean field in the cycle planning data. |
+| A6 | "Promotion" in the Manager grid is a boolean flag sourced from the Workday data import (not derived or manually set). |
 | A7 | Performance ratings map directly from Workday's `Review_Rating` field without additional transformation. |
 | A8 | Currency is USD for all employees in Milestone 1; multi-currency support is a later milestone. |
 | A9 | Sync frequency is configurable but defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks based on current schedule). |
 | A10 | The Data Integration Engineer role has Workday Admin and Shareworks Admin access to configure API credentials. |
+| A11 | Managers see all direct and indirect (skip-level) reports — full org tree below them, not just immediate directs. |
+| A12 | Terminated employees are excluded from the Manager team grid entirely. They remain visible to Admins in data management views. |
+| A13 | All views and grids are read-only in Milestone 1. Inline editing of compensation fields (New Salary, New SRP %, Bonus, New Equity) is deferred to Milestone 2. |
+| A14 | When Shareworks data is unavailable for an employee (e.g., new hire with no grants), the UI displays an error message indicating equity data is unavailable rather than showing $0 or hiding the section. |
+| A15 | The persona switcher is a production feature. Users may hold multiple roles (e.g., a Manager who is also an Admin), and the switcher allows them to toggle between their assigned views. Server-side role enforcement is required. |
 
 ---
 
@@ -432,10 +441,15 @@ Thrive App (Okta SSO)
 |---|---|---|---|
 | Q1 | **How is `Worker_ID` mapped to `Participant_ID` in Shareworks?** Are they the same value, or is there a separate mapping table? | Blocks equity data join for Employee and Manager views | **Option A:** Same value (simplest). **Option B:** Mapping table maintained in Shareworks. **Option C:** Thrive maintains a crosswalk table. |
 | Q2 | **What Okta claims/attributes are available?** Specifically, does the Okta token include `Worker_ID`, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data | **Option A:** Okta profile includes `Worker_ID` as custom attribute. **Option B:** Okta provides email, and we look up `Worker_ID` from synced Workday data. |
-| Q3 | **How is "Promotion" determined?** Is it a boolean field from Workday, a pending Change Job operation, or a flag set during cycle planning in Thrive? | Affects Manager grid column data source | **Option A:** From `INT_WD_Pave_Integration_Inbound` Change Job operations. **Option B:** Manual flag set by Admin during cycle setup. **Option C:** Derived from job level change between current and proposed. |
-| Q4 | **Should Managers see compensation data for indirect reports (skip-level)?** The current design shows direct reports only (`Manager_Reference = current_user`). | Affects permission query scope | **Option A:** Direct reports only (simpler, current design). **Option B:** Full org tree below manager (recursive, more complex). |
-| Q5 | **What is the expected behavior when Shareworks data is unavailable for an employee?** (e.g., new hire with no grants yet) | Affects Total Rewards and RSU views | **Option A:** Show $0 equity with "No grants" message. **Option B:** Hide the equity section entirely. |
-| Q6 | **Is the "New Salary" / "New SRP %" / "Bonus" / "New Equity" in the Manager grid editable in Milestone 1, or read-only?** These are comp planning fields. | Determines if Manager grid is view-only or includes inline editing | **Option A:** Read-only in M1, editable in M2 (cycle planning). **Option B:** Editable in M1 with save/submit workflow. |
-| Q7 | **What is the Shareworks API authentication method?** OAuth 2.0, API Key, or certificate-based? | Affects API Setup configuration UI and credential storage | Need Shareworks Admin to confirm. |
-| Q8 | **Should terminated employees (within 90 days) appear in the Manager team grid?** The RaaS report includes them. | Affects data filtering logic | **Option A:** Exclude terminated from Manager view, include in Admin view. **Option B:** Show with a "Terminated" status indicator. |
-| Q9 | **Is the persona switcher (Employee/Manager/Admin/Data Integration) a development/demo tool, or will it exist in production?** Currently it is a UI toggle. | Affects security model — if production, need server-side role enforcement | **Option A:** Dev/demo only; production uses Okta role claims. **Option B:** Production feature for users with multiple roles (e.g., Manager who is also an Admin). |
+| Q3 | **What is the Shareworks API authentication method?** OAuth 2.0, API Key, or certificate-based? | Affects API Setup configuration UI and credential storage | Need Shareworks Admin to confirm. |
+
+### Resolved Questions
+
+| # | Question | Resolution |
+|---|---|---|
+| ~~Q3~~ | How is "Promotion" determined? | **Resolved:** Promotion is a boolean flag sourced directly from the Workday data import. It is not derived or manually set. |
+| ~~Q4~~ | Should Managers see compensation data for indirect reports (skip-level)? | **Resolved:** Yes. Managers see the full org tree below them (recursive), not just direct reports. |
+| ~~Q5~~ | What is the expected behavior when Shareworks data is unavailable? | **Resolved:** Display an error message indicating equity data is unavailable. Do not show $0 or hide the section. |
+| ~~Q6~~ | Are comp planning fields editable in Milestone 1? | **Resolved:** No. All fields are read-only in Milestone 1. Inline editing is deferred to Milestone 2. |
+| ~~Q8~~ | Should terminated employees appear in the Manager team grid? | **Resolved:** No. Terminated employees are excluded from the Manager grid entirely. They remain visible in Admin views. |
+| ~~Q9~~ | Is the persona switcher a dev/demo tool or production feature? | **Resolved:** Production feature. Users may hold multiple roles and switch between them. Server-side role enforcement is required. |
