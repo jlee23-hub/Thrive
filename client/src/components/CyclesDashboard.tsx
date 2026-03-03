@@ -279,7 +279,7 @@ export default function CyclesDashboard({ onCreateCycle, onSelectCycle }: Cycles
         />
       </div>
 
-      <div style={{ ...cardStyle, padding: token("space.300") }}>
+      <div style={{ ...cardStyle, paddingTop: token("space.300"), paddingLeft: token("space.300"), paddingRight: token("space.300"), paddingBottom: token("space.050") }}>
         <div
           style={{
             display: "flex",
