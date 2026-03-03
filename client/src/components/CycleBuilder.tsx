@@ -2730,6 +2730,25 @@ function FieldPermissionsStep({
   fieldPermissions: typeof fieldPermissionsData;
   toggleFieldPermission: (id: string, type: "visible" | "editable") => void;
 }) {
+  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+
+  const toggleRow = (id: string) => {
+    setSelectedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selectedRows.size === fieldPermissions.length) {
+      setSelectedRows(new Set());
+    } else {
+      setSelectedRows(new Set(fieldPermissions.map((f) => f.id)));
+    }
+  };
+
   const thStyle: React.CSSProperties = {
     padding: `${token("space.100")} ${token("space.150")}`,
     textAlign: "left",
@@ -2763,16 +2782,34 @@ function FieldPermissionsStep({
         </div>
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: token("space.100") }}>
-        <Button appearance="default" iconBefore={EyeOpenIcon}>
-          View Columns by Role
-        </Button>
-        <Button appearance="default" iconBefore={EditIcon}>
-          Edit Column Order
-        </Button>
-        <Button appearance="primary" iconBefore={AddIcon}>
-          Add New Column
-        </Button>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: token("space.100") }}>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          {selectedRows.size > 0 && (
+            <>
+              <Text size="small" weight="semibold">{selectedRows.size} selected</Text>
+              <Button appearance="warning" iconBefore={DeleteIcon}>
+                Delete
+              </Button>
+              <Button appearance="default" iconBefore={DownloadIcon}>
+                Export
+              </Button>
+              <Button appearance="subtle" onClick={() => setSelectedRows(new Set())}>
+                Clear selection
+              </Button>
+            </>
+          )}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <Button appearance="default" iconBefore={EyeOpenIcon}>
+            View Columns by Role
+          </Button>
+          <Button appearance="default" iconBefore={EditIcon}>
+            Edit Column Order
+          </Button>
+          <Button appearance="primary" iconBefore={AddIcon}>
+            Add New Column
+          </Button>
+        </div>
       </div>
 
       <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.200"), overflow: "hidden" }}>
@@ -2781,7 +2818,12 @@ function FieldPermissionsStep({
             <thead>
               <tr style={{ backgroundColor: token("elevation.surface.sunken") }}>
                 <th style={{ ...thStyle, width: 36, textAlign: "center" }}>
-                  <Checkbox label="" />
+                  <Checkbox
+                    label=""
+                    isChecked={selectedRows.size === fieldPermissions.length}
+                    isIndeterminate={selectedRows.size > 0 && selectedRows.size < fieldPermissions.length}
+                    onChange={toggleAll}
+                  />
                 </th>
                 <th style={{ ...thStyle, width: 28 }}></th>
                 <th style={{ ...thStyle, minWidth: 200 }}>Column Name</th>
@@ -2795,9 +2837,15 @@ function FieldPermissionsStep({
             </thead>
             <tbody>
               {fieldPermissions.map((field) => (
-                <tr key={field.id} style={{ borderTop: `1px solid ${token("color.border")}` }}>
+                <tr
+                  key={field.id}
+                  style={{
+                    borderTop: `1px solid ${token("color.border")}`,
+                    backgroundColor: selectedRows.has(field.id) ? token("color.background.selected") : undefined,
+                  }}
+                >
                   <td style={{ ...tdStyle, textAlign: "center" }}>
-                    <Checkbox label="" />
+                    <Checkbox label="" isChecked={selectedRows.has(field.id)} onChange={() => toggleRow(field.id)} />
                   </td>
                   <td style={tdStyle}>
                     {field.locked && <LockLockedIcon label="Locked" color={token("color.icon.subtle")} />}
