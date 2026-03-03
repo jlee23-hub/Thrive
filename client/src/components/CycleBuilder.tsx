@@ -2731,6 +2731,39 @@ function FieldPermissionsStep({
   toggleFieldPermission: (id: string, type: "visible" | "editable") => void;
 }) {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+  const [addColumnOpen, setAddColumnOpen] = useState(false);
+  const [columnForm, setColumnForm] = useState({
+    column: "custom",
+    name: "",
+    description: "",
+    defaultDisplay: "visible",
+    displayType: "",
+    customFormula: "",
+  });
+
+  const columnTypeOptions = [
+    { label: "Custom", value: "custom" },
+    { label: "Pre-configured: Base Salary", value: "base_salary" },
+    { label: "Pre-configured: Bonus", value: "bonus" },
+    { label: "Pre-configured: Equity", value: "equity" },
+    { label: "Pre-configured: Merit %", value: "merit" },
+    { label: "Pre-configured: Total Compensation", value: "total_comp" },
+  ];
+
+  const displayTypeOptions = [
+    { label: "Select a data display type", value: "" },
+    { label: "Currency", value: "currency" },
+    { label: "Percentage", value: "percentage" },
+    { label: "Number", value: "number" },
+    { label: "Text", value: "text" },
+    { label: "Date", value: "date" },
+  ];
+
+  const defaultDisplayOptions = [
+    { name: "defaultDisplay", value: "visible", label: "Visible" },
+    { name: "defaultDisplay", value: "pinned", label: "Pinned" },
+    { name: "defaultDisplay", value: "hidden", label: "Hidden" },
+  ];
 
   const toggleRow = (id: string) => {
     setSelectedRows((prev) => {
@@ -2806,7 +2839,7 @@ function FieldPermissionsStep({
           <Button appearance="default" iconBefore={EditIcon}>
             Edit Column Order
           </Button>
-          <Button appearance="primary" iconBefore={AddIcon}>
+          <Button appearance="primary" iconBefore={AddIcon} onClick={() => setAddColumnOpen(true)}>
             Add New Column
           </Button>
         </div>
@@ -2891,6 +2924,142 @@ function FieldPermissionsStep({
           </table>
         </div>
       </div>
+
+      {addColumnOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: "calc(var(--n_bnrM, 0px) + var(--n_tNvM, 0px))",
+            right: 0,
+            height: "calc(100vh - var(--n_bnrM, 0px) - var(--n_tNvM, 0px))",
+            width: 480,
+            backgroundColor: token("elevation.surface.overlay"),
+            boxShadow: token("elevation.shadow.overlay"),
+            zIndex: 500,
+            overflowY: "auto",
+            animation: "slideInRight 200ms ease-out",
+          }}
+        >
+          <div style={{ position: "absolute", top: token("space.200"), right: token("space.200"), zIndex: 1 }}>
+            <IconButton icon={CrossIcon} label="Close" appearance="subtle" onClick={() => setAddColumnOpen(false)} />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.400") }}>
+            <Heading size="large">Add a Column</Heading>
+
+            <SectionMessage appearance="information">
+              <Text size="small">
+                Add columns that match your needs by selecting from our pre-configured columns or by creating custom columns. If an option you need is missing, contact your Implementation Manager.
+              </Text>
+            </SectionMessage>
+
+            <div>
+              <LabelText>Column</LabelText>
+              <Select
+                options={columnTypeOptions}
+                value={columnTypeOptions.find((o) => o.value === columnForm.column)}
+                onChange={(opt) => opt && setColumnForm({ ...columnForm, column: opt.value })}
+              />
+            </div>
+
+            <div>
+              <LabelText>Name</LabelText>
+              <Textfield
+                value={columnForm.name}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setColumnForm({ ...columnForm, name: e.target.value })
+                }
+              />
+            </div>
+
+            <div>
+              <LabelText>
+                Description <Text size="UNSAFE_small" color="color.text.subtlest" as="span">Optional</Text>
+              </LabelText>
+              <Textfield
+                value={columnForm.description}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setColumnForm({ ...columnForm, description: e.target.value })
+                }
+              />
+              <Text size="UNSAFE_small" color="color.text.subtlest">
+                This description will appear as a tooltip when hovering over the column name in the Planner table.
+              </Text>
+            </div>
+
+            <div>
+              <LabelText>Default column display</LabelText>
+              <Text size="UNSAFE_small" color="color.text.subtlest">
+                Choose how this column appears by default in planner worksheets. This sets what planners see before they customize their own view. Note: This is separate from column visibility permissions (who can see this column), which is defined on the Permissions tab.
+              </Text>
+              <div style={{ marginTop: token("space.100") }}>
+                <RadioGroup
+                  options={defaultDisplayOptions}
+                  value={columnForm.defaultDisplay}
+                  onChange={(e) => setColumnForm({ ...columnForm, defaultDisplay: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div>
+              <LabelText>Data Display Type</LabelText>
+              <Select
+                options={displayTypeOptions}
+                value={displayTypeOptions.find((o) => o.value === columnForm.displayType)}
+                onChange={(opt) => opt && setColumnForm({ ...columnForm, displayType: opt.value })}
+                placeholder="Select a data display type"
+              />
+            </div>
+
+            <div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <LabelText>Custom formula</LabelText>
+                <Button appearance="link" spacing="none">Show preview</Button>
+              </div>
+              <div
+                style={{
+                  border: `1px solid ${token("color.border")}`,
+                  borderRadius: token("border.radius.100"),
+                  overflow: "hidden",
+                  marginTop: token("space.050"),
+                }}
+              >
+                <div style={{ display: "flex" }}>
+                  <div
+                    style={{
+                      width: 40,
+                      backgroundColor: token("elevation.surface.sunken"),
+                      borderRight: `1px solid ${token("color.border")}`,
+                      padding: `${token("space.100")} ${token("space.050")}`,
+                      textAlign: "right",
+                    }}
+                  >
+                    <Text size="UNSAFE_small" color="color.text.subtlest">1</Text>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <TextArea
+                      value={columnForm.customFormula}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                        setColumnForm({ ...columnForm, customFormula: e.target.value })
+                      }
+                      placeholder=""
+                      minimumRows={4}
+                      appearance="none"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div style={{ marginTop: token("space.100") }}>
+                <Button appearance="link" spacing="none">Learn more about Handlebars formulas ↗</Button>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.200") }}>
+              <Button appearance="primary" onClick={() => setAddColumnOpen(false)}>Save</Button>
+              <Button appearance="subtle" onClick={() => setAddColumnOpen(false)}>Cancel</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
