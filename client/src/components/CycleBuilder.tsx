@@ -2263,6 +2263,9 @@ function UsersTabContent() {
           </button>
         </div>
         <div style={{ display: "flex", gap: token("space.100") }}>
+          <Button appearance="default" iconBefore={TableColumnsDistributeIcon}>
+            Add column
+          </Button>
           <Button appearance="default" iconBefore={PersonAddIcon}>
             Add guest
           </Button>
