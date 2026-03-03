@@ -134,16 +134,7 @@ Milestone 1 delivers the foundational employee compensation experience in Thrive
 | CRINT Pave-Compensation History | Compensation Changes | Salary and bonus change history | Active and eligible employees; No intern/casual types; 2-year lookback; Salary and bonus change events |
 | CRINT Pave-Employee Eligible Earnings | All Eligible Earnings Overrides | Eligible earnings and bonus plan details | Active and eligible employees; No intern/casual types; Current eligible earnings override period |
 
-### 4.2 Workday Studio Integrations (Inbound — Write)
-
-| Integration Name | Function | Behavior |
-|---|---|---|
-| INT_WD_Pave_Integration_Inbound | Parent integration processing inbound zip file | Aggregates Change Job, Add Stock Grant, Request Comp Change, Add Bonus Payment operations; submits via Workday API |
-| INT_WD_Pave_Bonus_Inbound | Child: loads bonus payments | Called by parent; can be individually re-run with correction file |
-| INT_WD_Pave_Add_Stock_Grant | Child: loads stock grants | Called by parent; can be individually re-run with correction file |
-| INT_WD_PAVE_RequestComp_Inbound | Child: loads compensation changes | Called by parent; can be individually re-run with correction file |
-
-### 4.3 Workday Field Mapping (CRINT Pave Employee Compensation Records)
+### 4.2 Workday Field Mapping (CRINT Pave Employee Compensation Records)
 
 | Source Field (Workday) | Thrive Field | Data Type | Required | Transform |
 |---|---|---|---|---|
@@ -163,7 +154,7 @@ Milestone 1 delivers the foundational employee compensation experience in Thrive
 | Employee_Type | employeeType | String | Yes | filterInternCasual |
 | Worker_Status | status | String | Yes | — |
 
-### 4.4 Shareworks Field Mapping
+### 4.3 Shareworks Field Mapping
 
 | Source Field (Shareworks) | Thrive Field | Data Type | Required | Transform |
 |---|---|---|---|---|
