@@ -42,7 +42,7 @@ const employees: Employee[] = [
     lastName: "Jenkins",
     startDate: "Mar 15, 2019",
     eligibilityDate: "Mar 15, 2020",
-    jobLevel: "P4",
+    jobLevel: "P40",
     jobFamily: "Design",
     zone: "Zone A USA",
     currentBaseSalary: 145000,
@@ -57,7 +57,7 @@ const employees: Employee[] = [
     lastName: "Chen",
     startDate: "Jun 01, 2018",
     eligibilityDate: "Jun 01, 2019",
-    jobLevel: "M3",
+    jobLevel: "M50",
     jobFamily: "Engineering",
     zone: "Zone A USA",
     currentBaseSalary: 185000,
@@ -72,7 +72,7 @@ const employees: Employee[] = [
     lastName: "Wu",
     startDate: "Jan 10, 2021",
     eligibilityDate: "Jan 10, 2022",
-    jobLevel: "P3",
+    jobLevel: "P30",
     jobFamily: "Engineering",
     zone: "Zone B USA",
     currentBaseSalary: 120000,
@@ -87,7 +87,7 @@ const employees: Employee[] = [
     lastName: "Miller",
     startDate: "Sep 22, 2017",
     eligibilityDate: "Sep 22, 2018",
-    jobLevel: "P6",
+    jobLevel: "P60",
     jobFamily: "Product",
     zone: "Zone A USA",
     currentBaseSalary: 195000,
@@ -102,7 +102,7 @@ const employees: Employee[] = [
     lastName: "Wilson",
     startDate: "Aug 05, 2022",
     eligibilityDate: "Aug 05, 2023",
-    jobLevel: "P2",
+    jobLevel: "P20",
     jobFamily: "Marketing",
     zone: "Zone C USA",
     currentBaseSalary: 75000,
@@ -117,7 +117,7 @@ const employees: Employee[] = [
     lastName: "Rodriguez",
     startDate: "Feb 14, 2020",
     eligibilityDate: "Feb 14, 2021",
-    jobLevel: "P4",
+    jobLevel: "P40",
     jobFamily: "Customer Success",
     zone: "Zone B USA",
     currentBaseSalary: 110000,
@@ -132,7 +132,7 @@ const employees: Employee[] = [
     lastName: "Chang",
     startDate: "Nov 30, 2019",
     eligibilityDate: "Nov 30, 2020",
-    jobLevel: "P4",
+    jobLevel: "P40",
     jobFamily: "Data Science",
     zone: "Zone A USA",
     currentBaseSalary: 135000,
@@ -147,7 +147,7 @@ const employees: Employee[] = [
     lastName: "Taylor",
     startDate: "Apr 18, 2021",
     eligibilityDate: "Apr 18, 2022",
-    jobLevel: "P3",
+    jobLevel: "P30",
     jobFamily: "Engineering",
     zone: "Zone C USA",
     currentBaseSalary: 95000,
@@ -319,7 +319,6 @@ export default function TeamOverview() {
       <div style={{ display: "flex", gap: token("space.400") }}>
         <SummaryCard title="Equity Allocated" value="$0" />
         <SummaryCard title="Equity Spent" value="$0" />
-        <SummaryCard title="Team Risk" value="9" subtitle="Expiring shares" />
       </div>
 
       <div style={cardStyle}>
