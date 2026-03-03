@@ -1707,7 +1707,7 @@ function BudgetFxStep() {
         <Heading size="medium">Configure budget & FX rates</Heading>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <Heading size="xsmall">Budget Allocation</Heading>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginTop: token("space.200") }}>
           <div>
@@ -1725,7 +1725,7 @@ function BudgetFxStep() {
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
           <div>
             <Heading size="xsmall">Budgets</Heading>
@@ -1928,7 +1928,7 @@ function BudgetFxStep() {
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
             <Heading size="xsmall">Exchange Rates</Heading>
@@ -2039,7 +2039,7 @@ function BudgetFxStep() {
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
           <div>
             <Heading size="xsmall">Department Budget Allocations</Heading>
