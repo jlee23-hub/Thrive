@@ -44,9 +44,9 @@ div[role="list"]._bozg1crf {
   display: block !important;
 }
 
-/* REQUIRED: Move selected notch to far-left edge of menu item */
+/* REQUIRED: Keep selected notch at left edge inside the selected background */
 ._bfhk1o0g._kqswstnw {
-  inset-inline-start: calc(-1 * (24px + var(--ds-space-100, 8px))) !important;
+  inset-inline-start: 0 !important;
 }
 
 /* REQUIRED: Force Search bar visible in top nav */
