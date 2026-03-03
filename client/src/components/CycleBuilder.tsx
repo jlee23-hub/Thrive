@@ -2790,6 +2790,7 @@ function FieldPermissionsStep({
                 <th style={thStyle}>Reward Letter Status</th>
                 <th style={thStyle}>Column Default</th>
                 <th style={{ ...thStyle, minWidth: 280 }}>Permissions</th>
+                <th style={{ ...thStyle, width: 60, textAlign: "center" }}></th>
               </tr>
             </thead>
             <tbody>
@@ -2828,7 +2829,13 @@ function FieldPermissionsStep({
                       {(field.permissions || []).map((p, pi) => (
                         <Lozenge key={pi} appearance={p.appearance}>{p.role}</Lozenge>
                       ))}
+                      <Button appearance="subtle" spacing="compact" iconBefore={AddIcon}>
+                        Add
+                      </Button>
                     </div>
+                  </td>
+                  <td style={{ ...tdStyle, textAlign: "center" }}>
+                    <IconButton icon={EditIcon} label="Edit row" appearance="subtle" spacing="compact" />
                   </td>
                 </tr>
               ))}
