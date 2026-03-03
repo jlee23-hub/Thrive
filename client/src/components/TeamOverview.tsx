@@ -46,7 +46,7 @@ const employees: Employee[] = [
     jobFamily: "Design",
     zone: "Zone A USA",
     currentBaseSalary: 145000,
-    srpPercent: "+3.2%",
+    srpPercent: "112%",
     currentEquity: "1,250 RSUs",
     fy24H2Rating: "Meets Expectations",
   },
@@ -61,7 +61,7 @@ const employees: Employee[] = [
     jobFamily: "Engineering",
     zone: "Zone A USA",
     currentBaseSalary: 185000,
-    srpPercent: "+8.5%",
+    srpPercent: "125%",
     currentEquity: "2,800 RSUs",
     fy24H2Rating: "Exceeds Expectations",
   },
@@ -76,7 +76,7 @@ const employees: Employee[] = [
     jobFamily: "Engineering",
     zone: "Zone B USA",
     currentBaseSalary: 120000,
-    srpPercent: "-4.1%",
+    srpPercent: "104%",
     currentEquity: "800 RSUs",
     fy24H2Rating: "Meets Expectations",
   },
@@ -91,7 +91,7 @@ const employees: Employee[] = [
     jobFamily: "Product",
     zone: "Zone A USA",
     currentBaseSalary: 195000,
-    srpPercent: "+12.0%",
+    srpPercent: "138%",
     currentEquity: "4,200 RSUs",
     fy24H2Rating: "Greatly Exceeds",
   },
@@ -106,7 +106,7 @@ const employees: Employee[] = [
     jobFamily: "Marketing",
     zone: "Zone C USA",
     currentBaseSalary: 75000,
-    srpPercent: "-12.5%",
+    srpPercent: "95%",
     currentEquity: "400 RSUs",
     fy24H2Rating: "Meets Expectations",
   },
@@ -121,7 +121,7 @@ const employees: Employee[] = [
     jobFamily: "Customer Success",
     zone: "Zone B USA",
     currentBaseSalary: 110000,
-    srpPercent: "+1.8%",
+    srpPercent: "108%",
     currentEquity: "950 RSUs",
     fy24H2Rating: "Met Some",
   },
@@ -136,7 +136,7 @@ const employees: Employee[] = [
     jobFamily: "Data Science",
     zone: "Zone A USA",
     currentBaseSalary: 135000,
-    srpPercent: "+5.6%",
+    srpPercent: "118%",
     currentEquity: "1,600 RSUs",
     fy24H2Rating: "Exceeds Expectations",
   },
@@ -151,7 +151,7 @@ const employees: Employee[] = [
     jobFamily: "Engineering",
     zone: "Zone C USA",
     currentBaseSalary: 95000,
-    srpPercent: "-2.3%",
+    srpPercent: "102%",
     currentEquity: "600 RSUs",
     fy24H2Rating: "Meets Expectations",
   },
@@ -287,7 +287,7 @@ const createRows = (data: Employee[], searchQuery: string) => {
         content: (
           <Text
             size="small"
-            color={employee.srpPercent.startsWith("-") ? "color.text.danger" : "color.text.success"}
+            color={parseInt(employee.srpPercent) < 100 ? "color.text.danger" : "color.text.success"}
           >
             {employee.srpPercent}
           </Text>
