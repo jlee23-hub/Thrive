@@ -686,7 +686,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
                       position: "absolute",
                       left: circleCenter - 1,
                       top: circleCenter,
-                      height: `${((currentStep) / (STEPS.length - 1)) * 100}%`,
+                      height: `calc(${(currentStep / (STEPS.length - 1)) * 100}% - ${(currentStep / (STEPS.length - 1)) * circleSize}px)`,
                       width: 2,
                       backgroundColor: token("color.border.brand"),
                       zIndex: 0,
