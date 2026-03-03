@@ -2787,7 +2787,7 @@ function FieldPermissionsStep({
           {selectedRows.size > 0 && (
             <Text size="small" weight="semibold">{selectedRows.size} selected</Text>
           )}
-          <Button appearance="warning" iconBefore={DeleteIcon} isDisabled={selectedRows.size === 0}>
+          <Button appearance="danger" iconBefore={DeleteIcon} isDisabled={selectedRows.size === 0}>
             Delete
           </Button>
           <Button appearance="default" iconBefore={DownloadIcon} isDisabled={selectedRows.size === 0}>
