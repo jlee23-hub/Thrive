@@ -51,7 +51,7 @@ import { RadioGroup } from "@atlaskit/radio";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.300"),
+  borderRadius: token("border.radius.400"),
   padding: token("space.400"),
   boxShadow: token("elevation.shadow.raised"),
 };
@@ -612,7 +612,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
         flexDirection: "column",
         height: "100%",
         backgroundColor: token("elevation.surface"),
-        borderRadius: token("border.radius.300"),
+        borderRadius: token("border.radius.400"),
         boxShadow: token("elevation.shadow.raised"),
         overflow: "hidden",
         position: "relative",
@@ -951,7 +951,7 @@ function IntegrationCard({
             style={{
               width: 32,
               height: 32,
-              borderRadius: token("border.radius.100"),
+              borderRadius: token("border.radius.200"),
               backgroundColor: iconColor,
               display: "flex",
               alignItems: "center",
@@ -1010,7 +1010,7 @@ function DataIntegrationsStep({
       <div
         style={{
           border: `2px dashed ${token("color.border")}`,
-          borderRadius: token("border.radius.200"),
+          borderRadius: token("border.radius.300"),
           backgroundColor: token("elevation.surface.sunken"),
           padding: token("space.500"),
           display: "flex",
@@ -1352,7 +1352,7 @@ function FieldMappingTable({ fields }: { fields: typeof workdayFields }) {
                   color: token("color.text.subtlest"),
                   backgroundColor: token("color.background.neutral"),
                   padding: `${token("space.025")} ${token("space.075")}`,
-                  borderRadius: token("border.radius.100"),
+                  borderRadius: token("border.radius.200"),
                   fontFamily: "monospace",
                 }}
               >
@@ -1496,7 +1496,7 @@ function EligibilityRulesStep() {
               key={i}
               style={{
                 border: `1px solid ${token("color.border")}`,
-                borderRadius: token("border.radius.200"),
+                borderRadius: token("border.radius.300"),
                 padding: token("space.200"),
               }}
             >
@@ -1736,7 +1736,7 @@ function BudgetFxStep() {
           <Button appearance="primary">Create a Budget</Button>
         </div>
 
-        <div style={{ display: "flex", border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.200"), overflow: "hidden" }}>
+        <div style={{ display: "flex", border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.300"), overflow: "hidden" }}>
           <div
             style={{
               width: 280,
@@ -1883,7 +1883,7 @@ function BudgetFxStep() {
                           key={col.id}
                           style={{
                             border: `1px solid ${token("color.border")}`,
-                            borderRadius: token("border.radius.200"),
+                            borderRadius: token("border.radius.300"),
                             padding: token("space.300"),
                           }}
                         >
@@ -2114,7 +2114,7 @@ function SalaryBandsStep() {
         <div
           style={{
             border: `2px dashed ${token("color.border")}`,
-            borderRadius: token("border.radius.200"),
+            borderRadius: token("border.radius.300"),
             padding: token("space.500"),
             textAlign: "center",
             display: "flex",
@@ -2231,7 +2231,7 @@ function UsersTabContent() {
     cursor: "pointer",
     background: "none",
     border: isActive ? `1px solid ${token("color.border")}` : `1px solid transparent`,
-    borderRadius: token("border.radius.100"),
+    borderRadius: token("border.radius.200"),
     color: isActive ? token("color.text") : token("color.text.subtlest"),
     fontWeight: isActive ? 600 : 400,
     fontSize: 14,
@@ -2309,7 +2309,7 @@ function UsersTabContent() {
 
       {usersSubTab === "users" && (
         <>
-          <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.200"), overflow: "hidden" }}>
+          <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.300"), overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ backgroundColor: token("elevation.surface.sunken") }}>
@@ -2442,7 +2442,7 @@ function UsersTabContent() {
         <div
           style={{
             border: `1px solid ${token("color.border")}`,
-            borderRadius: token("border.radius.200"),
+            borderRadius: token("border.radius.300"),
             padding: token("space.500"),
             display: "flex",
             flexDirection: "column",
@@ -2567,7 +2567,7 @@ function UsersRolesStep() {
                 key={i}
                 style={{
                   border: `1px solid ${token("color.border")}`,
-                  borderRadius: token("border.radius.200"),
+                  borderRadius: token("border.radius.300"),
                   padding: token("space.300"),
                   backgroundColor: token("elevation.surface"),
                 }}
@@ -2845,7 +2845,7 @@ function FieldPermissionsStep({
         </div>
       </div>
 
-      <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.200"), overflow: "hidden" }}>
+      <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.300"), overflow: "hidden" }}>
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1100 }}>
             <thead>
@@ -3018,7 +3018,7 @@ function FieldPermissionsStep({
               <div
                 style={{
                   border: `1px solid ${token("color.border")}`,
-                  borderRadius: token("border.radius.100"),
+                  borderRadius: token("border.radius.200"),
                   overflow: "hidden",
                   marginTop: token("space.050"),
                 }}
@@ -3158,7 +3158,7 @@ function RewardLetterStep({
           style={{
             marginTop: token("space.200"),
             border: `1px solid ${token("color.border")}`,
-            borderRadius: token("border.radius.200"),
+            borderRadius: token("border.radius.300"),
             padding: token("space.300"),
             backgroundColor: token("elevation.surface.sunken"),
           }}
