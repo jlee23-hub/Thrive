@@ -237,37 +237,69 @@ const users = [
   { name: "Demo Employee", username: "@employee1", email: "employee@compvista.com", linked: "Chris Williams (EMP-00004)", role: "employee", permissions: "", active: true },
 ];
 
-const fieldPermissionsData = [
-  { id: "inti", name: "INTI Status", visible: true, editable: false },
-  { id: "employeeName", name: "Employee Name", visible: true, editable: true },
-  { id: "employeeId", name: "Employee ID", visible: true, editable: true },
-  { id: "jobFamily", name: "Job Family", visible: true, editable: false },
-  { id: "jobLevel", name: "Job Level", visible: true, editable: true },
-  { id: "jobProfile", name: "Job Profile", visible: true, editable: false },
-  { id: "geographicZone", name: "Geographic Zone", visible: true, editable: false },
-  { id: "paidHourly", name: "Paid Hourly", visible: true, editable: false },
-  { id: "location", name: "Location", visible: true, editable: false },
-  { id: "businessTitle", name: "Business Title", visible: true, editable: false },
-  { id: "department", name: "Department", visible: true, editable: true },
-  { id: "manager", name: "Manager", visible: true, editable: false },
-  { id: "startDate", name: "Start Date", visible: true, editable: false },
-  { id: "timeInJobProfile", name: "Time in Job Profile", visible: true, editable: false },
-  { id: "tenure", name: "Tenure", visible: true, editable: false },
-  { id: "fte", name: "FTE %", visible: true, editable: false },
-  { id: "h1PerfRating", name: "H1 Perf Rating", visible: true, editable: false },
-  { id: "currentSalary", name: "Current Salary", visible: true, editable: true },
-  { id: "currentTargetBonus", name: "Current Target Bonus", visible: true, editable: false },
-  { id: "currentEquity", name: "Current Equity", visible: true, editable: false },
-  { id: "proposedSalary", name: "Proposed Salary", visible: true, editable: true },
-  { id: "proposedTargetBonus", name: "Proposed Target Bonus", visible: true, editable: false },
-  { id: "proposedEquity", name: "Proposed Equity", visible: true, editable: false },
-  { id: "meritIncrease", name: "Merit Increase %", visible: true, editable: true },
-  { id: "meritIncreaseAmount", name: "Merit Increase Amount", visible: true, editable: false },
-  { id: "promotionIncrease", name: "Promotion Increase %", visible: true, editable: false },
-  { id: "promotionAmount", name: "Promotion Amount", visible: true, editable: false },
-  { id: "oneTimeBonus", name: "One-Time Bonus", visible: true, editable: true },
-  { id: "equityGrant", name: "Equity Grant", visible: true, editable: false },
-  { id: "totalCompensation", name: "Total Compensation", visible: true, editable: false },
+type ColumnField = {
+  id: string;
+  name: string;
+  variable: string;
+  dataSource: "Integration" | "User Input or Data Upload" | "Computed" | "Checkbox";
+  displayType: "Text" | "Number" | "Currency" | "Percentage" | "Yes/No" | "Frozen";
+  rewardLetter: boolean;
+  columnDefault: "Visible" | "Hidden";
+  locked: boolean;
+  visible: boolean;
+  editable: boolean;
+  permissions: { role: string; appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new" }[];
+};
+
+const fieldPermissionsData: ColumnField[] = [
+  { id: "employeeName", name: "Employee", variable: "empName", dataSource: "Integration", displayType: "Frozen", rewardLetter: false, columnDefault: "Visible", locked: true, visible: true, editable: true, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "employeeId", name: "Employee ID", variable: "empId001", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: true, visible: true, editable: true, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "geographicZone", name: "Geographic Zone", variable: "geo", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "prorated", name: "Prorated?", variable: "isProrated", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "All Other Users Can View", appearance: "default" }] },
+  { id: "jobFamily", name: "Non - Process Job Family Charge", variable: "csPharmact7MrCharge", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "jobProfile", name: "New Job Profile (Proposed)", variable: "newJobProfile", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Admin", appearance: "removed" }] },
+  { id: "h1Rating", name: "H1 Rating # FY23", variable: "h1RatingNumericValue", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "h2Rating", name: "H2 Rating FY23", variable: "h2RatingMadebyManager", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "newSalary", name: "New Salary (Annualized)", variable: "newSalary", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "apexEquityTarget", name: "APEX Equity Target (pre-vested)", variable: "fullBaseEquityTargetCompBase", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Columns Gr...", appearance: "moved" }, { role: "All Other Users Can Not View", appearance: "default" }] },
+  { id: "meritApex", name: "Modeled APEX Multiplier", variable: "modeledApexMultiplier", dataSource: "User Input or Data Upload", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "CRP ZU an...", appearance: "inprogress" }, { role: "HRBP All Role...", appearance: "moved" }, { role: "APEX Syste...", appearance: "success" }] },
+  { id: "refreshEquity", name: "Refresh Equity (USD)", variable: "equity1RefreshAmount", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Plans...", appearance: "success" }, { role: "CRP Org an...", appearance: "inprogress" }, { role: "All Other Users Can View", appearance: "default" }] },
+  { id: "maxEquity", name: "Max Equity - (USD)", variable: "maxEquity", dataSource: "Computed", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Other Users Can View", appearance: "default" }] },
+  { id: "futureTermination", name: "Future termination", variable: "futureTermDate", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
+  { id: "equityDiscretionJustification", name: "Equity Discretion Justification", variable: "deviationFromModelRat", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "APEX Basis...", appearance: "success" }, { role: "CRP Org an...", appearance: "inprogress" }] },
+  { id: "equityDiscretionComments", name: "Equity Discretion Comments - Other", variable: "comments", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Basis...", appearance: "success" }] },
+  { id: "declineAppeal", name: "Decline/decline appeal?", variable: "isDeclined", dataSource: "Computed", displayType: "Yes/No", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "fy25SpecialEquity", name: "FY25 Special Equity Top", variable: "specialEquityTop", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
+  { id: "fy19SpecialEquity", name: "FY19 Special Equity Recipient", variable: "fy19SpecialEquityRecipient", dataSource: "User Input or Data Upload", displayType: "Yes/No", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "HRBP Intro...", appearance: "moved" }, { role: "APEX Basis...", appearance: "success" }] },
+  { id: "stockRank", name: "Stock Rank", variable: "stockRank", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "HRBP Role...", appearance: "moved" }, { role: "Columns De...", appearance: "moved" }] },
+  { id: "specialEquityComponent", name: "Special Equity - Components", variable: "specialEquityBreakdownPayline", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
+  { id: "specialEquityGrant", name: "Special Equity Grant (USD)", variable: "equityGrants", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }, { role: "Columns De...", appearance: "moved" }, { role: "APEX Syste...", appearance: "success" }] },
+  { id: "lusoProm", name: "L500+ Promotion Equity (USD)", variable: "promoEquityGrantUsd", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "APEX Basis...", appearance: "success" }, { role: "Columns De...", appearance: "moved" }] },
+  { id: "lusoRetention", name: "L500+ Retention Equity (USD)", variable: "retentionEquity", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [] },
+  { id: "finalEquityMultiplier", name: "Final Equity Multiplier (%)", variable: "fullBaseEquityMultiplierPercentage", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "inti", name: "INTI Status", visible: true, editable: false, variable: "intiStatus", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "paidHourly", name: "Paid Hourly", visible: true, editable: false, variable: "paidHourly", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "location", name: "Location", visible: true, editable: false, variable: "location", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "businessTitle", name: "Business Title", visible: true, editable: false, variable: "businessTitle", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Admin", appearance: "removed" }, { role: "All Other Users Can Not View", appearance: "default" }] },
+  { id: "department", name: "Department", visible: true, editable: true, variable: "dept", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "manager", name: "Manager", visible: true, editable: false, variable: "managerName", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "startDate", name: "Start Date", visible: true, editable: false, variable: "startDate", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "timeInJobProfile", name: "Time in Job Profile", visible: true, editable: false, variable: "timeInJobProfile", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "tenure", name: "Tenure", visible: true, editable: false, variable: "tenure", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "fte", name: "FTE %", visible: true, editable: false, variable: "ftePct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "currentSalary", name: "Current Salary", visible: true, editable: true, variable: "currentSalary", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }, { role: "All Other Users Can Not View", appearance: "default" }] },
+  { id: "currentTargetBonus", name: "Current Target Bonus", visible: true, editable: false, variable: "currentTargetBonus", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "currentEquity", name: "Current Equity", visible: true, editable: false, variable: "currentEquity", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "proposedSalary", name: "Proposed Salary", visible: true, editable: true, variable: "proposedSalary", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Admin", appearance: "removed" }, { role: "All Other Users Can Not View", appearance: "default" }] },
+  { id: "proposedTargetBonus", name: "Proposed Target Bonus", visible: true, editable: false, variable: "proposedBonus", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "proposedEquity", name: "Proposed Equity", visible: true, editable: false, variable: "proposedEquity", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Plans...", appearance: "success" }] },
+  { id: "meritIncrease", name: "Merit Increase %", visible: true, editable: true, variable: "meritIncreasePct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "meritIncreaseAmount", name: "Merit Increase Amount", visible: true, editable: false, variable: "meritIncreaseAmt", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "promotionIncrease", name: "Promotion Increase %", visible: true, editable: false, variable: "promotionIncrPct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "promotionAmount", name: "Promotion Amount", visible: true, editable: false, variable: "promotionAmt", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "oneTimeBonus", name: "One-Time Bonus", visible: true, editable: true, variable: "oneTimeBonus", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }] },
+  { id: "equityGrant", name: "Equity Grant", visible: true, editable: false, variable: "equityGrant", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
+  { id: "totalCompensation", name: "Total Compensation", visible: true, editable: false, variable: "totalComp", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
 ];
 
 const fxChangeHistory = [
@@ -2698,78 +2730,110 @@ function FieldPermissionsStep({
   fieldPermissions: typeof fieldPermissionsData;
   toggleFieldPermission: (id: string, type: "visible" | "editable") => void;
 }) {
-  const roleOptions = [
-    { label: "Admin", value: "Admin" },
-    { label: "Manager", value: "Manager" },
-    { label: "Leader", value: "Leader" },
-    { label: "Planner", value: "Planner" },
-    { label: "HRBP", value: "HRBP" },
-    { label: "Employee", value: "Employee" },
-  ];
+  const thStyle: React.CSSProperties = {
+    padding: `${token("space.100")} ${token("space.150")}`,
+    textAlign: "left",
+    fontSize: 11,
+    fontWeight: 600,
+    color: token("color.text.subtlest"),
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+    whiteSpace: "nowrap",
+  };
+
+  const tdStyle: React.CSSProperties = {
+    padding: `${token("space.075")} ${token("space.150")}`,
+    verticalAlign: "middle",
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-        <EyeOpenIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Field Permissions</Heading>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.200") }}>
+            <Heading size="medium">Columns</Heading>
+            <Button appearance="link" spacing="none">View Audit Log</Button>
+          </div>
+          <div style={{ marginTop: token("space.100") }}>
+            <Text size="small" color="color.text.subtlest">
+              Specify the columns that will appear in the Planner and surrogate which roles will be able to view and edit them.{" "}
+              <Button appearance="link" spacing="none">Learn more about columns</Button>
+            </Text>
+          </div>
+        </div>
       </div>
 
-      <div style={{ maxWidth: 240 }}>
-        <LabelText>Role</LabelText>
-        <Select
-          options={roleOptions}
-          value={roleOptions.find((o) => o.value === selectedRole)}
-          onChange={(opt) => opt && setSelectedRole(opt.value)}
-        />
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: token("space.100") }}>
+        <Button appearance="default" iconBefore={EyeOpenIcon}>
+          View Columns by Role
+        </Button>
+        <Button appearance="default" iconBefore={EditIcon}>
+          Edit Column Order
+        </Button>
+        <Button appearance="primary" iconBefore={AddIcon}>
+          Add New Column
+        </Button>
       </div>
 
-      <div style={cardStyle}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-              {["Field", "Visible", "Editable"].map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: `${token("space.100")} ${token("space.200")}`,
-                    textAlign: "left",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: token("color.text.subtlest"),
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {h}
+      <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: token("border.radius.200"), overflow: "hidden" }}>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1100 }}>
+            <thead>
+              <tr style={{ backgroundColor: token("elevation.surface.sunken") }}>
+                <th style={{ ...thStyle, width: 36, textAlign: "center" }}>
+                  <Checkbox label="" />
                 </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {fieldPermissions.map((field) => (
-              <tr key={field.id} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small">{field.name}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Checkbox
-                    isChecked={field.visible}
-                    onChange={() => toggleFieldPermission(field.id, "visible")}
-                    label=""
-                  />
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Checkbox
-                    isChecked={field.editable}
-                    onChange={() => toggleFieldPermission(field.id, "editable")}
-                    label=""
-                  />
-                </td>
+                <th style={{ ...thStyle, width: 28 }}></th>
+                <th style={{ ...thStyle, minWidth: 200 }}>Column Name</th>
+                <th style={thStyle}>Data Source</th>
+                <th style={thStyle}>Data Display Type</th>
+                <th style={thStyle}>Reward Letter Status</th>
+                <th style={thStyle}>Column Default</th>
+                <th style={{ ...thStyle, minWidth: 280 }}>Permissions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: token("space.200") }}>
-          <Button appearance="primary">Save Permissions</Button>
+            </thead>
+            <tbody>
+              {fieldPermissions.map((field) => (
+                <tr key={field.id} style={{ borderTop: `1px solid ${token("color.border")}` }}>
+                  <td style={{ ...tdStyle, textAlign: "center" }}>
+                    <Checkbox label="" />
+                  </td>
+                  <td style={tdStyle}>
+                    {field.locked && <LockLockedIcon label="Locked" color={token("color.icon.subtle")} />}
+                  </td>
+                  <td style={tdStyle}>
+                    <div>
+                      <Text size="small" weight="medium">{field.name}</Text>
+                      {field.variable && (
+                        <div>
+                          <Text size="UNSAFE_small" color="color.text.subtlest">{field.variable}</Text>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{field.dataSource || ""}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{field.displayType || ""}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{field.rewardLetter ? "Yes" : "No"}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{field.columnDefault || "Visible"}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <div style={{ display: "flex", alignItems: "center", gap: token("space.050"), flexWrap: "wrap" }}>
+                      {(field.permissions || []).map((p, pi) => (
+                        <Lozenge key={pi} appearance={p.appearance}>{p.role}</Lozenge>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
