@@ -15,7 +15,7 @@ import DownloadIcon from "@atlaskit/icon/core/download";
 import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
 import EditIcon from "@atlaskit/icon/core/edit";
 import SettingsIcon from "@atlaskit/icon/core/settings";
-import SortIcon from "@atlaskit/icon/core/drag-handle";
+import ShowMoreVerticalIcon from "@atlaskit/icon/core/show-more-vertical";
 
 interface SalaryBandRow {
   name: string;
@@ -204,7 +204,7 @@ export default function SalaryBands() {
           <Button appearance="subtle" iconBefore={SettingsIcon}>
             Columns
           </Button>
-          <IconButton icon={SortIcon} label="View" appearance="subtle" />
+          <IconButton icon={ShowMoreVerticalIcon} label="View" appearance="subtle" />
         </div>
       </div>
 
