@@ -714,19 +714,31 @@ function StepperNav({
   const containerRef = useRef<HTMLDivElement>(null);
   const circleRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [blueLineHeight, setBlueLineHeight] = useState(0);
+  const [greyLineTop, setGreyLineTop] = useState(0);
+  const [greyLineHeight, setGreyLineHeight] = useState(0);
 
   const updateLineHeight = useCallback(() => {
-    if (currentStep <= 0) return;
     const container = containerRef.current;
     const firstCircle = circleRefs.current[0];
-    const activeCircle = circleRefs.current[currentStep];
-    if (!container || !firstCircle || !activeCircle) return;
+    const lastCircle = circleRefs.current[steps.length - 1];
+    if (!container || !firstCircle || !lastCircle) return;
 
     const containerRect = container.getBoundingClientRect();
     const firstCenter = firstCircle.getBoundingClientRect().top + circleCenter - containerRect.top;
-    const activeCenter = activeCircle.getBoundingClientRect().top + circleCenter - containerRect.top;
-    setBlueLineHeight(activeCenter - firstCenter);
-  }, [currentStep, circleCenter]);
+    const lastCenter = lastCircle.getBoundingClientRect().top + circleCenter - containerRect.top;
+    setGreyLineTop(firstCenter);
+    setGreyLineHeight(lastCenter - firstCenter);
+
+    if (currentStep > 0) {
+      const activeCircle = circleRefs.current[currentStep];
+      if (activeCircle) {
+        const activeCenter = activeCircle.getBoundingClientRect().top + circleCenter - containerRect.top;
+        setBlueLineHeight(activeCenter - firstCenter);
+      }
+    } else {
+      setBlueLineHeight(0);
+    }
+  }, [currentStep, circleCenter, steps.length]);
 
   useLayoutEffect(() => {
     updateLineHeight();
@@ -749,23 +761,25 @@ function StepperNav({
         position: "relative",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          left: circleCenter - 1,
-          top: circleCenter,
-          bottom: circleCenter,
-          width: 2,
-          backgroundColor: token("color.border"),
-          zIndex: 0,
-        }}
-      />
-      {currentStep > 0 && (
+      {greyLineHeight > 0 && (
         <div
           style={{
             position: "absolute",
             left: circleCenter - 1,
-            top: circleCenter,
+            top: greyLineTop,
+            height: greyLineHeight,
+            width: 2,
+            backgroundColor: token("color.border"),
+            zIndex: 0,
+          }}
+        />
+      )}
+      {currentStep > 0 && blueLineHeight > 0 && (
+        <div
+          style={{
+            position: "absolute",
+            left: circleCenter - 1,
+            top: greyLineTop,
             height: blueLineHeight,
             width: 2,
             backgroundColor: token("color.border.brand"),
