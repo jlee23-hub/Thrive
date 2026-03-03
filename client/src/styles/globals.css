@@ -41,6 +41,14 @@ div[role="list"]._bozg1crf {
   display: block !important;
 }
 
+/* REQUIRED: Position selected notch at left edge of menu item background */
+div[aria-hidden="true"]._bfhk1o0g {
+  inset-inline-start: -4px !important;
+  height: 16px !important;
+  width: 3px !important;
+  border-radius: 0 2px 2px 0 !important;
+}
+
 
 /* REQUIRED: Force Search bar visible in top nav */
 ._2rko12b0._1e0cglyw {
