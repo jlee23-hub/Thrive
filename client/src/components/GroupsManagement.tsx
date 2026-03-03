@@ -180,7 +180,7 @@ export default function GroupsManagement() {
               }}
               style={{
                 padding: token("space.150"),
-                borderRadius: token("border.radius.200"),
+                borderRadius: token("border.radius.300"),
                 marginBottom: token("space.050"),
                 cursor: "pointer",
                 backgroundColor:
@@ -277,7 +277,7 @@ export default function GroupsManagement() {
                 style={{
                   padding: token("space.200"),
                   backgroundColor: token("color.background.information"),
-                  borderRadius: token("border.radius.200"),
+                  borderRadius: token("border.radius.300"),
                   marginBottom: token("space.300"),
                   border: `1px solid ${token("color.border.information")}`,
                 }}
@@ -305,7 +305,7 @@ export default function GroupsManagement() {
                       padding: token("space.150"),
                       backgroundColor: token("elevation.surface"),
                       border: `1px solid ${token("color.border")}`,
-                      borderRadius: token("border.radius.100"),
+                      borderRadius: token("border.radius.200"),
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
@@ -410,7 +410,7 @@ export default function GroupsManagement() {
                           padding: token("space.200"),
                           backgroundColor: token("elevation.surface"),
                           border: `1px solid ${token("color.border")}`,
-                          borderRadius: token("border.radius.200"),
+                          borderRadius: token("border.radius.300"),
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
@@ -473,7 +473,7 @@ export default function GroupsManagement() {
                         gap: token("space.150"),
                         padding: token("space.150"),
                         border: `1px solid ${token("color.border")}`,
-                        borderRadius: token("border.radius.100"),
+                        borderRadius: token("border.radius.200"),
                       }}
                     >
                       <Checkbox

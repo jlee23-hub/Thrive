@@ -3018,7 +3018,7 @@ function FieldPermissionsStep({
               <div
                 style={{
                   border: `1px solid ${token("color.border")}`,
-                  borderRadius: token("border.radius.300"),
+                  borderRadius: token("border.radius.400"),
                   overflow: "hidden",
                   marginTop: token("space.050"),
                 }}

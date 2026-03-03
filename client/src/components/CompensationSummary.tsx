@@ -31,7 +31,7 @@ const COLORS = {
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.300"),
+  borderRadius: token("border.radius.400"),
   padding: token("space.400"),
   boxShadow: token("elevation.shadow.raised"),
 };
@@ -203,7 +203,7 @@ export default function CompensationSummary() {
               gap: token("space.050"),
               backgroundColor: token("color.background.input"),
               border: `1px solid ${token("color.border.input")}`,
-              borderRadius: token("border.radius.100"),
+              borderRadius: token("border.radius.200"),
               padding: `${token("space.100")} ${token("space.150")}`,
               minWidth: 90,
             }}
@@ -220,7 +220,7 @@ export default function CompensationSummary() {
             style={{
               width: 32,
               height: 32,
-              borderRadius: token("border.radius.100"),
+              borderRadius: token("border.radius.200"),
               backgroundColor: token("color.background.success"),
               display: "flex",
               alignItems: "center",
@@ -283,7 +283,7 @@ export default function CompensationSummary() {
             style={{
               minWidth: 220,
               backgroundColor: token("color.background.neutral"),
-              borderRadius: token("border.radius.200"),
+              borderRadius: token("border.radius.300"),
               padding: token("space.300"),
               textAlign: "center",
             }}

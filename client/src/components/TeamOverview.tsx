@@ -13,7 +13,7 @@ import EditIcon from "@atlaskit/icon/core/edit";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
-  borderRadius: token("border.radius.300"),
+  borderRadius: token("border.radius.400"),
   padding: token("space.400"),
   boxShadow: token("elevation.shadow.raised"),
 };
