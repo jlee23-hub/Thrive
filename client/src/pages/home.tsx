@@ -191,7 +191,7 @@ export default function Home() {
             isSelected={activeNav === "system-settings"}
             onClick={(e) => { e.preventDefault(); setActiveNav("system-settings"); }}
           >
-            Settings
+            Permissions
           </LinkMenuItem>
         </MenuList>
       );
