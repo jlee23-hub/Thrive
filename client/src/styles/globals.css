@@ -49,6 +49,13 @@ div[role="list"]._bozg1crf {
   display: grid !important;
   border-color: var(--ds-border, #091e4224) !important;
   justify-items: start !important;
+  grid-template-columns: auto 1fr auto !important;
+}
+
+/* REQUIRED: Search text beside icon, not overlapping */
+._2rko12b0 ._yyhyjvu9 {
+  grid-column: 2 !important;
+  text-align: left !important;
 }
 
 /* REQUIRED: Center-align TopNavMiddle content */
