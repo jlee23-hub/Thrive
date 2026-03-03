@@ -1651,16 +1651,17 @@ function EligibilityRulesStep() {
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-              {["Employee", "Department", "Start Date", "Type", "Reason", "Action"].map((h) => (
+              {["Employee", "Department", "Start Date", "Type", "Reason", ""].map((h) => (
                 <th
-                  key={h}
+                  key={h || "action"}
                   style={{
                     padding: `${token("space.100")} ${token("space.200")}`,
-                    textAlign: h === "Action" ? "right" : "left",
+                    textAlign: "left",
                     fontSize: 11,
                     fontWeight: 600,
                     color: token("color.text.subtlest"),
                     textTransform: "uppercase",
+                    width: h === "" ? "100px" : undefined,
                   }}
                 >
                   {h}
@@ -1699,8 +1700,8 @@ function EligibilityRulesStep() {
                     <Text size="UNSAFE_small" color="color.text.subtlest">{emp.detail}</Text>
                   </InlineMessage>
                 </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right" }}>
-                  <Button appearance="subtle" spacing="compact">
+                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                  <Button appearance="default" spacing="compact">
                     Override
                   </Button>
                 </td>
