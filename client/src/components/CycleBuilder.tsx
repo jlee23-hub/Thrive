@@ -1822,7 +1822,7 @@ function BudgetFxStep() {
           </div>
 
           <div style={{ flex: 1, padding: token("space.300") }}>
-            <Heading size="small">Editing {selectedBudget.id}. {selectedBudget.name}</Heading>
+            <Heading size="small">{selectedBudget.id}. {selectedBudget.name}</Heading>
 
             <div style={{ display: "flex", gap: token("space.300"), marginTop: token("space.200"), marginBottom: token("space.300") }}>
               {(["general", "permissions"] as const).map((tab) => (
