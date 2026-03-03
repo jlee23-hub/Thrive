@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
 import { token } from "@atlaskit/tokens";
 import Heading from "@atlaskit/heading";
 import { Text } from "@atlaskit/primitives";
@@ -656,118 +656,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             flexDirection: "column",
           }}
         >
-          {(() => {
-            const circleSize = 28;
-            const circleCenter = circleSize / 2;
-            return (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  flex: 1,
-                  position: "relative",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    left: circleCenter - 1,
-                    top: circleCenter,
-                    bottom: circleCenter,
-                    width: 2,
-                    backgroundColor: token("color.border"),
-                    zIndex: 0,
-                  }}
-                />
-                {currentStep > 0 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: circleCenter - 1,
-                      top: circleCenter,
-                      height: `calc(${(currentStep / (STEPS.length - 1)) * 100}% - ${(currentStep / (STEPS.length - 1)) * circleSize}px)`,
-                      width: 2,
-                      backgroundColor: token("color.border.brand"),
-                      zIndex: 0,
-                    }}
-                  />
-                )}
-                {STEPS.map((step, index) => {
-                  const isActive = index === currentStep;
-                  const isCompleted = index < currentStep;
-
-                  return (
-                    <div
-                      key={step.id}
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: token("space.100"),
-                        cursor: "pointer",
-                      }}
-                      onClick={() => setCurrentStep(index)}
-                    >
-                      <div
-                        style={{
-                          position: "relative",
-                          zIndex: 1,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: circleSize,
-                          height: circleSize,
-                          borderRadius: "50%",
-                          border: `2px solid ${
-                            isActive
-                              ? token("color.border.brand")
-                              : isCompleted
-                              ? token("color.border.brand")
-                              : token("color.border")
-                          }`,
-                          backgroundColor: isCompleted
-                            ? token("color.background.brand.bold")
-                            : isActive
-                            ? token("color.background.selected")
-                            : token("elevation.surface"),
-                          color: isCompleted
-                            ? token("color.text.inverse")
-                            : isActive
-                            ? token("color.text.brand")
-                            : token("color.text.subtlest"),
-                          flexShrink: 0,
-                          fontSize: 12,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {isCompleted ? (
-                          <CheckMarkIcon label="" color={token("color.icon.inverse")} />
-                        ) : (
-                          <span>{index + 1}</span>
-                        )}
-                      </div>
-
-                      <div style={{ paddingTop: token("space.025") }}>
-                        <Text
-                          size="medium"
-                          weight="semibold"
-                          color={isActive ? "color.text.brand" : "color.text"}
-                        >
-                          {step.title}
-                        </Text>
-                        <div style={{ lineHeight: 1.2 }}>
-                          <Text size="UNSAFE_small" color="color.text.subtlest">
-                            {step.description}
-                          </Text>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })()}
+          <StepperNav steps={STEPS} currentStep={currentStep} onStepClick={setCurrentStep} />
         </div>
 
         <div
@@ -807,6 +696,157 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
           {currentStep === STEPS.length - 1 ? "Finalize Cycle" : "Next Step"}
         </Button>
       </div>
+    </div>
+  );
+}
+
+function StepperNav({
+  steps,
+  currentStep,
+  onStepClick,
+}: {
+  steps: typeof STEPS;
+  currentStep: number;
+  onStepClick: (index: number) => void;
+}) {
+  const circleSize = 28;
+  const circleCenter = circleSize / 2;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const circleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [blueLineHeight, setBlueLineHeight] = useState(0);
+
+  const updateLineHeight = useCallback(() => {
+    if (currentStep <= 0) return;
+    const container = containerRef.current;
+    const firstCircle = circleRefs.current[0];
+    const activeCircle = circleRefs.current[currentStep];
+    if (!container || !firstCircle || !activeCircle) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const firstCenter = firstCircle.getBoundingClientRect().top + circleCenter - containerRect.top;
+    const activeCenter = activeCircle.getBoundingClientRect().top + circleCenter - containerRect.top;
+    setBlueLineHeight(activeCenter - firstCenter);
+  }, [currentStep, circleCenter]);
+
+  useLayoutEffect(() => {
+    updateLineHeight();
+  }, [updateLineHeight]);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => updateLineHeight());
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [updateLineHeight]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        flex: 1,
+        position: "relative",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          left: circleCenter - 1,
+          top: circleCenter,
+          bottom: circleCenter,
+          width: 2,
+          backgroundColor: token("color.border"),
+          zIndex: 0,
+        }}
+      />
+      {currentStep > 0 && (
+        <div
+          style={{
+            position: "absolute",
+            left: circleCenter - 1,
+            top: circleCenter,
+            height: blueLineHeight,
+            width: 2,
+            backgroundColor: token("color.border.brand"),
+            zIndex: 0,
+            transition: "height 0.2s ease",
+          }}
+        />
+      )}
+      {steps.map((step, index) => {
+        const isActive = index === currentStep;
+        const isCompleted = index < currentStep;
+
+        return (
+          <div
+            key={step.id}
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: token("space.100"),
+              cursor: "pointer",
+            }}
+            onClick={() => onStepClick(index)}
+          >
+            <div
+              ref={(el) => { circleRefs.current[index] = el; }}
+              style={{
+                position: "relative",
+                zIndex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: circleSize,
+                height: circleSize,
+                borderRadius: "50%",
+                border: `2px solid ${
+                  isActive
+                    ? token("color.border.brand")
+                    : isCompleted
+                    ? token("color.border.brand")
+                    : token("color.border")
+                }`,
+                backgroundColor: isCompleted
+                  ? token("color.background.brand.bold")
+                  : isActive
+                  ? token("color.background.selected")
+                  : token("elevation.surface"),
+                color: isCompleted
+                  ? token("color.text.inverse")
+                  : isActive
+                  ? token("color.text.brand")
+                  : token("color.text.subtlest"),
+                flexShrink: 0,
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            >
+              {isCompleted ? (
+                <CheckMarkIcon label="" color={token("color.icon.inverse")} />
+              ) : (
+                <span>{index + 1}</span>
+              )}
+            </div>
+
+            <div style={{ paddingTop: token("space.025") }}>
+              <Text
+                size="medium"
+                weight="semibold"
+                color={isActive ? "color.text.brand" : "color.text"}
+              >
+                {step.title}
+              </Text>
+              <div style={{ lineHeight: 1.2 }}>
+                <Text size="UNSAFE_small" color="color.text.subtlest">
+                  {step.description}
+                </Text>
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
