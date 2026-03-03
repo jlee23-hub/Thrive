@@ -375,14 +375,3 @@ Thrive App (Okta SSO)
 | Q1 | **How is `Worker_ID` mapped to `Participant_ID` in Shareworks?** Are they the same value, or is there a separate mapping table? | Blocks equity data join for Employee and Manager views | **Option A:** Same value (simplest). **Option B:** Mapping table maintained in Shareworks. **Option C:** Thrive maintains a crosswalk table. |
 | Q2 | **What Okta claims/attributes are available?** Specifically, does the Okta token include `Worker_ID`, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data | **Option A:** Okta profile includes `Worker_ID` as custom attribute. **Option B:** Okta provides email, and we look up `Worker_ID` from synced Workday data. |
 | Q3 | **What is the Shareworks API authentication method?** OAuth 2.0, API Key, or certificate-based? | Affects API Setup configuration UI and credential storage | Need Shareworks Admin to confirm. |
-
-### Resolved Questions
-
-| # | Question | Resolution |
-|---|---|---|
-| ~~Q3~~ | How is "Promotion" determined? | **Resolved:** Promotion is a boolean flag sourced directly from the Workday data import. It is not derived or manually set. |
-| ~~Q4~~ | Should Managers see compensation data for indirect reports (skip-level)? | **Resolved:** Yes. Managers see the full org tree below them (recursive), not just direct reports. |
-| ~~Q5~~ | What is the expected behavior when Shareworks data is unavailable? | **Resolved:** Display an error message indicating equity data is unavailable. Do not show $0 or hide the section. |
-| ~~Q6~~ | Are comp planning fields editable in Milestone 1? | **Resolved:** No. All fields are read-only in Milestone 1. Inline editing is deferred to Milestone 2. |
-| ~~Q8~~ | Should terminated employees appear in the Manager team grid? | **Resolved:** No. Terminated employees are excluded from the Manager grid entirely. They remain visible in Admin views. |
-| ~~Q9~~ | Is the persona switcher a dev/demo tool or production feature? | **Resolved:** Production feature. Users may hold multiple roles and switch between them. Server-side role enforcement is required. |
