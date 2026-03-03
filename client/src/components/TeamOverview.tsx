@@ -23,17 +23,15 @@ interface Employee {
   initials: string;
   firstName: string;
   lastName: string;
-  jobProfile: string;
-  level: string;
-  promotion: string;
-  performance: string;
-  currentSalary: number;
-  smpPercent: string;
-  newSalary: number;
-  newSmpPercent: string;
-  bonus: number;
-  newEquity: string;
-  status: string;
+  startDate: string;
+  eligibilityDate: string;
+  jobLevel: string;
+  jobFamily: string;
+  zone: string;
+  currentBaseSalary: number;
+  srpPercent: string;
+  currentEquity: string;
+  fy24H2Rating: string;
 }
 
 const employees: Employee[] = [
@@ -42,136 +40,120 @@ const employees: Employee[] = [
     initials: "SJ",
     firstName: "Sarah",
     lastName: "Jenkins",
-    jobProfile: "Senior Product Designer",
-    level: "P4",
-    promotion: "No",
-    performance: "Meets Expectations",
-    currentSalary: 145000,
-    smpPercent: "+45.0%",
-    newSalary: 0,
-    newSmpPercent: "-45.0% (-100.0)",
-    bonus: 0,
-    newEquity: "0k units",
-    status: "pending",
+    startDate: "Mar 15, 2019",
+    eligibilityDate: "Mar 15, 2020",
+    jobLevel: "P4",
+    jobFamily: "Design",
+    zone: "Zone A USA",
+    currentBaseSalary: 145000,
+    srpPercent: "+3.2%",
+    currentEquity: "1,250 RSUs",
+    fy24H2Rating: "Meets Expectations",
   },
   {
     id: "2",
     initials: "MC",
     firstName: "Michael",
     lastName: "Chen",
-    jobProfile: "Engineering Manager",
-    level: "M3",
-    promotion: "No",
-    performance: "Meets Expectations",
-    currentSalary: 185000,
-    smpPercent: "+85.0%",
-    newSalary: 0,
-    newSmpPercent: "-85.0% (-100.0)",
-    bonus: 0,
-    newEquity: "0k units",
-    status: "pending",
+    startDate: "Jun 01, 2018",
+    eligibilityDate: "Jun 01, 2019",
+    jobLevel: "M3",
+    jobFamily: "Engineering",
+    zone: "Zone A USA",
+    currentBaseSalary: 185000,
+    srpPercent: "+8.5%",
+    currentEquity: "2,800 RSUs",
+    fy24H2Rating: "Exceeds Expectations",
   },
   {
     id: "3",
     initials: "JW",
     firstName: "Jessica",
     lastName: "Wu",
-    jobProfile: "Software Engineer II",
-    level: "P3",
-    promotion: "No",
-    performance: "Meets Expectations",
-    currentSalary: 120000,
-    smpPercent: "+20.0%",
-    newSalary: 0,
-    newSmpPercent: "-20.0% (-100.0)",
-    bonus: 0,
-    newEquity: "0k units",
-    status: "pending",
+    startDate: "Jan 10, 2021",
+    eligibilityDate: "Jan 10, 2022",
+    jobLevel: "P3",
+    jobFamily: "Engineering",
+    zone: "Zone B USA",
+    currentBaseSalary: 120000,
+    srpPercent: "-4.1%",
+    currentEquity: "800 RSUs",
+    fy24H2Rating: "Meets Expectations",
   },
   {
     id: "4",
     initials: "DM",
     firstName: "David",
     lastName: "Miller",
-    jobProfile: "Principal Product Manager",
-    level: "P6",
-    promotion: "No",
-    performance: "Meets Expectations",
-    currentSalary: 195000,
-    smpPercent: "+95.0%",
-    newSalary: 0,
-    newSmpPercent: "-95.0% (-100.0)",
-    bonus: 0,
-    newEquity: "0k units",
-    status: "pending",
+    startDate: "Sep 22, 2017",
+    eligibilityDate: "Sep 22, 2018",
+    jobLevel: "P6",
+    jobFamily: "Product",
+    zone: "Zone A USA",
+    currentBaseSalary: 195000,
+    srpPercent: "+12.0%",
+    currentEquity: "4,200 RSUs",
+    fy24H2Rating: "Greatly Exceeds",
   },
   {
     id: "5",
     initials: "EW",
     firstName: "Emma",
     lastName: "Wilson",
-    jobProfile: "Marketing Specialist",
-    level: "P2",
-    promotion: "No",
-    performance: "Meets Expectations",
-    currentSalary: 75000,
-    smpPercent: "-25.0%",
-    newSalary: 0,
-    newSmpPercent: "+25.0% (+100.0)",
-    bonus: 0,
-    newEquity: "0k units",
-    status: "pending",
+    startDate: "Aug 05, 2022",
+    eligibilityDate: "Aug 05, 2023",
+    jobLevel: "P2",
+    jobFamily: "Marketing",
+    zone: "Zone C USA",
+    currentBaseSalary: 75000,
+    srpPercent: "-12.5%",
+    currentEquity: "400 RSUs",
+    fy24H2Rating: "Meets Expectations",
   },
   {
     id: "6",
     initials: "JR",
     firstName: "James",
     lastName: "Rodriguez",
-    jobProfile: "Customer Success Lead",
-    level: "P4",
-    promotion: "No",
-    performance: "Meets Expectations",
-    currentSalary: 110000,
-    smpPercent: "+10.0%",
-    newSalary: 0,
-    newSmpPercent: "-10.0% (-100.0)",
-    bonus: 0,
-    newEquity: "0k units",
-    status: "pending",
+    startDate: "Feb 14, 2020",
+    eligibilityDate: "Feb 14, 2021",
+    jobLevel: "P4",
+    jobFamily: "Customer Success",
+    zone: "Zone B USA",
+    currentBaseSalary: 110000,
+    srpPercent: "+1.8%",
+    currentEquity: "950 RSUs",
+    fy24H2Rating: "Met Some",
   },
   {
     id: "7",
     initials: "LC",
     firstName: "Lisa",
     lastName: "Chang",
-    jobProfile: "Data Scientist",
-    level: "P4",
-    promotion: "No",
-    performance: "Meets Expectations",
-    currentSalary: 135000,
-    smpPercent: "+35.0%",
-    newSalary: 0,
-    newSmpPercent: "-35.0% (-100.0)",
-    bonus: 0,
-    newEquity: "0k units",
-    status: "pending",
+    startDate: "Nov 30, 2019",
+    eligibilityDate: "Nov 30, 2020",
+    jobLevel: "P4",
+    jobFamily: "Data Science",
+    zone: "Zone A USA",
+    currentBaseSalary: 135000,
+    srpPercent: "+5.6%",
+    currentEquity: "1,600 RSUs",
+    fy24H2Rating: "Exceeds Expectations",
   },
   {
     id: "8",
     initials: "RT",
     firstName: "Robert",
     lastName: "Taylor",
-    jobProfile: "DevOps Engineer",
-    level: "P3",
-    promotion: "No",
-    performance: "Meets Expectations",
-    currentSalary: 95000,
-    smpPercent: "-5.0%",
-    newSalary: 0,
-    newSmpPercent: "+5.0% (+100.0)",
-    bonus: 0,
-    newEquity: "0k units",
-    status: "pending",
+    startDate: "Apr 18, 2021",
+    eligibilityDate: "Apr 18, 2022",
+    jobLevel: "P3",
+    jobFamily: "Engineering",
+    zone: "Zone C USA",
+    currentBaseSalary: 95000,
+    srpPercent: "-2.3%",
+    currentEquity: "600 RSUs",
+    fy24H2Rating: "Meets Expectations",
   },
 ];
 
@@ -226,21 +208,26 @@ function SummaryCard({ title, value, subtitle }: { title: string; value: string;
   );
 }
 
+const ratingAppearance = (rating: string): "success" | "inprogress" | "default" | "moved" | "removed" => {
+  if (rating === "Greatly Exceeds") return "success";
+  if (rating === "Exceeds Expectations") return "inprogress";
+  if (rating === "Meets Expectations") return "default";
+  if (rating === "Met Some") return "moved";
+  return "removed";
+};
+
 const head = {
   cells: [
-    { key: "name", content: "NAME", isSortable: true, width: 12 },
-    { key: "jobProfile", content: "JOB PROFILE", isSortable: true, width: 10 },
-    { key: "level", content: "LEVEL", isSortable: true, width: 5 },
-    { key: "promotion", content: "PROMOTION", width: 5 },
-    { key: "performance", content: "PERFORMANCE", width: 9 },
-    { key: "currentSalary", content: "CURRENT SALARY", isSortable: true, width: 8 },
-    { key: "smpPercent", content: "SMP %", width: 6 },
-    { key: "newSalary", content: "NEW SALARY (AM'T)", width: 7 },
-    { key: "newSmpPercent", content: "NEW SMP %", width: 10 },
-    { key: "bonus", content: "BONUS", width: 5 },
-    { key: "newEquity", content: "NEW EQUITY", width: 6 },
-    { key: "status", content: "STATUS", width: 6 },
-    { key: "actions", content: "", width: 3 },
+    { key: "name", content: "NAME", isSortable: true, width: 14 },
+    { key: "startDate", content: "START DATE", isSortable: true, width: 9 },
+    { key: "eligibilityDate", content: "ELIGIBILITY DATE", isSortable: true, width: 10 },
+    { key: "jobLevel", content: "JOB LEVEL", isSortable: true, width: 7 },
+    { key: "jobFamily", content: "JOB FAMILY", isSortable: true, width: 10 },
+    { key: "zone", content: "ZONE", isSortable: true, width: 9 },
+    { key: "currentBaseSalary", content: "CURRENT BASE SALARY", isSortable: true, width: 12 },
+    { key: "srpPercent", content: "% OF SRP", isSortable: true, width: 7 },
+    { key: "currentEquity", content: "CURRENT EQUITY (RSUs)", width: 12 },
+    { key: "fy24H2Rating", content: "FY24 H2 RATING", isSortable: true, width: 10 },
   ],
 };
 
@@ -249,7 +236,7 @@ const createRows = (data: Employee[], searchQuery: string) => {
     ? data.filter(
         (e) =>
           `${e.firstName} ${e.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          e.jobProfile.toLowerCase().includes(searchQuery.toLowerCase())
+          e.jobFamily.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : data;
 
@@ -268,67 +255,54 @@ const createRows = (data: Employee[], searchQuery: string) => {
         ),
       },
       {
-        key: employee.jobProfile,
-        content: <Text size="small">{employee.jobProfile}</Text>,
+        key: employee.startDate,
+        content: <Text size="small">{employee.startDate}</Text>,
       },
       {
-        key: employee.level,
-        content: <Text size="small">{employee.level}</Text>,
+        key: employee.eligibilityDate,
+        content: <Text size="small">{employee.eligibilityDate}</Text>,
       },
       {
-        key: employee.promotion,
-        content: <Text size="small">{employee.promotion}</Text>,
+        key: employee.jobLevel,
+        content: (
+          <Lozenge appearance={employee.jobLevel.startsWith("M") ? "success" : "inprogress"}>
+            {employee.jobLevel}
+          </Lozenge>
+        ),
       },
       {
-        key: employee.performance,
-        content: <Text size="small">{employee.performance}</Text>,
+        key: employee.jobFamily,
+        content: <Text size="small">{employee.jobFamily}</Text>,
       },
       {
-        key: employee.currentSalary,
-        content: <Text size="small" weight="bold">{formatCurrency(employee.currentSalary)}</Text>,
+        key: employee.zone,
+        content: <Text size="small">{employee.zone}</Text>,
       },
       {
-        key: employee.smpPercent,
+        key: employee.currentBaseSalary,
+        content: <Text size="small" weight="bold">{formatCurrency(employee.currentBaseSalary)}</Text>,
+      },
+      {
+        key: employee.srpPercent,
         content: (
           <Text
             size="small"
-            color={employee.smpPercent.startsWith("-") ? "color.text.danger" : "color.text.success"}
+            color={employee.srpPercent.startsWith("-") ? "color.text.danger" : "color.text.success"}
           >
-            {employee.smpPercent}
+            {employee.srpPercent}
           </Text>
         ),
       },
       {
-        key: employee.newSalary,
-        content: <Text size="small">{formatCurrency(employee.newSalary)}</Text>,
+        key: employee.currentEquity,
+        content: <Text size="small">{employee.currentEquity}</Text>,
       },
       {
-        key: employee.newSmpPercent,
+        key: employee.fy24H2Rating,
         content: (
-          <Text
-            size="small"
-            color={employee.newSmpPercent.startsWith("+") ? "color.text.success" : "color.text.danger"}
-          >
-            {employee.newSmpPercent}
-          </Text>
-        ),
-      },
-      {
-        key: employee.bonus,
-        content: <Text size="small">{formatCurrency(employee.bonus)}</Text>,
-      },
-      {
-        key: employee.newEquity,
-        content: <Text size="small">{employee.newEquity}</Text>,
-      },
-      {
-        key: employee.status,
-        content: <Lozenge appearance="moved">{employee.status}</Lozenge>,
-      },
-      {
-        key: "actions",
-        content: (
-          <Button appearance="subtle" iconBefore={EditIcon} label="Edit" />
+          <Lozenge appearance={ratingAppearance(employee.fy24H2Rating)}>
+            {employee.fy24H2Rating}
+          </Lozenge>
         ),
       },
     ],
