@@ -1,14 +1,15 @@
 # Thrive - Employee Compensation Dashboard
 
 ## User Preferences
-- All card/box containers must use rounded corners with `border.radius.300` (12px)
+- **IMPORTANT: All card/box containers and any new boxes must use `borderRadius: "6px"` — never use ADS border radius tokens for cards/containers**
 - Use consistent `cardStyle` across all components:
   ```
   backgroundColor: token("elevation.surface.raised")
-  borderRadius: token("border.radius.300")
+  borderRadius: "6px"
   padding: token("space.400")
-  boxShadow: token("elevation.shadow.raised")
+  border: `1px solid ${token("color.border")}`
   ```
+- Any new card, container, panel, or box element created in the future must also use `borderRadius: "6px"`
 
 ## Architecture
 - React + TypeScript frontend with Express backend
