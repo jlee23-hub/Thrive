@@ -1627,7 +1627,7 @@ function EligibilityRulesStep() {
                   <Text size="small">{emp.dept}</Text>
                 </td>
                 <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="UNSAFE_small" color="color.text.subtlest">{emp.startDate}</Text>
+                  <Text size="small" color="color.text.subtlest">{emp.startDate}</Text>
                 </td>
                 <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                   <Lozenge
