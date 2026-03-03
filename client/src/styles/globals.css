@@ -46,11 +46,11 @@ div[aria-hidden="true"]._bfhk1o0g {
   display: none !important;
 }
 
-/* Custom selected indicator on the menu item wrapper */
-._bfhkfg4m._kqswh2mm {
+/* Custom selected indicator on the menu item container */
+div[data-selected="true"] {
   position: relative !important;
 }
-._bfhkfg4m._kqswh2mm::before {
+div[data-selected="true"]::before {
   content: "" !important;
   position: absolute !important;
   left: 0 !important;
@@ -60,6 +60,7 @@ div[aria-hidden="true"]._bfhk1o0g {
   height: 16px !important;
   border-radius: 0 2px 2px 0 !important;
   background-color: var(--ds-background-selected-bold, #0c66e4) !important;
+  z-index: 1 !important;
 }
 
 
