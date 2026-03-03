@@ -47,6 +47,8 @@ div[role="list"]._bozg1crf {
 /* REQUIRED: Force Search bar visible in top nav */
 ._2rko12b0._1e0cglyw {
   display: grid !important;
+  border-color: var(--ds-border, #091e4224) !important;
+  justify-items: start !important;
 }
 
 /* REQUIRED: Center-align TopNavMiddle content */
