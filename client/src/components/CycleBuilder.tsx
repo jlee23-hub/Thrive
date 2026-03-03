@@ -1484,7 +1484,7 @@ function EligibilityRulesStep() {
         </Button>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <Heading size="xsmall">Active Rules</Heading>
         <div style={{ marginTop: token("space.200"), display: "flex", flexDirection: "column", gap: token("space.200") }}>
           {[
@@ -1518,7 +1518,7 @@ function EligibilityRulesStep() {
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div style={{ marginBottom: token("space.200") }}>
           <Heading size="xsmall">New Eligibility Rule</Heading>
         </div>
@@ -1587,7 +1587,7 @@ function EligibilityRulesStep() {
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
           <div>
             <Heading size="xsmall">Excluded Employees</Heading>
