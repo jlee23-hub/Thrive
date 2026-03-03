@@ -3,59 +3,64 @@ import { token } from "@atlaskit/tokens";
 import Heading from "@atlaskit/heading";
 import { Text } from "@atlaskit/primitives";
 import Button from "@atlaskit/button/new";
+import { IconButton } from "@atlaskit/button/new";
 import Select from "@atlaskit/select";
+import Textfield from "@atlaskit/textfield";
+import Lozenge from "@atlaskit/lozenge";
+import Checkbox from "@atlaskit/checkbox";
 import AddIcon from "@atlaskit/icon/core/add";
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import SearchIcon from "@atlaskit/icon/core/search";
+import FilterIcon from "@atlaskit/icon/core/filter";
+import DownloadIcon from "@atlaskit/icon/core/download";
+import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
+import EditIcon from "@atlaskit/icon/core/edit";
+import SettingsIcon from "@atlaskit/icon/core/settings";
+import SortIcon from "@atlaskit/icon/core/drag-handle";
 
-const salaryBandData = [
-  { level: "P30", label: "Junior", min: 140000, mid: 175000, max: 210000, p10: 135000, p25: 155000, p50: 175000, p75: 195000, p90: 215000, spread: 50 },
-  { level: "P40", label: "Mid-Level", min: 175000, mid: 220000, max: 265000, p10: 170000, p25: 195000, p50: 220000, p75: 245000, p90: 270000, spread: 51 },
-  { level: "P50", label: "Senior", min: 220000, mid: 280000, max: 340000, p10: 215000, p25: 245000, p50: 280000, p75: 315000, p90: 345000, spread: 55 },
-  { level: "P60", label: "Staff", min: 280000, mid: 360000, max: 440000, p10: 275000, p25: 315000, p50: 360000, p75: 405000, p90: 445000, spread: 57 },
-  { level: "P70", label: "Principal", min: 360000, mid: 465000, max: 570000, p10: 355000, p25: 405000, p50: 465000, p75: 525000, p90: 575000, spread: 58 },
-  { level: "P80", label: "Distinguished", min: 465000, mid: 605000, max: 745000, p10: 460000, p25: 525000, p50: 605000, p75: 685000, p90: 750000, spread: 60 },
-];
+interface SalaryBandRow {
+  name: string;
+  zone: string;
+  basePayMin: number;
+  basePayMax: number;
+  srpOrMin: number;
+  equityMax: number;
+  targetVariablePct: number;
+  totalEquityValueMin: number;
+  totalEquityValueMax: number;
+  function: string;
+  leader: string;
+  family: string;
+  level: string;
+  type: string;
+  ladderName: string;
+  track: string;
+  payments: number;
+  currency: string;
+  equityCurrency: string;
+  hrisJobCode: string;
+}
 
-const managerBandData = [
-  { level: "M10", label: "Manager", min: 130000, mid: 160000, max: 190000, p10: 125000, p25: 145000, p50: 160000, p75: 175000, p90: 195000, spread: 46 },
-  { level: "M20", label: "Senior Manager", min: 165000, mid: 205000, max: 245000, p10: 160000, p25: 185000, p50: 205000, p75: 225000, p90: 250000, spread: 48 },
-  { level: "M30", label: "Director", min: 210000, mid: 265000, max: 320000, p10: 205000, p25: 235000, p50: 265000, p75: 295000, p90: 325000, spread: 52 },
-  { level: "M40", label: "Senior Director", min: 270000, mid: 345000, max: 420000, p10: 265000, p25: 305000, p50: 345000, p75: 385000, p90: 425000, spread: 56 },
-  { level: "M50", label: "VP", min: 350000, mid: 450000, max: 550000, p10: 345000, p25: 395000, p50: 450000, p75: 505000, p90: 555000, spread: 57 },
-  { level: "M60", label: "Senior VP", min: 455000, mid: 590000, max: 725000, p10: 450000, p25: 515000, p50: 590000, p75: 665000, p90: 730000, spread: 59 },
-  { level: "M70", label: "EVP", min: 595000, mid: 775000, max: 955000, p10: 590000, p25: 675000, p50: 775000, p75: 875000, p90: 960000, spread: 61 },
-];
-
-const jobFamilyOptions = [
-  { label: "Engineering", value: "engineering" },
-  { label: "Product", value: "product" },
-  { label: "Design", value: "design" },
-  { label: "Sales", value: "sales" },
-  { label: "Marketing", value: "marketing" },
-];
-
-const levelTypeOptions = [
-  { label: "Individual Contributor (P-Levels)", value: "ic" },
-  { label: "Manager (M-Levels)", value: "manager" },
-];
-
-const locationOptions = [
-  { label: "San Francisco Bay Area", value: "san-francisco" },
-  { label: "New York City", value: "new-york" },
-  { label: "Seattle", value: "seattle" },
-  { label: "Austin", value: "austin" },
-  { label: "Boston", value: "boston" },
+const salaryBandRows: SalaryBandRow[] = [
+  { name: "Account Associate, Renewals P10", zone: "Zone A", basePayMin: 49800, basePayMax: 83000, srpOrMin: 66400, equityMax: 4150, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 10300, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P10", type: "P10 - Account Associate, Renewals", ladderName: "P10", track: "Coe A × 6", payments: 100, currency: "P10 - Account Associate, Renewals", equityCurrency: "P10 - Account Associate, Renewals", hrisJobCode: "AAR-P10" },
+  { name: "Account Associate, Renewals P20", zone: "Zone A", basePayMin: 66700, basePayMax: 111200, srpOrMin: 88900, equityMax: 8300, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 20600, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P20", type: "P20 - Account Associate, Renewals", ladderName: "P20", track: "Coe A × 6", payments: 100, currency: "P20 - Account Associate, Renewals", equityCurrency: "P20 - Account Associate, Renewals", hrisJobCode: "AAR-P20" },
+  { name: "Account Associate, Renewals P30", zone: "Zone A", basePayMin: 87400, basePayMax: 145600, srpOrMin: 116500, equityMax: 16500, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 33100, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P30", type: "P30 - Account Associate, Renewals", ladderName: "P30", track: "Coe A × 6", payments: 100, currency: "P30 - Account Associate, Renewals", equityCurrency: "P30 - Account Associate, Renewals", hrisJobCode: "AAR-P30" },
+  { name: "Account Associate, Renewals P40", zone: "Zone A", basePayMin: 116500, basePayMax: 194200, srpOrMin: 155400, equityMax: 33100, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 66200, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P40", type: "P40 - Account Associate, Renewals", ladderName: "P40", track: "Coe A × 6", payments: 100, currency: "P40 - Account Associate, Renewals", equityCurrency: "P40 - Account Associate, Renewals", hrisJobCode: "AAR-P40" },
+  { name: "Account Associate, Renewals P50", zone: "Zone A", basePayMin: 155400, basePayMax: 259000, srpOrMin: 207200, equityMax: 66200, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 132400, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P50", type: "P50 - Account Associate, Renewals", ladderName: "P50", track: "Coe A × 6", payments: 100, currency: "P50 - Account Associate, Renewals", equityCurrency: "P50 - Account Associate, Renewals", hrisJobCode: "AAR-P50" },
+  { name: "Account Associate, Renewals P10", zone: "Zone B", basePayMin: 44800, basePayMax: 74700, srpOrMin: 59800, equityMax: 4150, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 10300, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P10", type: "P10 - Account Associate, Renewals", ladderName: "P10", track: "Coe B × 6", payments: 100, currency: "P10 - Account Associate, Renewals", equityCurrency: "P10 - Account Associate, Renewals", hrisJobCode: "AAR-P10" },
+  { name: "Account Associate, Renewals P20", zone: "Zone B", basePayMin: 60000, basePayMax: 100100, srpOrMin: 80000, equityMax: 8300, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 20600, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P20", type: "P20 - Account Associate, Renewals", ladderName: "P20", track: "Coe B × 6", payments: 100, currency: "P20 - Account Associate, Renewals", equityCurrency: "P20 - Account Associate, Renewals", hrisJobCode: "AAR-P20" },
+  { name: "Account Associate, Renewals P30", zone: "Zone B", basePayMin: 78700, basePayMax: 131000, srpOrMin: 104900, equityMax: 16500, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 33100, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P30", type: "P30 - Account Associate, Renewals", ladderName: "P30", track: "Coe B × 6", payments: 100, currency: "P30 - Account Associate, Renewals", equityCurrency: "P30 - Account Associate, Renewals", hrisJobCode: "AAR-P30" },
+  { name: "Account Associate, Renewals P40", zone: "Zone B", basePayMin: 104900, basePayMax: 174800, srpOrMin: 139800, equityMax: 33100, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 66200, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P40", type: "P40 - Account Associate, Renewals", ladderName: "P40", track: "Coe B × 6", payments: 100, currency: "P40 - Account Associate, Renewals", equityCurrency: "P40 - Account Associate, Renewals", hrisJobCode: "AAR-P40" },
+  { name: "Account Associate, Renewals P50", zone: "Zone B", basePayMin: 139800, basePayMax: 233100, srpOrMin: 186400, equityMax: 66200, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 132400, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P50", type: "P50 - Account Associate, Renewals", ladderName: "P50", track: "Coe B × 6", payments: 100, currency: "P50 - Account Associate, Renewals", equityCurrency: "P50 - Account Associate, Renewals", hrisJobCode: "AAR-P50" },
+  { name: "Account Associate, Renewals M50", zone: "Zone A", basePayMin: 194200, basePayMax: 323600, srpOrMin: 258900, equityMax: 99300, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 198600, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "M50", type: "M50 - Account Associate, Renewals", ladderName: "M50", track: "Coe A × 6", payments: 100, currency: "M50 - Account Associate, Renewals", equityCurrency: "M50 - Account Associate, Renewals", hrisJobCode: "AAR-M50" },
+  { name: "Account Associate, Renewals M60", zone: "Zone A", basePayMin: 258900, basePayMax: 431500, srpOrMin: 345200, equityMax: 165500, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 331000, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "M60", type: "M60 - Account Associate, Renewals", ladderName: "M60", track: "Coe A × 6", payments: 100, currency: "M60 - Account Associate, Renewals", equityCurrency: "M60 - Account Associate, Renewals", hrisJobCode: "AAR-M60" },
+  { name: "Account Associate, Renewals P10", zone: "Zone C", basePayMin: 39800, basePayMax: 66400, srpOrMin: 53100, equityMax: 4150, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 10300, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P10", type: "P10 - Account Associate, Renewals", ladderName: "P10", track: "Coe C × 6", payments: 100, currency: "P10 - Account Associate, Renewals", equityCurrency: "P10 - Account Associate, Renewals", hrisJobCode: "AAR-P10" },
+  { name: "Account Associate, Renewals P20", zone: "Zone C", basePayMin: 53300, basePayMax: 88900, srpOrMin: 71100, equityMax: 8300, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 20600, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P20", type: "P20 - Account Associate, Renewals", ladderName: "P20", track: "Coe C × 6", payments: 100, currency: "P20 - Account Associate, Renewals", equityCurrency: "P20 - Account Associate, Renewals", hrisJobCode: "AAR-P20" },
+  { name: "Account Associate, Renewals P30", zone: "Zone C", basePayMin: 69900, basePayMax: 116500, srpOrMin: 93200, equityMax: 16500, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 33100, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P30", type: "P30 - Account Associate, Renewals", ladderName: "P30", track: "Coe C × 6", payments: 100, currency: "P30 - Account Associate, Renewals", equityCurrency: "P30 - Account Associate, Renewals", hrisJobCode: "AAR-P30" },
+  { name: "Account Associate, Renewals P40", zone: "Zone C", basePayMin: 93200, basePayMax: 155400, srpOrMin: 124300, equityMax: 33100, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 66200, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P40", type: "P40 - Account Associate, Renewals", ladderName: "P40", track: "Coe C × 6", payments: 100, currency: "P40 - Account Associate, Renewals", equityCurrency: "P40 - Account Associate, Renewals", hrisJobCode: "AAR-P40" },
+  { name: "Account Associate, Renewals P50", zone: "Zone C", basePayMin: 124300, basePayMax: 207200, srpOrMin: 165800, equityMax: 66200, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 132400, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "P50", type: "P50 - Account Associate, Renewals", ladderName: "P50", track: "Coe C × 6", payments: 100, currency: "P50 - Account Associate, Renewals", equityCurrency: "P50 - Account Associate, Renewals", hrisJobCode: "AAR-P50" },
+  { name: "Account Associate, Renewals M50", zone: "Zone B", basePayMin: 174800, basePayMax: 291200, srpOrMin: 233000, equityMax: 99300, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 198600, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "M50", type: "M50 - Account Associate, Renewals", ladderName: "M50", track: "Coe B × 6", payments: 100, currency: "M50 - Account Associate, Renewals", equityCurrency: "M50 - Account Associate, Renewals", hrisJobCode: "AAR-M50" },
+  { name: "Account Associate, Renewals M60", zone: "Zone B", basePayMin: 233000, basePayMax: 388300, srpOrMin: 310700, equityMax: 165500, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 331000, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "M60", type: "M60 - Account Associate, Renewals", ladderName: "M60", track: "Coe B × 6", payments: 100, currency: "M60 - Account Associate, Renewals", equityCurrency: "M60 - Account Associate, Renewals", hrisJobCode: "AAR-M60" },
+  { name: "Account Associate, Renewals M50", zone: "Zone C", basePayMin: 155400, basePayMax: 259000, srpOrMin: 207200, equityMax: 99300, targetVariablePct: 0, totalEquityValueMin: 0, totalEquityValueMax: 198600, function: "Account Associate, Renewals", leader: "Account Associate, Renewals", family: "Account Associate, Renewals - 1", level: "M50", type: "M50 - Account Associate, Renewals", ladderName: "M50", track: "Coe C × 6", payments: 100, currency: "M50 - Account Associate, Renewals", equityCurrency: "M50 - Account Associate, Renewals", hrisJobCode: "AAR-M50" },
 ];
 
 const formatCurrency = (value: number) =>
@@ -66,205 +71,272 @@ const cardStyle: React.CSSProperties = {
   borderRadius: "6px",
   padding: token("space.300"),
   border: `1px solid ${token("color.border")}`,
-  marginBottom: token("space.300"),
+};
+
+function RangeBar({ min, max, globalMax }: { min: number; max: number; globalMax: number }) {
+  const left = (min / globalMax) * 100;
+  const width = ((max - min) / globalMax) * 100;
+  return (
+    <div style={{ position: "relative", height: 8, backgroundColor: token("color.background.neutral"), borderRadius: 4, minWidth: 120 }}>
+      <div
+        style={{
+          position: "absolute",
+          left: `${left}%`,
+          width: `${Math.max(width, 1)}%`,
+          height: "100%",
+          backgroundColor: token("color.chart.blue.bold"),
+          borderRadius: 4,
+        }}
+      />
+    </div>
+  );
+}
+
+const thStyle: React.CSSProperties = {
+  padding: `${token("space.100")} ${token("space.150")}`,
+  textAlign: "left",
+  fontSize: 11,
+  fontWeight: 600,
+  color: token("color.text.subtlest"),
+  textTransform: "uppercase",
+  letterSpacing: "0.5px",
+  whiteSpace: "nowrap",
+  position: "sticky",
+  top: 0,
+  backgroundColor: token("elevation.surface.sunken"),
+  zIndex: 1,
+};
+
+const thRightStyle: React.CSSProperties = {
+  ...thStyle,
+  textAlign: "right",
+};
+
+const tdStyle: React.CSSProperties = {
+  padding: `${token("space.075")} ${token("space.150")}`,
+  verticalAlign: "middle",
+  whiteSpace: "nowrap",
+  fontSize: 13,
+};
+
+const tdRightStyle: React.CSSProperties = {
+  ...tdStyle,
+  textAlign: "right",
+  fontFamily: "monospace",
 };
 
 export default function SalaryBands() {
-  const [jobFamily, setJobFamily] = useState(jobFamilyOptions[0]);
-  const [levelType, setLevelType] = useState(levelTypeOptions[0]);
-  const [location, setLocation] = useState(locationOptions[0]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
 
-  const currentData = levelType.value === "ic" ? salaryBandData : managerBandData;
+  const globalBaseMax = Math.max(...salaryBandRows.map((r) => r.basePayMax));
+  const globalEquityMax = Math.max(...salaryBandRows.map((r) => r.totalEquityValueMax));
+
+  const filtered = searchQuery
+    ? salaryBandRows.filter(
+        (r) =>
+          r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          r.level.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          r.zone.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : salaryBandRows;
+
+  const toggleRow = (idx: number) => {
+    setSelectedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selectedRows.size === filtered.length) {
+      setSelectedRows(new Set());
+    } else {
+      setSelectedRows(new Set(filtered.map((_, i) => i)));
+    }
+  };
 
   return (
-    <div style={{ padding: token("space.400") }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.300") }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <Heading size="large">Salary Bands</Heading>
-          <div style={{ marginTop: token("space.100") }}>
-            <Text size="small" color="color.text.subtlest">Market-based compensation ranges by level and location</Text>
+          <div style={{ marginTop: token("space.050") }}>
+            <Text size="medium" color="color.text.subtlest">
+              Market-based compensation ranges by role, zone, and level
+            </Text>
           </div>
         </div>
-        <Button appearance="primary" iconBefore={AddIcon}>
-          Create New Band
-        </Button>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.200"), marginBottom: token("space.300") }}>
-        <div>
-          <Text size="small" weight="semibold">Job Family</Text>
-          <div style={{ marginTop: token("space.100") }}>
-            <Select options={jobFamilyOptions} value={jobFamily} onChange={(val) => val && setJobFamily(val)} />
-          </div>
-        </div>
-        <div>
-          <Text size="small" weight="semibold">Level Type</Text>
-          <div style={{ marginTop: token("space.100") }}>
-            <Select options={levelTypeOptions} value={levelType} onChange={(val) => val && setLevelType(val)} />
-          </div>
-        </div>
-        <div>
-          <Text size="small" weight="semibold">Location</Text>
-          <div style={{ marginTop: token("space.100") }}>
-            <Select options={locationOptions} value={location} onChange={(val) => val && setLocation(val)} />
-          </div>
+        <div style={{ display: "flex", gap: token("space.100") }}>
+          <Button appearance="default" iconBefore={DownloadIcon}>
+            Export
+          </Button>
+          <Button appearance="primary" iconBefore={AddIcon}>
+            Add Band
+          </Button>
         </div>
       </div>
 
-      <div style={cardStyle}>
-        <Heading size="small">Salary Bands by Level</Heading>
-        <div style={{ marginTop: token("space.200") }}>
-          <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={currentData}>
-              <CartesianGrid strokeDasharray="3 3" stroke={token("color.border")} />
-              <XAxis
-                dataKey="level"
-                stroke={token("color.text.subtlest")}
-                style={{ fontSize: "12px" }}
-                tickFormatter={(value: string) => {
-                  const item = currentData.find((d) => d.level === value);
-                  return item ? `${value} - ${item.label}` : value;
-                }}
-              />
-              <YAxis
-                stroke={token("color.text.subtlest")}
-                style={{ fontSize: "12px" }}
-                tickFormatter={(value: number) => `$${(value / 1000).toFixed(0)}k`}
-              />
-              <Tooltip
-                formatter={(value: any) => formatCurrency(Number(value))}
-                labelFormatter={(label: any) => {
-                  const item = currentData.find((d) => d.level === label);
-                  return item ? `${item.level} - ${item.label}` : String(label);
-                }}
-                contentStyle={{
-                  backgroundColor: token("elevation.surface.overlay"),
-                  border: `1px solid ${token("color.border")}`,
-                  borderRadius: "6px",
-                  fontSize: "12px",
-                }}
-              />
-              <Legend wrapperStyle={{ fontSize: "12px" }} />
-              <Line type="monotone" dataKey="min" stroke={token("color.text.subtlest")} strokeWidth={2} name="Min" dot={{ fill: token("color.text.subtlest"), r: 4 }} />
-              <Line type="monotone" dataKey="p25" stroke={token("color.chart.purple.bold")} strokeWidth={2} name="25th Percentile" dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="mid" stroke={token("color.chart.blue.bold")} strokeWidth={3} name="Midpoint" dot={{ r: 5 }} />
-              <Line type="monotone" dataKey="p75" stroke={token("color.chart.green.bold")} strokeWidth={2} name="75th Percentile" dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="max" stroke={token("color.chart.red.bold")} strokeWidth={2} name="Max" dot={{ r: 4 }} />
-            </LineChart>
-          </ResponsiveContainer>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: token("space.200") }}>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), flex: 1 }}>
+          <div style={{ flex: 1, maxWidth: 360 }}>
+            <Textfield
+              placeholder={`Search ${salaryBandRows.length} bands...`}
+              elemBeforeInput={
+                <div style={{ paddingLeft: token("space.100"), display: "flex", alignItems: "center" }}>
+                  <SearchIcon label="" color={token("color.icon.subtle")} />
+                </div>
+              }
+              value={searchQuery}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <Button appearance="subtle" iconBefore={ChevronDownIcon}>
+            Sort
+          </Button>
+          <Button appearance="subtle" iconBefore={FilterIcon}>
+            Filter
+          </Button>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <Button appearance="subtle" iconBefore={SettingsIcon}>
+            Columns
+          </Button>
+          <IconButton icon={SortIcon} label="View" appearance="subtle" />
         </div>
       </div>
 
-      <div style={cardStyle}>
-        <Heading size="small">Band Spread by Level</Heading>
-        <div style={{ marginTop: token("space.200") }}>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={currentData}>
-              <CartesianGrid strokeDasharray="3 3" stroke={token("color.border")} />
-              <XAxis
-                dataKey="level"
-                stroke={token("color.text.subtlest")}
-                style={{ fontSize: "12px" }}
-                tickFormatter={(value: string) => {
-                  const item = currentData.find((d) => d.level === value);
-                  return item ? `${value} - ${item.label}` : value;
-                }}
-              />
-              <YAxis stroke={token("color.text.subtlest")} style={{ fontSize: "12px" }} />
-              <Tooltip
-                labelFormatter={(label: any) => {
-                  const item = currentData.find((d) => d.level === label);
-                  return item ? `${item.level} - ${item.label}` : String(label);
-                }}
-                contentStyle={{
-                  backgroundColor: token("elevation.surface.overlay"),
-                  border: `1px solid ${token("color.border")}`,
-                  borderRadius: "6px",
-                  fontSize: "12px",
-                }}
-              />
-              <Bar dataKey="spread" fill={token("color.chart.blue.bold")} radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      <div style={cardStyle}>
-        <Heading size="small">Market Data Summary</Heading>
-        <div style={{ marginTop: token("space.200"), overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <div style={{ ...cardStyle, padding: 0, overflow: "hidden" }}>
+        <div style={{ overflowX: "auto", maxHeight: 700 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 2200 }}>
             <thead>
-              <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-                {["Level", "10th %ile", "25th %ile", "50th %ile", "75th %ile", "90th %ile"].map((h, i) => (
-                  <th
-                    key={h}
-                    style={{
-                      padding: `${token("space.150")} ${token("space.200")}`,
-                      textAlign: i === 0 ? "left" : "right",
-                      color: token("color.text"),
-                      fontSize: "13px",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {h}
-                  </th>
-                ))}
+              <tr>
+                <th style={{ ...thStyle, width: 36, textAlign: "center" }}>
+                  <Checkbox
+                    label=""
+                    isChecked={selectedRows.size === filtered.length && filtered.length > 0}
+                    isIndeterminate={selectedRows.size > 0 && selectedRows.size < filtered.length}
+                    onChange={toggleAll}
+                  />
+                </th>
+                <th style={{ ...thStyle, position: "sticky", left: 0, zIndex: 2, backgroundColor: token("elevation.surface.sunken"), minWidth: 260 }}>Name</th>
+                <th style={thRightStyle}>Base Pay Min</th>
+                <th style={thRightStyle}>SRP (Min)</th>
+                <th style={thRightStyle}>Base Pay Max</th>
+                <th style={{ ...thStyle, minWidth: 140 }}>Base Pay Range</th>
+                <th style={thRightStyle}>Target Variable %</th>
+                <th style={thRightStyle}>Total Equity Value Min</th>
+                <th style={thRightStyle}>Equity Max</th>
+                <th style={{ ...thStyle, minWidth: 140 }}>Total Equity Value Range</th>
+                <th style={thStyle}>Function</th>
+                <th style={thStyle}>Leader</th>
+                <th style={thStyle}>Family</th>
+                <th style={thStyle}>Level</th>
+                <th style={thStyle}>Type</th>
+                <th style={thStyle}>Ladder Name</th>
+                <th style={thStyle}>Track</th>
+                <th style={thRightStyle}>Payments</th>
+                <th style={thStyle}>Currency</th>
+                <th style={thStyle}>Equity Currency</th>
+                <th style={thStyle}>HRIS Job Code</th>
               </tr>
             </thead>
             <tbody>
-              {currentData.map((row) => (
-                <tr key={row.level} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, fontSize: "13px", fontWeight: 500, color: token("color.text") }}>
-                    {row.level} - {row.label}
+              {filtered.map((row, idx) => (
+                <tr
+                  key={idx}
+                  style={{
+                    borderTop: `1px solid ${token("color.border")}`,
+                    backgroundColor: selectedRows.has(idx) ? token("color.background.selected") : undefined,
+                  }}
+                >
+                  <td style={{ ...tdStyle, textAlign: "center" }}>
+                    <Checkbox label="" isChecked={selectedRows.has(idx)} onChange={() => toggleRow(idx)} />
                   </td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", color: token("color.text.subtlest") }}>{formatCurrency(row.p10)}</td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", color: token("color.text.subtlest") }}>{formatCurrency(row.p25)}</td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", fontWeight: 600, color: token("color.text") }}>{formatCurrency(row.p50)}</td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", color: token("color.text.subtlest") }}>{formatCurrency(row.p75)}</td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", color: token("color.text.subtlest") }}>{formatCurrency(row.p90)}</td>
+                  <td style={{ ...tdStyle, position: "sticky", left: 0, zIndex: 1, backgroundColor: selectedRows.has(idx) ? token("color.background.selected") : token("elevation.surface.raised") }}>
+                    <div>
+                      <Text size="small" weight="semibold">{row.name}</Text>
+                      <div>
+                        <Text size="UNSAFE_small" color="color.text.subtlest">{row.zone}</Text>
+                      </div>
+                    </div>
+                  </td>
+                  <td style={tdRightStyle}>{formatCurrency(row.basePayMin)}</td>
+                  <td style={{ ...tdRightStyle, fontWeight: 600 }}>{formatCurrency(row.srpOrMin)}</td>
+                  <td style={tdRightStyle}>{formatCurrency(row.basePayMax)}</td>
+                  <td style={tdStyle}>
+                    <RangeBar min={row.basePayMin} max={row.basePayMax} globalMax={globalBaseMax} />
+                  </td>
+                  <td style={tdRightStyle}>{row.targetVariablePct}%</td>
+                  <td style={tdRightStyle}>{formatCurrency(row.totalEquityValueMin)}</td>
+                  <td style={{ ...tdRightStyle, fontWeight: 600 }}>{formatCurrency(row.equityMax)}</td>
+                  <td style={tdStyle}>
+                    <RangeBar min={row.totalEquityValueMin} max={row.totalEquityValueMax} globalMax={globalEquityMax} />
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{row.function}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{row.leader}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{row.family}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Lozenge appearance={row.level.startsWith("M") ? "success" : "inprogress"}>
+                      {row.level}
+                    </Lozenge>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{row.type}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{row.ladderName}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{row.track}</Text>
+                  </td>
+                  <td style={tdRightStyle}>{row.payments}</td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{row.currency}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">{row.equityCurrency}</Text>
+                  </td>
+                  <td style={tdStyle}>
+                    <code style={{ fontSize: 11, fontFamily: "monospace", color: token("color.text.subtlest"), backgroundColor: token("color.background.neutral"), padding: `${token("space.025")} ${token("space.075")}`, borderRadius: "6px" }}>
+                      {row.hrisJobCode}
+                    </code>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
 
-      <div style={cardStyle}>
-        <Heading size="small">Band Positioning</Heading>
-        <div style={{ marginTop: token("space.200"), overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-                {["Level", "Min", "Midpoint", "Max", "Spread"].map((h, i) => (
-                  <th
-                    key={h}
-                    style={{
-                      padding: `${token("space.150")} ${token("space.200")}`,
-                      textAlign: i === 0 ? "left" : "right",
-                      color: token("color.text"),
-                      fontSize: "13px",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {currentData.map((row) => (
-                <tr key={row.level} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, fontSize: "13px", fontWeight: 500, color: token("color.text") }}>
-                    {row.level} - {row.label}
-                  </td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", color: token("color.text.subtlest") }}>{formatCurrency(row.min)}</td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", fontWeight: 600, color: token("color.text") }}>{formatCurrency(row.mid)}</td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", color: token("color.text.subtlest") }}>{formatCurrency(row.max)}</td>
-                  <td style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "13px", color: token("color.text.subtlest") }}>{row.spread}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div
+          style={{
+            backgroundColor: token("elevation.surface.sunken"),
+            borderTop: `1px solid ${token("color.border")}`,
+            padding: `${token("space.150")} ${token("space.200")}`,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text size="small" color="color.text.subtlest">
+            Showing <Text size="small" weight="bold" as="span">{filtered.length}</Text> of <Text size="small" weight="bold" as="span">{salaryBandRows.length}</Text> bands
+          </Text>
+          <div style={{ display: "flex", gap: token("space.100") }}>
+            <Button appearance="subtle" spacing="compact" isDisabled>
+              Previous
+            </Button>
+            <Button appearance="subtle" spacing="compact">
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>
