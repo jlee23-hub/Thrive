@@ -3096,7 +3096,7 @@ function RewardLetterStep({
         <Heading size="medium">Reward Letter</Heading>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
         <Heading size="xsmall">Template Selection</Heading>
         <div style={{ marginTop: token("space.200") }}>
           <LabelText>Letter Template</LabelText>
@@ -3108,7 +3108,7 @@ function RewardLetterStep({
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
         <Heading size="xsmall">Content Options</Heading>
         <div style={{ display: "flex", flexDirection: "column", gap: token("space.200"), marginTop: token("space.200") }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -3140,7 +3140,7 @@ function RewardLetterStep({
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
         <Heading size="xsmall">Custom Message</Heading>
         <div style={{ marginTop: token("space.200") }}>
           <TextArea
@@ -3152,7 +3152,7 @@ function RewardLetterStep({
         </div>
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
         <Heading size="xsmall">Preview</Heading>
         <div
           style={{
