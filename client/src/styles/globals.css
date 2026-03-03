@@ -44,6 +44,11 @@ div[role="list"]._bozg1crf {
   display: block !important;
 }
 
+/* REQUIRED: Move selected notch to far-left edge of menu item */
+._bfhk1o0g._kqswstnw {
+  inset-inline-start: calc(-1 * (24px + var(--ds-space-100, 8px))) !important;
+}
+
 /* REQUIRED: Force Search bar visible in top nav */
 ._2rko12b0._1e0cglyw {
   display: grid !important;
