@@ -114,6 +114,7 @@ function SummaryStatCard({
     <div
       style={{
         ...cardStyle,
+        padding: `${token("space.300")} ${token("space.400")}`,
         flex: 1,
         display: "flex",
         justifyContent: "space-between",
