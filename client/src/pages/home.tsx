@@ -224,7 +224,7 @@ export default function Home() {
           isSelected={activeNav === "compensation"}
           onClick={(e) => { e.preventDefault(); setActiveNav("compensation"); }}
         >
-          Total Compensation Summary
+          Total Rewards
         </LinkMenuItem>
         <LinkMenuItem
           href="#rsus"
