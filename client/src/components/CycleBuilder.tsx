@@ -1221,7 +1221,7 @@ function DataIntegrationsStep({
       </div>
 
       <Heading size="small">Data sources</Heading>
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
         <div
           onClick={() => setWorkdayExpanded(!workdayExpanded)}
           style={{
@@ -1234,7 +1234,7 @@ function DataIntegrationsStep({
         >
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
             <PageIcon label="" color={token("color.icon.brand")} />
-            <Text size="small" weight="bold">Workday</Text>
+            <Text size="medium" weight="bold">Workday</Text>
           </div>
           {workdayExpanded ? (
             <ChevronUpIcon label="" color={token("color.icon.subtle")} />
@@ -1265,7 +1265,7 @@ function DataIntegrationsStep({
         )}
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
         <div
           onClick={() => setShareworksExpanded(!shareworksExpanded)}
           style={{
@@ -1278,7 +1278,7 @@ function DataIntegrationsStep({
         >
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
             <CreditCardIcon label="" color={token("color.icon.success")} />
-            <Text size="small" weight="bold">Shareworks</Text>
+            <Text size="medium" weight="bold">Shareworks</Text>
           </div>
           {shareworksExpanded ? (
             <ChevronUpIcon label="" color={token("color.icon.subtle")} />
