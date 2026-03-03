@@ -2568,7 +2568,7 @@ function UsersRolesStep() {
                 style={{
                   border: `1px solid ${token("color.border")}`,
                   borderRadius: "6px",
-                  padding: token("space.300"),
+                  padding: `${token("space.300")} ${token("space.400")}`,
                   backgroundColor: token("elevation.surface"),
                 }}
               >
