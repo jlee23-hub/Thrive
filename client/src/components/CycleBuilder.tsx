@@ -1075,7 +1075,7 @@ function DataIntegrationsStep({
         />
       </div>
 
-      <div style={cardStyle}>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
         <div style={{ marginBottom: token("space.200") }}>
           <Heading size="small">Upload History</Heading>
           <Text size="small" color="color.text.subtlest">Previous data uploads for this compensation cycle</Text>
