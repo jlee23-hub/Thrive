@@ -74,7 +74,7 @@ const resolveFeatureFlags = (featureFlags: string[] = []) => {
 
 resolveFeatureFlags();
 
-type Persona = "employee" | "manager" | "comp-admin";
+type Persona = "employee" | "manager" | "comp-admin" | "data-integration";
 type NavItem = "compensation" | "rsus" | "about" | "team-overview" | "cycles-dashboard" | "cycle-builder" | "cycle-details" | "merit-matrix" | "groups" | "salary-bands" | "data-management" | "system-settings";
 
 export default function Home() {
@@ -89,6 +89,8 @@ export default function Home() {
       setActiveNav("team-overview");
     } else if (newPersona === "comp-admin") {
       setActiveNav("cycles-dashboard");
+    } else if (newPersona === "data-integration") {
+      setActiveNav("data-management");
     } else {
       setActiveNav("compensation");
     }
@@ -190,6 +192,21 @@ export default function Home() {
             onClick={(e) => { e.preventDefault(); setActiveNav("system-settings"); }}
           >
             Settings
+          </LinkMenuItem>
+        </MenuList>
+      );
+    }
+
+    if (persona === "data-integration") {
+      return (
+        <MenuList>
+          <LinkMenuItem
+            href="#data-management"
+            elemBefore={<DatabaseIcon label="" color="currentColor" />}
+            isSelected={activeNav === "data-management"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("data-management"); }}
+          >
+            Data Management
           </LinkMenuItem>
         </MenuList>
       );
@@ -302,6 +319,13 @@ export default function Home() {
                     >
                       Comp Admin
                     </ButtonItem>
+                    <ButtonItem
+                      iconBefore={<DatabaseIcon label="" />}
+                      onClick={() => switchPersona("data-integration")}
+                      isSelected={persona === "data-integration"}
+                    >
+                      Data Integration
+                    </ButtonItem>
                   </Section>
                 </MenuGroup>
               )}
@@ -331,7 +355,7 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          {persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands" ? (
+          {(persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands") || persona === "data-integration" ? (
             renderContent()
           ) : (
             <div style={{ padding: token("space.500") }}>
