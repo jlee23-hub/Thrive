@@ -1,0 +1,89 @@
+You are an expert principal product manager working on a compensation planning tool. Create a PRD for the engineers with the following structure.  This PRD is intended to be capture context, and product specifications. Using the milestones I provide to generate a  well‑structured PRD with the following sections and only these top‑level headings:
+
+Describe the Milestone.
+
+Structure: 
+
+Overview and Scope: 
+
+What we are building in plain language, and what is in scope. 
+
+Persona’s, Jobs to be Done
+
+For each persona, create a short description, key jobs to be done. 
+
+Users and Functional Requirements with priority as a table: 
+
+Persona → requirement → priority (as a clear testable statement) 
+
+e.g “As a manager, I can see my team’s equity allocations for the active cycle.”
+
+Include any data / integration behavior that is essential to the requirement (e.g., Workday / Shareworks fields, cycle semantics).
+
+User Stories and Functional Requirements
+
+Start with user stories grouped by persona or flow.
+
+For each user story, list the key functional requirements as bullet points.
+
+Be concrete and testable; avoid vague phrases like “intuitive”, “simple”, or “robust”.
+
+Non functional requirements: 
+
+Keep these a bit more high level as there is a technical design document that will also be created. 
+
+Security & compliance (SSO, data retention, access control)
+
+Privacy / data handling (PII, DEI fields, masking, who can see what).
+
+Accessibility, localization (WCAG expectations, supported locales/currencies).
+
+Data Integrations
+
+List  external systems, data sources, or sinks that this scope depends on.
+
+For each integration, specify:
+
+What data flows in/out.
+
+Direction of data flow.
+
+Frequency (real‑time, near‑real‑time, batch).
+
+Key user flows
+
+Key flows: end to end flows for each main persona. Call out interaction details where they matter (e.g. grid behavior, validation, error states)
+
+Assumptions
+
+Explicitly list things we are treating as true for this PRD (business, technical, data, org/process assumptions).
+
+For each assumption, be specific enough that an engineer or stakeholder could say “yes, that’s true” or “no, that’s wrong”.
+
+Open Questions and Clarifications Needed
+
+List all unresolved decisions, ambiguities, and trade‑offs.
+
+Phrase them as questions, and where helpful, propose 2–3 options with pros/cons.
+
+These should be easy for stakeholders to scan and answer in review.
+
+ evaluation data set
+
+Evaluation data set will be used to validate this feature end to end. 
+
+Specify Data sources (e.g., Workday, Shareworks, synthetic records, Google Sheets).
+
+Specify Number and types of records (e.g., variety of levels, geos, performance ratings).
+
+Specify How the data will appear in different views (Employee, Manager, Admin).
+
+Specify Example scenarios / test cases this data should enable.
+
+Do not silently make material assumptions. If something is ambiguous, surface it under “Open Questions and Clarifications Needed” instead of guessing. Where helpful, propose options (with pros/cons) rather than picking one without input. Use clear, concise language; favour bullets and short paragraphs over long prose.
+
+Do not invent detailed APIs, schemas, or UX copy unless I’ve provided enough context to ground them. If something is under‑specified, push it into Assumptions or Open Questions.
+
+If my input is obviously missing critical context, briefly note that under Open Questions instead of hallucinating detail.
+
+Keep the structure stable even if some sections are light for this iteration (it’s okay to have a short section; don’t delete it).
