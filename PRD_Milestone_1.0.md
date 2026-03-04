@@ -112,7 +112,6 @@ An individual contributor who wants to understand their total compensation — b
 - The Total Rewards page shows "Last synced from Workday: [timestamp]" for salary, bonus, and job data.
 - The Total Rewards page shows "Last synced from Shareworks: [timestamp]" for equity data.
 - Timestamps are displayed per-source so the employee can see freshness of each system independently.
-- If a sync is stale (>24 hours since last sync), a warning indicator is shown next to the timestamp.
 
 ---
 
@@ -164,8 +163,6 @@ An individual contributor who wants to understand their total compensation — b
 
 **Error states:**
 - Shareworks unavailable: Error message displayed in equity section.
-- Workday data stale (>24 hours): Warning icon next to Workday sync timestamp.
-- Shareworks data stale (>24 hours): Warning icon next to Shareworks sync timestamp.
 - No Workday record found for user: "We couldn't find your compensation record. Please contact your administrator."
 
 ### Flow 2: Employee Models RSU Value
@@ -189,7 +186,7 @@ An individual contributor who wants to understand their total compensation — b
 | # | Assumption |
 |---|---|
 | A1 | Okta is the sole identity provider; all Thrive users have an Okta account with a resolvable employee identifier. |
-| A2 | The employee identifier in Workday and the participant identifier in Shareworks can be reliably joined — either they are the same value or a mapping table exists. |
+| A2 | Workday and Shareworks data is joined via a shared employee ID. |
 | A3 | The Workday integration is already configured and data is flowing into Thrive. |
 | A4 | The Shareworks integration is already configured and data is flowing into Thrive. |
 | A5 | Currency is USD for all employees; multi-currency support is deferred. |
@@ -197,8 +194,7 @@ An individual contributor who wants to understand their total compensation — b
 | A7 | When Shareworks data is unavailable for an employee (e.g., new hire with no grants), the UI displays an error message rather than showing $0 or hiding the equity section. |
 | A8 | The default share price for RSU modeling is today's closing price. The slider range is $20–$200. |
 | A9 | Sync timestamps are displayed per-source (Workday and Shareworks separately) so employees know the freshness of each data source independently. |
-| A10 | A sync is considered "stale" if it occurred more than 24 hours ago. |
-| A11 | The Total Rewards view is read-only. Employees cannot edit any compensation data. |
+| A10 | The Total Rewards view is read-only. Employees cannot edit any compensation data. |
 
 ---
 
@@ -206,12 +202,9 @@ An individual contributor who wants to understand their total compensation — b
 
 | # | Question | Impact | Proposed Options |
 |---|---|---|---|
-| Q1 | **How is the employee identifier mapped between Workday and Shareworks?** Are they the same value, or is there a separate mapping table? | Blocks equity data join for the Employee view. | **Option A:** Same value (simplest, no mapping needed). **Option B:** Mapping table maintained in Shareworks. **Option C:** Thrive maintains a crosswalk table. |
-| Q2 | **What Okta claims/attributes are available?** Does the Okta token include the employee identifier directly, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data. | **Option A:** Okta profile includes the employee identifier as a custom attribute. **Option B:** Okta provides email, and we look up the identifier from synced Workday data. |
-| Q3 | **What is the Shareworks API authentication method?** OAuth 2.0, API Key, or certificate-based? | Affects how the backend connects to Shareworks to pull equity data. | Need Shareworks Admin to confirm the supported auth method. |
-| Q4 | **What does the sync timestamp represent?** The time data was pulled from the source system, or the time it was written to Thrive's database? | Affects what "last synced" means to the employee viewing their data. | **Option A:** Time data was fetched from the source (more meaningful to user). **Option B:** Time data was committed to Thrive DB (more technically accurate). **Recommendation:** Option A. |
-| Q5 | **Should the "stale data" warning threshold be configurable?** Currently proposed as a fixed 24-hour threshold. | Affects whether this is a hard-coded value or needs an admin setting. | **Option A:** Hard-coded at 24 hours (simpler, ships faster). **Option B:** Configurable (more flexible but adds scope). |
-| Q6 | **Where does the default share price come from?** Is it a live market feed, a daily batch from a provider, or manually entered by an admin? | Affects accuracy of RSU modeling and whether a third integration is needed. | **Option A:** Manually entered (simplest). **Option B:** Daily batch from a market data API. **Option C:** Real-time market feed (adds significant complexity). |
+| Q1 | **What Okta claims/attributes are available?** Does the Okta token include the employee identifier directly, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data. | **Option A:** Okta profile includes the employee identifier as a custom attribute. **Option B:** Okta provides email, and we look up the identifier from synced Workday data. |
+| Q2 | **What does the sync timestamp represent?** The time data was pulled from the source system, or the time it was written to Thrive's database? | Affects what "last synced" means to the employee viewing their data. | **Option A:** Time data was fetched from the source (more meaningful to user). **Option B:** Time data was committed to Thrive DB (more technically accurate). **Recommendation:** Option A. |
+| Q3 | **Where does the default share price come from?** Is it a live market feed, a daily batch from a provider, or manually entered by an admin? | Affects accuracy of RSU modeling and whether a third integration is needed. | **Option A:** Manually entered (simplest). **Option B:** Daily batch from a market data API. **Option C:** Real-time market feed (adds significant complexity). |
 
 ---
 
@@ -224,7 +217,7 @@ An individual contributor who wants to understand their total compensation — b
 | Workday (Employee Compensation Records) | Production | Employee demographics, salary, level, job data |
 | Workday (Compensation History) | Production | 2-year salary/bonus change history |
 | Shareworks (Equity Grants + Vesting Schedule) | Production | RSU grants, vesting events, current FMV |
-| Synthetic test records | Generated | Edge cases (e.g., no equity, fully vested, stale sync) |
+| Synthetic test records | Generated | Edge cases (e.g., no equity, fully vested) |
 
 ### View-Specific Data Expectations
 
@@ -232,7 +225,6 @@ An individual contributor who wants to understand their total compensation — b
 |---|---|---|
 | Employee Total Rewards | Own base salary, bonus %, equity value, total comp, per-source sync timestamps | Values match Workday + Shareworks source data exactly; timestamps reflect actual last sync per system |
 | Employee Total Rewards (no equity) | Error message in equity section; salary and bonus still display | "Equity data is currently unavailable" message shown; base salary and bonus render correctly |
-| Employee Total Rewards (stale sync) | Warning indicator next to the stale timestamp | Warning appears when sync is >24 hours old |
 | Employee RSUs | Own grants only, vesting timeline, share price modeler | Modeled value updates when slider moves; vesting dates and units are correct |
 | Employee RSUs (fully vested) | All grants at 100% progress; no future vesting events | Progress bar shows 100%; no upcoming vesting dates |
 
@@ -244,8 +236,5 @@ An individual contributor who wants to understand their total compensation — b
 | TC-2 | Employee with no Shareworks data (new hire, no grants) | Equity section shows error message; base salary and bonus display correctly from Workday |
 | TC-3 | Employee adjusts share price slider from $79 to $150 | Equity value, total compensation, and donut chart update proportionally in real-time |
 | TC-4 | Employee with a single grant, all shares vested | Vesting progress shows 100%; no future vesting events on timeline |
-| TC-5 | Workday sync completed 2 hours ago | Timestamp shows recent sync time; no stale warning indicator |
-| TC-6 | Workday sync completed 30 hours ago | Stale warning indicator displayed next to the Workday sync timestamp |
-| TC-7 | Shareworks sync completed 26 hours ago | Stale warning indicator displayed next to the Shareworks sync timestamp |
-| TC-8 | Employee views RSU tab with 3 grants, selects second grant | Vesting schedule chart and area chart update to show the selected grant's data |
-| TC-9 | Employee with base salary but no bonus target in Workday | Bonus section shows $0 or "N/A"; total comp is base + equity only |
+| TC-5 | Employee views RSU tab with 3 grants, selects second grant | Vesting schedule chart and area chart update to show the selected grant's data |
+| TC-6 | Employee with base salary but no bonus target in Workday | Bonus section shows $0 or "N/A"; total comp is base + equity only |
