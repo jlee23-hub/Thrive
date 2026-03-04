@@ -18,16 +18,16 @@ Employees can also model their RSU value at different share prices using an inte
 - **RSU Modeling** (Employee): Interactive equity grant viewer with per-grant vesting schedules, vesting progress, and a share price modeling slider — all powered by Shareworks data.
 - **Okta SSO** (Employee): Authentication via Okta OIDC/SAML; user identity resolved to `Worker_ID` for data scoping.
 
-### Out of Scope (This Milestone)
+### Out of Scope
 
-- Manager Team Grid (future milestone).
-- Permissions page and role-based access configuration (future milestone).
-- Data Ingestion configuration UI for Workday and Shareworks (future milestone).
-- Compensation cycle creation, approval workflows, and cycle execution (future milestone).
-- Inline editing of compensation fields (future milestone).
-- Merit matrix and salary band management (future milestone).
-- Notifications and Rovo AI assistant integration (future milestone).
-- Audit logging and SOX compliance reporting (future milestone).
+- Manager Team Grid.
+- Permissions page and role-based access configuration.
+- Data Ingestion configuration UI for Workday and Shareworks.
+- Compensation cycle creation, approval workflows, and cycle execution.
+- Inline editing of compensation fields.
+- Merit matrix and salary band management.
+- Notifications and Rovo AI assistant integration.
+- Audit logging and SOX compliance reporting.
 
 ---
 
@@ -192,8 +192,8 @@ An individual contributor who wants to understand their total compensation — b
 | A2 | `Worker_ID` (Workday) and `Participant_ID` (Shareworks) can be reliably joined — either they are the same value or a mapping table exists. |
 | A3 | The Workday RaaS reports (CRINT Pave) are already configured and accessible via the tenant's RaaS API endpoint. |
 | A4 | Shareworks API is REST-based and supports per-participant grant and vesting queries. |
-| A5 | Currency is USD for all employees in Milestone 1; multi-currency support is deferred to a later milestone. |
-| A6 | Sync frequency defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks). Data ingestion configuration is handled outside the application in this milestone. |
+| A5 | Currency is USD for all employees; multi-currency support is deferred. |
+| A6 | Sync frequency defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks). Data ingestion configuration is handled outside the application. |
 | A7 | When Shareworks data is unavailable for an employee (e.g., new hire with no grants), the UI displays an error message rather than showing $0 or hiding the equity section. |
 | A8 | The default share price for RSU modeling is today's closing price. The slider range is $20–$200. |
 | A9 | Sync timestamps are displayed per-source (Workday and Shareworks separately) so employees know the freshness of each data source independently. |
