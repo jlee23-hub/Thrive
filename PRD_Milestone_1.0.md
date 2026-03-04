@@ -447,21 +447,6 @@ A technical administrator with Workday Admin and Shareworks Admin access who con
 | Shareworks (Equity Grants + Vesting Schedule) | Production API | RSU grants, vesting events, current FMV |
 | Synthetic test records | Generated | Edge cases not covered by production data (e.g., no equity, fully vested, stale sync) |
 
-### Record Types and Variety
-
-| Dimension | Values to Include |
-|---|---|
-| Job Levels | P20, P30, P40, P50, P60, M50, M60, M70 |
-| Zones / Geos | Zone 1 (SF/NYC), Zone 2 (Seattle/Austin), Zone 3 (Remote US), Zone 4 (International) |
-| Performance Ratings | Exceptional, Exceeds, Meets, Developing, New (no rating) |
-| Employee Types | Regular FT (included), Intern (excluded), Casual (excluded) |
-| Worker Status | Active (included), Terminated within 90 days (included in Admin views only), Terminated > 90 days (excluded) |
-| Equity Grant Types | RSU, ISO, NSO |
-| Vesting Status | Pending, Partially Vested, Fully Vested, Forfeited |
-| Manager Hierarchy | 3 levels deep minimum (IC → Manager → Director → VP) |
-| Shareworks Availability | Employees with multiple grants, employees with no grants (new hires), employees with fully vested grants (no unvested) |
-| Sync Freshness | Records with recent sync (<1 hour), records with normal sync (<24 hours), records with stale sync (>24 hours) |
-
 ### Recommended Record Counts
 
 - **Total employees:** 50 synthetic + production data
