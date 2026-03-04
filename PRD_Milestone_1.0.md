@@ -447,15 +447,6 @@ A technical administrator with Workday Admin and Shareworks Admin access who con
 | Shareworks (Equity Grants + Vesting Schedule) | Production API | RSU grants, vesting events, current FMV |
 | Synthetic test records | Generated | Edge cases not covered by production data (e.g., no equity, fully vested, stale sync) |
 
-### Recommended Record Counts
-
-- **Total employees:** 50 synthetic + production data
-- **Managers:** 8–10 (each with 4–8 direct reports; at least 2 with skip-level reports)
-- **Admins:** 2–3
-- **Data Integration Engineers:** 1–2
-- **Equity grants per employee:** 1–4 (include at least 1 employee with 0 grants)
-- **Comp history records:** 2–6 per employee (over 2-year lookback)
-
 ### View-Specific Data Expectations
 
 | View | What the User Sees | Key Validation |
