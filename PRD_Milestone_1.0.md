@@ -200,9 +200,7 @@ An individual contributor who wants to understand their total compensation — b
 
 ## Open Questions and Clarifications Needed
 
-| # | Question | Impact | Proposed Options |
-|---|---|---|---|
-| Q1 | **What Okta claims/attributes are available?** Does the Okta token include the employee identifier directly, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data. | **Option A:** Okta profile includes the employee identifier as a custom attribute. **Option B:** Okta provides email, and we look up the identifier from synced Workday data. |
+No open questions at this time. All decisions have been resolved.
 
 ---
 
