@@ -193,7 +193,7 @@ An individual contributor who wants to understand their total compensation — b
 | A6 | Sync frequency defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks). Data ingestion configuration is handled outside the application. |
 | A7 | When Shareworks data is unavailable for an employee (e.g., new hire with no grants), the UI displays an error message rather than showing $0 or hiding the equity section. |
 | A8 | The default share price for RSU modeling is $80. The slider range is $20–$200. |
-| A9 | Sync timestamps are displayed per-source (Workday and Shareworks separately) so employees know the freshness of each data source independently. |
+| A9 | Sync timestamps represent the time data was pulled from the source system. Timestamps are displayed per-source (Workday and Shareworks separately) so employees know the freshness of each data source independently. |
 | A10 | The Total Rewards view is read-only. Employees cannot edit any compensation data. |
 
 ---
@@ -203,7 +203,6 @@ An individual contributor who wants to understand their total compensation — b
 | # | Question | Impact | Proposed Options |
 |---|---|---|---|
 | Q1 | **What Okta claims/attributes are available?** Does the Okta token include the employee identifier directly, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data. | **Option A:** Okta profile includes the employee identifier as a custom attribute. **Option B:** Okta provides email, and we look up the identifier from synced Workday data. |
-| Q2 | **What does the sync timestamp represent?** The time data was pulled from the source system, or the time it was written to Thrive's database? | Affects what "last synced" means to the employee viewing their data. | **Option A:** Time data was fetched from the source (more meaningful to user). **Option B:** Time data was committed to Thrive DB (more technically accurate). **Recommendation:** Option A. |
 
 ---
 
