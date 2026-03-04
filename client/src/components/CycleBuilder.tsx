@@ -3005,21 +3005,23 @@ function FieldPermissionsStep({
                       {(field.permissions || []).map((p, pi) => (
                         <Lozenge key={pi} appearance={p.appearance}>{p.role}</Lozenge>
                       ))}
-                      <Button
-                        appearance="subtle"
-                        spacing="compact"
-                        iconBefore={AddIcon}
-                        onClick={(e: React.MouseEvent<HTMLElement>) => {
-                          const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-                          setAddRolePopup({ fieldId: field.id, anchorRect: rect });
-                          setRoleSearch("");
-                        }}
-                      >
-                        Add
-                      </Button>
+                      <span style={{ fontSize: "12px" }}>
+                        <Button
+                          appearance="subtle"
+                          spacing="compact"
+                          iconBefore={AddIcon}
+                          onClick={(e: React.MouseEvent<HTMLElement>) => {
+                            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                            setAddRolePopup({ fieldId: field.id, anchorRect: rect });
+                            setRoleSearch("");
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </span>
                     </div>
                   </td>
-                  <td style={{ ...tdStyle, textAlign: "center" }}>
+                  <td style={{ ...tdStyle, textAlign: "center", fontSize: "12px" }}>
                     <IconButton icon={EditIcon} label="Edit row" appearance="subtle" spacing="compact" />
                   </td>
                 </tr>
