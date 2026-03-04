@@ -30,6 +30,19 @@
 
 ---
 
-## Workday (HRIS)
+## Workday — Compensation Table
 
-_Awaiting field list from stakeholder._
+| # | Source Field | Data Type | Description |
+|---|---|---|---|
+| 1 | Employee ID | String | Unique employee identifier (used to join with Shareworks) |
+| 2 | CF Worker Email ID | String | Employee's email address |
+| 3 | Effective Date | Date | Date the compensation change takes effect |
+| 4 | Date and Time Completed | DateTime | Timestamp when the compensation action was completed |
+| 5 | Status | String | Status of the compensation event |
+| 6 | Pay Rate Type - Proposed | String | Type of pay rate (e.g., salary, hourly) |
+| 7 | Primary Compensation Basis Amount - Proposed | Currency | Proposed base compensation amount |
+| 8 | Currency - Proposed | String | Currency code for the proposed compensation (e.g., USD) |
+| 9 | Bonus Percent - Proposed | Decimal | Proposed bonus target as a percentage |
+| 10 | CF EVAL Proposed Unprorated Annualized Base Pay | Currency | Proposed annualized base pay (unprorated) |
+| 11 | Bonus Amount - Proposed | Currency | Proposed bonus dollar amount |
+| 12 | Commission Amount - Proposed | Currency | Proposed commission dollar amount |
