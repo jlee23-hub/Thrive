@@ -2787,6 +2787,8 @@ function FieldPermissionsStep({
 }) {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [addColumnOpen, setAddColumnOpen] = useState(false);
+  const [addRolePopup, setAddRolePopup] = useState<{ fieldId: string; anchorRect: DOMRect } | null>(null);
+  const [roleSearch, setRoleSearch] = useState("");
   const [columnForm, setColumnForm] = useState({
     column: "custom",
     name: "",
@@ -2795,6 +2797,44 @@ function FieldPermissionsStep({
     displayType: "",
     customFormula: "",
   });
+
+  const availablePermissionRoles = [
+    { role: "All Users Can View", appearance: "default" as const },
+    { role: "All Users Can Not View", appearance: "default" as const },
+    { role: "All Other Users Can View", appearance: "default" as const },
+    { role: "All Other Users Can Not View", appearance: "default" as const },
+    { role: "Admin", appearance: "removed" as const },
+    { role: "CRP Zone", appearance: "inprogress" as const },
+    { role: "CRP Org and Geo Zone", appearance: "inprogress" as const },
+    { role: "CRP ZU and Geo Zone", appearance: "inprogress" as const },
+    { role: "HRBP All Roles", appearance: "moved" as const },
+    { role: "HRBP Intro Roles", appearance: "moved" as const },
+    { role: "HRBP Role View", appearance: "moved" as const },
+    { role: "APEX System Admin", appearance: "success" as const },
+    { role: "APEX Basis Points", appearance: "success" as const },
+    { role: "APEX Plans View", appearance: "success" as const },
+    { role: "APEX Executive Planner", appearance: "success" as const },
+    { role: "Columns Group Default", appearance: "moved" as const },
+    { role: "Columns Derived", appearance: "moved" as const },
+  ];
+
+  const filteredRoles = availablePermissionRoles.filter((r) =>
+    r.role.toLowerCase().includes(roleSearch.toLowerCase())
+  );
+
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!addRolePopup) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+        setAddRolePopup(null);
+        setRoleSearch("");
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [addRolePopup]);
 
   const columnTypeOptions = [
     { label: "Custom", value: "custom" },
@@ -2965,7 +3005,16 @@ function FieldPermissionsStep({
                       {(field.permissions || []).map((p, pi) => (
                         <Lozenge key={pi} appearance={p.appearance}>{p.role}</Lozenge>
                       ))}
-                      <Button appearance="subtle" spacing="compact" iconBefore={AddIcon}>
+                      <Button
+                        appearance="subtle"
+                        spacing="compact"
+                        iconBefore={AddIcon}
+                        onClick={(e: React.MouseEvent<HTMLElement>) => {
+                          const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                          setAddRolePopup({ fieldId: field.id, anchorRect: rect });
+                          setRoleSearch("");
+                        }}
+                      >
                         Add
                       </Button>
                     </div>
@@ -2979,6 +3028,88 @@ function FieldPermissionsStep({
           </table>
         </div>
       </div>
+
+      {addRolePopup && (
+        <div
+          ref={popupRef}
+          style={{
+            position: "fixed",
+            top: Math.min(addRolePopup.anchorRect.bottom + 4, window.innerHeight - 360),
+            left: Math.min(addRolePopup.anchorRect.left, window.innerWidth - 320),
+            width: 300,
+            maxHeight: 340,
+            backgroundColor: token("elevation.surface.overlay"),
+            boxShadow: token("elevation.shadow.overlay"),
+            borderRadius: "6px",
+            border: `1px solid ${token("color.border")}`,
+            zIndex: 600,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <div style={{ padding: `${token("space.150")} ${token("space.200")}`, borderBottom: `1px solid ${token("color.border")}` }}>
+            <Textfield
+              isCompact
+              placeholder="Search roles..."
+              value={roleSearch}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRoleSearch(e.target.value)}
+              elemBeforeInput={
+                <div style={{ paddingLeft: token("space.075"), display: "flex", alignItems: "center" }}>
+                  <SearchIcon label="" LEGACY_size="small" />
+                </div>
+              }
+              autoFocus
+            />
+          </div>
+          <div style={{ overflowY: "auto", flex: 1 }}>
+            {filteredRoles.length === 0 ? (
+              <div style={{ padding: `${token("space.200")} ${token("space.200")}`, textAlign: "center" }}>
+                <Text size="small" color="color.text.subtlest">No roles found</Text>
+              </div>
+            ) : (
+              filteredRoles.map((r) => {
+                const field = fieldPermissions.find((f) => f.id === addRolePopup.fieldId);
+                const alreadyAdded = field?.permissions?.some((p) => p.role === r.role);
+                return (
+                  <div
+                    key={r.role}
+                    style={{
+                      padding: `${token("space.100")} ${token("space.200")}`,
+                      cursor: alreadyAdded ? "default" : "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: token("space.100"),
+                      opacity: alreadyAdded ? 0.5 : 1,
+                      backgroundColor: "transparent",
+                      transition: "background-color 100ms",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!alreadyAdded) (e.currentTarget as HTMLElement).style.backgroundColor = token("color.background.neutral.subtle.hovered");
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
+                    }}
+                    onClick={() => {
+                      if (alreadyAdded) return;
+                      toggleFieldPermission(addRolePopup.fieldId, "visible");
+                      setAddRolePopup(null);
+                      setRoleSearch("");
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                      <Lozenge appearance={r.appearance}>{r.role}</Lozenge>
+                    </div>
+                    {alreadyAdded && (
+                      <CheckMarkIcon label="Already added" LEGACY_size="small" color={token("color.icon.subtle")} />
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
 
       {addColumnOpen && (
         <div
