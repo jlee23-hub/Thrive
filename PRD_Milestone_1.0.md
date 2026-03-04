@@ -190,8 +190,8 @@ An individual contributor who wants to understand their total compensation — b
 |---|---|
 | A1 | Okta is the sole identity provider; all Thrive users have an Okta account with a resolvable employee identifier. |
 | A2 | The employee identifier in Workday and the participant identifier in Shareworks can be reliably joined — either they are the same value or a mapping table exists. |
-| A3 | The Workday reports are already configured and accessible via the tenant's API endpoint. |
-| A4 | Shareworks API is REST-based and supports per-participant grant and vesting queries. |
+| A3 | The Workday integration is already configured and data is flowing into Thrive. |
+| A4 | The Shareworks integration is already configured and data is flowing into Thrive. |
 | A5 | Currency is USD for all employees; multi-currency support is deferred. |
 | A6 | Sync frequency defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks). Data ingestion configuration is handled outside the application. |
 | A7 | When Shareworks data is unavailable for an employee (e.g., new hire with no grants), the UI displays an error message rather than showing $0 or hiding the equity section. |
@@ -221,9 +221,9 @@ An individual contributor who wants to understand their total compensation — b
 
 | Source | Type | Purpose |
 |---|---|---|
-| Workday (Employee Compensation Records) | Production API | Employee demographics, salary, level, job data |
-| Workday (Compensation History) | Production API | 2-year salary/bonus change history |
-| Shareworks (Equity Grants + Vesting Schedule) | Production API | RSU grants, vesting events, current FMV |
+| Workday (Employee Compensation Records) | Production | Employee demographics, salary, level, job data |
+| Workday (Compensation History) | Production | 2-year salary/bonus change history |
+| Shareworks (Equity Grants + Vesting Schedule) | Production | RSU grants, vesting events, current FMV |
 | Synthetic test records | Generated | Edge cases (e.g., no equity, fully vested, stale sync) |
 
 ### View-Specific Data Expectations
