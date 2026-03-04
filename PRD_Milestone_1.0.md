@@ -99,7 +99,7 @@ An individual contributor who wants to understand their total compensation — b
 **As an employee, I want to model my equity at different share prices so I can understand the potential value of my grants.**
 
 - A share price slider (range: $20–$200) allows the employee to adjust the modeled share price.
-- The default share price is today's closing price (e.g., $79.43).
+- The default share price is $80.
 - Moving the slider dynamically updates: total equity value, vested value, unvested value, and the donut chart proportions.
 - The RSU tab shows a list of all grants, each displayed as a card with: grant date, total units, vested units, vested value, total value, and a vesting progress bar.
 - Selecting a grant shows its detailed quarterly vesting schedule as a line chart (vested units over time vs. total units) and a stacked area chart (vested vs. unvested units).
@@ -192,7 +192,7 @@ An individual contributor who wants to understand their total compensation — b
 | A5 | Currency is USD for all employees; multi-currency support is deferred. |
 | A6 | Sync frequency defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks). Data ingestion configuration is handled outside the application. |
 | A7 | When Shareworks data is unavailable for an employee (e.g., new hire with no grants), the UI displays an error message rather than showing $0 or hiding the equity section. |
-| A8 | The default share price for RSU modeling is today's closing price. The slider range is $20–$200. |
+| A8 | The default share price for RSU modeling is $80. The slider range is $20–$200. |
 | A9 | Sync timestamps are displayed per-source (Workday and Shareworks separately) so employees know the freshness of each data source independently. |
 | A10 | The Total Rewards view is read-only. Employees cannot edit any compensation data. |
 
@@ -204,7 +204,6 @@ An individual contributor who wants to understand their total compensation — b
 |---|---|---|---|
 | Q1 | **What Okta claims/attributes are available?** Does the Okta token include the employee identifier directly, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data. | **Option A:** Okta profile includes the employee identifier as a custom attribute. **Option B:** Okta provides email, and we look up the identifier from synced Workday data. |
 | Q2 | **What does the sync timestamp represent?** The time data was pulled from the source system, or the time it was written to Thrive's database? | Affects what "last synced" means to the employee viewing their data. | **Option A:** Time data was fetched from the source (more meaningful to user). **Option B:** Time data was committed to Thrive DB (more technically accurate). **Recommendation:** Option A. |
-| Q3 | **Where does the default share price come from?** Is it a live market feed, a daily batch from a provider, or manually entered by an admin? | Affects accuracy of RSU modeling and whether a third integration is needed. | **Option A:** Manually entered (simplest). **Option B:** Daily batch from a market data API. **Option C:** Real-time market feed (adds significant complexity). |
 
 ---
 
@@ -234,7 +233,7 @@ An individual contributor who wants to understand their total compensation — b
 |---|---|---|
 | TC-1 | Employee at P40, Zone 1, with 2 RSU grants | Total Rewards shows correct base + bonus + equity sum; RSU tab shows 2 grants; both Workday and Shareworks sync timestamps visible |
 | TC-2 | Employee with no Shareworks data (new hire, no grants) | Equity section shows error message; base salary and bonus display correctly from Workday |
-| TC-3 | Employee adjusts share price slider from $79 to $150 | Equity value, total compensation, and donut chart update proportionally in real-time |
+| TC-3 | Employee adjusts share price slider from $80 to $150 | Equity value, total compensation, and donut chart update proportionally in real-time |
 | TC-4 | Employee with a single grant, all shares vested | Vesting progress shows 100%; no future vesting events on timeline |
 | TC-5 | Employee views RSU tab with 3 grants, selects second grant | Vesting schedule chart and area chart update to show the selected grant's data |
 | TC-6 | Employee with base salary but no bonus target in Workday | Bonus section shows $0 or "N/A"; total comp is base + equity only |
