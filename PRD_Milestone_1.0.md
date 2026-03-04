@@ -6,7 +6,7 @@
 
 ## Overview and Scope
 
-Milestone 1 delivers the foundational Total Rewards experience in Thrive — a Pave replacement compensation planning tool built on the Atlassian Design System.
+Milestone 1 delivers the foundational Total Rewards experience in Thrive — a compensation planning tool built on the Atlassian Design System.
 
 Every employee gets a personalized Total Rewards view showing their base salary, bonus target, and equity value in one place. Employee demographics, compensation history, and job data flow from Workday (via RaaS reports). Equity and RSU grant data flow from Shareworks. Authentication is through Okta SSO. All data displayed to the user is timestamped with when it was last synced from each source system, so employees and managers always know how current the information is.
 
