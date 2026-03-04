@@ -8,7 +8,7 @@
 
 Milestone 1 delivers the foundational Employee Total Rewards experience in Thrive — a compensation planning tool built on the Atlassian Design System.
 
-Every employee gets a personalized Total Rewards view showing their base salary, bonus target, and equity value in one place. Employee demographics, compensation history, and job data flow from Workday (via RaaS reports). Equity and RSU grant data flow from Shareworks. Authentication is through Okta SSO. All data displayed to the user is timestamped with when it was last synced from each source system, so employees always know how current the information is.
+Every employee gets a personalized Total Rewards view showing their base salary, bonus target, and equity value in one place. Employee demographics, compensation history, and job data flow from Workday. Equity and RSU grant data flow from Shareworks. Authentication is through Okta SSO. All data displayed to the user is timestamped with when it was last synced from each source system, so employees always know how current the information is.
 
 Employees can also model their RSU value at different share prices using an interactive slider.
 
@@ -16,7 +16,7 @@ Employees can also model their RSU value at different share prices using an inte
 
 - **Total Rewards View** (Employee): Personalized compensation dashboard showing base salary (Workday), bonus target (Workday), and equity value (Shareworks). Each data source displays a "last synced" timestamp.
 - **RSU Modeling** (Employee): Interactive equity grant viewer with per-grant vesting schedules, vesting progress, and a share price modeling slider — all powered by Shareworks data.
-- **Okta SSO** (Employee): Authentication via Okta OIDC/SAML; user identity resolved to `Worker_ID` for data scoping.
+- **Okta SSO** (Employee): Authentication via Okta OIDC/SAML; user identity resolved to their employee identifier for data scoping.
 
 ### Out of Scope
 
@@ -53,18 +53,18 @@ An individual contributor who wants to understand their total compensation — b
 
 | # | Requirement | Priority |
 |---|---|---|
-| E-1 | As an employee, I can see my annualized base salary on the Total Rewards dashboard. Source: Workday `Annual_Base_Pay` from `CRINT Pave Employee Compensation Records`. | P0 |
-| E-2 | As an employee, I can see my bonus target percentage and calculated bonus dollar amount. Source: Workday `Bonus_Plan_Percent`; calculated as `Annual_Base_Pay × Bonus_Plan_Percent`. | P0 |
-| E-3 | As an employee, I can see my total equity value (vested + unvested) in dollars. Source: Shareworks `Total_Shares_Granted × Current_FMV`. | P0 |
+| E-1 | As an employee, I can see my annualized base salary on the Total Rewards dashboard. Source: Workday. | P0 |
+| E-2 | As an employee, I can see my bonus target percentage and calculated bonus dollar amount. Source: Workday; calculated as base salary × bonus target percentage. | P0 |
+| E-3 | As an employee, I can see my total equity value (vested + unvested) in dollars. Source: Shareworks (total shares granted × current fair market value). | P0 |
 | E-4 | As an employee, I can see my total annual compensation (base + bonus + equity) as a single headline number and as a donut chart showing the proportional breakdown. | P0 |
 | E-5 | As an employee, I can see a bar chart of my year-over-year RSU value (historical and projected future years). | P1 |
 | E-6 | As an employee, I can see my vested vs. unvested equity split in both dollars and units. | P0 |
-| E-7 | As an employee, I can see my Job Role and Job Level displayed on the Total Rewards page. Source: Workday `Business_Title` and `Job_Profile_Level`. | P0 |
+| E-7 | As an employee, I can see my Job Role and Job Level displayed on the Total Rewards page. Source: Workday. | P0 |
 | E-8 | As an employee, I can see the timestamp of when my compensation data was last synced from Workday. | P0 |
 | E-9 | As an employee, I can see the timestamp of when my equity data was last synced from Shareworks. | P0 |
 | E-10 | As an employee, I can see a note indicating that FX rates are updated daily and the default share price used for equity calculations. | P1 |
 | E-11 | As an employee, if my Shareworks data is unavailable (e.g., new hire with no grants), I see an error message: "Equity data is currently unavailable. Please contact your administrator." The equity section is not hidden and does not show $0. | P0 |
-| E-12 | As an employee, I am authenticated via Okta SSO before accessing any Thrive data. My identity is resolved to a `Worker_ID` which scopes all queries to my records only. | P0 |
+| E-12 | As an employee, I am authenticated via Okta SSO before accessing any Thrive data. My identity is resolved to my employee identifier which scopes all queries to my records only. | P0 |
 
 ### Employee — RSU Modeling
 
@@ -88,7 +88,7 @@ An individual contributor who wants to understand their total compensation — b
 - The dashboard shows three compensation components: Base Salary (annualized, from Workday), Bonus/Commission Target (from Workday), and RSU Equity Value (from Shareworks).
 - A donut chart shows the proportional breakdown of base, bonus, and equity.
 - Total annual compensation is displayed as a single headline number (sum of all three components).
-- Job Role (e.g., "Senior Engineer") and Job Level (e.g., "P50") are shown, sourced from Workday `Business_Title` and `Job_Profile_Level`.
+- Job Role (e.g., "Senior Engineer") and Job Level (e.g., "P50") are shown, sourced from Workday.
 - A "last synced from Workday" timestamp is displayed near the salary/bonus data.
 - A "last synced from Shareworks" timestamp is displayed near the equity data.
 - A note indicates that FX rates are updated daily and states the default share price used for equity calculations.
@@ -132,7 +132,7 @@ An individual contributor who wants to understand their total compensation — b
 | Requirement | Detail |
 |---|---|
 | PII Fields | Name, email, salary, bonus, equity values are PII; encrypted at rest |
-| Who Can See What | Employee: own data only. Identity resolved via Okta `Worker_ID`; no access to other employees' data. |
+| Who Can See What | Employee: own data only. Identity resolved via Okta employee identifier; no access to other employees' data. |
 
 ### Accessibility & Localization
 
@@ -152,8 +152,8 @@ An individual contributor who wants to understand their total compensation — b
 
 1. Employee navigates to Thrive → redirected to Okta SSO login.
 2. Okta authenticates the user → returns JWT with identity claims.
-3. Thrive resolves `Worker_ID` from Okta profile → fetches compensation data from Workday sync cache.
-4. Thrive fetches equity data from Shareworks sync cache (joined on `Worker_ID` ↔ `Participant_ID`).
+3. Thrive resolves the employee's identity from Okta profile → fetches compensation data from Workday sync cache.
+4. Thrive fetches equity data from Shareworks sync cache (joined on the employee's identifier across both systems).
 5. Total Rewards page renders:
    - Headline: Total Annual Compensation (single number).
    - Donut chart: Base Salary, Bonus Target, RSU Equity value as proportional segments.
@@ -188,9 +188,9 @@ An individual contributor who wants to understand their total compensation — b
 
 | # | Assumption |
 |---|---|
-| A1 | Okta is the sole identity provider; all Thrive users have an Okta account with a `Worker_ID` claim or a resolvable attribute. |
-| A2 | `Worker_ID` (Workday) and `Participant_ID` (Shareworks) can be reliably joined — either they are the same value or a mapping table exists. |
-| A3 | The Workday RaaS reports (CRINT Pave) are already configured and accessible via the tenant's RaaS API endpoint. |
+| A1 | Okta is the sole identity provider; all Thrive users have an Okta account with a resolvable employee identifier. |
+| A2 | The employee identifier in Workday and the participant identifier in Shareworks can be reliably joined — either they are the same value or a mapping table exists. |
+| A3 | The Workday reports are already configured and accessible via the tenant's API endpoint. |
 | A4 | Shareworks API is REST-based and supports per-participant grant and vesting queries. |
 | A5 | Currency is USD for all employees; multi-currency support is deferred. |
 | A6 | Sync frequency defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks). Data ingestion configuration is handled outside the application. |
@@ -206,8 +206,8 @@ An individual contributor who wants to understand their total compensation — b
 
 | # | Question | Impact | Proposed Options |
 |---|---|---|---|
-| Q1 | **How is `Worker_ID` mapped to `Participant_ID` in Shareworks?** Are they the same value, or is there a separate mapping table? | Blocks equity data join for the Employee view. | **Option A:** Same value (simplest, no mapping needed). **Option B:** Mapping table maintained in Shareworks. **Option C:** Thrive maintains a crosswalk table. |
-| Q2 | **What Okta claims/attributes are available?** Does the Okta token include `Worker_ID` directly, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data. | **Option A:** Okta profile includes `Worker_ID` as a custom attribute. **Option B:** Okta provides email, and we look up `Worker_ID` from synced Workday data. |
+| Q1 | **How is the employee identifier mapped between Workday and Shareworks?** Are they the same value, or is there a separate mapping table? | Blocks equity data join for the Employee view. | **Option A:** Same value (simplest, no mapping needed). **Option B:** Mapping table maintained in Shareworks. **Option C:** Thrive maintains a crosswalk table. |
+| Q2 | **What Okta claims/attributes are available?** Does the Okta token include the employee identifier directly, or do we need a lookup after authentication? | Affects how we resolve the authenticated user to their Workday/Shareworks data. | **Option A:** Okta profile includes the employee identifier as a custom attribute. **Option B:** Okta provides email, and we look up the identifier from synced Workday data. |
 | Q3 | **What is the Shareworks API authentication method?** OAuth 2.0, API Key, or certificate-based? | Affects how the backend connects to Shareworks to pull equity data. | Need Shareworks Admin to confirm the supported auth method. |
 | Q4 | **What does the sync timestamp represent?** The time data was pulled from the source system, or the time it was written to Thrive's database? | Affects what "last synced" means to the employee viewing their data. | **Option A:** Time data was fetched from the source (more meaningful to user). **Option B:** Time data was committed to Thrive DB (more technically accurate). **Recommendation:** Option A. |
 | Q5 | **Should the "stale data" warning threshold be configurable?** Currently proposed as a fixed 24-hour threshold. | Affects whether this is a hard-coded value or needs an admin setting. | **Option A:** Hard-coded at 24 hours (simpler, ships faster). **Option B:** Configurable (more flexible but adds scope). |
@@ -221,8 +221,8 @@ An individual contributor who wants to understand their total compensation — b
 
 | Source | Type | Purpose |
 |---|---|---|
-| Workday (CRINT Pave Employee Compensation Records) | Production RaaS | Employee demographics, salary, level, job data |
-| Workday (CRINT Pave-Compensation History) | Production RaaS | 2-year salary/bonus change history |
+| Workday (Employee Compensation Records) | Production API | Employee demographics, salary, level, job data |
+| Workday (Compensation History) | Production API | 2-year salary/bonus change history |
 | Shareworks (Equity Grants + Vesting Schedule) | Production API | RSU grants, vesting events, current FMV |
 | Synthetic test records | Generated | Edge cases (e.g., no equity, fully vested, stale sync) |
 
