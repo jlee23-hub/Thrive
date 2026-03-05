@@ -2294,6 +2294,67 @@ function UsersTabContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 10;
 
+  const availableUserRoles = [
+    { role: "APEX System Admin | Comp", appearance: "success" as const },
+    { role: "APEX System Admin | HRBP", appearance: "success" as const },
+    { role: "APEX Executive Planner", appearance: "success" as const },
+    { role: "APEX Planner", appearance: "default" as const },
+    { role: "APEX Planner + Full Budget View", appearance: "inprogress" as const },
+    { role: "APEX Basis Points", appearance: "success" as const },
+    { role: "APEX Plans View", appearance: "success" as const },
+    { role: "CRP Zone", appearance: "inprogress" as const },
+    { role: "CRP Org and Geo Zone", appearance: "inprogress" as const },
+    { role: "HRBP All Roles", appearance: "moved" as const },
+    { role: "HRBP Intro Roles", appearance: "moved" as const },
+    { role: "Admin", appearance: "removed" as const },
+  ];
+
+  const [employeeRoles, setEmployeeRoles] = useState<Record<string, { role: string; appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new" }[]>>(() => {
+    const initial: Record<string, { role: string; appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new" }[]> = {};
+    employeeData.forEach((emp) => {
+      const assignedRole = userRoleAssignments[emp.id] || "APEX Planner";
+      const match = availableUserRoles.find((r) => r.role === assignedRole);
+      initial[emp.id] = [{ role: assignedRole, appearance: match?.appearance || "default" }];
+    });
+    return initial;
+  });
+
+  const [userRolePopup, setUserRolePopup] = useState<{ empId: string; anchorRect: DOMRect } | null>(null);
+  const [userRoleSearch, setUserRoleSearch] = useState("");
+  const [expandedUserRoles, setExpandedUserRoles] = useState<Set<string>>(new Set());
+  const userRolePopupRef = useRef<HTMLDivElement>(null);
+
+  const filteredUserRoles = availableUserRoles.filter((r) =>
+    r.role.toLowerCase().includes(userRoleSearch.toLowerCase())
+  );
+
+  useEffect(() => {
+    if (!userRolePopup) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userRolePopupRef.current && !userRolePopupRef.current.contains(e.target as Node)) {
+        setUserRolePopup(null);
+        setUserRoleSearch("");
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [userRolePopup]);
+
+  const addUserRole = (empId: string, role: string, appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new") => {
+    setEmployeeRoles((prev) => {
+      const current = prev[empId] || [];
+      if (current.some((r) => r.role === role)) return prev;
+      return { ...prev, [empId]: [...current, { role, appearance }] };
+    });
+  };
+
+  const removeUserRole = (empId: string, role: string) => {
+    setEmployeeRoles((prev) => {
+      const current = prev[empId] || [];
+      return { ...prev, [empId]: current.filter((r) => r.role !== role) };
+    });
+  };
+
   const filteredEmployees = employeeData.filter((emp) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
@@ -2471,12 +2532,67 @@ function UsersTabContent() {
                         <Text size="small">{city}</Text>
                       </td>
                       <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                          <Lozenge appearance="default">{roleLabel}</Lozenge>
-                          <Button appearance="link" spacing="none">
-                            + Add role
-                          </Button>
-                        </div>
+                        {(() => {
+                          const roles = employeeRoles[emp.id] || [{ role: roleLabel, appearance: "default" as const }];
+                          const isExpanded = expandedUserRoles.has(emp.id);
+                          const visibleRoles = isExpanded ? roles : roles.slice(0, 3);
+                          const hiddenCount = roles.length - 3;
+                          return (
+                            <div style={{ display: "flex", alignItems: "center", gap: token("space.050"), flexWrap: "wrap" }}>
+                              {visibleRoles.map((r, ri) => (
+                                <Lozenge key={ri} appearance={r.appearance}>{r.role}</Lozenge>
+                              ))}
+                              {!isExpanded && hiddenCount > 0 && (
+                                <span
+                                  style={{
+                                    cursor: "pointer",
+                                    fontSize: "11px",
+                                    color: token("color.text.subtle"),
+                                    fontWeight: 500,
+                                  }}
+                                  onClick={() => setExpandedUserRoles((prev) => {
+                                    const next = new Set(prev);
+                                    next.add(emp.id);
+                                    return next;
+                                  })}
+                                >
+                                  + {hiddenCount} other{hiddenCount > 1 ? "s" : ""}
+                                </span>
+                              )}
+                              {isExpanded && roles.length > 3 && (
+                                <span
+                                  style={{
+                                    cursor: "pointer",
+                                    fontSize: "11px",
+                                    color: token("color.text.subtle"),
+                                    fontWeight: 500,
+                                  }}
+                                  onClick={() => setExpandedUserRoles((prev) => {
+                                    const next = new Set(prev);
+                                    next.delete(emp.id);
+                                    return next;
+                                  })}
+                                >
+                                  Show less
+                                </span>
+                              )}
+                              <span style={{ fontSize: "12px" }}>
+                                <Button
+                                  appearance="subtle"
+                                  spacing="compact"
+                                  iconBefore={AddIcon}
+                                  onClick={(e: React.MouseEvent<HTMLElement>) => {
+                                    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                                    setUserRolePopup({ empId: emp.id, anchorRect: rect });
+                                    setUserRoleSearch("");
+                                  }}
+                                >
+                                  Add
+                                </Button>
+                              </span>
+                            </div>
+                          );
+                        })()}
                       </td>
                     </tr>
                   );
@@ -2536,6 +2652,99 @@ function UsersTabContent() {
           <Button appearance="primary" iconBefore={PersonAddIcon}>
             Add guest
           </Button>
+        </div>
+      )}
+
+      {userRolePopup && (
+        <div
+          ref={userRolePopupRef}
+          style={{
+            position: "fixed",
+            top: Math.min(userRolePopup.anchorRect.bottom + 4, window.innerHeight - 400),
+            left: Math.min(userRolePopup.anchorRect.left, window.innerWidth - 340),
+            width: 320,
+            maxHeight: 380,
+            backgroundColor: token("elevation.surface.overlay"),
+            boxShadow: token("elevation.shadow.overlay"),
+            borderRadius: "6px",
+            border: `1px solid ${token("color.border")}`,
+            zIndex: 600,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <div style={{ padding: `${token("space.150")} ${token("space.200")}`, borderBottom: `1px solid ${token("color.border")}` }}>
+            <Textfield
+              isCompact
+              placeholder="Search roles..."
+              value={userRoleSearch}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserRoleSearch(e.target.value)}
+              elemBeforeInput={
+                <div style={{ paddingLeft: token("space.075"), display: "flex", alignItems: "center" }}>
+                  <SearchIcon label="" LEGACY_size="small" />
+                </div>
+              }
+              autoFocus
+            />
+          </div>
+          <div style={{ overflowY: "auto", flex: 1 }}>
+            {filteredUserRoles.length === 0 ? (
+              <div style={{ padding: `${token("space.200")} ${token("space.200")}`, textAlign: "center" }}>
+                <Text size="small" color="color.text.subtlest">No roles found</Text>
+              </div>
+            ) : (
+              filteredUserRoles.map((r) => {
+                const empRoles = employeeRoles[userRolePopup.empId] || [];
+                const isSelected = empRoles.some((er) => er.role === r.role);
+                return (
+                  <div
+                    key={r.role}
+                    style={{
+                      padding: `${token("space.075")} ${token("space.200")}`,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: token("space.100"),
+                      backgroundColor: "transparent",
+                      transition: "background-color 100ms",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.backgroundColor = token("color.background.neutral.subtle.hovered");
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
+                    }}
+                    onClick={() => {
+                      if (isSelected) {
+                        removeUserRole(userRolePopup.empId, r.role);
+                      } else {
+                        addUserRole(userRolePopup.empId, r.role, r.appearance);
+                      }
+                    }}
+                  >
+                    <Checkbox
+                      isChecked={isSelected}
+                      onChange={() => {}}
+                      label=""
+                    />
+                    <Lozenge appearance={r.appearance}>{r.role}</Lozenge>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          <div style={{ padding: `${token("space.100")} ${token("space.200")}`, borderTop: `1px solid ${token("color.border")}`, display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              appearance="primary"
+              spacing="compact"
+              onClick={() => {
+                setUserRolePopup(null);
+                setUserRoleSearch("");
+              }}
+            >
+              Done
+            </Button>
+          </div>
         </div>
       )}
     </div>
