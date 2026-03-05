@@ -551,6 +551,26 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
     );
   };
 
+  const addRoleToField = (fieldId: string, role: string, appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new") => {
+    setFieldPermissions((prev) =>
+      prev.map((f) =>
+        f.id === fieldId && !f.permissions.some((p) => p.role === role)
+          ? { ...f, permissions: [...f.permissions, { role, appearance }] }
+          : f
+      )
+    );
+  };
+
+  const removeRoleFromField = (fieldId: string, role: string) => {
+    setFieldPermissions((prev) =>
+      prev.map((f) =>
+        f.id === fieldId
+          ? { ...f, permissions: f.permissions.filter((p) => p.role !== role) }
+          : f
+      )
+    );
+  };
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
@@ -583,6 +603,8 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             setSelectedRole={setSelectedRole}
             fieldPermissions={fieldPermissions}
             toggleFieldPermission={toggleFieldPermission}
+            addRoleToField={addRoleToField}
+            removeRoleFromField={removeRoleFromField}
           />
         );
       case 8:
@@ -2779,16 +2801,21 @@ function FieldPermissionsStep({
   setSelectedRole,
   fieldPermissions,
   toggleFieldPermission,
+  addRoleToField,
+  removeRoleFromField,
 }: {
   selectedRole: string;
   setSelectedRole: (v: string) => void;
   fieldPermissions: typeof fieldPermissionsData;
   toggleFieldPermission: (id: string, type: "visible" | "editable") => void;
+  addRoleToField: (fieldId: string, role: string, appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new") => void;
+  removeRoleFromField: (fieldId: string, role: string) => void;
 }) {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [addColumnOpen, setAddColumnOpen] = useState(false);
   const [addRolePopup, setAddRolePopup] = useState<{ fieldId: string; anchorRect: DOMRect } | null>(null);
   const [roleSearch, setRoleSearch] = useState("");
+  const [expandedPermissions, setExpandedPermissions] = useState<Set<string>>(new Set());
   const [columnForm, setColumnForm] = useState({
     column: "custom",
     name: "",
@@ -3001,25 +3028,67 @@ function FieldPermissionsStep({
                     <Text size="UNSAFE_small" color="color.text.subtlest">{field.columnDefault || "Visible"}</Text>
                   </td>
                   <td style={tdStyle}>
-                    <div style={{ display: "flex", alignItems: "center", gap: token("space.050"), flexWrap: "wrap" }}>
-                      {(field.permissions || []).map((p, pi) => (
-                        <Lozenge key={pi} appearance={p.appearance}>{p.role}</Lozenge>
-                      ))}
-                      <span style={{ fontSize: "12px" }}>
-                        <Button
-                          appearance="subtle"
-                          spacing="compact"
-                          iconBefore={AddIcon}
-                          onClick={(e: React.MouseEvent<HTMLElement>) => {
-                            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-                            setAddRolePopup({ fieldId: field.id, anchorRect: rect });
-                            setRoleSearch("");
-                          }}
-                        >
-                          Add
-                        </Button>
-                      </span>
-                    </div>
+                    {(() => {
+                      const perms = field.permissions || [];
+                      const isExpanded = expandedPermissions.has(field.id);
+                      const visiblePerms = isExpanded ? perms : perms.slice(0, 3);
+                      const hiddenCount = perms.length - 3;
+                      return (
+                        <div style={{ display: "flex", alignItems: "center", gap: token("space.050"), flexWrap: "wrap" }}>
+                          {visiblePerms.map((p, pi) => (
+                            <Lozenge key={pi} appearance={p.appearance}>{p.role}</Lozenge>
+                          ))}
+                          {!isExpanded && hiddenCount > 0 && (
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                fontSize: "11px",
+                                color: token("color.text.subtle"),
+                                fontWeight: 500,
+                              }}
+                              onClick={() => setExpandedPermissions((prev) => {
+                                const next = new Set(prev);
+                                next.add(field.id);
+                                return next;
+                              })}
+                            >
+                              + {hiddenCount} other{hiddenCount > 1 ? "s" : ""}
+                            </span>
+                          )}
+                          {isExpanded && perms.length > 3 && (
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                fontSize: "11px",
+                                color: token("color.text.subtle"),
+                                fontWeight: 500,
+                              }}
+                              onClick={() => setExpandedPermissions((prev) => {
+                                const next = new Set(prev);
+                                next.delete(field.id);
+                                return next;
+                              })}
+                            >
+                              Show less
+                            </span>
+                          )}
+                          <span style={{ fontSize: "12px" }}>
+                            <Button
+                              appearance="subtle"
+                              spacing="compact"
+                              iconBefore={AddIcon}
+                              onClick={(e: React.MouseEvent<HTMLElement>) => {
+                                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                                setAddRolePopup({ fieldId: field.id, anchorRect: rect });
+                                setRoleSearch("");
+                              }}
+                            >
+                              Add
+                            </Button>
+                          </span>
+                        </div>
+                      );
+                    })()}
                   </td>
                   <td style={{ ...tdStyle, textAlign: "center", fontSize: "12px" }}>
                     <IconButton icon={EditIcon} label="Edit row" appearance="subtle" spacing="compact" />
@@ -3036,10 +3105,10 @@ function FieldPermissionsStep({
           ref={popupRef}
           style={{
             position: "fixed",
-            top: Math.min(addRolePopup.anchorRect.bottom + 4, window.innerHeight - 360),
-            left: Math.min(addRolePopup.anchorRect.left, window.innerWidth - 320),
-            width: 300,
-            maxHeight: 340,
+            top: Math.min(addRolePopup.anchorRect.bottom + 4, window.innerHeight - 400),
+            left: Math.min(addRolePopup.anchorRect.left, window.innerWidth - 340),
+            width: 320,
+            maxHeight: 380,
             backgroundColor: token("elevation.surface.overlay"),
             boxShadow: token("elevation.shadow.overlay"),
             borderRadius: "6px",
@@ -3071,44 +3140,55 @@ function FieldPermissionsStep({
             ) : (
               filteredRoles.map((r) => {
                 const field = fieldPermissions.find((f) => f.id === addRolePopup.fieldId);
-                const alreadyAdded = field?.permissions?.some((p) => p.role === r.role);
+                const isSelected = field?.permissions?.some((p) => p.role === r.role) ?? false;
                 return (
                   <div
                     key={r.role}
                     style={{
-                      padding: `${token("space.100")} ${token("space.200")}`,
-                      cursor: alreadyAdded ? "default" : "pointer",
+                      padding: `${token("space.075")} ${token("space.200")}`,
+                      cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "space-between",
                       gap: token("space.100"),
-                      opacity: alreadyAdded ? 0.5 : 1,
                       backgroundColor: "transparent",
                       transition: "background-color 100ms",
                     }}
                     onMouseEnter={(e) => {
-                      if (!alreadyAdded) (e.currentTarget as HTMLElement).style.backgroundColor = token("color.background.neutral.subtle.hovered");
+                      (e.currentTarget as HTMLElement).style.backgroundColor = token("color.background.neutral.subtle.hovered");
                     }}
                     onMouseLeave={(e) => {
                       (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
                     }}
                     onClick={() => {
-                      if (alreadyAdded) return;
-                      toggleFieldPermission(addRolePopup.fieldId, "visible");
-                      setAddRolePopup(null);
-                      setRoleSearch("");
+                      if (isSelected) {
+                        removeRoleFromField(addRolePopup.fieldId, r.role);
+                      } else {
+                        addRoleToField(addRolePopup.fieldId, r.role, r.appearance);
+                      }
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                      <Lozenge appearance={r.appearance}>{r.role}</Lozenge>
-                    </div>
-                    {alreadyAdded && (
-                      <CheckMarkIcon label="Already added" LEGACY_size="small" color={token("color.icon.subtle")} />
-                    )}
+                    <Checkbox
+                      isChecked={isSelected}
+                      onChange={() => {}}
+                      label=""
+                    />
+                    <Lozenge appearance={r.appearance}>{r.role}</Lozenge>
                   </div>
                 );
               })
             )}
+          </div>
+          <div style={{ padding: `${token("space.100")} ${token("space.200")}`, borderTop: `1px solid ${token("color.border")}`, display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              appearance="primary"
+              spacing="compact"
+              onClick={() => {
+                setAddRolePopup(null);
+                setRoleSearch("");
+              }}
+            >
+              Done
+            </Button>
           </div>
         </div>
       )}
