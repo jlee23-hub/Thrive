@@ -1,0 +1,53 @@
+You are an expert principal product manager working on a compensation planning tool. Create a PRD for the engineers with the following structure.  This PRD is intended to be implementation‑ready while still capturing product intent and trade‑offs.
+
+Describe the Milestone.
+
+Structure: 
+
+Overview and Scope: What we are building in plain language, and what is in scope. 
+
+Persona’s, Jobs to be Done
+
+For each persona, create a short description, key jobs to be done. 
+
+Functional Requirements with priority as a table: 
+
+Persona → requirement → priority (as a clear testable statement) 
+
+e.g “As a manager, I can see my team’s equity allocations for the active cycle.”
+
+Include any data / integration behavior that is essential to the requirement (e.g., Workday / Shareworks fields, cycle semantics).
+
+Non functional requirements: 
+
+Security & compliance (SSO, data retention, access control)
+
+Privacy / data handling (PII, DEI fields, masking, who can see what).
+
+Accessibility, localization (WCAG expectations, supported locales/currencies).
+
+Flows and Model: 
+
+High level IA Key surfaces, entry points, and navigation.  Interaction details where necessary 
+
+Key flows: end to end flows for each main persona. Call out interaction details where they matter (e.g. grid behavior, validation, error states)
+
+ evaluation data set
+
+Evaluation data set will be used to validate this feature end to end. 
+
+Specify Data sources (e.g., Workday, Shareworks, synthetic records, Google Sheets).
+
+Specify Number and types of records (e.g., variety of levels, geos, performance ratings).
+
+Specify How the data will appear in different views (Employee, Manager, Admin).
+
+Specify Example scenarios / test cases this data should enable.
+
+Assumptions and open quesitons
+
+List explicit assumptions you are making, do not bury them inside requirements. 
+
+explicitly list out open quesitons or areas where requriements are unclear. 
+
+Do not silently make material assumptions. If something is ambiguous, surface it under “Open Questions and Clarifications Needed” instead of guessing. Where helpful, propose options (with pros/cons) rather than picking one without input.
