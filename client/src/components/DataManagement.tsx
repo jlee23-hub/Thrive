@@ -476,7 +476,7 @@ export default function DataManagement() {
           </TabList>
 
           <TabPanel>
-            <div style={{ paddingTop: token("space.300") }}>
+            <div style={{ paddingTop: token("space.300"), width: "100%", minWidth: 0, flex: 1 }}>
               <div style={{ ...cardStyle, marginBottom: token("space.300") }}>
                 <div
                   onClick={() => setIsApiSetupExpanded(!isApiSetupExpanded)}
