@@ -41,11 +41,12 @@ Employee demographics, salary, level, and job data continue to flow from Workday
 
 ### Manager
 
-A people leader (typically M50–M70 level) responsible for recommending equity grants for their direct reports during a compensation cycle.
+A people leader (typically M50–M70 level) responsible for recommending equity grants for their direct reports during a compensation cycle. Any user with at least one direct report gets manager access — there is no minimum team size requirement. Managers have two views: "My View" (personal Total Rewards dashboard from Milestone 1) and "My Team" (Team Planner from this milestone), both accessible from the left navigation.
 
 | Job to Be Done |
 |---|
 | See all my direct reports' current compensation, job metadata, and performance ratings in one grid |
+| Switch between my personal compensation view ("My View") and my team planning view ("My Team") |
 | Recommend new equity (RSU) grants for direct reports |
 | Understand where each employee sits relative to their salary band (compa-ratio / % of SRP) |
 | Filter and sort my team by level, zone, performance rating, or job family to make informed decisions |
@@ -332,6 +333,8 @@ A compensation administrator who configures cycles and monitors progress. In Mil
 | A9 | The "Recall" action is available only while the cycle status is "Open". Once the cycle is closed by the Comp Admin, submissions are final. |
 | A10 | Workday and Shareworks sync timestamps and behavior are the same as Milestone 1 — timestamps represent the time data was last pulled from the source system. |
 | A11 | Employee Name column is pinned by default on initial load. Manager's pinning preferences are not persisted across sessions (reset on page load). |
+| A12 | Managers have dual navigation: "My View" (personal Total Rewards dashboard from Milestone 1) and "My Team" (Team Planner). Both are accessible from the left navigation. |
+| A13 | No minimum team size is required for manager access. Any user with at least one direct report in Workday gets the "My Team" navigation item and Team Planner access. |
 
 ---
 
@@ -340,8 +343,8 @@ A compensation administrator who configures cycles and monitors progress. In Mil
 | # | Question | Options / Context |
 |---|---|---|
 | OQ-1 | How should we handle managers who are also direct reports of another manager in the same cycle? Should the manager's own record appear in their manager's grid? | Standard practice is yes — the manager is an employee too. Confirming this is the expected behavior. |
-| OQ-2 | Should the manager see a read-only view of their own compensation (as an employee) alongside the Team Planner, or are those completely separate views? | In many tools, the manager can toggle between "My Compensation" and "My Team". Confirming whether this toggle is in scope. |
+| ~~OQ-2~~ | ~~Should the manager see a read-only view of their own compensation (as an employee) alongside the Team Planner, or are those completely separate views?~~ | **RESOLVED:** Manager has both views — "My View" (personal Total Rewards dashboard from Milestone 1) and "My Team" (Team Planner). Both are accessible from the left navigation. |
 | OQ-3 | What happens if the Comp Admin changes eligibility rules while a manager has a draft in progress? | **Option A:** Manager is notified and draft is recalculated against new parameters. **Option B:** Draft is preserved as-is; manager sees updated parameters on next page load but existing values are not changed. |
 | OQ-4 | Should the equity recommendation column accept a dollar value (converted to units at current share price) or units only? | Dollar-based entry is more intuitive for managers; unit-based is more precise. |
-| OQ-5 | Is there a minimum team size or reporting relationship requirement to access the Team Planner, or does any user with at least one direct report get manager access? | Need to confirm the threshold, if any. |
+| ~~OQ-5~~ | ~~Is there a minimum team size or reporting relationship requirement to access the Team Planner, or does any user with at least one direct report get manager access?~~ | **RESOLVED:** No minimum team size. Any user with at least one direct report gets manager access to the Team Planner. |
 | OQ-6 | Should manager's column pinning preferences persist across sessions, or reset to defaults on each page load? | Persisting requires additional storage; resetting is simpler for initial release. |
