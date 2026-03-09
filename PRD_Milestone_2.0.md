@@ -15,7 +15,7 @@ Employee demographics, salary, level, and job data continue to flow from Workday
 ### In Scope
 
 - **Team Planner Grid** (Manager): Read-only grid showing all direct reports eligible for the active cycle with current compensation data. Supports column pinning (freeze columns on left side of grid while scrolling horizontally).
-- **Team Summary Cards** (Manager): Headline metrics for the team — headcount, total current base, total current equity, and average salary range position.
+- **Team Summary Cards** (Manager): Headline metrics for the team — headcount and total current equity.
 - **Filtering** (Manager): Column-level filters by job level, zone, performance rating, and eligibility status. Filters are additive (AND logic).
 - **Sorting** (Manager): Column-level sorting (ascending/descending) on any column.
 - **Search** (Manager): Text search by employee name or job family.
@@ -68,7 +68,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-4 | As a manager, I can see summary cards above the grid showing: team headcount, total current base salary, total current equity (RSUs), and average % of SRP. | P0 |
+| M-4 | As a manager, I can see summary cards above the grid showing: team headcount and total current equity (RSUs). | P0 |
 | M-5 | As a manager, the summary cards update dynamically when filters are applied (showing metrics for the filtered subset). | P1 |
 
 ### Manager — Sorting
@@ -185,7 +185,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 4. System resolves the manager's identity → queries the reporting hierarchy from Workday to determine direct reports.
 5. System filters direct reports by the cycle's eligibility rules.
 6. Team Planner grid renders with:
-   - Summary cards (headcount, total base, total equity, avg % of SRP).
+   - Summary cards (headcount, total equity).
    - Read-only grid with current compensation data.
    - Employee Name column pinned by default.
    - Cycle metadata in the header (name, type, effective date).
@@ -231,7 +231,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 | View | What the User Sees | Key Validation |
 |---|---|---|
-| Manager Team Planner (active cycle) | Read-only grid of direct reports with current comp data, summary cards | Grid shows only eligible direct reports; summary card math is correct; all columns are read-only |
+| Manager Team Planner (active cycle) | Read-only grid of direct reports with current comp data, summary cards (headcount, total equity) | Grid shows only eligible direct reports; summary card math is correct; all columns are read-only |
 | Manager Team Planner (no active cycle) | "No active compensation cycle" message | Grid and summary cards are not rendered |
 | Manager Team Planner (all reports excluded) | "All of your direct reports are excluded" message | Grid renders empty state |
 
@@ -239,7 +239,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 | # | Scenario | Expected Result |
 |---|---|---|
-| TC-1 | Manager with 8 direct reports, active Equity cycle | Grid shows 8 eligible employees with all compensation data; all columns are read-only; summary cards show correct totals |
+| TC-1 | Manager with 8 direct reports, active Equity cycle | Grid shows 8 eligible employees with all compensation data; all columns are read-only; summary cards show headcount (8) and total equity |
 | TC-2 | Manager pins Employee Name and Job Level columns, then scrolls right | Pinned columns remain fixed on the left; other columns scroll horizontally; visual separator visible |
 | TC-3 | Manager sorts by Performance Rating descending | Grid reorders with "Greatly Exceeds" at top; sort indicator visible on column header |
 | TC-4 | Manager filters by Zone = "Zone 1" and Level = "IC5" | Grid shows only employees matching both criteria; active filter indicators visible; summary cards update |
