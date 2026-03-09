@@ -14,7 +14,7 @@ Employee demographics, salary, level, and job data continue to flow from Workday
 
 ### In Scope
 
-- **Team Planner Grid** (Manager): Read-only grid showing all direct reports eligible for the active cycle with current compensation data. Supports column pinning (freeze columns on left side of grid while scrolling horizontally).
+- **Team Planner Grid** (Manager): Read-only grid showing all direct reports eligible for the active cycle with current compensation data. Supports column pinning and drill-down into skip-level reports (one additional click into a direct report who is also a manager).
 - **Team Summary Cards** (Manager): Headline metrics for the team — headcount and total current equity.
 - **Filtering** (Manager): Column-level filters by job level, zone, performance rating, and eligibility status. Filters are additive (AND logic).
 - **Sorting** (Manager): Column-level sorting (ascending/descending) on any column.
@@ -46,6 +46,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | Job to Be Done |
 |---|
 | See all my direct reports' current compensation, job metadata, and performance ratings in one grid |
+| Drill into a direct report who is also a manager to see their skip-level reports |
 | Switch between my personal compensation view ("My View") and my team planning view ("My Team") |
 | Understand where each employee sits relative to their salary band (compa-ratio / % of SRP) |
 | Filter and sort my team by level, zone, performance rating, or job family to review team composition |
@@ -61,50 +62,51 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | # | Requirement | Priority |
 |---|---|---|
 | M-1 | As a manager, I can see a read-only grid of all my direct reports who are eligible for the active compensation cycle. Columns include: Employee Name, Employee ID, Job Title, Job Level, Job Family, Zone, Start Date, Eligibility Date, Current Base Salary, Bonus Target %, Current Equity (RSUs), Performance Rating, % of SRP (Salary Range Position). Source: Workday (demographics, salary, job data), Shareworks (equity). | P0 |
-| M-2 | As a manager, I can pin columns to the left side of the grid so they remain visible while scrolling horizontally (e.g., pin Employee Name and Employee ID). | P0 |
-| M-3 | As a manager, I can unpin a previously pinned column to return it to its default scrollable position. | P0 |
+| M-2 | As a manager, if a direct report is also a manager, I can click into that employee's row to see their direct reports (my skip-level reports) in the same grid format. A breadcrumb or back navigation allows me to return to my direct reports view. | P0 |
+| M-3 | As a manager, I can pin columns to the left side of the grid so they remain visible while scrolling horizontally (e.g., pin Employee Name and Employee ID). | P0 |
+| M-4 | As a manager, I can unpin a previously pinned column to return it to its default scrollable position. | P0 |
 
 ### Manager — Team Summary Cards
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-4 | As a manager, I can see summary cards above the grid showing: team headcount and total current equity (RSUs). | P0 |
-| M-5 | As a manager, the summary cards update dynamically when filters are applied (showing metrics for the filtered subset). | P1 |
+| M-5 | As a manager, I can see summary cards above the grid showing: team headcount and total current equity (RSUs). | P0 |
+| M-6 | As a manager, the summary cards update dynamically when filters are applied (showing metrics for the filtered subset). | P1 |
 
 ### Manager — Sorting
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-6 | As a manager, I can sort the grid by any column (ascending/descending) by clicking the column header. | P0 |
-| M-7 | As a manager, I can see a visual indicator on the column header showing the current sort direction. | P0 |
-| M-8 | As a manager, clicking a sorted column header a third time removes the sort (returns to default order). | P1 |
+| M-7 | As a manager, I can sort the grid by any column (ascending/descending) by clicking the column header. | P0 |
+| M-8 | As a manager, I can see a visual indicator on the column header showing the current sort direction. | P0 |
+| M-9 | As a manager, clicking a sorted column header a third time removes the sort (returns to default order). | P1 |
 
 ### Manager — Search
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-9 | As a manager, I can search the grid by any column value using a text search field above the grid (e.g., employee name, job title, job family, zone, level, performance rating). | P0 |
-| M-10 | As a manager, the search filters the grid in real time as I type (debounced, no submit button required). | P0 |
-| M-11 | As a manager, I can clear the search to restore the full grid. | P0 |
+| M-10 | As a manager, I can search the grid by any column value using a text search field above the grid (e.g., employee name, job title, job family, zone, level, performance rating). | P0 |
+| M-11 | As a manager, the search filters the grid in real time as I type (debounced, no submit button required). | P0 |
+| M-12 | As a manager, I can clear the search to restore the full grid. | P0 |
 
 ### Manager — Filtering
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-12 | As a manager, I can filter the grid by job level, zone, performance rating, and eligibility status. Filters are additive (AND logic). | P0 |
-| M-13 | As a manager, I can see active filter indicators showing which filters are currently applied. | P0 |
-| M-14 | As a manager, I can clear individual filters or clear all filters at once. | P0 |
+| M-13 | As a manager, I can filter the grid by job level, zone, performance rating, and eligibility status. Filters are additive (AND logic). | P0 |
+| M-14 | As a manager, I can see active filter indicators showing which filters are currently applied. | P0 |
+| M-15 | As a manager, I can clear individual filters or clear all filters at once. | P0 |
 
 ### Manager — Data Display and Context
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-15 | As a manager, I can see the active cycle name, type, and effective date displayed in the Team Planner header. | P0 |
-| M-16 | As a manager, I can see the "last synced from Workday" and "last synced from Shareworks" timestamps on the Team Planner page. | P1 |
-| M-17 | As a manager, I can see each employee's performance rating displayed as a color-coded lozenge (Greatly Exceeds = green, Exceeds = blue, Meets = default, Met Some = yellow). | P0 |
-| M-18 | As a manager, I can see each employee's % of SRP with color coding (red if below 100%, green if at or above 100%). | P0 |
-| M-19 | As a manager, I can paginate the grid if my team exceeds 10 direct reports (10 rows per page). | P1 |
-| M-20 | As a manager, I can export the grid as a CSV file. | P2 |
+| M-16 | As a manager, I can see the active cycle name, type, and effective date displayed in the Team Planner header. | P0 |
+| M-17 | As a manager, I can see the "last synced from Workday" and "last synced from Shareworks" timestamps on the Team Planner page. | P1 |
+| M-18 | As a manager, I can see each employee's performance rating displayed as a color-coded lozenge (Greatly Exceeds = green, Exceeds = blue, Meets = default, Met Some = yellow). | P0 |
+| M-19 | As a manager, I can see each employee's % of SRP with color coding (red if below 100%, green if at or above 100%). | P0 |
+| M-20 | As a manager, I can paginate the grid if my team exceeds 10 direct reports (10 rows per page). | P1 |
+| M-21 | As a manager, I can export the grid as a CSV file. | P2 |
 
 ---
 
@@ -119,6 +121,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 - All columns are read-only: Name, Employee ID, Job Title, Level, Job Family, Zone, Start Date, Eligibility Date, Current Base Salary, Bonus Target %, Current Equity (RSUs), Performance Rating, % of SRP.
 - Team Summary Cards above the grid show headline metrics.
 - Employee Name column is pinned by default. Manager can pin/unpin additional columns.
+- If a direct report is also a manager, the manager can click into that row to see their skip-level reports in the same grid format. A breadcrumb trail (e.g., "My Team > Aisha Johnson's Team") allows navigation back.
 
 ### Manager: Find and Focus on Specific Employees
 
@@ -206,7 +209,20 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 6. Grid reorders; sort direction indicator appears on the column header.
 7. Manager clears search and filters to restore the full grid.
 
-### Flow 3: Manager Pins and Unpins Columns
+### Flow 3: Manager Views Skip-Level Reports
+
+1. Manager sees Aisha Johnson (Engineering Manager, M50) in the grid — her row has a visual indicator showing she has direct reports.
+2. Manager clicks into Aisha Johnson's row (e.g., clicks her name or a drill-down icon).
+3. Grid refreshes to show Aisha Johnson's direct reports in the same column format.
+4. Breadcrumb updates to "My Team > Aisha Johnson's Team".
+5. Summary cards update to reflect Aisha Johnson's team metrics (headcount, total equity).
+6. Search, filter, sort, and pinning all function the same on the skip-level view.
+7. Manager clicks "My Team" in the breadcrumb to return to their own direct reports view.
+
+**Error states:**
+- Direct report has no reports of their own: Row does not show a drill-down indicator; no click action available.
+
+### Flow 4: Manager Pins and Unpins Columns
 
 1. Manager right-clicks or uses pin icon on a column header (e.g., Job Level).
 2. Column freezes to the left side of the grid alongside Employee Name (pinned by default).
@@ -257,7 +273,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | # | Assumption |
 |---|---|
 | A1 | The manager's reporting hierarchy (who reports to whom) is available from Workday and maintained in the Thrive data model. |
-| A2 | A manager sees only their direct reports — not skip-level reports or dotted-line reports. |
+| A2 | A manager's default view shows their direct reports. Skip-level reports are accessible by clicking into a direct report who is also a manager. Dotted-line reports are not shown. |
 | A3 | Only one compensation cycle can be active at a time for a given population. If multiple cycles exist, the Team Planner shows the one that includes the manager's direct reports. |
 | A4 | Salary band data (min, mid, max per level and zone) is configured during cycle setup (Cycle Builder step 5) and is available for % of SRP calculations. |
 | A5 | Column permissions configured in Cycle Builder step 7 determine which columns are visible for the manager role. The Team Planner respects these permissions. |

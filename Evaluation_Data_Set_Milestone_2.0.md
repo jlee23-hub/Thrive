@@ -279,7 +279,76 @@
 | EC-7 | Manager switches from "My Team" to "My View" | Navigation switches to personal Total Rewards dashboard (Milestone 1); Team Planner state is not lost on return |
 | EC-8 | Search returns zero results | Grid shows empty state with message; summary cards show 0 headcount and 0 total equity |
 | EC-9 | All filters cleared after narrowing results | Full grid restored (8 rows); filter indicators removed; summary cards show full team totals |
-| EC-10 | Employee who is also a manager (Aisha Johnson, M50) | Appears as a normal row in Sarah Chen's grid; her own direct reports are not shown in this view |
+| EC-10 | Employee who is also a manager (Aisha Johnson, M50) | Row shows a drill-down indicator; clicking into her row shows her 3 direct reports in the same grid format; breadcrumb shows "My Team > Aisha Johnson's Team" |
+| EC-11 | Manager drills into skip-level view, then clicks "My Team" breadcrumb | Grid returns to Sarah Chen's 8 direct reports; summary cards restore to headcount 8, total equity 14,800 |
+| EC-12 | Direct report who is not a manager (e.g., James Rodriguez, IC5) | No drill-down indicator on the row; clicking does not navigate anywhere |
+
+---
+
+### Skip-Level Data — Aisha Johnson's Direct Reports (3 employees)
+
+Aisha Johnson (E-20106, Engineering Manager, M50) has 3 direct reports. When Sarah Chen clicks into Aisha's row, the grid shows these employees:
+
+#### Skip-Level Employee 1
+
+| Column | Value |
+|---|---|
+| Employee Name | Nina Vasquez |
+| Employee ID | E-30201 |
+| Job Title | Software Engineer II |
+| Job Level | IC4 |
+| Job Family | Engineering |
+| Zone | Zone 1 |
+| Start Date | 2023-02-13 |
+| Eligibility Date | 2023-02-13 |
+| Current Base Salary | $158,000.00 |
+| Bonus Target % | 12% |
+| Current Equity (RSUs) | 1,000 |
+| Performance Rating | Exceeds |
+| % of SRP | 96% |
+
+#### Skip-Level Employee 2
+
+| Column | Value |
+|---|---|
+| Employee Name | Ryan O'Brien |
+| Employee ID | E-30202 |
+| Job Title | Software Engineer I |
+| Job Level | IC3 |
+| Job Family | Engineering |
+| Zone | Zone 1 |
+| Start Date | 2024-06-03 |
+| Eligibility Date | 2024-06-03 |
+| Current Base Salary | $132,000.00 |
+| Bonus Target % | 10% |
+| Current Equity (RSUs) | 400 |
+| Performance Rating | Meets |
+| % of SRP | 100% |
+
+#### Skip-Level Employee 3
+
+| Column | Value |
+|---|---|
+| Employee Name | Tomoko Sato |
+| Employee ID | E-30203 |
+| Job Title | Senior Software Engineer |
+| Job Level | IC5 |
+| Job Family | Engineering |
+| Zone | Zone 2 |
+| Start Date | 2021-09-20 |
+| Eligibility Date | 2021-09-20 |
+| Current Base Salary | $185,000.00 |
+| Bonus Target % | 15% |
+| Current Equity (RSUs) | 2,000 |
+| Performance Rating | Greatly Exceeds |
+| % of SRP | 101% |
+
+#### Skip-Level Summary Card Expected Values
+
+| Card | Value | Derivation |
+|---|---|---|
+| Team Headcount | 3 | Count of Aisha Johnson's direct reports |
+| Total Current Equity (RSUs) | 3,400 | 1,000 + 400 + 2,000 |
 
 ---
 
