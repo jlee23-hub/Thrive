@@ -1,10 +1,10 @@
 # Product Requirements Document (PRD)
 
-## Compensation tool — Employee Compensation Management Platform
+## the compensation tool — Employee Compensation Management Platform
 
 | Field | Detail |
 |---|---|
-| **Product Name** | Compensation tool |
+| **Product Name** | the compensation tool |
 | **Version** | 1.0 |
 | **Date** | March 2, 2026 |
 | **Status** | In Development |
@@ -15,7 +15,7 @@
 
 ## 1. Executive Summary
 
-Compensation tool is an enterprise compensation management platform designed to replace Pave. It provides a unified interface for managing the full lifecycle of compensation planning — from cycle creation and budget allocation to merit matrices, salary bands, eligibility rules, and employee-facing compensation summaries. The platform serves three distinct personas (Employee, Manager, Comp Admin) with role-appropriate views and permissions.
+the compensation tool is an enterprise compensation management platform designed to replace Pave. It provides a unified interface for managing the full lifecycle of compensation planning — from cycle creation and budget allocation to merit matrices, salary bands, eligibility rules, and employee-facing compensation summaries. The platform serves three distinct personas (Employee, Manager, Comp Admin) with role-appropriate views and permissions.
 
 ---
 
@@ -75,7 +75,7 @@ Organizations managing compensation across large employee populations need a cen
 | Element | Description |
 |---|---|
 | App Switcher | Access to other enterprise apps |
-| Product Logo | "Compensation tool" branding |
+| Product Logo | "the compensation tool" branding |
 | Chat | In-app messaging |
 | Notifications | Activity feed |
 | Help | Documentation and support |
@@ -579,4 +579,4 @@ All compensation data is currently client-side (mock data for demonstration):
 
 ---
 
-*Document generated from the current state of the Compensation tool application codebase as of March 2, 2026.*
+*Document generated from the current state of the the compensation tool application codebase as of March 2, 2026.*

@@ -113,7 +113,7 @@ export default function SystemSettings() {
         <Heading size="large">Permissions</Heading>
         <div style={{ marginTop: token("space.100") }}>
           <Text size="small" color="color.text.subtlest">
-            Role-based access control for Compensation tool. Each role determines what areas a user can see and interact with.
+            Role-based access control for the compensation platform. Each role determines what areas a user can see and interact with.
           </Text>
         </div>
       </div>

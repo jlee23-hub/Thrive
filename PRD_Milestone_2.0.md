@@ -1,12 +1,12 @@
 # PRD Milestone 2.0
 
-## Compensation tool — Manager Team Planner View (Read-Only)
+## the compensation tool — Manager Team Planner View (Read-Only)
 
 ---
 
 ## Overview and Scope
 
-Milestone 2 delivers the Manager Team Planner experience in Compensation tool — a compensation planning tool built on the Atlassian Design System.
+Milestone 2 delivers the Manager Team Planner experience in the compensation tool — a compensation planning tool built on the Atlassian Design System.
 
 Managers get a dedicated read-only workspace to view their direct reports' current compensation during an active compensation cycle. The Team Planner surfaces each employee's current compensation (base salary, bonus target, equity), job metadata, performance ratings, and salary range position — all in a sortable, filterable, searchable grid with column pinning. Team Summary Cards provide headline metrics at a glance.
 
@@ -271,7 +271,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 | # | Assumption |
 |---|---|
-| A1 | The manager's reporting hierarchy (who reports to whom) is available from Workday and maintained in the Compensation tool data model. |
+| A1 | The manager's reporting hierarchy (who reports to whom) is available from Workday and maintained in the the compensation tool data model. |
 | A2 | A manager's default view shows their direct reports. Skip-level reports are accessible by clicking into a direct report who is also a manager. Dotted-line reports are not shown. |
 | A3 | Only one compensation cycle can be active at a time for a given population. If multiple cycles exist, the Team Planner shows the one that includes the manager's direct reports. |
 | A4 | Salary band data (min, mid, max per level and zone) is configured during cycle setup (Cycle Builder step 5) and is available for % of SRP calculations. |
