@@ -1,4 +1,4 @@
-# Thrive - Employee Compensation Dashboard
+# Compensation tool - Employee Compensation Dashboard
 
 ## User Preferences
 - **IMPORTANT: All card/box containers and any new boxes must use `borderRadius: "6px"` — never use ADS border radius tokens for cards/containers**

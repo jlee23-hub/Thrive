@@ -1,12 +1,12 @@
 # PRD Milestone 1.0
 
-## Thrive — Employee Total Rewards View & RSU Modeling
+## Compensation tool — Employee Total Rewards View & RSU Modeling
 
 ---
 
 ## Overview and Scope
 
-Milestone 1 delivers the foundational Employee Total Rewards experience in Thrive — a compensation planning tool built on the Atlassian Design System.
+Milestone 1 delivers the foundational Employee Total Rewards experience in Compensation tool — a compensation planning tool built on the Atlassian Design System.
 
 Every employee gets a personalized Total Rewards view showing their base salary, bonus target, and equity value in one place. Employee demographics, compensation history, and job data flow from Workday. Equity and RSU grant data flow from Shareworks. Authentication is through Okta SSO. All data displayed to the user is timestamped with when it was last synced from each source system, so employees always know how current the information is.
 
@@ -64,7 +64,7 @@ An individual contributor who wants to understand their total compensation — b
 | E-9 | As an employee, I can see the timestamp of when my equity data was last synced from Shareworks. | P0 |
 | E-10 | As an employee, I can see a note indicating that FX rates are updated daily and the default share price used for equity calculations. | P1 |
 | E-11 | As an employee, if my Shareworks data is unavailable (e.g., new hire with no grants), I see an error message: "Equity data is currently unavailable. Please contact your administrator." The equity section is not hidden and does not show $0. | P0 |
-| E-12 | As an employee, I am authenticated via Okta SSO before accessing any Thrive data. My identity is resolved to my employee identifier which scopes all queries to my records only. | P0 |
+| E-12 | As an employee, I am authenticated via Okta SSO before accessing any Compensation tool data. My identity is resolved to my employee identifier which scopes all queries to my records only. | P0 |
 
 ### Employee — RSU Modeling
 
@@ -149,10 +149,10 @@ An individual contributor who wants to understand their total compensation — b
 
 ### Flow 1: Employee Views Total Rewards
 
-1. Employee navigates to Thrive → redirected to Okta SSO login.
+1. Employee navigates to Compensation tool → redirected to Okta SSO login.
 2. Okta authenticates the user → returns JWT with identity claims.
-3. Thrive resolves the employee's identity from Okta profile → fetches compensation data from Workday sync cache.
-4. Thrive fetches equity data from Shareworks sync cache (joined on the employee's identifier across both systems).
+3. Compensation tool resolves the employee's identity from Okta profile → fetches compensation data from Workday sync cache.
+4. Compensation tool fetches equity data from Shareworks sync cache (joined on the employee's identifier across both systems).
 5. Total Rewards page renders:
    - Headline: Total Annual Compensation (single number).
    - Donut chart: Base Salary, Bonus Target, RSU Equity value as proportional segments.
@@ -185,10 +185,10 @@ An individual contributor who wants to understand their total compensation — b
 
 | # | Assumption |
 |---|---|
-| A1 | Okta is the sole identity provider; all Thrive users have an Okta account with a resolvable employee identifier. |
+| A1 | Okta is the sole identity provider; all Compensation tool users have an Okta account with a resolvable employee identifier. |
 | A2 | Workday and Shareworks data is joined via a shared employee ID. |
-| A3 | The Workday integration is already configured and data is flowing into Thrive. |
-| A4 | The Shareworks integration is already configured and data is flowing into Thrive. |
+| A3 | The Workday integration is already configured and data is flowing into Compensation tool. |
+| A4 | The Shareworks integration is already configured and data is flowing into Compensation tool. |
 | A5 | Currency is USD for all employees; multi-currency support is deferred. |
 | A6 | Sync frequency defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks). Data ingestion configuration is handled outside the application. |
 | A7 | When Shareworks data is unavailable for an employee (e.g., new hire with no grants), the UI displays an error message rather than showing $0 or hiding the equity section. |

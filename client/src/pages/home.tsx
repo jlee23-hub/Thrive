@@ -277,8 +277,8 @@ export default function Home() {
             <AppSwitcher label="App Switcher" />
             <CustomTitle>
               <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                <SpreadsheetIcon label="Thrive" color={token("color.icon.brand")} />
-                <span style={{ color: token("color.text"), fontWeight: 800 }}>Thrive</span>
+                <SpreadsheetIcon label="Compensation tool" color={token("color.icon.brand")} />
+                <span style={{ color: token("color.text"), fontWeight: 800 }}>Compensation tool</span>
               </div>
             </CustomTitle>
           </TopNavStart>
@@ -343,7 +343,7 @@ export default function Home() {
           </TopNavEnd>
         </TopNav>
 
-        <SideNav label="Thrive Navigation" defaultWidth={280}>
+        <SideNav label="Compensation tool Navigation" defaultWidth={280}>
           <SideNavContent>
             <div className="bold-nav-items">
             <MenuSection>

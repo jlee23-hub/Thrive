@@ -746,7 +746,7 @@ export default function DataManagement() {
                       <Heading size="small">{selectedSourceData.name} Field Mapping</Heading>
                       <div style={{ marginTop: token("space.050") }}>
                         <Text size="small" color="color.text.subtlest">
-                          Map source fields from {selectedSourceData.name} to Thrive fields. {currentFieldMappings.filter(f => f.isMapped).length} of {currentFieldMappings.length} fields mapped.
+                          Map source fields from {selectedSourceData.name} to Compensation tool fields. {currentFieldMappings.filter(f => f.isMapped).length} of {currentFieldMappings.length} fields mapped.
                         </Text>
                       </div>
                     </div>
@@ -763,7 +763,7 @@ export default function DataManagement() {
                           <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text"), width: "32px" }}></th>
                           <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Source Field ({selectedSourceData.name})</th>
                           <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "12px", fontWeight: 600, color: token("color.text"), width: "40px" }}></th>
-                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Thrive Field</th>
+                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Compensation tool Field</th>
                           <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Data Type</th>
                           <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Transform</th>
                           <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Status</th>
