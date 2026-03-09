@@ -52,14 +52,6 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | Pin key columns (like employee name) so they remain visible while scrolling through other data |
 | Search for specific employees or job families quickly |
 
-### Comp Admin (read-only context in this milestone)
-
-A compensation administrator who configures cycles and monitors progress. In Milestone 2, the Comp Admin does not interact with the Manager Team Planner directly — their role is limited to having configured the cycle, salary bands, and eligibility rules that govern the manager's experience.
-
-| Job to Be Done |
-|---|
-| Ensure the cycle configuration (bands, eligibility) is correctly reflected in what managers see |
-
 ---
 
 ## Users and Functional Requirements
