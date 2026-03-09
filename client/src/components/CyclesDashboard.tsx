@@ -25,7 +25,7 @@ interface Cycle {
   name: string;
   subtitle: string;
   type: string;
-  status: "Active" | "Planning" | "Completed";
+  status: "Active" | "Inactive" | "Finalized";
   timeline: string;
   participants: number;
   budget: string;
@@ -60,7 +60,7 @@ const cycles: Cycle[] = [
     name: "Q1 2026 Equity Refresh",
     subtitle: "Due in 42 days",
     type: "Equity",
-    status: "Planning",
+    status: "Inactive",
     timeline: "2/28/2026 - 5/29/2026",
     participants: 892,
     budget: "$5.8M",
@@ -71,7 +71,7 @@ const cycles: Cycle[] = [
     name: "FY2025 Annual Merit Cycle",
     subtitle: "Due in Closed",
     type: "Merit",
-    status: "Completed",
+    status: "Finalized",
     timeline: "1/9/2025 - 3/24/2025",
     participants: 1756,
     budget: "$26.3M",
@@ -82,7 +82,7 @@ const cycles: Cycle[] = [
     name: "FY2025 Mid-Year Adjustment",
     subtitle: "Due in Closed",
     type: "Merit",
-    status: "Completed",
+    status: "Finalized",
     timeline: "6/30/2025 - 8/14/2025",
     participants: 234,
     budget: "$1.8M",
@@ -93,9 +93,9 @@ const cycles: Cycle[] = [
 function StatusLozenge({ status }: { status: Cycle["status"] }) {
   const appearance = status === "Active"
     ? "success"
-    : status === "Planning"
-      ? "moved"
-      : "default";
+    : status === "Inactive"
+      ? "default"
+      : "moved";
   return <Lozenge appearance={appearance} isBold>{status}</Lozenge>;
 }
 
@@ -241,7 +241,7 @@ function buildRows(onSelectCycle?: (cycle: Cycle) => void) {
 
 export default function CyclesDashboard({ onCreateCycle, onSelectCycle }: CyclesDashboardProps) {
   const activeCycles = cycles.filter((c) => c.status === "Active").length;
-  const inactiveCycles = cycles.filter((c) => c.status === "Planning").length;
+  const inactiveCycles = cycles.filter((c) => c.status === "Inactive").length;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
