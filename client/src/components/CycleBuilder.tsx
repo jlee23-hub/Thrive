@@ -90,6 +90,7 @@ const typeOptions = [
   { label: "Promotion", value: "promotion" },
   { label: "Equity", value: "equity" },
   { label: "Combined (Merit + Promo + Equity)", value: "all" },
+  { label: "Other", value: "other" },
 ];
 
 const uploadHistory = [
@@ -512,6 +513,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
     name: "",
     fiscalYear: new Date().getFullYear().toString(),
     type: "merit",
+    customType: "",
     description: "",
     startDate: "",
     endDate: "",
@@ -937,6 +939,18 @@ function CycleDetailsStep({
               onChange={(opt) => opt && updateField("type", opt.value)}
             />
           </div>
+          {formData.type === "other" && (
+            <div>
+              <LabelText required>Specify Type</LabelText>
+              <Textfield
+                placeholder="Enter custom cycle type"
+                value={formData.customType}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  updateField("customType", e.target.value)
+                }
+              />
+            </div>
+          )}
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300") }}>
@@ -3268,7 +3282,7 @@ function ReviewFinalizeStep({
               <Text size="UNSAFE_small" color="color.text.subtlest">Cycle Type</Text>
               <div>
                 <Text size="small" weight="semibold">
-                  {typeOptions.find((o) => o.value === formData.type)?.label || formData.type}
+                  {formData.type === "other" ? (formData.customType || "Not specified") : (typeOptions.find((o) => o.value === formData.type)?.label || formData.type)}
                 </Text>
               </div>
             </div>
