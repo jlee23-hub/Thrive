@@ -81,7 +81,7 @@ export default function Home() {
   const [persona, setPersona] = useState<Persona>("employee");
   const [activeNav, setActiveNav] = useState<NavItem>("compensation");
   const [profileOpen, setProfileOpen] = useState(false);
-  const [selectedCycle, setSelectedCycle] = useState<{ id: string; name: string; type: string; status: "Active" | "Inactive" | "Finalized"; timeline: string; participants: number; budget: string; progress: number } | null>(null);
+  const [selectedCycle, setSelectedCycle] = useState<{ id: string; name: string; type: string; status: "Active" | "Inactive" | "Finalized"; timeline: string; participants: number; progress: number } | null>(null);
 
   const switchPersona = (newPersona: Persona) => {
     setPersona(newPersona);

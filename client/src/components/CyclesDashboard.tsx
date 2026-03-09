@@ -28,7 +28,6 @@ interface Cycle {
   status: "Active" | "Inactive" | "Finalized";
   timeline: string;
   participants: number;
-  budget: string;
   progress: number;
 }
 
@@ -41,7 +40,6 @@ const cycles: Cycle[] = [
     status: "Active",
     timeline: "1/14/2026 - 3/30/2026",
     participants: 1842,
-    budget: "$28.5M",
     progress: 67,
   },
   {
@@ -52,7 +50,6 @@ const cycles: Cycle[] = [
     status: "Active",
     timeline: "1/31/2026 - 4/14/2026",
     participants: 456,
-    budget: "$8.2M",
     progress: 45,
   },
   {
@@ -63,7 +60,6 @@ const cycles: Cycle[] = [
     status: "Inactive",
     timeline: "2/28/2026 - 5/29/2026",
     participants: 892,
-    budget: "$5.8M",
     progress: 12,
   },
   {
@@ -74,7 +70,6 @@ const cycles: Cycle[] = [
     status: "Finalized",
     timeline: "1/9/2025 - 3/24/2025",
     participants: 1756,
-    budget: "$26.3M",
     progress: 100,
   },
   {
@@ -85,7 +80,6 @@ const cycles: Cycle[] = [
     status: "Finalized",
     timeline: "6/30/2025 - 8/14/2025",
     participants: 234,
-    budget: "$1.8M",
     progress: 100,
   },
 ];
@@ -152,7 +146,6 @@ const head = {
     { key: "status", content: "STATUS", width: 10 },
     { key: "timeline", content: "TIMELINE", width: 16 },
     { key: "participants", content: "PARTICIPANTS", isSortable: true, width: 12 },
-    { key: "budget", content: "BUDGET", isSortable: true, width: 10 },
     { key: "progress", content: "PROGRESS", width: 16 },
     { key: "actions", content: "ACTIONS", width: 6 },
   ],
@@ -206,10 +199,6 @@ function buildRows(onSelectCycle?: (cycle: Cycle) => void) {
             <Text size="small">{cycle.participants.toLocaleString()}</Text>
           </div>
         ),
-      },
-      {
-        key: cycle.budget,
-        content: <Text size="small" weight="bold">{cycle.budget}</Text>,
       },
       {
         key: cycle.progress,
