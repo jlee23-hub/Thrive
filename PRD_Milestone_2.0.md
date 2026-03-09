@@ -18,7 +18,7 @@ Employee demographics, salary, level, and job data continue to flow from Workday
 - **Team Summary Cards** (Manager): Headline metrics for the team — headcount and total current equity.
 - **Filtering** (Manager): Column-level filters by job level, zone, performance rating, and eligibility status. Filters are additive (AND logic).
 - **Sorting** (Manager): Column-level sorting (ascending/descending) on any column.
-- **Search** (Manager): Text search by employee name or job family.
+- **Search** (Manager): Text search across any column in the grid.
 - **Column Pinning** (Manager): Ability to pin columns to the left side of the grid so they remain visible while scrolling horizontally through other columns.
 
 ### Out of Scope
@@ -83,7 +83,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-9 | As a manager, I can search the grid by employee name or job family using a text search field above the grid. | P0 |
+| M-9 | As a manager, I can search the grid by any column value using a text search field above the grid (e.g., employee name, job title, job family, zone, level, performance rating). | P0 |
 | M-10 | As a manager, the search filters the grid in real time as I type (debounced, no submit button required). | P0 |
 | M-11 | As a manager, I can clear the search to restore the full grid. | P0 |
 
@@ -124,7 +124,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 **As a manager, I want to search, filter, and sort my team grid so I can focus on specific employees or groups when reviewing compensation data.**
 
-- Text search field above the grid filters by employee name or job family in real time.
+- Text search field above the grid filters across all column values in real time.
 - Filter dropdowns for job level, zone, performance rating, and eligibility status.
 - Active filter indicators show applied filters; clear individual or clear all.
 - Column header click toggles sort direction (ascending → descending → unsorted).
@@ -243,7 +243,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | TC-2 | Manager pins Employee Name and Job Level columns, then scrolls right | Pinned columns remain fixed on the left; other columns scroll horizontally; visual separator visible |
 | TC-3 | Manager sorts by Performance Rating descending | Grid reorders with "Greatly Exceeds" at top; sort indicator visible on column header |
 | TC-4 | Manager filters by Zone = "Zone 1" and Level = "IC5" | Grid shows only employees matching both criteria; active filter indicators visible; summary cards update |
-| TC-5 | Manager searches "Engineering" | Grid filters to show only employees whose name or job family contains "Engineering" |
+| TC-5 | Manager searches "Engineering" | Grid filters to show any row where any column value contains "Engineering" (e.g., job family, job title) |
 | TC-6 | Manager opens Team Planner but no active cycle exists | "No active compensation cycle. Contact your Comp Admin." message displayed; no grid rendered |
 | TC-7 | Manager with 15 direct reports (exceeds page size of 10) | Pagination appears; first page shows 10 rows; second page shows 5 rows |
 | TC-8 | Manager with 1 direct report who has no Shareworks data (new hire) | Current equity column shows "—" or "0 RSUs"; other columns populated from Workday |
