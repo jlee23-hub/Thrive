@@ -277,10 +277,11 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | A4 | Salary band data (min, mid, max per level and zone) is configured during cycle setup (Cycle Builder step 5) and is available for % of SRP calculations. |
 | A5 | Column permissions configured in Cycle Builder step 7 determine which columns are visible for the manager role. The Team Planner respects these permissions. |
 | A7 | Workday and Shareworks sync timestamps and behavior are the same as Milestone 1 — timestamps represent the time data was last pulled from the source system. |
-| A8 | Employee Name column is pinned by default on initial load. Manager's pinning preferences are not persisted across sessions (reset on page load). |
+| A8 | Employee Name column is pinned by default on initial load. Manager's pinning preferences persist across sessions. |
 | A9 | Managers have dual navigation: "My View" (personal Total Rewards dashboard from Milestone 1) and "My Team" (Team Planner). Both are accessible from the left navigation. |
 | A10 | No minimum team size is required for manager access. Any user with at least one direct report in Workday gets the "My Team" navigation item and Team Planner access. |
 | A11 | The Team Planner is entirely read-only in this milestone. No data entry, editing, saving, or submission functionality is included. |
+| A12 | A manager who is also a direct report of another manager appears as a normal row in their manager's grid. They are treated as an employee in that context. |
 
 ---
 
@@ -288,8 +289,8 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 | # | Question | Options / Context |
 |---|---|---|
-| OQ-1 | How should we handle managers who are also direct reports of another manager in the same cycle? Should the manager's own record appear in their manager's grid? | Standard practice is yes — the manager is an employee too. Confirming this is the expected behavior. |
+| ~~OQ-1~~ | ~~How should we handle managers who are also direct reports of another manager in the same cycle? Should the manager's own record appear in their manager's grid?~~ | **RESOLVED:** Yes. A manager who is also a direct report appears as a normal row in their manager's grid. They are an employee too. |
 | ~~OQ-2~~ | ~~Should the manager see a read-only view of their own compensation (as an employee) alongside the Team Planner, or are those completely separate views?~~ | **RESOLVED:** Manager has both views — "My View" (personal Total Rewards dashboard from Milestone 1) and "My Team" (Team Planner). Both are accessible from the left navigation. |
 | ~~OQ-3~~ | ~~Should the equity recommendation column accept a dollar value or units only?~~ | **RESOLVED:** No equity recommendation column in this milestone. Team Planner is read-only. |
 | ~~OQ-4~~ | ~~Is there a minimum team size or reporting relationship requirement to access the Team Planner, or does any user with at least one direct report get manager access?~~ | **RESOLVED:** No minimum team size. Any user with at least one direct report gets manager access to the Team Planner. |
-| OQ-5 | Should manager's column pinning preferences persist across sessions, or reset to defaults on each page load? | Persisting requires additional storage; resetting is simpler for initial release. |
+| ~~OQ-5~~ | ~~Should manager's column pinning preferences persist across sessions, or reset to defaults on each page load?~~ | **RESOLVED:** Pinning preferences persist across sessions. |
