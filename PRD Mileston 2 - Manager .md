@@ -1,6 +1,4 @@
-# PRD Milestone 2.0
-
-## the compensation tool — Manager Team Planner View (Read-Only)
+# PRD Milestone 2.0 --> Manager Team Planner View (Read-Only)
 
 ---
 

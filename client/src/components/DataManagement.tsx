@@ -482,7 +482,7 @@ export default function DataManagement() {
                   onClick={() => setIsApiSetupExpanded(!isApiSetupExpanded)}
                   style={{
                     padding: `${token("space.200")} ${token("space.300")}`,
-                    backgroundColor: token("elevation.surface.sunken"),
+                    backgroundColor: token("elevation.surface"),
                     borderBottom: isApiSetupExpanded ? `1px solid ${token("color.border")}` : undefined,
                     cursor: "pointer",
                     display: "flex",

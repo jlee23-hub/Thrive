@@ -1,6 +1,4 @@
-# PRD Milestone 1.0
-
-## the compensation tool — Employee Total Rewards View & RSU Modeling
+# PRD Milestone 2.0 --> Employee Total Rewards View & RSU Modeling
 
 ---
 
