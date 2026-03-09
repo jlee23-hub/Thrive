@@ -62,7 +62,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 |---|---|---|
 | M-1 | As a manager, I can see a read-only grid of all my direct reports who are eligible for the active compensation cycle. Columns include: Employee Name, Employee ID, Job Title, Job Level, Job Family, Zone, Start Date, Eligibility Date, Current Base Salary, Bonus Target %, Current Equity (RSUs), Performance Rating, % of SRP (Salary Range Position). Source: Workday (demographics, salary, job data), Shareworks (equity). | P0 |
 | M-2 | As a manager, I can pin columns to the left side of the grid so they remain visible while scrolling horizontally (e.g., pin Employee Name and Employee ID). | P0 |
-| M-3 | As a manager, I can unpin a previously pinned column to return it to its default scrollable position. | P1 |
+| M-3 | As a manager, I can unpin a previously pinned column to return it to its default scrollable position. | P0 |
 
 ### Manager — Team Summary Cards
 
