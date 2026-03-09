@@ -67,7 +67,6 @@ const STEPS: Step[] = [
   { id: "import", title: "Data Integrations", description: "Employee and comp data" },
   { id: "columns", title: "Employee data grid", description: "Configure data fields" },
   { id: "eligibility", title: "Eligibility Rules", description: "Define participation criteria" },
-  { id: "budget", title: "Configure budget & FX rates", description: "Set budget and exchange rates" },
   { id: "salary-bands", title: "Salary Bands & Equity Targets", description: "Upload and manage salary bands" },
   { id: "users", title: "Users & Role Permissions", description: "Manage user access" },
   { id: "field-permissions", title: "Column Permissions", description: "Configure field access" },
@@ -209,14 +208,6 @@ const fxRates = [
   { currency: "Japanese Yen", code: "JPY", rate: "148.23", updated: "2024-01-15", updatedBy: "Sarah Chen" },
 ];
 
-const deptBudgets = [
-  { dept: "Engineering", headcount: 145, meritBudget: "725,000", meritPct: "3.5", bonusBudget: "290,000", bonusPct: "10.0" },
-  { dept: "Product", headcount: 42, meritBudget: "189,000", meritPct: "3.0", bonusBudget: "84,000", bonusPct: "8.0" },
-  { dept: "Sales", headcount: 78, meritBudget: "312,000", meritPct: "2.5", bonusBudget: "390,000", bonusPct: "15.0" },
-  { dept: "Marketing", headcount: 35, meritBudget: "122,500", meritPct: "2.5", bonusBudget: "70,000", bonusPct: "7.0" },
-  { dept: "Operations", headcount: 56, meritBudget: "168,000", meritPct: "3.0", bonusBudget: "84,000", bonusPct: "6.0" },
-  { dept: "Finance", headcount: 28, meritBudget: "98,000", meritPct: "3.5", bonusBudget: "56,000", bonusPct: "8.0" },
-];
 
 const salaryBands = [
   { level: "P30 - Junior", srp: "$75,000", rangeMax: "$95,000", equityMax: "$15,000" },
@@ -591,12 +582,10 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
       case 3:
         return <EligibilityRulesStep />;
       case 4:
-        return <BudgetFxStep />;
-      case 5:
         return <SalaryBandsStep />;
-      case 6:
+      case 5:
         return <UsersRolesStep />;
-      case 7:
+      case 6:
         return (
           <FieldPermissionsStep
             selectedRole={selectedRole}
@@ -607,7 +596,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             removeRoleFromField={removeRoleFromField}
           />
         );
-      case 8:
+      case 7:
         return (
           <RewardLetterStep
             selectedTemplate={selectedTemplate}
@@ -620,7 +609,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             setCustomMessage={setCustomMessage}
           />
         );
-      case 9:
+      case 8:
         return <ReviewFinalizeStep formData={formData} setCurrentStep={setCurrentStep} />;
       default:
         return null;
@@ -1736,444 +1725,6 @@ function EligibilityRulesStep() {
   );
 }
 
-function BudgetFxStep() {
-  const budgetsList = [
-    { id: 1, name: "Broad-based APEX Equity", lastUpdated: "Aug 09, 2025" },
-    { id: 2, name: "L100+ APEX Equity", lastUpdated: "Aug 08, 2025" },
-    { id: 3, name: "Broad-based Special Equity", lastUpdated: "Aug 08, 2025" },
-    { id: 4, name: "L100+ Retention Equity", lastUpdated: "Aug 08, 2025" },
-    { id: 5, name: "TOTAL- Broad-based APEX + Special Equity", lastUpdated: "Aug 08, 2025" },
-    { id: 6, name: "TOTAL L100+ APEX + Retention Equity", lastUpdated: "Aug 09, 2025" },
-  ];
-
-  const columnOptions = [
-    { id: "salary-increase", label: "Salary Increase", checked: false },
-    { id: "new-commission", label: "New Commission", checked: false },
-    { id: "special-equity", label: "Special Equity - Budget", checked: true },
-    { id: "modeled-equity", label: "Modeled Equity Broad-base Value - Budget", checked: true },
-    { id: "retention-equity", label: "Retention Equity - Budget", checked: false },
-    { id: "promotion-equity", label: "Promotion Equity - Budget", checked: false },
-    { id: "modeled-exec", label: "Modeled Equity Exec Value - Budget", checked: false },
-  ];
-
-  const calcMethodOptions = [
-    { name: "calc-method", value: "percentage", label: "Apply a percentage of Current Pay", description: "Define your budget as a percentage of a specified pay type" },
-    { name: "calc-method", value: "sum-column", label: "Sum values stored in a column", description: "Define your budget using the values stored in another column" },
-    { name: "calc-method", value: "sum-target", label: "Sum target recommendation values", description: "Define your budget using the sum of target recommendation values for this column" },
-    { name: "calc-method", value: "sum-uploaded", label: "Sum uploaded values", description: "Define your budget using uploaded values via Data Upload" },
-  ];
-
-  const [selectedBudgetId, setSelectedBudgetId] = useState(5);
-  const [budgetTab, setBudgetTab] = useState<"general" | "permissions">("general");
-  const [budgetType, setBudgetType] = useState("equity");
-  const [budgetCreation, setBudgetCreation] = useState("bottoms-up");
-  const [budgetLimit, setBudgetLimit] = useState("yes");
-  const [columnChecks, setColumnChecks] = useState(columnOptions);
-  const [calcMethods, setCalcMethods] = useState<Record<string, string>>({
-    "special-equity": "sum-uploaded",
-    "modeled-equity": "sum-uploaded",
-  });
-
-  const selectedBudget = budgetsList.find((b) => b.id === selectedBudgetId)!;
-  const selectedColumns = columnChecks.filter((c) => c.checked);
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-        <CreditCardIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Configure budget & FX rates</Heading>
-      </div>
-
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <Heading size="xsmall">Budget Allocation</Heading>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginTop: token("space.200") }}>
-          <div>
-            <LabelText>Broadbased Equity Budget (USD)</LabelText>
-            <Textfield type="number" placeholder="e.g., 3000000" />
-          </div>
-          <div>
-            <LabelText>L100+ Equity Budget (USD)</LabelText>
-            <Textfield type="number" placeholder="e.g., 2000000" />
-          </div>
-          <div>
-            <LabelText>Total Equity Budget</LabelText>
-            <Textfield value="$0" isReadOnly />
-          </div>
-        </div>
-      </div>
-
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
-          <div>
-            <Heading size="xsmall">Budgets</Heading>
-            <Text size="small" color="color.text.subtlest">
-              Create budgets that your planners will see and have their changes compared against.
-            </Text>
-          </div>
-          <Button appearance="primary">Create a Budget</Button>
-        </div>
-
-        <div style={{ display: "flex", border: `1px solid ${token("color.border")}`, borderRadius: "6px", overflow: "hidden" }}>
-          <div
-            style={{
-              width: 280,
-              borderRight: `1px solid ${token("color.border")}`,
-              flexShrink: 0,
-            }}
-          >
-            {budgetsList.map((budget) => (
-              <div
-                key={budget.id}
-                onClick={() => setSelectedBudgetId(budget.id)}
-                style={{
-                  padding: `${token("space.150")} ${token("space.200")}`,
-                  cursor: "pointer",
-                  borderBottom: `1px solid ${token("color.border")}`,
-                  borderLeft: selectedBudgetId === budget.id ? `3px solid ${token("color.border.selected")}` : "3px solid transparent",
-                  backgroundColor: selectedBudgetId === budget.id ? token("color.background.selected") : "transparent",
-                }}
-              >
-                <Text size="small" weight={selectedBudgetId === budget.id ? "semibold" : "regular"}>
-                  {budget.id}. {budget.name}
-                </Text>
-                <div>
-                  <Text size="UNSAFE_small" color="color.text.subtlest">Last Updated: {budget.lastUpdated}</Text>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ flex: 1, padding: token("space.300") }}>
-            <Heading size="small">{selectedBudget.id}. {selectedBudget.name}</Heading>
-
-            <div style={{ display: "flex", gap: token("space.300"), marginTop: token("space.200"), marginBottom: token("space.300") }}>
-              {(["general", "permissions"] as const).map((tab) => (
-                <div
-                  key={tab}
-                  onClick={() => setBudgetTab(tab)}
-                  style={{
-                    paddingBottom: token("space.100"),
-                    cursor: "pointer",
-                    borderBottom: budgetTab === tab ? `2px solid ${token("color.border.selected")}` : "2px solid transparent",
-                  }}
-                >
-                  <Text
-                    size="small"
-                    weight="semibold"
-                    color={budgetTab === tab ? "color.text.selected" : "color.text.subtlest"}
-                  >
-                    {tab === "general" ? "General" : "Permissions"}
-                  </Text>
-                </div>
-              ))}
-            </div>
-
-            {budgetTab === "general" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-                <div>
-                  <LabelText>Budget Name</LabelText>
-                  <Textfield defaultValue={`${selectedBudget.id}. ${selectedBudget.name}`} />
-                </div>
-
-                <div>
-                  <Text size="small" weight="semibold">What type of budget do you want to create?</Text>
-                  <div style={{ marginTop: token("space.150") }}>
-                    <RadioGroup
-                      options={[
-                        { name: "budget-type", value: "cash", label: "Cash" },
-                        { name: "budget-type", value: "equity", label: "Equity" },
-                      ]}
-                      value={budgetType}
-                      onChange={(e) => setBudgetType(e.target.value)}
-                    />
-                  </div>
-                  <div style={{ marginTop: token("space.050") }}>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">
-                      {budgetType === "cash"
-                        ? "Cash can include salary, as well as other pay types such as bonuses and variable raises"
-                        : "Equity includes performance, promotion, and refresher shares"}
-                    </Text>
-                  </div>
-                </div>
-
-                <div>
-                  <Text size="small" weight="semibold">Which columns should contribute to this budget?</Text>
-                  <div style={{ display: "flex", flexDirection: "column", gap: token("space.100"), marginTop: token("space.150") }}>
-                    {columnChecks.map((col) => (
-                      <Checkbox
-                        key={col.id}
-                        isChecked={col.checked}
-                        onChange={() =>
-                          setColumnChecks((prev) =>
-                            prev.map((c) => (c.id === col.id ? { ...c, checked: !c.checked } : c))
-                          )
-                        }
-                        label={col.label}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <Text size="small" weight="semibold">How would you like to create your budget?</Text>
-                  <div style={{ marginTop: token("space.150") }}>
-                    <RadioGroup
-                      options={[
-                        { name: "budget-creation", value: "bottoms-up", label: "Bottoms Up Budget" },
-                        { name: "budget-creation", value: "award", label: "Award Budget" },
-                      ]}
-                      value={budgetCreation}
-                      onChange={(e) => setBudgetCreation(e.target.value)}
-                    />
-                  </div>
-                  <div style={{ marginTop: token("space.050") }}>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">
-                      {budgetCreation === "bottoms-up"
-                        ? "These budgets are assigned on the employee level and calculated based on their current pay"
-                        : "These budgets simply display the sum of the specified columns"}
-                    </Text>
-                  </div>
-                </div>
-
-                <div>
-                  <Text size="small" weight="semibold">Do you want to set a limit for this budget?</Text>
-                  <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.150") }}>
-                    <RadioGroup
-                      options={[
-                        { name: "budget-limit", value: "yes", label: "Yes" },
-                        { name: "budget-limit", value: "no", label: "No" },
-                      ]}
-                      value={budgetLimit}
-                      onChange={(e) => setBudgetLimit(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                {selectedColumns.length > 0 && (
-                  <div>
-                    <Text size="small" color="color.text.subtlest">
-                      For each column selected, specify how budget should be calculated on a per-employee basis
-                    </Text>
-                    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), marginTop: token("space.200") }}>
-                      {selectedColumns.map((col) => (
-                        <div
-                          key={col.id}
-                          style={{
-                            border: `1px solid ${token("color.border")}`,
-                            borderRadius: "6px",
-                            padding: token("space.300"),
-                          }}
-                        >
-                          <Heading size="xsmall">{col.label}</Heading>
-                          <div style={{ marginTop: token("space.150") }}>
-                            <Text size="small" weight="semibold">Calculation Method</Text>
-                            <div style={{ marginTop: token("space.100") }}>
-                              <RadioGroup
-                                options={calcMethodOptions.map((opt) => ({
-                                  ...opt,
-                                  name: `calc-${col.id}`,
-                                }))}
-                                value={calcMethods[col.id] || "sum-uploaded"}
-                                onChange={(e) =>
-                                  setCalcMethods((prev) => ({ ...prev, [col.id]: e.target.value }))
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {budgetTab === "permissions" && (
-              <div style={{ textAlign: "center", padding: token("space.600") }}>
-                <ShieldIcon label="" color={token("color.icon.disabled")} />
-                <div style={{ marginTop: token("space.200") }}>
-                  <Text weight="semibold">Budget Permissions</Text>
-                </div>
-                <div style={{ marginTop: token("space.050") }}>
-                  <Text size="small" color="color.text.subtlest">
-                    Configure who can view and edit this budget
-                  </Text>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div>
-            <Heading size="xsmall">Exchange Rates</Heading>
-            <Text size="small" color="color.text.subtlest">
-              Set FX rates for employees to view compensation in their local currency
-            </Text>
-          </div>
-          <Button appearance="default" iconBefore={ClockIcon}>
-            View History
-          </Button>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.200") }}>
-          <div>
-            <LabelText>Base Currency</LabelText>
-            <Select
-              options={[
-                { label: "USD - US Dollar", value: "usd" },
-                { label: "EUR - Euro", value: "eur" },
-                { label: "GBP - British Pound", value: "gbp" },
-              ]}
-              defaultValue={{ label: "USD - US Dollar", value: "usd" }}
-            />
-          </div>
-          <div>
-            <LabelText>Rate Date</LabelText>
-            <Textfield type="date" />
-          </div>
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.200") }}>
-          <Button appearance="default" iconBefore={DownloadIcon}>
-            Export FX Rates
-          </Button>
-          <Button appearance="primary">Import FX Rates</Button>
-        </div>
-
-        <table style={{ width: "100%", borderCollapse: "collapse", marginTop: token("space.200") }}>
-          <thead>
-            <tr style={{ backgroundColor: token("elevation.surface.sunken"), borderBottom: `1px solid ${token("color.border")}` }}>
-              {["Currency", "Currency Code", "Rate to USD", "Last Updated"].map((h, i) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: `${token("space.100")} ${token("space.200")}`,
-                    textAlign: i >= 2 ? "right" : "left",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: token("color.text.subtlest"),
-                  }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {fxRates.map((row, idx) => (
-              <tr key={idx} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small">{row.currency}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, fontFamily: "monospace" }}>
-                  <Text size="small">{row.code}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right", fontFamily: "monospace" }}>
-                  <Text size="small">{row.rate}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right" }}>
-                  <Text size="small">{row.updated}</Text>
-                  <div>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">by {row.updatedBy}</Text>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div style={{ marginTop: token("space.300"), paddingTop: token("space.200") }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.150") }}>
-            <Text size="small" weight="bold">Recent Changes</Text>
-            <Button appearance="link" spacing="none">View All History</Button>
-          </div>
-          {fxChangeHistory.map((log, idx) => (
-            <div
-              key={idx}
-              style={{
-                padding: `${token("space.150")} 0`,
-                borderBottom: idx < fxChangeHistory.length - 1 ? `1px solid ${token("color.border")}` : "none",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.050") }}>
-                <Text size="small" weight="semibold">{log.action}</Text>
-                <Lozenge appearance={log.source === "CSV Import" ? "inprogress" : "default"}>
-                  {log.source}
-                </Lozenge>
-              </div>
-              <Text size="UNSAFE_small" color="color.text.subtlest">{log.details}</Text>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginTop: token("space.050") }}>
-                <PersonIcon label="" color={token("color.icon.subtle")} />
-                <Text size="UNSAFE_small" color="color.text.subtlest">{log.user}</Text>
-                <ClockIcon label="" color={token("color.icon.subtle")} />
-                <Text size="UNSAFE_small" color="color.text.subtlest">{log.date}</Text>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
-          <div>
-            <Heading size="xsmall">Department Budget Allocations</Heading>
-            <Text size="small" color="color.text.subtlest">
-              Review and adjust budget allocations by department
-            </Text>
-          </div>
-          <Button appearance="default">Recalculate Budgets</Button>
-        </div>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ backgroundColor: token("elevation.surface.sunken"), borderBottom: `1px solid ${token("color.border")}` }}>
-              {["Department", "Headcount", "Merit Budget ($)", "Merit %", "Bonus Budget ($)", "Bonus %"].map((h, i) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: `${token("space.100")} ${token("space.200")}`,
-                    textAlign: i >= 1 ? "right" : "left",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: token("color.text.subtlest"),
-                  }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {deptBudgets.map((row, idx) => (
-              <tr key={idx} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small" weight="semibold">{row.dept}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right" }}>
-                  <Text size="small" color="color.text.subtlest">{row.headcount}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right", fontFamily: "monospace" }}>
-                  <Text size="small">${row.meritBudget}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right", fontFamily: "monospace" }}>
-                  <Text size="small">{row.meritPct}%</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right", fontFamily: "monospace" }}>
-                  <Text size="small">${row.bonusBudget}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right", fontFamily: "monospace" }}>
-                  <Text size="small">{row.bonusPct}%</Text>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
 
 function SalaryBandsStep() {
   return (
@@ -3739,11 +3290,10 @@ function ReviewFinalizeStep({
         { step: 1, label: "Data Integrations", status: "3 data sources configured" },
         { step: 2, label: "Employee Data Grid", status: "52 employees loaded" },
         { step: 3, label: "Eligibility Rules", status: "3 active rules" },
-        { step: 4, label: "Budget & FX Rates", status: "Budget and 6 FX rates configured" },
-        { step: 5, label: "Salary Bands", status: "7 bands configured" },
-        { step: 6, label: "Users & Roles", status: "6 users configured" },
-        { step: 7, label: "Column Permissions", status: "30 fields configured" },
-        { step: 8, label: "Reward Letter", status: "Template selected" },
+        { step: 4, label: "Salary Bands", status: "7 bands configured" },
+        { step: 5, label: "Users & Roles", status: "6 users configured" },
+        { step: 6, label: "Column Permissions", status: "30 fields configured" },
+        { step: 7, label: "Reward Letter", status: "Template selected" },
       ].map((section) => (
         <div key={section.step} style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
           <div
