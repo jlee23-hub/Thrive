@@ -11,7 +11,7 @@
 | Workday (Employee Compensation Records) | Production | Employee demographics, salary, level, job data, reporting hierarchy |
 | Workday (Performance Ratings) | Production | Latest performance rating for each employee |
 | Shareworks (Equity Grants) | Production | Current RSU grant data for each employee |
-| Cycle Configuration (Bands, Eligibility) | Application | Salary band ranges, eligibility rules — configured in Cycle Builder |
+| Cycle Configuration (Bands) | Application | Salary band ranges — configured in Cycle Builder |
 | Synthetic test records | Generated | Edge cases (e.g., new hire with no equity, manager with 1 report) |
 
 ---
@@ -38,7 +38,7 @@
 | Manager Employee ID | E-10042 |
 | Manager Title | Senior Engineering Manager |
 | Manager Level | M60 |
-| Direct Reports (eligible) | 8 |
+| Direct Reports | 8 |
 
 ---
 
@@ -55,7 +55,7 @@
 | Job Family | Engineering |
 | Zone | Zone 1 |
 | Start Date | 2021-06-14 |
-| Eligibility Date | 2021-06-14 |
+
 | Current Base Salary | $198,800.00 |
 | Bonus Target % | 15% |
 | Current Equity (RSUs) | 2,400 |
@@ -73,7 +73,7 @@
 | Job Family | Engineering |
 | Zone | Zone 1 |
 | Start Date | 2022-01-10 |
-| Eligibility Date | 2022-01-10 |
+
 | Current Base Salary | $165,000.00 |
 | Bonus Target % | 12% |
 | Current Equity (RSUs) | 1,200 |
@@ -91,7 +91,7 @@
 | Job Family | Engineering |
 | Zone | Zone 2 |
 | Start Date | 2019-03-22 |
-| Eligibility Date | 2019-03-22 |
+
 | Current Base Salary | $225,500.00 |
 | Bonus Target % | 18% |
 | Current Equity (RSUs) | 4,800 |
@@ -109,7 +109,7 @@
 | Job Family | Engineering |
 | Zone | Zone 1 |
 | Start Date | 2024-08-05 |
-| Eligibility Date | 2024-08-05 |
+
 | Current Base Salary | $135,000.00 |
 | Bonus Target % | 10% |
 | Current Equity (RSUs) | 600 |
@@ -127,7 +127,7 @@
 | Job Family | Quality Engineering |
 | Zone | Zone 3 |
 | Start Date | 2020-11-30 |
-| Eligibility Date | 2020-11-30 |
+
 | Current Base Salary | $172,000.00 |
 | Bonus Target % | 15% |
 | Current Equity (RSUs) | 1,800 |
@@ -145,7 +145,7 @@
 | Job Family | Engineering |
 | Zone | Zone 1 |
 | Start Date | 2020-02-17 |
-| Eligibility Date | 2020-02-17 |
+
 | Current Base Salary | $210,000.00 |
 | Bonus Target % | 20% |
 | Current Equity (RSUs) | 3,200 |
@@ -163,7 +163,7 @@
 | Job Family | Engineering |
 | Zone | Zone 2 |
 | Start Date | 2023-05-08 |
-| Eligibility Date | 2023-05-08 |
+
 | Current Base Salary | $152,000.00 |
 | Bonus Target % | 12% |
 | Current Equity (RSUs) | 800 |
@@ -181,7 +181,7 @@
 | Job Family | Engineering |
 | Zone | Zone 1 |
 | Start Date | 2025-12-01 |
-| Eligibility Date | 2025-12-01 |
+
 | Current Base Salary | $140,000.00 |
 | Bonus Target % | 10% |
 | Current Equity (RSUs) | — |
@@ -194,7 +194,7 @@
 
 | Card | Value | Derivation |
 |---|---|---|
-| Team Headcount | 8 | Count of all eligible direct reports |
+| Team Headcount | 8 | Count of all direct reports |
 | Total Current Equity (RSUs) | 14,800 | 2,400 + 1,200 + 4,800 + 600 + 1,800 + 3,200 + 800 + 0 (Lena has no equity) |
 
 ---
@@ -203,9 +203,9 @@
 
 | View | What the User Sees | Key Validation |
 |---|---|---|
-| Manager Team Planner (active cycle) | Read-only grid of 8 direct reports with current comp data, summary cards (headcount: 8, total equity: 14,800) | Grid shows only eligible direct reports; summary card math is correct; all columns are read-only |
+| Manager Team Planner (active cycle) | Read-only grid of 8 direct reports with current comp data, summary cards (headcount: 8, total equity: 14,800) | Grid shows all direct reports; summary card math is correct; all columns are read-only |
 | Manager Team Planner (no active cycle) | "No active compensation cycle. Contact your Comp Admin." | Grid and summary cards are not rendered |
-| Manager Team Planner (all reports excluded) | "All of your direct reports are excluded from this cycle based on eligibility rules." | Grid renders empty state |
+| Manager Team Planner (no direct reports) | "You have no direct reports in this cycle." | Grid renders empty state |
 
 ---
 
@@ -273,7 +273,7 @@
 | EC-1 | Employee with no Shareworks data (Lena Okafor) | Current Equity column shows "—" or "0 RSUs"; all other columns populated from Workday |
 | EC-2 | Manager with exactly 1 direct report | Grid shows 1 row; summary cards show headcount 1; pagination not shown |
 | EC-3 | Manager with 15 direct reports (exceeds page size) | Pagination appears; first page shows 10 rows; second page shows 5 rows |
-| EC-4 | Manager has no direct reports in the cycle | "All of your direct reports are excluded from this cycle based on eligibility rules." message; no grid rendered |
+| EC-4 | Manager has no direct reports | "You have no direct reports in this cycle." message; no grid rendered |
 | EC-5 | No active compensation cycle | "No active compensation cycle. Contact your Comp Admin." message; no grid or summary cards rendered |
 | EC-6 | Workday data unavailable for a field on one employee | Row renders with available data; missing fields show "—" |
 | EC-7 | Manager switches from "My Team" to "My View" | Navigation switches to personal Total Rewards dashboard (Milestone 1); Team Planner state is not lost on return |
@@ -300,7 +300,7 @@ Aisha Johnson (E-20106, Engineering Manager, M50) has 3 direct reports. When Sar
 | Job Family | Engineering |
 | Zone | Zone 1 |
 | Start Date | 2023-02-13 |
-| Eligibility Date | 2023-02-13 |
+
 | Current Base Salary | $158,000.00 |
 | Bonus Target % | 12% |
 | Current Equity (RSUs) | 1,000 |
@@ -318,7 +318,7 @@ Aisha Johnson (E-20106, Engineering Manager, M50) has 3 direct reports. When Sar
 | Job Family | Engineering |
 | Zone | Zone 1 |
 | Start Date | 2024-06-03 |
-| Eligibility Date | 2024-06-03 |
+
 | Current Base Salary | $132,000.00 |
 | Bonus Target % | 10% |
 | Current Equity (RSUs) | 400 |
@@ -336,7 +336,7 @@ Aisha Johnson (E-20106, Engineering Manager, M50) has 3 direct reports. When Sar
 | Job Family | Engineering |
 | Zone | Zone 2 |
 | Start Date | 2021-09-20 |
-| Eligibility Date | 2021-09-20 |
+
 | Current Base Salary | $185,000.00 |
 | Bonus Target % | 15% |
 | Current Equity (RSUs) | 2,000 |

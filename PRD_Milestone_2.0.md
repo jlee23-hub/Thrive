@@ -16,7 +16,7 @@ Employee demographics, salary, level, and job data continue to flow from Workday
 
 - **Team Planner Grid** (Manager): Read-only grid showing all direct reports eligible for the active cycle with current compensation data. Supports column pinning and drill-down into skip-level reports (one additional click into a direct report who is also a manager).
 - **Team Summary Cards** (Manager): Headline metrics for the team — headcount and total current equity.
-- **Filtering** (Manager): Column-level filters by job level, zone, performance rating, and eligibility status. Filters are additive (AND logic).
+- **Filtering** (Manager): Column-level filters by job level, zone, and performance rating. Filters are additive (AND logic).
 - **Sorting** (Manager): Column-level sorting (ascending/descending) on any column.
 - **Search** (Manager): Text search across any column in the grid.
 - **Column Pinning** (Manager): Ability to pin columns to the left side of the grid so they remain visible while scrolling horizontally through other columns.
@@ -61,7 +61,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-1 | As a manager, I can see a read-only grid of all my direct reports who are eligible for the active compensation cycle. Columns include: Employee Name, Employee ID, Job Title, Job Level, Job Family, Zone, Start Date, Eligibility Date, Current Base Salary, Bonus Target %, Current Equity (RSUs), Performance Rating, % of SRP (Salary Range Position). Source: Workday (demographics, salary, job data), Shareworks (equity). | P0 |
+| M-1 | As a manager, I can see a read-only grid of all my direct reports in the active compensation cycle. Columns include: Employee Name, Employee ID, Job Title, Job Level, Job Family, Zone, Start Date, Current Base Salary, Bonus Target %, Current Equity (RSUs), Performance Rating, % of SRP (Salary Range Position). Source: Workday (demographics, salary, job data), Shareworks (equity). | P0 |
 | M-2 | As a manager, if a direct report is also a manager, I can click into that employee's row to see their direct reports (my skip-level reports) in the same grid format. A breadcrumb or back navigation allows me to return to my direct reports view. | P0 |
 | M-3 | As a manager, I can pin columns to the left side of the grid so they remain visible while scrolling horizontally (e.g., pin Employee Name and Employee ID). | P0 |
 | M-4 | As a manager, I can unpin a previously pinned column to return it to its default scrollable position. | P0 |
@@ -93,7 +93,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 | # | Requirement | Priority |
 |---|---|---|
-| M-13 | As a manager, I can filter the grid by job level, zone, performance rating, and eligibility status. Filters are additive (AND logic). | P0 |
+| M-13 | As a manager, I can filter the grid by job level, zone, and performance rating. Filters are additive (AND logic). | P0 |
 | M-14 | As a manager, I can see active filter indicators showing which filters are currently applied. | P0 |
 | M-15 | As a manager, I can clear individual filters or clear all filters at once. | P0 |
 
@@ -117,8 +117,8 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 **As a manager, I want to see my team's current compensation in a single read-only grid so I can understand my team's compensation landscape.**
 
 - The Team Planner opens to the active compensation cycle. If no cycle is active, the page displays: "No active compensation cycle. Contact your Comp Admin."
-- The grid shows all direct reports who are eligible for the cycle (eligibility determined by rules configured in cycle setup).
-- All columns are read-only: Name, Employee ID, Job Title, Level, Job Family, Zone, Start Date, Eligibility Date, Current Base Salary, Bonus Target %, Current Equity (RSUs), Performance Rating, % of SRP.
+- The grid shows all direct reports in the active cycle.
+- All columns are read-only: Name, Employee ID, Job Title, Level, Job Family, Zone, Start Date, Current Base Salary, Bonus Target %, Current Equity (RSUs), Performance Rating, % of SRP.
 - Team Summary Cards above the grid show headline metrics.
 - Employee Name column is pinned by default. Manager can pin/unpin additional columns.
 - If a direct report is also a manager, the manager can click into that row to see their skip-level reports in the same grid format. A breadcrumb trail (e.g., "My Team > Aisha Johnson's Team") allows navigation back.
@@ -128,7 +128,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 **As a manager, I want to search, filter, and sort my team grid so I can focus on specific employees or groups when reviewing compensation data.**
 
 - Text search field above the grid filters across all column values in real time.
-- Filter dropdowns for job level, zone, performance rating, and eligibility status.
+- Filter dropdowns for job level, zone, and performance rating.
 - Active filter indicators show applied filters; clear individual or clear all.
 - Column header click toggles sort direction (ascending → descending → unsorted).
 - Summary cards update to reflect the filtered subset.
@@ -153,7 +153,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | SSO Authentication | Okta OIDC/SAML; same infrastructure as Milestone 1 |
 | Session Management | JWT with 8-hour expiry; refresh token rotation |
 | Access Control | Manager can only view their own direct reports; enforced server-side. Manager cannot see other managers' teams. |
-| Data Scoping | Manager's team is determined by the reporting hierarchy in Workday. The server filters eligible employees by both the manager's reporting line and the cycle's eligibility rules. |
+| Data Scoping | Manager's team is determined by the reporting hierarchy in Workday. The server filters employees by the manager's reporting line. |
 | Transport Security | TLS 1.2+ for all API calls |
 
 ### Privacy & Data Handling
@@ -186,8 +186,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
    - If no active cycle → display message: "No active compensation cycle. Contact your Comp Admin."
    - If active cycle exists → proceed.
 4. System resolves the manager's identity → queries the reporting hierarchy from Workday to determine direct reports.
-5. System filters direct reports by the cycle's eligibility rules.
-6. Team Planner grid renders with:
+5. Team Planner grid renders with:
    - Summary cards (headcount, total equity).
    - Read-only grid with current compensation data.
    - Employee Name column pinned by default.
@@ -196,7 +195,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 
 **Error states:**
 - No active cycle: Message displayed; grid not rendered.
-- Manager has no direct reports in the cycle: "All of your direct reports are excluded from this cycle based on eligibility rules."
+- Manager has no direct reports: "You have no direct reports in this cycle."
 - Workday data unavailable for an employee: Row renders with available data; missing fields show "—".
 
 ### Flow 2: Manager Searches, Filters, and Sorts
@@ -240,7 +239,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | Workday (Employee Compensation Records) | Production | Employee demographics, salary, level, job data, reporting hierarchy |
 | Workday (Performance Ratings) | Production | Latest performance rating for each employee |
 | Shareworks (Equity Grants) | Production | Current RSU grant data for each employee |
-| Cycle Configuration (Bands, Eligibility) | Application | Salary band ranges, eligibility rules — configured in Cycle Builder |
+| Cycle Configuration (Bands) | Application | Salary band ranges — configured in Cycle Builder |
 | Synthetic test records | Generated | Edge cases (e.g., new hire with no equity, manager with 1 report) |
 
 ### View-Specific Data Expectations
@@ -249,7 +248,7 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 |---|---|---|
 | Manager Team Planner (active cycle) | Read-only grid of direct reports with current comp data, summary cards (headcount, total equity) | Grid shows only eligible direct reports; summary card math is correct; all columns are read-only |
 | Manager Team Planner (no active cycle) | "No active compensation cycle" message | Grid and summary cards are not rendered |
-| Manager Team Planner (all reports excluded) | "All of your direct reports are excluded" message | Grid renders empty state |
+| Manager Team Planner (no direct reports) | "You have no direct reports in this cycle." message | Grid renders empty state |
 
 ### Example Test Cases
 
@@ -277,7 +276,6 @@ A people leader (typically M50–M70 level) who needs visibility into their dire
 | A3 | Only one compensation cycle can be active at a time for a given population. If multiple cycles exist, the Team Planner shows the one that includes the manager's direct reports. |
 | A4 | Salary band data (min, mid, max per level and zone) is configured during cycle setup (Cycle Builder step 5) and is available for % of SRP calculations. |
 | A5 | Column permissions configured in Cycle Builder step 7 determine which columns are visible for the manager role. The Team Planner respects these permissions. |
-| A6 | Eligibility rules configured in Cycle Builder step 3 determine which of the manager's direct reports appear in the grid. Excluded employees are not shown. |
 | A7 | Workday and Shareworks sync timestamps and behavior are the same as Milestone 1 — timestamps represent the time data was last pulled from the source system. |
 | A8 | Employee Name column is pinned by default on initial load. Manager's pinning preferences are not persisted across sessions (reset on page load). |
 | A9 | Managers have dual navigation: "My View" (personal Total Rewards dashboard from Milestone 1) and "My Team" (Team Planner). Both are accessible from the left navigation. |
