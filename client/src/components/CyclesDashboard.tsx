@@ -65,7 +65,7 @@ const cycles: Cycle[] = [
   {
     id: "4",
     name: "FY2025 Annual Merit Cycle",
-    subtitle: "Due in Closed",
+    subtitle: "",
     type: "Merit",
     status: "Finalized",
     timeline: "1/9/2025 - 3/24/2025",
@@ -75,7 +75,7 @@ const cycles: Cycle[] = [
   {
     id: "5",
     name: "FY2025 Mid-Year Adjustment",
-    subtitle: "Due in Closed",
+    subtitle: "",
     type: "Merit",
     status: "Finalized",
     timeline: "6/30/2025 - 8/14/2025",
@@ -168,9 +168,11 @@ function buildRows(onSelectCycle?: (cycle: Cycle) => void) {
             onClick={() => onSelectCycle?.(cycle)}
           >
             <Text size="medium" weight="bold" color="color.link">{cycle.name}</Text>
-            <div>
-              <Text size="small" color="color.text.subtlest">{cycle.subtitle}</Text>
-            </div>
+            {cycle.subtitle && (
+              <div>
+                <Text size="small" color="color.text.subtlest">{cycle.subtitle}</Text>
+              </div>
+            )}
           </div>
         ),
       },
