@@ -7,8 +7,8 @@ import InformationIcon from "@atlaskit/icon/core/information";
 import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
 import Button from "@atlaskit/button/new";
 import {
-  AreaChart,
-  Area,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -295,7 +295,7 @@ export default function RSUDetails() {
           <Heading size="small">Vesting Schedule</Heading>
           <div style={{ marginTop: token("space.200"), height: 320 }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={1}>
-              <AreaChart data={vestingScheduleData}>
+              <BarChart data={vestingScheduleData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
                 <XAxis
                   dataKey="date"
@@ -323,23 +323,19 @@ export default function RSUDetails() {
                     fontSize: 13,
                   }}
                 />
-                <Area
-                  type="monotone"
+                <Bar
                   dataKey="vested"
                   stackId="1"
-                  stroke={token("color.border.success")}
-                  fill={token("color.background.success")}
-                  fillOpacity={0.6}
+                  fill={token("color.background.success.bold")}
                   name="vested"
+                  radius={[0, 0, 0, 0]}
                 />
-                <Area
-                  type="monotone"
+                <Bar
                   dataKey="unvested"
                   stackId="1"
-                  stroke={token("color.border")}
                   fill={token("color.background.neutral")}
-                  fillOpacity={0.4}
                   name="unvested"
+                  radius={[4, 4, 0, 0]}
                 />
                 <Legend
                   formatter={(value: string) =>
@@ -348,7 +344,7 @@ export default function RSUDetails() {
                   iconType="square"
                   wrapperStyle={{ fontSize: 12, color: token("color.text.subtlest") }}
                 />
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
