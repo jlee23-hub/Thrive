@@ -478,11 +478,12 @@ export default function RSUDetails() {
                   radius={[4, 4, 0, 0]}
                 />
                 <Legend
-                  formatter={(value: string) =>
-                    value === "vested" ? "Vested Units" : "Unvested Units"
-                  }
+                  formatter={(value: string) => (
+                    <span style={{ color: token("color.text"), fontSize: 12 }}>
+                      {value === "vested" ? "Vested Units" : "Unvested Units"}
+                    </span>
+                  )}
                   iconType="square"
-                  wrapperStyle={{ fontSize: 12, color: token("color.text") }}
                 />
               </BarChart>
             </ResponsiveContainer>
