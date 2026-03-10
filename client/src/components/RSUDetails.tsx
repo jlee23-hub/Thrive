@@ -52,7 +52,7 @@ const cardStyle: React.CSSProperties = {
 };
 
 
-function GrantDetails({ grant, allGrants, onSelectGrant }: { grant: Grant; allGrants: Grant[]; onSelectGrant: (g: Grant) => void }) {
+function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: Grant; allGrants: Grant[]; onSelectGrant: (g: Grant) => void; sharePrice: number }) {
   const vestingData = useMemo(() => getGrantVestingData(grant), [grant]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -125,7 +125,7 @@ function GrantDetails({ grant, allGrants, onSelectGrant }: { grant: Grant; allGr
                   </Text>
                   <div>
                     <Text size="UNSAFE_small" color="color.text.subtlest">
-                      {g.vestedUnits.toLocaleString()} vested · {formatCurrency(g.totalValue)}
+                      {g.vestedUnits.toLocaleString()} vested · {formatCurrency(g.totalUnits * sharePrice)}
                     </Text>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ function GrantDetails({ grant, allGrants, onSelectGrant }: { grant: Grant; allGr
               <Text size="small" color="color.text.subtlest">Vested</Text>
               <div>
                 <Text size="large" weight="bold" color="color.text.success">
-                  {formatCurrency(grant.vestedValue)}
+                  {formatCurrency(grant.vestedUnits * sharePrice)}
                 </Text>
               </div>
               <Text size="small" color="color.text.subtlest">
@@ -153,7 +153,7 @@ function GrantDetails({ grant, allGrants, onSelectGrant }: { grant: Grant; allGr
               <Text size="small" color="color.text.subtlest">Unvested</Text>
               <div>
                 <Text size="large" weight="bold" color="color.text.discovery">
-                  {formatCurrency(grant.totalValue - grant.vestedValue)}
+                  {formatCurrency((grant.totalUnits - grant.vestedUnits) * sharePrice)}
                 </Text>
               </div>
               <Text size="small" color="color.text.subtlest">
@@ -171,7 +171,7 @@ function GrantDetails({ grant, allGrants, onSelectGrant }: { grant: Grant; allGr
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: token("space.100") }}>
               <Text size="medium" weight="bold">Estimated Grant Value Calculator</Text>
-              <Heading size="medium">{formatCurrency(grant.totalValue)}</Heading>
+              <Heading size="medium">{formatCurrency(grant.totalUnits * sharePrice)}</Heading>
             </div>
             <Text size="small" color="color.text.subtlest">
               This is the total pre-tax value of your grant. Here's the calculation:
@@ -185,11 +185,11 @@ function GrantDetails({ grant, allGrants, onSelectGrant }: { grant: Grant; allGr
               <Text size="medium" weight="medium">(</Text>
               <div style={{ textAlign: "center" }}>
                 <Heading size="small" color="color.text.success">
-                  {formatCurrencyDecimal(compensationData.defaultSharePrice)}
+                  {formatCurrencyDecimal(sharePrice)}
                 </Heading>
                 <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-                  <Text size="small" color="color.text.subtlest">Assumed share price</Text>
-                  <Tooltip content="Based on current share price">
+                  <Text size="small" color="color.text.subtlest">Modeled share price</Text>
+                  <Tooltip content="Based on modeled share price from slider">
                     <span style={{ display: "inline-flex", cursor: "help" }}>
                       <InformationIcon label="info" />
                     </span>
@@ -491,7 +491,7 @@ export default function RSUDetails() {
 
       </div>
 
-      <GrantDetails grant={selectedGrant} allGrants={grants} onSelectGrant={setSelectedGrant} />
+      <GrantDetails grant={selectedGrant} allGrants={grants} onSelectGrant={setSelectedGrant} sharePrice={modeledPrice} />
     </div>
   );
 }
