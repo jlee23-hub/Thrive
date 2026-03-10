@@ -3,13 +3,10 @@ import Heading from "@atlaskit/heading";
 import { Text } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
 import Tooltip from "@atlaskit/tooltip";
-import ProgressBar from "@atlaskit/progress-bar";
 import InformationIcon from "@atlaskit/icon/core/information";
 import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
 import Button from "@atlaskit/button/new";
 import {
-  AreaChart,
-  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -17,7 +14,6 @@ import {
   Tooltip as RechartsTooltip,
   LineChart,
   Line,
-  Legend,
 } from "recharts";
 import {
   grants,
@@ -51,53 +47,6 @@ const cardStyle: React.CSSProperties = {
   border: `1px solid ${token("color.border")}`,
 };
 
-function GrantCard({ grant, isSelected }: { grant: Grant; isSelected: boolean }) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        ...cardStyle,
-        marginBottom: token("space.200"),
-        border: isSelected
-          ? `2px solid ${token("color.border.selected")}`
-          : `2px solid transparent`,
-        backgroundColor: isSelected
-          ? token("color.background.selected")
-          : isHovered
-            ? token("color.background.neutral.hovered")
-            : token("elevation.surface.raised"),
-        transition: "background-color 0.15s ease, border-color 0.15s ease",
-      }}
-    >
-      <Text size="medium" weight="bold">{grant.grantDate} Grant</Text>
-      <div style={{ marginTop: token("space.150"), marginBottom: token("space.100") }}>
-        <ProgressBar
-          appearance="success"
-          value={grant.vestingProgress / 100}
-        />
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Text size="small" color="color.text.success">
-          {grant.vestedUnits.toLocaleString()} vested
-        </Text>
-        <Text size="small" color="color.text.subtlest">
-          / {grant.totalUnits.toLocaleString()} total units
-        </Text>
-        <div style={{ textAlign: "right" }}>
-          <Text size="small" color="color.text.success" weight="bold">
-            {formatCurrency(grant.vestedValue)}
-          </Text>
-          <Text size="small" color="color.text.subtlest">
-            / {formatCurrency(grant.totalValue)}
-          </Text>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function GrantDetails({ grant }: { grant: Grant }) {
   const vestingData = useMemo(() => getGrantVestingData(grant), [grant]);
@@ -263,15 +212,6 @@ function GrantDetails({ grant }: { grant: Grant }) {
 export default function RSUDetails() {
   const [selectedGrant, setSelectedGrant] = useState<Grant>(grants[0]);
 
-  const selectedChartData = useMemo(() => {
-    const data = getGrantVestingData(selectedGrant);
-    return data.map((d) => ({
-      date: d.date,
-      vested: d.vested,
-      unvested: d.total - d.vested,
-    }));
-  }, [selectedGrant]);
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={cardStyle}>
@@ -348,78 +288,6 @@ export default function RSUDetails() {
           })()}
         </div>
 
-        <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.300"), alignItems: "center" }}>
-          <div style={{ flex: 1 }}>
-            {grants.map((grant) => (
-              <div
-                key={grant.id}
-                onClick={() => setSelectedGrant(grant)}
-                style={{ cursor: "pointer" }}
-              >
-                <GrantCard grant={grant} isSelected={selectedGrant.id === grant.id} />
-              </div>
-            ))}
-          </div>
-
-          <div style={{ flex: 1, height: 600, minWidth: 0 }}>
-            <ResponsiveContainer width="100%" height="100%" minWidth={1}>
-              <AreaChart data={selectedChartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
-                <XAxis
-                  dataKey="date"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
-                  interval={2}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
-                  tickFormatter={(v) => v.toLocaleString()}
-                  width={50}
-                />
-                <RechartsTooltip
-                  formatter={(value: number, name: string) => [
-                    value.toLocaleString() + " units",
-                    name === "vested" ? "Vested Units" : "Unvested Units",
-                  ]}
-                  contentStyle={{
-                    backgroundColor: token("elevation.surface.overlay"),
-                    border: `1px solid ${token("color.border")}`,
-                    borderRadius: 8,
-                    fontSize: 13,
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="vested"
-                  stackId="1"
-                  stroke="#36B37E"
-                  fill="#36B37E"
-                  fillOpacity={0.4}
-                  name="vested"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="unvested"
-                  stackId="1"
-                  stroke="#C1F0D8"
-                  fill="#C1F0D8"
-                  fillOpacity={0.3}
-                  name="unvested"
-                />
-                <Legend
-                  formatter={(value: string) =>
-                    value === "vested" ? "Vested Units" : "Unvested Units"
-                  }
-                  iconType="square"
-                  wrapperStyle={{ fontSize: 12, color: token("color.text.subtlest") }}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
       </div>
 
       <GrantDetails grant={selectedGrant} />
