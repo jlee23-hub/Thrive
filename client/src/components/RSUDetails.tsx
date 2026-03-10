@@ -326,14 +326,14 @@ export default function RSUDetails() {
                 <Bar
                   dataKey="vested"
                   stackId="1"
-                  fill={token("color.background.success.bold")}
+                  fill={token("color.chart.success.bold")}
                   name="vested"
                   radius={[0, 0, 0, 0]}
                 />
                 <Bar
                   dataKey="unvested"
                   stackId="1"
-                  fill={token("color.background.neutral")}
+                  fill={token("color.background.neutral.bold")}
                   name="unvested"
                   radius={[4, 4, 0, 0]}
                 />
