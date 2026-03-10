@@ -953,7 +953,17 @@ export default function DataManagement() {
               </div>
 
               <div style={cardStyle}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
+                  <colgroup>
+                    <col style={{ width: "16%" }} />
+                    <col style={{ width: "12%" }} />
+                    <col style={{ width: "22%" }} />
+                    <col style={{ width: "9%" }} />
+                    <col style={{ width: "9%" }} />
+                    <col style={{ width: "8%" }} />
+                    <col style={{ width: "9%" }} />
+                    <col style={{ width: "15%" }} />
+                  </colgroup>
                   <thead>
                     <tr style={{ borderBottom: `2px solid ${token("color.border")}`, backgroundColor: token("elevation.surface.sunken") }}>
                       <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Timestamp</th>
@@ -978,8 +988,10 @@ export default function DataManagement() {
                         <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                           <Text size="small" weight="medium">{entry.source}</Text>
                         </td>
-                        <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                          <Text size="small">{entry.table}</Text>
+                        <td style={{ padding: `${token("space.100")} ${token("space.200")}`, overflow: "hidden" }}>
+                          <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            <Text size="small">{entry.table}</Text>
+                          </div>
                         </td>
                         <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "center" }}>
                           <Lozenge
@@ -999,10 +1011,12 @@ export default function DataManagement() {
                         <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right" }}>
                           <Text size="small" color="color.text.subtlest">{entry.duration}</Text>
                         </td>
-                        <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                          <Text size="UNSAFE_small" color="color.text.subtlest">{entry.initiatedBy}</Text>
+                        <td style={{ padding: `${token("space.100")} ${token("space.200")}`, overflow: "hidden" }}>
+                          <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            <Text size="UNSAFE_small" color="color.text.subtlest">{entry.initiatedBy}</Text>
+                          </div>
                           {entry.errorMessage && (
-                            <div style={{ marginTop: token("space.025") }}>
+                            <div style={{ marginTop: token("space.025"), overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                               <Text size="UNSAFE_small" color="color.text.danger">{entry.errorMessage}</Text>
                             </div>
                           )}
