@@ -482,7 +482,7 @@ export default function RSUDetails() {
                     value === "vested" ? "Vested Units" : "Unvested Units"
                   }
                   iconType="square"
-                  wrapperStyle={{ fontSize: 12, color: token("color.text.subtle") }}
+                  wrapperStyle={{ fontSize: 12, color: token("color.text") }}
                 />
               </BarChart>
             </ResponsiveContainer>
