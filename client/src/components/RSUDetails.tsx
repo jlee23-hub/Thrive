@@ -276,6 +276,78 @@ export default function RSUDetails() {
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={cardStyle}>
         <Heading size="large">Equity Summary</Heading>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gap: token("space.300"),
+          marginTop: token("space.300"),
+        }}>
+          {(() => {
+            const totalUnits = grants.reduce((sum, g) => sum + g.totalUnits, 0);
+            const totalValue = grants.reduce((sum, g) => sum + g.totalValue, 0);
+            const vestedUnits = grants.reduce((sum, g) => sum + g.vestedUnits, 0);
+            const vestedValue = grants.reduce((sum, g) => sum + g.vestedValue, 0);
+            const unvestedUnits = totalUnits - vestedUnits;
+            const unvestedValue = totalValue - vestedValue;
+
+            return (
+              <>
+                <div style={{
+                  padding: token("space.300"),
+                  borderRadius: "6px",
+                  border: `1px solid ${token("color.border")}`,
+                  backgroundColor: token("elevation.surface.sunken"),
+                }}>
+                  <Text size="small" color="color.text.subtlest" weight="semibold">Total Equity</Text>
+                  <div style={{ marginTop: token("space.100") }}>
+                    <Heading size="medium">{formatCurrency(totalValue)}</Heading>
+                  </div>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Text size="small" color="color.text.subtlest">
+                      {totalUnits.toLocaleString()} total units
+                    </Text>
+                  </div>
+                </div>
+
+                <div style={{
+                  padding: token("space.300"),
+                  borderRadius: "6px",
+                  border: `1px solid ${token("color.border")}`,
+                  backgroundColor: token("elevation.surface.sunken"),
+                }}>
+                  <Text size="small" color="color.text.subtlest" weight="semibold">Vested</Text>
+                  <div style={{ marginTop: token("space.100") }}>
+                    <Heading size="medium">{formatCurrency(vestedValue)}</Heading>
+                  </div>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Text size="small" color="color.text.success">
+                      {vestedUnits.toLocaleString()} vested units
+                    </Text>
+                  </div>
+                </div>
+
+                <div style={{
+                  padding: token("space.300"),
+                  borderRadius: "6px",
+                  border: `1px solid ${token("color.border")}`,
+                  backgroundColor: token("elevation.surface.sunken"),
+                }}>
+                  <Text size="small" color="color.text.subtlest" weight="semibold">Unvested</Text>
+                  <div style={{ marginTop: token("space.100") }}>
+                    <Heading size="medium">{formatCurrency(unvestedValue)}</Heading>
+                  </div>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Text size="small" color="color.text.subtlest">
+                      {unvestedUnits.toLocaleString()} unvested units
+                    </Text>
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+
         <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.300"), alignItems: "center" }}>
           <div style={{ flex: 1 }}>
             {grants.map((grant) => (
