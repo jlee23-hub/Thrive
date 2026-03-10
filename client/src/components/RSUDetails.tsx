@@ -7,6 +7,8 @@ import InformationIcon from "@atlaskit/icon/core/information";
 import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
 import Button from "@atlaskit/button/new";
 import {
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -14,6 +16,7 @@ import {
   Tooltip as RechartsTooltip,
   LineChart,
   Line,
+  Legend,
 } from "recharts";
 import {
   grants,
@@ -286,6 +289,68 @@ export default function RSUDetails() {
               </>
             );
           })()}
+        </div>
+
+        <div style={{ marginTop: token("space.300") }}>
+          <Heading size="small">Vesting Schedule</Heading>
+          <div style={{ marginTop: token("space.200"), height: 320 }}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={1}>
+              <AreaChart data={vestingScheduleData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
+                <XAxis
+                  dataKey="date"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
+                  interval={1}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
+                  tickFormatter={(v) => v.toLocaleString()}
+                  width={50}
+                />
+                <RechartsTooltip
+                  formatter={(value: number, name: string) => [
+                    value.toLocaleString() + " units",
+                    name === "vested" ? "Vested" : "Unvested",
+                  ]}
+                  contentStyle={{
+                    backgroundColor: token("elevation.surface.overlay"),
+                    border: `1px solid ${token("color.border")}`,
+                    borderRadius: 8,
+                    fontSize: 13,
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="vested"
+                  stackId="1"
+                  stroke={token("color.border.success")}
+                  fill={token("color.background.success")}
+                  fillOpacity={0.6}
+                  name="vested"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="unvested"
+                  stackId="1"
+                  stroke={token("color.border")}
+                  fill={token("color.background.neutral")}
+                  fillOpacity={0.4}
+                  name="unvested"
+                />
+                <Legend
+                  formatter={(value: string) =>
+                    value === "vested" ? "Vested Units" : "Unvested Units"
+                  }
+                  iconType="square"
+                  wrapperStyle={{ fontSize: 12, color: token("color.text.subtlest") }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
       </div>
