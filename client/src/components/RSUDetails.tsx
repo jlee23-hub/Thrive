@@ -333,7 +333,7 @@ export default function RSUDetails() {
                 <Bar
                   dataKey="unvested"
                   stackId="1"
-                  fill={token("color.background.neutral.bold")}
+                  fill={token("color.background.neutral")}
                   name="unvested"
                   radius={[4, 4, 0, 0]}
                 />
