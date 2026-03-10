@@ -312,15 +312,45 @@ export default function RSUDetails() {
                   width={50}
                 />
                 <RechartsTooltip
-                  formatter={(value: number, name: string) => [
-                    value.toLocaleString() + " units",
-                    name === "vested" ? "Vested" : "Unvested",
-                  ]}
-                  contentStyle={{
-                    backgroundColor: token("elevation.surface.overlay"),
-                    border: `1px solid ${token("color.border")}`,
-                    borderRadius: 8,
-                    fontSize: 13,
+                  content={({ active, payload, label }) => {
+                    if (!active || !payload?.length) return null;
+                    return (
+                      <div style={{
+                        backgroundColor: token("elevation.surface.overlay"),
+                        border: `1px solid ${token("color.border")}`,
+                        borderRadius: 8,
+                        fontSize: 13,
+                        padding: token("space.150"),
+                      }}>
+                        <div style={{ marginBottom: token("space.050"), fontWeight: 600 }}>{label}</div>
+                        {payload.map((entry) => (
+                          <div key={entry.name} style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: token("space.100"),
+                            marginTop: token("space.025"),
+                          }}>
+                            <div style={{
+                              width: 10,
+                              height: 10,
+                              borderRadius: 2,
+                              backgroundColor: entry.color,
+                            }} />
+                            <span style={{
+                              color: entry.name === "unvested"
+                                ? token("color.text")
+                                : token("color.text.success"),
+                              fontWeight: 500,
+                            }}>
+                              {entry.name === "vested" ? "Vested" : "Unvested"}:
+                            </span>
+                            <span style={{ color: token("color.text"), fontWeight: 600 }}>
+                              {(entry.value as number).toLocaleString()} units
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    );
                   }}
                 />
                 <Bar
