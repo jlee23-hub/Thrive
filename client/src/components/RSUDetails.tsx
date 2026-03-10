@@ -51,25 +51,86 @@ const cardStyle: React.CSSProperties = {
 };
 
 
-function GrantDetails({ grant }: { grant: Grant }) {
+function GrantDetails({ grant, allGrants, onSelectGrant }: { grant: Grant; allGrants: Grant[]; onSelectGrant: (g: Grant) => void }) {
   const vestingData = useMemo(() => getGrantVestingData(grant), [grant]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div style={cardStyle}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.200"), marginBottom: token("space.400") }}>
         <Heading size="medium">Grant Details For</Heading>
-        <div
-          style={{
-            backgroundColor: token("color.background.neutral"),
-            borderRadius: "6px",
-            padding: `${token("space.050")} ${token("space.200")}`,
-            display: "flex",
-            alignItems: "center",
-            gap: token("space.100"),
-          }}
-        >
-          <Text size="small">{grant.grantDate} - {grant.totalUnits.toLocaleString()} total units</Text>
-          <ChevronDownIcon label="select" />
+        <div ref={dropdownRef} style={{ position: "relative" }}>
+          <div
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            style={{
+              backgroundColor: token("color.background.neutral"),
+              borderRadius: "6px",
+              padding: `${token("space.050")} ${token("space.200")}`,
+              display: "flex",
+              alignItems: "center",
+              gap: token("space.100"),
+              cursor: "pointer",
+            }}
+          >
+            <Text size="small">{grant.grantDate} - {grant.totalUnits.toLocaleString()} total units</Text>
+            <ChevronDownIcon label="select" />
+          </div>
+          {dropdownOpen && (
+            <div style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              marginTop: token("space.050"),
+              backgroundColor: token("elevation.surface.overlay"),
+              border: `1px solid ${token("color.border")}`,
+              borderRadius: "6px",
+              minWidth: 280,
+              zIndex: 10,
+              overflow: "hidden",
+            }}>
+              {allGrants.map((g) => (
+                <div
+                  key={g.id}
+                  onClick={() => {
+                    onSelectGrant(g);
+                    setDropdownOpen(false);
+                  }}
+                  style={{
+                    padding: `${token("space.100")} ${token("space.200")}`,
+                    cursor: "pointer",
+                    backgroundColor: g.id === grant.id ? token("color.background.selected") : "transparent",
+                    borderLeft: g.id === grant.id ? `2px solid ${token("color.border.selected")}` : "2px solid transparent",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (g.id !== grant.id) e.currentTarget.style.backgroundColor = token("color.background.neutral.subtle.hovered");
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = g.id === grant.id ? token("color.background.selected") : "transparent";
+                  }}
+                >
+                  <Text size="small" weight={g.id === grant.id ? "bold" : "regular"}>
+                    {g.grantDate} - {g.totalUnits.toLocaleString()} total units
+                  </Text>
+                  <div>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">
+                      {g.vestedUnits.toLocaleString()} vested · {formatCurrency(g.totalValue)}
+                    </Text>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -381,7 +442,7 @@ export default function RSUDetails() {
 
       </div>
 
-      <GrantDetails grant={selectedGrant} />
+      <GrantDetails grant={selectedGrant} allGrants={grants} onSelectGrant={setSelectedGrant} />
     </div>
   );
 }
