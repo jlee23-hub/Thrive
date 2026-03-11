@@ -187,7 +187,7 @@ export default function CompensationSummary() {
           {formatCurrencyDecimal(compensationData.defaultSharePrice)} is the default share price
         </Text>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.300"), marginTop: token("space.200") }}>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1 }} className="hide-range-dot">
             <Range
               min={20}
               max={200}
