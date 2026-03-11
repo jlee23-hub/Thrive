@@ -109,3 +109,7 @@ div[data-selected="true"]::before {
 .no-last-row-border > div > div > nav {
   border-top: none !important;
 }
+
+.hide-range-dot > div::after {
+  display: none !important;
+}

@@ -317,7 +317,7 @@ export default function RSUDetails() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.200") }}>
             <Text size="UNSAFE_small" color="color.text.subtlest">{formatCurrencyDecimal(defaultPrice * 0.5)}</Text>
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1 }} className="hide-range-dot">
               <Range
                 min={Math.round(defaultPrice * 0.5 * 100) / 100}
                 max={Math.round(defaultPrice * 2 * 100) / 100}
