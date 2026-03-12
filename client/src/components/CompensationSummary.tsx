@@ -16,6 +16,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip as RechartsTooltip,
+  Legend,
 } from "recharts";
 import {
   compensationData,
@@ -81,7 +82,8 @@ export default function CompensationSummary() {
     const ratio = sharePrice / compensationData.defaultSharePrice;
     return rsuYearlyData.map((d) => ({
       ...d,
-      value: Math.round(d.value * ratio),
+      vested: Math.round(d.vested * ratio),
+      unvested: Math.round(d.unvested * ratio),
     }));
   }, [sharePrice]);
 
@@ -266,15 +268,69 @@ export default function CompensationSummary() {
                   width={60}
                 />
                 <RechartsTooltip
-                  formatter={(value: number) => [formatCurrency(value), "RSU Value"]}
-                  contentStyle={{
-                    backgroundColor: token("elevation.surface.overlay"),
-                    border: `1px solid ${token("color.border")}`,
-                    borderRadius: 8,
-                    fontSize: 13,
+                  content={({ active, payload, label }) => {
+                    if (!active || !payload?.length) return null;
+                    return (
+                      <div style={{
+                        backgroundColor: token("elevation.surface.overlay"),
+                        border: `1px solid ${token("color.border")}`,
+                        borderRadius: 8,
+                        fontSize: 13,
+                        padding: token("space.150"),
+                      }}>
+                        <div style={{ marginBottom: token("space.050"), fontWeight: 600 }}>{label}</div>
+                        {payload.map((entry) => (
+                          <div key={entry.name} style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: token("space.100"),
+                            marginTop: token("space.025"),
+                          }}>
+                            <div style={{
+                              width: 10,
+                              height: 10,
+                              borderRadius: 2,
+                              backgroundColor: entry.color,
+                            }} />
+                            <span style={{
+                              color: entry.name === "unvested"
+                                ? token("color.text")
+                                : token("color.text.success"),
+                              fontWeight: 500,
+                            }}>
+                              {entry.name === "vested" ? "Vested" : "Unvested"}:
+                            </span>
+                            <span style={{ color: token("color.text"), fontWeight: 600 }}>
+                              {formatCurrency(entry.value as number)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    );
                   }}
                 />
-                <Bar dataKey="value" fill="#36B37E" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="vested"
+                  stackId="rsu"
+                  fill={token("color.chart.success.bold")}
+                  name="vested"
+                  radius={[0, 0, 0, 0]}
+                />
+                <Bar
+                  dataKey="unvested"
+                  stackId="rsu"
+                  fill={token("color.background.neutral")}
+                  name="unvested"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Legend
+                  formatter={(value: string) => (
+                    <span style={{ color: token("color.text"), fontSize: 12 }}>
+                      {value === "vested" ? "Vested" : "Unvested"}
+                    </span>
+                  )}
+                  iconType="square"
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
