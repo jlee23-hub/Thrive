@@ -20,6 +20,7 @@ import DatabaseIcon from "@atlaskit/icon/core/database";
 import PersonIcon from "@atlaskit/icon/core/person";
 import ShieldIcon from "@atlaskit/icon/core/shield";
 import SearchIcon from "@atlaskit/icon/core/search";
+import LockLockedIcon from "@atlaskit/icon/core/lock-locked";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
@@ -101,15 +102,30 @@ const rolePermissions = [
   { role: "Employee", view: false, edit: false, approve: false, export: false },
 ];
 
-const fieldPermissions = [
-  { field: "Employee Name", admin: "Edit", hrbp: "Edit", manager: "View", finance: "View" },
-  { field: "Base Salary", admin: "Edit", hrbp: "Edit", manager: "View", finance: "View" },
-  { field: "Merit Increase %", admin: "Edit", hrbp: "Edit", manager: "Edit", finance: "View" },
-  { field: "New Salary", admin: "Edit", hrbp: "View", manager: "View", finance: "View" },
-  { field: "Compa-Ratio", admin: "Edit", hrbp: "View", manager: "View", finance: "View" },
-  { field: "Performance Rating", admin: "Edit", hrbp: "View", manager: "View", finance: "Hidden" },
-  { field: "Promotion", admin: "Edit", hrbp: "Edit", manager: "View", finance: "Hidden" },
-  { field: "Equity Grant", admin: "Edit", hrbp: "View", manager: "Hidden", finance: "View" },
+const columnPermissionsData = [
+  { id: "employeeName", name: "Employee", variable: "empName", dataSource: "Integration", displayType: "Frozen", rewardLetter: false, columnDefault: "Visible", locked: true, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "employeeId", name: "Employee ID", variable: "empId001", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: true, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "geographicZone", name: "Geographic Zone", variable: "geo", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "prorated", name: "Prorated?", variable: "isProrated", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" as const }, { role: "All Other Users Can View", appearance: "default" as const }] },
+  { id: "jobFamily", name: "Non - Process Job Family Charge", variable: "csPharmact7MrCharge", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "jobProfile", name: "New Job Profile (Proposed)", variable: "newJobProfile", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" as const }] },
+  { id: "h1Rating", name: "H1 Rating # FY23", variable: "h1RatingNumericValue", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "h2Rating", name: "H2 Rating FY23", variable: "h2RatingMadebyManager", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "newSalary", name: "New Salary (Annualized)", variable: "newSalary", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "apexEquityTarget", name: "APEX Equity Target (pre-vested)", variable: "fullBaseEquityTargetCompBase", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" as const }, { role: "Columns Gr...", appearance: "moved" as const }, { role: "All Other Users Can Not View", appearance: "default" as const }] },
+  { id: "meritApex", name: "Modeled APEX Multiplier", variable: "modeledApexMultiplier", dataSource: "User Input or Data Upload", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" as const }, { role: "CRP ZU an...", appearance: "inprogress" as const }, { role: "HRBP All Role...", appearance: "moved" as const }, { role: "APEX Syste...", appearance: "success" as const }] },
+  { id: "refreshEquity", name: "Refresh Equity (USD)", variable: "equity1RefreshAmount", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" as const }, { role: "APEX Plans...", appearance: "success" as const }, { role: "CRP Org an...", appearance: "inprogress" as const }, { role: "All Other Users Can View", appearance: "default" as const }] },
+  { id: "maxEquity", name: "Max Equity - (USD)", variable: "maxEquity", dataSource: "Computed", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Other Users Can View", appearance: "default" as const }] },
+  { id: "futureTermination", name: "Future termination", variable: "futureTermDate", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can Not View", appearance: "default" as const }] },
+  { id: "location", name: "Location", variable: "location", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "businessTitle", name: "Business Title", variable: "businessTitle", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" as const }, { role: "Admin", appearance: "removed" as const }, { role: "All Other Users Can Not View", appearance: "default" as const }] },
+  { id: "department", name: "Department", variable: "dept", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "manager", name: "Manager", variable: "managerName", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "currentSalary", name: "Current Salary", variable: "currentSalary", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" as const }, { role: "APEX Basis...", appearance: "success" as const }, { role: "All Other Users Can Not View", appearance: "default" as const }] },
+  { id: "proposedSalary", name: "Proposed Salary", variable: "proposedSalary", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" as const }, { role: "Admin", appearance: "removed" as const }, { role: "All Other Users Can Not View", appearance: "default" as const }] },
+  { id: "meritIncrease", name: "Merit Increase %", variable: "meritIncreasePct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "equityGrant", name: "Equity Grant", variable: "equityGrant", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
+  { id: "totalCompensation", name: "Total Compensation", variable: "totalComp", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" as const }] },
 ];
 
 function parseCycleDates(timeline: string) {
@@ -201,26 +217,7 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
     ],
   }));
 
-  const fpHead = {
-    cells: [
-      { key: "field", content: "FIELD", width: 20 },
-      { key: "admin", content: "COMP ADMIN", width: 16 },
-      { key: "hrbp", content: "HRBP", width: 16 },
-      { key: "manager", content: "MANAGER", width: 16 },
-      { key: "finance", content: "FINANCE", width: 16 },
-    ],
-  };
-
-  const fpRows = fieldPermissions.map((fp, i) => ({
-    key: String(i),
-    cells: [
-      { key: fp.field, content: <Text weight="semibold">{fp.field}</Text> },
-      { key: fp.admin, content: <PermBadge level={fp.admin} /> },
-      { key: fp.hrbp, content: <PermBadge level={fp.hrbp} /> },
-      { key: fp.manager, content: <PermBadge level={fp.manager} /> },
-      { key: fp.finance, content: <PermBadge level={fp.finance} /> },
-    ],
-  }));
+  const [expandedPermissions, setExpandedPermissions] = useState<Set<string>>(new Set());
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -526,15 +523,86 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
 
         {selectedTab === 5 && (
           <div style={cardStyle}>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.200") }}>
               <ShieldIcon label="" color={token("color.icon.brand")} />
-              <Heading size="small">Field-Level Permissions</Heading>
+              <Heading size="small">Column Permissions</Heading>
             </div>
-            <DynamicTable
-              head={fpHead}
-              rows={fpRows}
-              isFixedSize
-            />
+            <div style={{ marginBottom: token("space.300") }}>
+              <Text size="small" color="color.text.subtlest">
+                Columns configured for this cycle and their role-based access permissions.
+              </Text>
+            </div>
+            <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: "6px", overflow: "hidden" }}>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 900 }}>
+                  <thead>
+                    <tr style={{ backgroundColor: token("elevation.surface.sunken") }}>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", width: 28 }}></th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", minWidth: 180 }}>Column Name</th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}>Data Source</th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}>Display Type</th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}>Column Default</th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", minWidth: 240 }}>Permissions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {columnPermissionsData.map((field) => {
+                      const perms = field.permissions || [];
+                      const isExpanded = expandedPermissions.has(field.id);
+                      const visiblePerms = isExpanded ? perms : perms.slice(0, 3);
+                      const hiddenCount = perms.length - 3;
+                      return (
+                        <tr key={field.id} style={{ borderTop: `1px solid ${token("color.border")}` }}>
+                          <td style={{ padding: `${token("space.075")} ${token("space.150")}`, verticalAlign: "middle" }}>
+                            {field.locked && <LockLockedIcon label="Locked" LEGACY_size="small" color={token("color.icon.subtle")} />}
+                          </td>
+                          <td style={{ padding: `${token("space.075")} ${token("space.150")}`, verticalAlign: "middle" }}>
+                            <div>
+                              <Text size="small" weight="medium">{field.name}</Text>
+                              <div>
+                                <Text size="UNSAFE_small" color="color.text.subtlest">{field.variable}</Text>
+                              </div>
+                            </div>
+                          </td>
+                          <td style={{ padding: `${token("space.075")} ${token("space.150")}`, verticalAlign: "middle" }}>
+                            <Text size="UNSAFE_small" color="color.text.subtlest">{field.dataSource}</Text>
+                          </td>
+                          <td style={{ padding: `${token("space.075")} ${token("space.150")}`, verticalAlign: "middle" }}>
+                            <Text size="UNSAFE_small" color="color.text.subtlest">{field.displayType}</Text>
+                          </td>
+                          <td style={{ padding: `${token("space.075")} ${token("space.150")}`, verticalAlign: "middle" }}>
+                            <Text size="UNSAFE_small" color="color.text.subtlest">{field.columnDefault}</Text>
+                          </td>
+                          <td style={{ padding: `${token("space.075")} ${token("space.150")}`, verticalAlign: "middle" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: token("space.050"), flexWrap: "wrap" }}>
+                              {visiblePerms.map((p, pi) => (
+                                <Lozenge key={pi} appearance={p.appearance}>{p.role}</Lozenge>
+                              ))}
+                              {!isExpanded && hiddenCount > 0 && (
+                                <span
+                                  style={{ cursor: "pointer", fontSize: "11px", color: token("color.text.subtle"), fontWeight: 500 }}
+                                  onClick={() => setExpandedPermissions((prev) => { const next = new Set(prev); next.add(field.id); return next; })}
+                                >
+                                  + {hiddenCount} other{hiddenCount > 1 ? "s" : ""}
+                                </span>
+                              )}
+                              {isExpanded && perms.length > 3 && (
+                                <span
+                                  style={{ cursor: "pointer", fontSize: "11px", color: token("color.text.subtle"), fontWeight: 500 }}
+                                  onClick={() => setExpandedPermissions((prev) => { const next = new Set(prev); next.delete(field.id); return next; })}
+                                >
+                                  Show less
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.300") }}>
               <Button appearance="subtle">Reset</Button>
               <Button appearance="primary">Save Permissions</Button>
@@ -546,11 +614,3 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
   );
 }
 
-function PermBadge({ level }: { level: string }) {
-  const appearance = level === "Edit"
-    ? "success"
-    : level === "View"
-      ? "inprogress"
-      : "default";
-  return <Lozenge appearance={appearance}>{level}</Lozenge>;
-}
