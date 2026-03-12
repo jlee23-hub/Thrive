@@ -7,11 +7,11 @@ export const compensationData = {
 };
 
 export const rsuYearlyData = [
-  { year: "2023", vested: 65000, unvested: 0, isCurrent: false },
-  { year: "2024", vested: 78000, unvested: 0, isCurrent: false },
-  { year: "2025", vested: 72000, unvested: 23000, isCurrent: false },
-  { year: "2026", vested: 48000, unvested: 57000, isCurrent: true },
-  { year: "2027", vested: 0, unvested: 38000, isCurrent: false },
+  { year: "2023", value: 65000 },
+  { year: "2024", value: 78000 },
+  { year: "2025", value: 95000 },
+  { year: "2026", value: 105000, isCurrent: true },
+  { year: "2027", value: 38000 },
 ];
 
 export const equityData = {
