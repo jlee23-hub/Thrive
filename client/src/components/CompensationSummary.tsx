@@ -5,6 +5,7 @@ import { token } from "@atlaskit/tokens";
 import Range from "@atlaskit/range";
 import Tooltip from "@atlaskit/tooltip";
 import InformationIcon from "@atlaskit/icon/core/information";
+import Lozenge from "@atlaskit/lozenge";
 import {
   PieChart,
   Pie,
@@ -232,6 +233,7 @@ export default function CompensationSummary() {
             <Text size="small" weight="bold" color="color.text.success">↗</Text>
           </div>
           <Heading size="medium">RSUs</Heading>
+          <Lozenge appearance="default">{equityData.totalUnits.toLocaleString()} units</Lozenge>
         </div>
 
         <div style={{ display: "flex", gap: token("space.400"), alignItems: "flex-start" }}>
