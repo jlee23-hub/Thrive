@@ -134,6 +134,11 @@ export default function CompensationSummary() {
                       }}
                     />
                     <Text size="large">{item.name}</Text>
+                    {item.name === "RSUs" && (
+                      <Text size="small" color="color.text.subtlest">
+                        ({Math.round(adjustedData.adjustedRsus / sharePrice).toLocaleString()} units)
+                      </Text>
+                    )}
                   </div>
                   <Heading size="medium">{formatCurrency(item.value)}</Heading>
                 </div>
