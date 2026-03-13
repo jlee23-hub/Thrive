@@ -66,7 +66,7 @@ export default function CompensationSummary() {
   const pieData = [
     { name: "Base Salary (annualized)", value: compensationData.baseSalary, color: COLORS.baseSalary },
     { name: "Bonus/ Commission Target", value: compensationData.bonusTarget, color: COLORS.bonus },
-    { name: "RSUs", value: adjustedData.adjustedRsus, color: COLORS.rsus },
+    { name: `RSUs (${equityData.totalUnits.toLocaleString()} units)`, value: adjustedData.adjustedRsus, color: COLORS.rsus },
   ];
 
   const adjustedEquity = useMemo(() => {
