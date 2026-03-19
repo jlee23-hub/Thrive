@@ -92,7 +92,7 @@ export default function CompensationSummary() {
       <div style={cardStyle}>
         <div style={{ display: "flex", gap: token("space.400"), alignItems: "flex-start" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <Heading size="xlarge">Total Compensation Summary</Heading>
+            <Heading size="xlarge">Welcome Anand, here are your total rewards</Heading>
             <div style={{ display: "flex", gap: token("space.1000"), marginTop: token("space.300") }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
