@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, Search, SlidersHorizontal, ArrowUpDown, Users, User, MoreHorizontal } from "lucide-react";
+import { ChevronDown, ChevronRight, Search, SlidersHorizontal, ArrowUpDown, Users, MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -50,40 +49,113 @@ const employees: Employee[] = [
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(value);
 
-function RatingBadge({ rating }: { rating: string }) {
-  const variant = rating === "Greatly Exceeds" ? "default" : rating === "Exceeds Expectations" ? "secondary" : rating === "Met Some" ? "outline" : "outline";
-  const colorClass = rating === "Greatly Exceeds" ? "bg-emerald-100 text-emerald-800 border-emerald-200" : rating === "Exceeds Expectations" ? "bg-blue-100 text-blue-800 border-blue-200" : rating === "Met Some" ? "bg-amber-100 text-amber-800 border-amber-200" : "bg-slate-100 text-slate-700 border-slate-200";
-  return <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${colorClass}`}>{rating}</span>;
+type LozengeAppearance = "success" | "inprogress" | "default" | "moved" | "removed" | "new";
+
+const lozengeStyles: Record<LozengeAppearance, { bg: string; text: string }> = {
+  success:    { bg: "#DFFCF0", text: "#216E4E" },
+  inprogress: { bg: "#E9F2FF", text: "#0055CC" },
+  default:    { bg: "#F1F2F4", text: "#44546F" },
+  moved:      { bg: "#FFF7D6", text: "#7F5F01" },
+  removed:    { bg: "#FFECEB", text: "#AE2E24" },
+  new:        { bg: "#F3F0FF", text: "#6E5DC6" },
+};
+
+function Lozenge({ appearance = "default", children, isBold = false }: { appearance?: LozengeAppearance; children: React.ReactNode; isBold?: boolean }) {
+  const style = lozengeStyles[appearance];
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        padding: "2px 6px",
+        borderRadius: "3px",
+        fontSize: "11px",
+        fontWeight: isBold ? 700 : 600,
+        lineHeight: "16px",
+        textTransform: "uppercase" as const,
+        maxWidth: 200,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap" as const,
+        backgroundColor: isBold ? style.text : style.bg,
+        color: isBold ? "#FFFFFF" : style.text,
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+function ratingAppearance(rating: string): LozengeAppearance {
+  if (rating === "Greatly Exceeds") return "success";
+  if (rating === "Exceeds Expectations") return "inprogress";
+  if (rating === "Meets Expectations") return "default";
+  if (rating === "Met Some") return "moved";
+  return "removed";
+}
+
+function levelAppearance(level: string): LozengeAppearance {
+  return level.startsWith("M") ? "success" : "inprogress";
 }
 
 function SrpIndicator({ value }: { value: string }) {
   const num = parseInt(value);
-  const color = num < 100 ? "text-red-600" : num >= 120 ? "text-emerald-600" : "text-slate-900";
-  return <span className={`text-sm font-medium ${color}`}>{value}</span>;
+  const color = num < 100 ? "#AE2E24" : num >= 120 ? "#216E4E" : "#44546F";
+  return <span style={{ fontSize: 14, fontWeight: 500, color }}>{value}</span>;
 }
+
+const headerStyle: React.CSSProperties = {
+  fontSize: 12,
+  fontWeight: 600,
+  color: "#44546F",
+  textTransform: "uppercase",
+  letterSpacing: "0.04em",
+  padding: "8px 12px",
+  borderBottom: "2px solid #DFE1E6",
+  backgroundColor: "#FAFBFC",
+};
+
+const cellStyle: React.CSSProperties = {
+  fontSize: 14,
+  color: "#172B4D",
+  padding: "10px 12px",
+  borderBottom: "1px solid #EBECF0",
+  verticalAlign: "middle",
+};
+
+const subtleCellStyle: React.CSSProperties = {
+  ...cellStyle,
+  color: "#626F86",
+};
 
 function EmployeeRow({ emp, indent = false }: { emp: Employee; indent?: boolean }) {
   return (
-    <div className={`grid grid-cols-[1fr_80px_100px_80px_120px_80px_100px_140px_32px] items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors border-b border-slate-100 ${indent ? "pl-12" : ""}`}>
-      <div className="flex items-center gap-2.5 min-w-0">
-        <Avatar className="h-7 w-7 flex-shrink-0">
-          <AvatarFallback className="text-[10px] font-semibold bg-blue-100 text-blue-700">{emp.initials}</AvatarFallback>
-        </Avatar>
-        <div className="min-w-0">
-          <div className="text-sm font-medium text-slate-900 truncate">{emp.firstName} {emp.lastName}</div>
+    <tr style={{ cursor: "default" }} className="hover:bg-[#F4F5F7] transition-colors">
+      <td style={{ ...cellStyle, paddingLeft: indent ? 48 : 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Avatar className="h-7 w-7 flex-shrink-0">
+            <AvatarFallback className="text-[10px] font-semibold" style={{ backgroundColor: "#E9F2FF", color: "#0055CC" }}>{emp.initials}</AvatarFallback>
+          </Avatar>
+          <span style={{ fontSize: 14, fontWeight: 500, color: "#172B4D" }}>{emp.firstName} {emp.lastName}</span>
         </div>
-      </div>
-      <div><span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${emp.jobLevel.startsWith("M") ? "bg-emerald-100 text-emerald-700" : "bg-sky-100 text-sky-700"}`}>{emp.jobLevel}</span></div>
-      <div className="text-sm text-slate-600 truncate">{emp.jobFamily}</div>
-      <div className="text-sm text-slate-500">{emp.zone}</div>
-      <div className="text-sm font-semibold text-slate-900">{formatCurrency(emp.currentBaseSalary)}</div>
-      <SrpIndicator value={emp.srpPercent} />
-      <div className="text-sm text-slate-600">{emp.currentEquity}</div>
-      <RatingBadge rating={emp.rating} />
-      <button className="p-1 hover:bg-slate-100 rounded transition-colors">
-        <MoreHorizontal className="w-4 h-4 text-slate-400" />
-      </button>
-    </div>
+      </td>
+      <td style={cellStyle}>
+        <Lozenge appearance={levelAppearance(emp.jobLevel)}>{emp.jobLevel}</Lozenge>
+      </td>
+      <td style={subtleCellStyle}>{emp.jobFamily}</td>
+      <td style={subtleCellStyle}>{emp.zone}</td>
+      <td style={{ ...cellStyle, fontWeight: 600 }}>{formatCurrency(emp.currentBaseSalary)}</td>
+      <td style={cellStyle}><SrpIndicator value={emp.srpPercent} /></td>
+      <td style={subtleCellStyle}>{emp.currentEquity}</td>
+      <td style={cellStyle}>
+        <Lozenge appearance={ratingAppearance(emp.rating)}>{emp.rating}</Lozenge>
+      </td>
+      <td style={cellStyle}>
+        <button style={{ padding: 4, borderRadius: 3, border: "none", background: "transparent", cursor: "pointer" }} className="hover:bg-[#EBECF0]">
+          <MoreHorizontal className="w-4 h-4" style={{ color: "#626F86" }} />
+        </button>
+      </td>
+    </tr>
   );
 }
 
@@ -93,42 +165,53 @@ function ManagerGroup({ manager, reports }: { manager: Employee; reports: Employ
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <div className="border border-slate-200 rounded-lg overflow-hidden mb-3">
+      <div style={{ border: "1px solid #DFE1E6", borderRadius: 6, overflow: "hidden", marginBottom: 12 }}>
         <CollapsibleTrigger asChild>
-          <div className="flex items-center justify-between px-4 py-3 bg-slate-50/80 cursor-pointer hover:bg-slate-100/80 transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5 text-slate-500">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "10px 16px",
+              backgroundColor: "#FAFBFC",
+              cursor: "pointer",
+              userSelect: "none",
+            }}
+            className="hover:bg-[#F4F5F7] transition-colors"
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ color: "#626F86", display: "flex" }}>
                 {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
               </div>
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="text-xs font-semibold bg-indigo-100 text-indigo-700">{manager.initials}</AvatarFallback>
+                <AvatarFallback className="text-xs font-semibold" style={{ backgroundColor: "#F3F0FF", color: "#6E5DC6" }}>{manager.initials}</AvatarFallback>
               </Avatar>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-slate-900">{manager.firstName} {manager.lastName}</span>
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-100 text-indigo-700">{manager.jobLevel}</span>
-                  <span className="text-xs text-slate-500">{manager.jobFamily}</span>
-                </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: "#172B4D" }}>{manager.firstName} {manager.lastName}</span>
+                <Lozenge appearance="new">{manager.jobLevel}</Lozenge>
+                <span style={{ fontSize: 12, color: "#626F86" }}>{manager.jobFamily}</span>
               </div>
             </div>
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-1.5 text-xs text-slate-500">
+            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "#626F86" }}>
                 <Users className="w-3.5 h-3.5" />
                 <span>{reports.length} reports</span>
               </div>
-              <div className="text-xs text-slate-500">
-                Team salary: <span className="font-semibold text-slate-700">{formatCurrency(totalSalary)}</span>
+              <div style={{ fontSize: 12, color: "#626F86" }}>
+                Team salary: <span style={{ fontWeight: 600, color: "#44546F" }}>{formatCurrency(totalSalary)}</span>
               </div>
-              <RatingBadge rating={manager.rating} />
+              <Lozenge appearance={ratingAppearance(manager.rating)}>{manager.rating}</Lozenge>
             </div>
           </div>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <div>
-            {reports.map((emp) => (
-              <EmployeeRow key={emp.id} emp={emp} indent />
-            ))}
-          </div>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <tbody>
+              {reports.map((emp) => (
+                <EmployeeRow key={emp.id} emp={emp} indent />
+              ))}
+            </tbody>
+          </table>
         </CollapsibleContent>
       </div>
     </Collapsible>
@@ -141,28 +224,28 @@ export function ExpandableManagers() {
   const standaloneReports = directReports.filter((e) => !e.isManager);
 
   return (
-    <div className="min-h-screen bg-white p-8 font-['Inter',sans-serif]">
-      <div className="max-w-[1200px] mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-slate-900">Team</h1>
-          <p className="text-sm text-slate-500 mt-0.5">View and understand your team's compensation</p>
+    <div style={{ minHeight: "100vh", backgroundColor: "#FFFFFF", padding: 32, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ marginBottom: 24 }}>
+          <h1 style={{ fontSize: 24, fontWeight: 600, color: "#172B4D", margin: 0 }}>Team</h1>
+          <p style={{ fontSize: 14, color: "#626F86", marginTop: 4, marginBottom: 0 }}>View and understand your team's compensation</p>
         </div>
 
-        <div className="border border-slate-200 rounded-lg p-5 mb-6">
-          <div className="text-sm font-semibold text-slate-900 mb-3">Filter {employees.length} employees</div>
-          <div className="flex items-center gap-3">
-            <div className="relative w-44">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input placeholder="Search" className="pl-8 h-9 text-sm" />
+        <div style={{ border: "1px solid #DFE1E6", borderRadius: 6, padding: 20, marginBottom: 24 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "#172B4D", marginBottom: 12 }}>Filter {employees.length} employees</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div className="relative" style={{ width: 176 }}>
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#626F86" }} />
+              <Input placeholder="Search" className="pl-8 h-9 text-sm" style={{ borderColor: "#DFE1E6" }} />
             </div>
-            <Button variant="outline" size="sm" className="gap-1.5 h-9">
+            <Button variant="outline" size="sm" className="gap-1.5 h-9" style={{ borderColor: "#DFE1E6", color: "#44546F" }}>
               <SlidersHorizontal className="w-3.5 h-3.5" /> Filter
             </Button>
-            <Button variant="outline" size="sm" className="gap-1.5 h-9">
+            <Button variant="outline" size="sm" className="gap-1.5 h-9" style={{ borderColor: "#DFE1E6", color: "#44546F" }}>
               <ArrowUpDown className="w-3.5 h-3.5" /> Sort
             </Button>
             <Select>
-              <SelectTrigger className="w-48 h-9 text-sm">
+              <SelectTrigger className="w-48 h-9 text-sm" style={{ borderColor: "#DFE1E6", color: "#44546F" }}>
                 <SelectValue placeholder="Filter by manager" />
               </SelectTrigger>
               <SelectContent>
@@ -172,39 +255,44 @@ export function ExpandableManagers() {
                 ))}
               </SelectContent>
             </Select>
-            <div className="flex items-center gap-2">
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <Checkbox id="direct-only" />
-              <label htmlFor="direct-only" className="text-sm text-slate-600 cursor-pointer">Show direct reports only</label>
+              <label htmlFor="direct-only" style={{ fontSize: 14, color: "#44546F", cursor: "pointer" }}>Show direct reports only</label>
             </div>
           </div>
         </div>
 
-        <div className="border border-slate-200 rounded-lg overflow-hidden">
-          <div className="grid grid-cols-[1fr_80px_100px_80px_120px_80px_100px_140px_32px] items-center gap-3 px-4 py-2.5 bg-slate-50 border-b border-slate-200">
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Name</div>
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Level</div>
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Family</div>
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Zone</div>
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Base Salary</div>
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">% SRP</div>
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Equity</div>
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Rating</div>
-            <div></div>
-          </div>
+        <div style={{ border: "1px solid #DFE1E6", borderRadius: 6, overflow: "hidden" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th style={{ ...headerStyle, textAlign: "left", width: "18%" }}>Name</th>
+                <th style={{ ...headerStyle, textAlign: "left", width: "8%" }}>Level</th>
+                <th style={{ ...headerStyle, textAlign: "left", width: "12%" }}>Family</th>
+                <th style={{ ...headerStyle, textAlign: "left", width: "8%" }}>Zone</th>
+                <th style={{ ...headerStyle, textAlign: "left", width: "12%" }}>Base Salary</th>
+                <th style={{ ...headerStyle, textAlign: "left", width: "8%" }}>% SRP</th>
+                <th style={{ ...headerStyle, textAlign: "left", width: "10%" }}>Equity</th>
+                <th style={{ ...headerStyle, textAlign: "left", width: "16%" }}>Rating</th>
+                <th style={{ ...headerStyle, width: "4%" }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {standaloneReports.map((emp) => (
+                <EmployeeRow key={emp.id} emp={emp} />
+              ))}
+            </tbody>
+          </table>
 
-          {standaloneReports.map((emp) => (
-            <EmployeeRow key={emp.id} emp={emp} />
-          ))}
-
-          <div className="px-4 pt-4 pb-2">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="h-px flex-1 bg-slate-200"></div>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Managers & Their Reports</span>
-              <div className="h-px flex-1 bg-slate-200"></div>
+          <div style={{ padding: "16px 16px 8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ height: 1, flex: 1, backgroundColor: "#DFE1E6" }}></div>
+              <span style={{ fontSize: 11, fontWeight: 600, color: "#8993A4", textTransform: "uppercase", letterSpacing: "0.06em" }}>Managers & Their Reports</span>
+              <div style={{ height: 1, flex: 1, backgroundColor: "#DFE1E6" }}></div>
             </div>
           </div>
 
-          <div className="px-3 pb-3">
+          <div style={{ padding: "0 12px 12px" }}>
             {managers.map((manager) => {
               const reports = employees.filter((e) => e.managerId === manager.id);
               return <ManagerGroup key={manager.id} manager={manager} reports={reports} />;
@@ -212,7 +300,7 @@ export function ExpandableManagers() {
           </div>
         </div>
 
-        <div className="mt-3 text-xs text-slate-400">
+        <div style={{ marginTop: 12, fontSize: 12, color: "#8993A4" }}>
           Showing {employees.length} of {employees.length} employees
         </div>
       </div>
