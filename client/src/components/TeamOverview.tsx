@@ -187,27 +187,6 @@ function AvatarInitials({ initials }: { initials: string }) {
   );
 }
 
-function SummaryCard({ title, value, subtitle }: { title: string; value: string; subtitle?: string }) {
-  return (
-    <div
-      style={{
-        ...cardStyle,
-        flex: 1,
-      }}
-    >
-      <Text size="medium" color="color.text.subtlest">{title}</Text>
-      <div style={{ marginTop: token("space.100") }}>
-        <Heading size="xlarge">{value}</Heading>
-      </div>
-      {subtitle && (
-        <div style={{ marginTop: token("space.050") }}>
-          <Text size="small" color="color.text.subtlest">{subtitle}</Text>
-        </div>
-      )}
-    </div>
-  );
-}
-
 const ratingAppearance = (rating: string): "success" | "inprogress" | "default" | "moved" | "removed" => {
   if (rating === "Greatly Exceeds") return "success";
   if (rating === "Exceeds Expectations") return "inprogress";
@@ -316,11 +295,6 @@ export default function TeamOverview() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
-      <div style={{ display: "flex", gap: token("space.400") }}>
-        <SummaryCard title="Equity Allocated" value="$0" />
-        <SummaryCard title="Equity Spent" value="$0" />
-      </div>
-
       <div style={cardStyle}>
         <div
           style={{
