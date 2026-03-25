@@ -6,9 +6,11 @@ import DynamicTable from "@atlaskit/dynamic-table";
 import Lozenge from "@atlaskit/lozenge";
 import Textfield from "@atlaskit/textfield";
 import Button from "@atlaskit/button/new";
+import Select from "@atlaskit/select";
+import { Checkbox } from "@atlaskit/checkbox";
 import SearchIcon from "@atlaskit/icon/core/search";
 import FilterIcon from "@atlaskit/icon/core/filter";
-import DownloadIcon from "@atlaskit/icon/core/download";
+import SortAscendingIcon from "@atlaskit/icon/core/sort-ascending";
 import EditIcon from "@atlaskit/icon/core/edit";
 
 const cardStyle: React.CSSProperties = {
@@ -346,6 +348,8 @@ export { employees };
 
 export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManagerId?: string; onDrillDown?: (managerId: string) => void }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showDirectOnly, setShowDirectOnly] = useState(false);
+  const [managerFilter, setManagerFilter] = useState<string | null>(null);
 
   const filteredEmployees = viewManagerId
     ? employees.filter((e) => e.managerId === viewManagerId)
@@ -357,51 +361,86 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
 
   const rows = createRows(filteredEmployees, searchQuery, onDrillDown);
 
+  const managerOptions = [
+    { label: "All managers", value: "" },
+    ...employees
+      .filter((e) => e.isManager)
+      .map((m) => ({ label: `${m.firstName} ${m.lastName}`, value: m.id })),
+  ];
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
+      <div>
+        {viewingManager && (
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.100") }}>
+            <Text size="small" color="color.text.subtlest">
+              <span style={{ cursor: "pointer" }} onClick={() => onDrillDown?.("")}>
+                All Reports
+              </span>
+            </Text>
+            <Text size="small" color="color.text.subtlest">/</Text>
+            <Text size="small" weight="bold">{viewingManager.firstName} {viewingManager.lastName}'s Team</Text>
+          </div>
+        )}
+        <Heading size="xlarge">{viewingManager ? `${viewingManager.firstName} ${viewingManager.lastName}'s Team` : "Team"}</Heading>
+        <div style={{ marginTop: token("space.050") }}>
+          <Text size="medium" color="color.text.subtlest">View and understand your team's compensation</Text>
+        </div>
+      </div>
+
       <div style={cardStyle}>
+        <div style={{ marginBottom: token("space.300") }}>
+          <Text size="medium" weight="semibold">Filter {filteredEmployees.length} employees</Text>
+        </div>
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
+            gap: token("space.200"),
             marginBottom: token("space.400"),
           }}
         >
-          <div>
-            {viewingManager && (
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.100") }}>
-                <Text size="small" color="color.text.subtlest">
-                  <span style={{ cursor: "pointer" }} onClick={() => onDrillDown?.("")}>
-                    All Reports
-                  </span>
-                </Text>
-                <Text size="small" color="color.text.subtlest">/</Text>
-                <Text size="small" weight="bold">{viewingManager.firstName} {viewingManager.lastName}'s Team</Text>
-              </div>
-            )}
-            <Heading size="large">{viewingManager ? `${viewingManager.firstName} ${viewingManager.lastName}'s Team` : "Team Assignments"}</Heading>
+          <div style={{ width: 180 }}>
+            <Textfield
+              placeholder="Search"
+              elemBeforeInput={
+                <div style={{ paddingLeft: token("space.100"), display: "flex", alignItems: "center" }}>
+                  <SearchIcon label="search" color={token("color.icon.subtle")} />
+                </div>
+              }
+              value={searchQuery}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            />
           </div>
-          <div style={{ display: "flex", gap: token("space.200"), alignItems: "center" }}>
-            <div style={{ width: 200 }}>
-              <Textfield
-                placeholder="Search by name"
-                elemBeforeInput={
-                  <div style={{ paddingLeft: token("space.100"), display: "flex", alignItems: "center" }}>
-                    <SearchIcon label="search" color={token("color.icon.subtle")} />
-                  </div>
+          <Button appearance="default" iconBefore={FilterIcon}>
+            Filter
+          </Button>
+          <Button appearance="default" iconBefore={SortAscendingIcon}>
+            Sort
+          </Button>
+          <div style={{ width: 200 }}>
+            <Select
+              inputId="manager-filter"
+              options={managerOptions}
+              placeholder="Filter by manager"
+              isClearable
+              onChange={(opt: any) => {
+                if (opt && opt.value) {
+                  onDrillDown?.(opt.value);
+                } else {
+                  onDrillDown?.("");
                 }
-                value={searchQuery}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <Button appearance="default" iconBefore={FilterIcon}>
-              Filters
-            </Button>
-            <Button appearance="default" iconBefore={DownloadIcon}>
-              Export
-            </Button>
+              }}
+              styles={{
+                control: (base: any) => ({ ...base, minHeight: 36 }),
+              }}
+            />
           </div>
+          <Checkbox
+            label="Show direct reports only"
+            isChecked={showDirectOnly}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowDirectOnly(e.target.checked)}
+          />
         </div>
 
         <DynamicTable
