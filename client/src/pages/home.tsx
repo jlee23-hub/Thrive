@@ -26,6 +26,7 @@ import { MenuSection } from "@atlaskit/navigation-system/side-nav-items/menu-sec
 import Popup from "@atlaskit/popup";
 import { ButtonItem, MenuGroup, Section } from "@atlaskit/menu";
 import Button, { IconButton } from "@atlaskit/button/new";
+import { Text } from "@atlaskit/primitives";
 const ColoredRovoIcon = () => (
   <img src="/rovo-icon.png" alt="Rovo" width={16} height={16} style={{ display: "block" }} />
 );
@@ -33,7 +34,7 @@ const ColoredRovoIcon = () => (
 import CompensationSummary from "../components/CompensationSummary";
 import RSUDetails from "../components/RSUDetails";
 import AboutUs from "../components/AboutUs";
-import TeamOverview from "../components/TeamOverview";
+import TeamOverview, { employees } from "../components/TeamOverview";
 import CyclesDashboard from "../components/CyclesDashboard";
 import CycleBuilder from "../components/CycleBuilder";
 import CycleDetails from "../components/CycleDetails";
@@ -55,6 +56,8 @@ import ChartMatrixIcon from "@atlaskit/icon/core/chart-matrix";
 import CashIcon from "@atlaskit/icon/core/cash";
 import DatabaseIcon from "@atlaskit/icon/core/database";
 import SettingsIcon from "@atlaskit/icon/core/settings";
+import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
+import ChevronRightIcon from "@atlaskit/icon/core/chevron-right";
 
 const defaultFeatureFlags = [
   "platform_design_system_team_portal_logic_r18_fix",
@@ -82,9 +85,15 @@ export default function Home() {
   const [activeNav, setActiveNav] = useState<NavItem>("compensation");
   const [profileOpen, setProfileOpen] = useState(false);
   const [selectedCycle, setSelectedCycle] = useState<{ id: string; name: string; type: string; status: "Active" | "Inactive" | "Finalized"; timeline: string; participants: number; progress: number } | null>(null);
+  const [viewManagerId, setViewManagerId] = useState<string | undefined>(undefined);
+  const [directReportsExpanded, setDirectReportsExpanded] = useState(true);
+
+  const directReports = employees.filter((e) => !e.managerId);
+  const subManagers = employees.filter((e) => e.isManager);
 
   const switchPersona = (newPersona: Persona) => {
     setPersona(newPersona);
+    setViewManagerId(undefined);
     if (newPersona === "manager") {
       setActiveNav("team-overview");
     } else if (newPersona === "comp-admin") {
@@ -106,7 +115,18 @@ export default function Home() {
       case "about":
         return <AboutUs />;
       case "team-overview":
-        return <TeamOverview />;
+        return (
+          <TeamOverview
+            viewManagerId={viewManagerId}
+            onDrillDown={(id) => {
+              if (id === "") {
+                setViewManagerId(undefined);
+              } else {
+                setViewManagerId(id);
+              }
+            }}
+          />
+        );
       case "cycles-dashboard":
         return (
           <CyclesDashboard
@@ -218,11 +238,93 @@ export default function Home() {
           <LinkMenuItem
             href="#team-overview"
             elemBefore={<PeopleGroupIcon label="" color="currentColor" />}
-            isSelected={activeNav === "team-overview"}
-            onClick={(e) => { e.preventDefault(); setActiveNav("team-overview"); }}
+            isSelected={activeNav === "team-overview" && !viewManagerId}
+            onClick={(e) => { e.preventDefault(); setViewManagerId(undefined); setActiveNav("team-overview"); }}
           >
             Team Overview
           </LinkMenuItem>
+          <MenuSection title="Direct Reports">
+            <div style={{ paddingLeft: token("space.200") }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: token("space.050"),
+                  cursor: "pointer",
+                  padding: `${token("space.050")} 0`,
+                  marginBottom: token("space.050"),
+                }}
+                onClick={() => setDirectReportsExpanded(!directReportsExpanded)}
+              >
+                {directReportsExpanded ? (
+                  <ChevronDownIcon label="" LEGACY_size="small" color={token("color.icon.subtle")} />
+                ) : (
+                  <ChevronRightIcon label="" LEGACY_size="small" color={token("color.icon.subtle")} />
+                )}
+                <Text size="small" weight="medium" color="color.text.subtlest">
+                  {employees.length} team members
+                </Text>
+              </div>
+              {directReportsExpanded && (
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  {employees.filter((e) => !e.managerId).map((emp) => {
+                    const hasReports = employees.some((e) => e.managerId === emp.id);
+                    const reportsCount = employees.filter((e) => e.managerId === emp.id).length;
+                    return (
+                      <div
+                        key={emp.id}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: token("space.100"),
+                          padding: `${token("space.075")} ${token("space.100")}`,
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          backgroundColor: viewManagerId === emp.id ? token("color.background.selected") : "transparent",
+                        }}
+                        onClick={() => {
+                          if (hasReports) {
+                            setViewManagerId(emp.id);
+                            setActiveNav("team-overview");
+                          }
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 24,
+                            height: 24,
+                            borderRadius: "50%",
+                            backgroundColor: token("color.background.accent.blue.subtler"),
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <Text size="small" weight="bold" color="color.text.accent.blue">
+                            {emp.initials}
+                          </Text>
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                          <Text size="small" weight={viewManagerId === emp.id ? "bold" : "medium"}>
+                            {emp.firstName} {emp.lastName}
+                          </Text>
+                          {hasReports && (
+                            <Text size="UNSAFE_small" color="color.text.subtlest">
+                              {reportsCount} reports
+                            </Text>
+                          )}
+                        </div>
+                        {hasReports && (
+                          <ChevronRightIcon label="" LEGACY_size="small" color={token("color.icon.subtle")} />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </MenuSection>
           <LinkMenuItem
             href="#about"
             elemBefore={<InformationIcon label="" color="currentColor" />}

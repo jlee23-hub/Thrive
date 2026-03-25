@@ -32,6 +32,8 @@ interface Employee {
   srpPercent: string;
   currentEquity: string;
   fy24H2Rating: string;
+  managerId?: string;
+  isManager?: boolean;
 }
 
 const employees: Employee[] = [
@@ -64,6 +66,7 @@ const employees: Employee[] = [
     srpPercent: "125%",
     currentEquity: "2,800 RSUs",
     fy24H2Rating: "Exceeds Expectations",
+    isManager: true,
   },
   {
     id: "3",
@@ -79,6 +82,7 @@ const employees: Employee[] = [
     srpPercent: "104%",
     currentEquity: "800 RSUs",
     fy24H2Rating: "Meets Expectations",
+    managerId: "2",
   },
   {
     id: "4",
@@ -87,13 +91,14 @@ const employees: Employee[] = [
     lastName: "Miller",
     startDate: "Sep 22, 2017",
     eligibilityDate: "Sep 22, 2018",
-    jobLevel: "P60",
+    jobLevel: "M50",
     jobFamily: "Product",
     zone: "Zone A USA",
     currentBaseSalary: 195000,
     srpPercent: "138%",
     currentEquity: "4,200 RSUs",
     fy24H2Rating: "Greatly Exceeds",
+    isManager: true,
   },
   {
     id: "5",
@@ -109,6 +114,7 @@ const employees: Employee[] = [
     srpPercent: "95%",
     currentEquity: "400 RSUs",
     fy24H2Rating: "Meets Expectations",
+    managerId: "4",
   },
   {
     id: "6",
@@ -124,6 +130,7 @@ const employees: Employee[] = [
     srpPercent: "108%",
     currentEquity: "950 RSUs",
     fy24H2Rating: "Met Some",
+    managerId: "2",
   },
   {
     id: "7",
@@ -154,6 +161,39 @@ const employees: Employee[] = [
     srpPercent: "102%",
     currentEquity: "600 RSUs",
     fy24H2Rating: "Meets Expectations",
+    managerId: "4",
+  },
+  {
+    id: "9",
+    initials: "AP",
+    firstName: "Anika",
+    lastName: "Patel",
+    startDate: "May 12, 2020",
+    eligibilityDate: "May 12, 2021",
+    jobLevel: "P30",
+    jobFamily: "Engineering",
+    zone: "Zone A USA",
+    currentBaseSalary: 128000,
+    srpPercent: "110%",
+    currentEquity: "900 RSUs",
+    fy24H2Rating: "Exceeds Expectations",
+    managerId: "2",
+  },
+  {
+    id: "10",
+    initials: "KN",
+    firstName: "Kevin",
+    lastName: "Nguyen",
+    startDate: "Jul 08, 2021",
+    eligibilityDate: "Jul 08, 2022",
+    jobLevel: "P20",
+    jobFamily: "Product",
+    zone: "Zone B USA",
+    currentBaseSalary: 98000,
+    srpPercent: "100%",
+    currentEquity: "500 RSUs",
+    fy24H2Rating: "Meets Expectations",
+    managerId: "4",
   },
 ];
 
@@ -210,7 +250,7 @@ const head = {
   ],
 };
 
-const createRows = (data: Employee[], searchQuery: string) => {
+const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: string) => void) => {
   const filtered = searchQuery
     ? data.filter(
         (e) =>
@@ -227,9 +267,23 @@ const createRows = (data: Employee[], searchQuery: string) => {
         content: (
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
             <AvatarInitials initials={employee.initials} />
-            <Text size="medium" weight="medium">
-              {employee.firstName} {employee.lastName}
-            </Text>
+            {employee.isManager && onDrillDown ? (
+              <span
+                style={{ cursor: "pointer", color: token("color.text.brand") }}
+                onClick={() => onDrillDown(employee.id)}
+              >
+                <Text size="medium" weight="medium" color="color.text.brand">
+                  {employee.firstName} {employee.lastName}
+                </Text>
+              </span>
+            ) : (
+              <Text size="medium" weight="medium">
+                {employee.firstName} {employee.lastName}
+              </Text>
+            )}
+            {employee.isManager && (
+              <Lozenge appearance="new">Mgr</Lozenge>
+            )}
           </div>
         ),
       },
@@ -288,10 +342,20 @@ const createRows = (data: Employee[], searchQuery: string) => {
   }));
 };
 
-export default function TeamOverview() {
+export { employees };
+
+export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManagerId?: string; onDrillDown?: (managerId: string) => void }) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const rows = createRows(employees, searchQuery);
+  const filteredEmployees = viewManagerId
+    ? employees.filter((e) => e.managerId === viewManagerId)
+    : employees;
+
+  const viewingManager = viewManagerId
+    ? employees.find((e) => e.id === viewManagerId)
+    : null;
+
+  const rows = createRows(filteredEmployees, searchQuery, onDrillDown);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
@@ -304,7 +368,20 @@ export default function TeamOverview() {
             marginBottom: token("space.400"),
           }}
         >
-          <Heading size="large">Team Assignments</Heading>
+          <div>
+            {viewingManager && (
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.100") }}>
+                <Text size="small" color="color.text.subtlest">
+                  <span style={{ cursor: "pointer" }} onClick={() => onDrillDown?.("")}>
+                    All Reports
+                  </span>
+                </Text>
+                <Text size="small" color="color.text.subtlest">/</Text>
+                <Text size="small" weight="bold">{viewingManager.firstName} {viewingManager.lastName}'s Team</Text>
+              </div>
+            )}
+            <Heading size="large">{viewingManager ? `${viewingManager.firstName} ${viewingManager.lastName}'s Team` : "Team Assignments"}</Heading>
+          </div>
           <div style={{ display: "flex", gap: token("space.200"), alignItems: "center" }}>
             <div style={{ width: 200 }}>
               <Textfield
@@ -339,7 +416,7 @@ export default function TeamOverview() {
 
         <div style={{ marginTop: token("space.200") }}>
           <Text size="small" color="color.text.subtlest">
-            Showing {rows.length} of {employees.length} employees
+            Showing {rows.length} of {filteredEmployees.length} employees
           </Text>
         </div>
       </div>
