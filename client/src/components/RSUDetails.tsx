@@ -428,6 +428,11 @@ export default function RSUDetails() {
                     const totalValueInPeriod = dataPoint?.grantBreakdown?.reduce((sum, g) => sum + g.value, 0) || 0;
                     const vestedUnits = dataPoint?.vested || 0;
                     const unvestedUnits = dataPoint?.unvested || 0;
+                    const now = new Date();
+                    const [monthStr, yearStr] = (label as string).split(" ");
+                    const monthIndex = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthStr);
+                    const periodDate = new Date(parseInt(yearStr), monthIndex);
+                    const isFuture = periodDate > now;
                     return (
                       <div style={{
                         backgroundColor: token("elevation.surface.overlay"),
@@ -506,10 +511,12 @@ export default function RSUDetails() {
                           paddingTop: token("space.075"),
                           borderTop: `1px solid ${token("color.border")}`,
                           fontSize: 11,
-                          color: token("color.text.subtlest"),
+                          color: isFuture ? token("color.text.warning") : token("color.text.subtlest"),
                           fontStyle: "italic",
                         }}>
-                          Vested equity valued at share price on vest date
+                          {isFuture
+                            ? "Projected value based on modeled share price"
+                            : "Vested equity valued at share price on vest date"}
                         </div>
                       </div>
                     );
