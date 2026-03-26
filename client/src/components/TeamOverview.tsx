@@ -13,12 +13,6 @@ import FilterIcon from "@atlaskit/icon/core/filter";
 import SortAscendingIcon from "@atlaskit/icon/core/sort-ascending";
 import EditIcon from "@atlaskit/icon/core/edit";
 
-const cardStyle: React.CSSProperties = {
-  backgroundColor: token("elevation.surface.raised"),
-  borderRadius: "6px",
-  padding: token("space.400"),
-  border: `1px solid ${token("color.border")}`,
-};
 
 interface Employee {
   id: string;
@@ -450,76 +444,71 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
         </div>
       </div>
 
-      <div style={cardStyle}>
-        <div style={{ marginBottom: token("space.300") }}>
-          <Text size="medium" weight="semibold">Filter {filteredEmployees.length} employees</Text>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: token("space.200"),
-            marginBottom: token("space.400"),
-          }}
-        >
-          <div style={{ width: 180 }}>
-            <Textfield
-              placeholder="Search"
-              elemBeforeInput={
-                <div style={{ paddingLeft: token("space.100"), display: "flex", alignItems: "center" }}>
-                  <SearchIcon label="search" color={token("color.icon.subtle")} />
-                </div>
-              }
-              value={searchQuery}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <Button appearance="default" iconBefore={FilterIcon}>
-            Filter
-          </Button>
-          <Button appearance="default" iconBefore={SortAscendingIcon}>
-            Sort
-          </Button>
-          <div style={{ width: 200 }}>
-            <Select
-              inputId="manager-filter"
-              options={managerOptions}
-              placeholder="Filter by manager"
-              isClearable
-              onChange={(opt: any) => {
-                if (opt && opt.value) {
-                  onDrillDown?.(opt.value);
-                } else {
-                  onDrillDown?.("");
-                }
-              }}
-              styles={{
-                control: (base: any) => ({ ...base, minHeight: 36 }),
-              }}
-            />
-          </div>
-          <Checkbox
-            label="Show direct reports only"
-            isChecked={showDirectOnly}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowDirectOnly(e.target.checked)}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: token("space.200"),
+          marginBottom: token("space.300"),
+        }}
+      >
+        <div style={{ width: 180 }}>
+          <Textfield
+            placeholder="Search"
+            elemBeforeInput={
+              <div style={{ paddingLeft: token("space.100"), display: "flex", alignItems: "center" }}>
+                <SearchIcon label="search" color={token("color.icon.subtle")} />
+              </div>
+            }
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
           />
         </div>
-
-        <DynamicTable
-          head={head}
-          rows={rows}
-          rowsPerPage={10}
-          defaultPage={1}
-          isFixedSize
-          defaultSortKey="name"
-          defaultSortOrder="ASC"
-        />
-
-        <div style={{ marginTop: token("space.200") }}>
-          <Text size="small" color="color.text.subtlest">
-            Showing {rows.length} of {filteredEmployees.length} employees
-          </Text>
+        <Button appearance="default" iconBefore={FilterIcon}>
+          Filter
+        </Button>
+        <Button appearance="default" iconBefore={SortAscendingIcon}>
+          Sort
+        </Button>
+        <div style={{ width: 200 }}>
+          <Select
+            inputId="manager-filter"
+            options={managerOptions}
+            placeholder="Filter by manager"
+            isClearable
+            onChange={(opt: any) => {
+              if (opt && opt.value) {
+                onDrillDown?.(opt.value);
+              } else {
+                onDrillDown?.("");
+              }
+            }}
+            styles={{
+              control: (base: any) => ({ ...base, minHeight: 36 }),
+            }}
+          />
         </div>
+        <Checkbox
+          label="Show direct reports only"
+          isChecked={showDirectOnly}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowDirectOnly(e.target.checked)}
+        />
+      </div>
+
+      <DynamicTable
+        head={head}
+        rows={rows}
+        rowsPerPage={10}
+        defaultPage={1}
+        isFixedSize
+        defaultSortKey="name"
+        defaultSortOrder="ASC"
+      />
+
+      <div style={{ marginTop: token("space.200") }}>
+        <Text size="small" color="color.text.subtlest">
+          Showing {rows.length} of {filteredEmployees.length} employees
+        </Text>
       </div>
     </div>
   );
