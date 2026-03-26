@@ -58,7 +58,7 @@ export default function CompensationSummary() {
 
   const adjustedData = useMemo(() => {
     const ratio = sharePrice / compensationData.defaultSharePrice;
-    const adjustedRsus = Math.round(compensationData.rsus * ratio);
+    const adjustedRsus = equityData.vestedValue + Math.round(equityData.unvestedValue * ratio);
     const total = compensationData.baseSalary + compensationData.bonusTarget + adjustedRsus;
     return { adjustedRsus, total };
   }, [sharePrice]);
@@ -71,10 +71,11 @@ export default function CompensationSummary() {
 
   const adjustedEquity = useMemo(() => {
     const ratio = sharePrice / compensationData.defaultSharePrice;
+    const unvestedValue = Math.round(equityData.unvestedValue * ratio);
     return {
-      totalValue: Math.round(equityData.totalValue * ratio),
-      vestedValue: Math.round(equityData.vestedValue * ratio),
-      unvestedValue: Math.round(equityData.unvestedValue * ratio),
+      totalValue: equityData.vestedValue + unvestedValue,
+      vestedValue: equityData.vestedValue,
+      unvestedValue,
     };
   }, [sharePrice]);
 
@@ -82,7 +83,7 @@ export default function CompensationSummary() {
     const ratio = sharePrice / compensationData.defaultSharePrice;
     return rsuYearlyData.map((d) => ({
       ...d,
-      vested: Math.round(d.vested * ratio),
+      vested: d.vested,
       unvested: Math.round(d.unvested * ratio),
     }));
   }, [sharePrice]);
