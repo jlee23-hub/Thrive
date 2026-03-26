@@ -242,7 +242,7 @@ export default function Home() {
             href="#team-overview"
             elemBefore={<PeopleGroupIcon label="" color="currentColor" />}
             isSelected={activeNav === "team-overview"}
-            onClick={(e) => { e.preventDefault(); setViewManagerId(undefined); setActiveNav("team-overview"); }}
+            onClick={(e) => { e.preventDefault(); setManagerStack([]); setActiveNav("team-overview"); }}
           >
             Team Overview
           </LinkMenuItem>
