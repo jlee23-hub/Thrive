@@ -460,24 +460,12 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
         </div>
       </div>
 
-      {viewingManager && (
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <Text size="small" color="color.text.subtlest">
-            <span style={{ cursor: "pointer" }} onClick={() => onDrillDown?.("")}>
-              All Reports
-            </span>
-          </Text>
-          <Text size="small" color="color.text.subtlest">/</Text>
-          <Text size="small" weight="bold">{viewingManager.firstName} {viewingManager.lastName}'s Team</Text>
-        </div>
-      )}
-
       <div
         style={{
           display: "flex",
           alignItems: "center",
           gap: token("space.200"),
-          marginBottom: token("space.100"),
+          marginBottom: viewingManager ? token("space.050") : token("space.100"),
         }}
       >
         <div style={{ width: 180 }}>
@@ -573,6 +561,18 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
           )}
         />
       </div>
+
+      {viewingManager && (
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <Text size="small" color="color.text.subtlest">
+            <span style={{ cursor: "pointer" }} onClick={() => onDrillDown?.("")}>
+              All Reports
+            </span>
+          </Text>
+          <Text size="small" color="color.text.subtlest">/</Text>
+          <Text size="small" weight="bold">{viewingManager.firstName} {viewingManager.lastName}'s Team</Text>
+        </div>
+      )}
 
       <div className="charlie-table">
         <DynamicTable
