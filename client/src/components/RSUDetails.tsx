@@ -171,15 +171,15 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: token("space.100") }}>
               <Text size="medium" weight="bold">Estimated Grant Value Calculator</Text>
-              <Heading size="medium">{formatCurrency(grant.totalUnits * sharePrice)}</Heading>
+              <Heading size="medium">{formatCurrency((grant.totalUnits - grant.vestedUnits) * sharePrice)}</Heading>
             </div>
             <Text size="small" color="color.text.subtlest">
-              This is the total pre-tax value of your grant. Here's the calculation:
+              This is the estimated pre-tax value of your unvested units. Here's the calculation:
             </Text>
             <div style={{ display: "flex", alignItems: "center", gap: token("space.200"), marginTop: token("space.200") }}>
               <div style={{ textAlign: "center" }}>
-                <Heading size="small">{grant.totalUnits.toLocaleString()}</Heading>
-                <Text size="small" color="color.text.subtlest">Total number of units</Text>
+                <Heading size="small">{(grant.totalUnits - grant.vestedUnits).toLocaleString()}</Heading>
+                <Text size="small" color="color.text.subtlest">Unvested units</Text>
               </div>
               <Text size="large" weight="bold" color="color.text.subtlest">×</Text>
               <Text size="medium" weight="medium">(</Text>
