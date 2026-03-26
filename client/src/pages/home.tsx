@@ -383,13 +383,15 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          {(persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands") || persona === "data-integration" ? (
-            renderContent()
-          ) : (
-            <div style={{ padding: token("space.500") }}>
-              {renderContent()}
-            </div>
-          )}
+          <div style={{ overflowY: "auto", height: "100%" }}>
+            {(persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands") || persona === "data-integration" ? (
+              renderContent()
+            ) : (
+              <div style={{ padding: token("space.500") }}>
+                {renderContent()}
+              </div>
+            )}
+          </div>
         </Main>
       </Root>
     </AppProvider>
