@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Heading from "@atlaskit/heading";
 import { Text } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
@@ -7,8 +7,10 @@ import Lozenge from "@atlaskit/lozenge";
 import Textfield from "@atlaskit/textfield";
 import Button from "@atlaskit/button/new";
 import Select from "@atlaskit/select";
+import Popup from "@atlaskit/popup";
 import SearchIcon from "@atlaskit/icon/core/search";
 import ShowMoreHorizontalIcon from "@atlaskit/icon/core/show-more-horizontal";
+import CrossIcon from "@atlaskit/icon/core/cross";
 
 
 interface Employee {
@@ -399,13 +401,31 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
 
 export { employees };
 
+interface Filters {
+  jobLevel: string | null;
+  jobFamily: string | null;
+  zone: string | null;
+  rating: string | null;
+}
+
 export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManagerId?: string; onDrillDown?: (managerId: string) => void }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [managerFilter, setManagerFilter] = useState<string | null>(null);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [filters, setFilters] = useState<Filters>({ jobLevel: null, jobFamily: null, zone: null, rating: null });
 
-  const filteredEmployees = viewManagerId
-    ? employees.filter((e) => e.managerId === viewManagerId)
-    : employees;
+  const activeFilterCount = Object.values(filters).filter(Boolean).length;
+
+  const filteredEmployees = useMemo(() => {
+    let result = viewManagerId
+      ? employees.filter((e) => e.managerId === viewManagerId)
+      : employees;
+    if (filters.jobLevel) result = result.filter((e) => e.jobLevel === filters.jobLevel);
+    if (filters.jobFamily) result = result.filter((e) => e.jobFamily === filters.jobFamily);
+    if (filters.zone) result = result.filter((e) => e.zone === filters.zone);
+    if (filters.rating) result = result.filter((e) => e.fy24H2Rating === filters.rating);
+    return result;
+  }, [viewManagerId, filters]);
 
   const viewingManager = viewManagerId
     ? employees.find((e) => e.id === viewManagerId)
@@ -418,6 +438,16 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
     ...employees
       .filter((e) => e.isManager)
       .map((m) => ({ label: `${m.firstName} ${m.lastName}`, value: m.id })),
+  ];
+
+  const uniqueValues = (key: keyof Employee) =>
+    [...new Set(employees.map((e) => String(e[key])))].sort().map((v) => ({ label: v, value: v }));
+
+  const filterFields: { key: keyof Filters; label: string; employeeKey: keyof Employee }[] = [
+    { key: "jobLevel", label: "Job Level", employeeKey: "jobLevel" },
+    { key: "jobFamily", label: "Job Family", employeeKey: "jobFamily" },
+    { key: "zone", label: "Zone", employeeKey: "zone" },
+    { key: "rating", label: "FY24 H2 Rating", employeeKey: "fy24H2Rating" },
   ];
 
   return (
@@ -481,10 +511,89 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
             }}
           />
         </div>
-        <Button appearance="default" iconBefore={ShowMoreHorizontalIcon}>
-          More
-        </Button>
+        <Popup
+          isOpen={moreOpen}
+          onClose={() => setMoreOpen(false)}
+          placement="bottom-start"
+          shouldRenderToParent
+          content={() => (
+            <div style={{ padding: token("space.300"), width: 320 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: token("space.200") }}>
+                <Text size="medium" weight="semibold">Filters</Text>
+                {activeFilterCount > 0 && (
+                  <Button
+                    appearance="subtle"
+                    spacing="compact"
+                    onClick={() => setFilters({ jobLevel: null, jobFamily: null, zone: null, rating: null })}
+                  >
+                    Clear all
+                  </Button>
+                )}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+                {filterFields.map((f) => (
+                  <div key={f.key}>
+                    <div style={{ marginBottom: token("space.050") }}>
+                      <Text size="small" weight="medium" color="color.text.subtlest">{f.label}</Text>
+                    </div>
+                    <Select
+                      inputId={`filter-${f.key}`}
+                      options={uniqueValues(f.employeeKey)}
+                      placeholder={`All ${f.label.toLowerCase()}`}
+                      isClearable
+                      value={filters[f.key] ? { label: filters[f.key]!, value: filters[f.key]! } : null}
+                      onChange={(opt: any) => setFilters((prev) => ({ ...prev, [f.key]: opt?.value || null }))}
+                      styles={{ control: (base: any) => ({ ...base, minHeight: 36 }) }}
+                      menuPortalTarget={document.body}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          trigger={(triggerProps) => (
+            <Button
+              {...triggerProps}
+              appearance="default"
+              iconBefore={ShowMoreHorizontalIcon}
+              onClick={() => setMoreOpen(!moreOpen)}
+            >
+              More{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+            </Button>
+          )}
+        />
       </div>
+
+      {activeFilterCount > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), flexWrap: "wrap" }}>
+          {filterFields.map((f) =>
+            filters[f.key] ? (
+              <div
+                key={f.key}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: token("space.050"),
+                  padding: `${token("space.025")} ${token("space.100")}`,
+                  borderRadius: "3px",
+                  backgroundColor: token("color.background.selected"),
+                  color: token("color.text.selected"),
+                }}
+              >
+                <Text size="small" weight="medium" color="color.text.selected">
+                  {f.label}: {filters[f.key]}
+                </Text>
+                <span
+                  style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+                  onClick={() => setFilters((prev) => ({ ...prev, [f.key]: null }))}
+                >
+                  <CrossIcon label={`Remove ${f.label} filter`} LEGACY_size="small" color={token("color.icon.selected")} />
+                </span>
+              </div>
+            ) : null
+          )}
+        </div>
+      )}
 
       <div className="charlie-table">
         <DynamicTable
