@@ -236,20 +236,20 @@ export default function Home() {
       return (
         <MenuList>
           <LinkMenuItem
-            href="#compensation"
-            elemBefore={<DashboardIcon label="" color="currentColor" />}
-            isSelected={activeNav === "compensation"}
-            onClick={(e) => { e.preventDefault(); setActiveNav("compensation"); }}
-          >
-            Total Rewards
-          </LinkMenuItem>
-          <LinkMenuItem
             href="#team-overview"
             elemBefore={<PeopleGroupIcon label="" color="currentColor" />}
             isSelected={activeNav === "team-overview"}
             onClick={(e) => { e.preventDefault(); setViewManagerId(undefined); setActiveNav("team-overview"); }}
           >
             Team Overview
+          </LinkMenuItem>
+          <LinkMenuItem
+            href="#compensation"
+            elemBefore={<DashboardIcon label="" color="currentColor" />}
+            isSelected={activeNav === "compensation"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("compensation"); }}
+          >
+            Total Rewards
           </LinkMenuItem>
           <LinkMenuItem
             href="#about"
