@@ -148,6 +148,7 @@ div[data-selected="true"]::before {
   height: 48px !important;
   vertical-align: middle !important;
   box-sizing: border-box !important;
+  white-space: nowrap !important;
 }
 
 .charlie-table table tbody tr:last-child td {

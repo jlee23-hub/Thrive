@@ -252,7 +252,7 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
       {
         key: employee.lastName,
         content: (
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), whiteSpace: "nowrap" }}>
             <Avatar size="small" src={employee.avatarUrl} name={`${employee.firstName} ${employee.lastName}`} />
             {employee.isManager && onDrillDown ? (
               <span
