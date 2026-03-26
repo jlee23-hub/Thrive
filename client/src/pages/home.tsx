@@ -85,7 +85,7 @@ export default function Home() {
   const [activeNav, setActiveNav] = useState<NavItem>("compensation");
   const [profileOpen, setProfileOpen] = useState(false);
   const [selectedCycle, setSelectedCycle] = useState<{ id: string; name: string; type: string; status: "Active" | "Inactive" | "Finalized"; timeline: string; participants: number; progress: number } | null>(null);
-  const [viewManagerId, setViewManagerId] = useState<string | undefined>(undefined);
+  const [managerStack, setManagerStack] = useState<string[]>([]);
   const [directReportsExpanded, setDirectReportsExpanded] = useState(true);
 
   const directReports = employees.filter((e) => !e.managerId);
@@ -93,7 +93,7 @@ export default function Home() {
 
   const switchPersona = (newPersona: Persona) => {
     setPersona(newPersona);
-    setViewManagerId(undefined);
+    setManagerStack([]);
     if (newPersona === "manager") {
       setActiveNav("team-overview");
     } else if (newPersona === "comp-admin") {
@@ -117,13 +117,16 @@ export default function Home() {
       case "team-overview":
         return (
           <TeamOverview
-            viewManagerId={viewManagerId}
+            managerStack={managerStack}
             onDrillDown={(id) => {
               if (id === "") {
-                setViewManagerId(undefined);
+                setManagerStack([]);
               } else {
-                setViewManagerId(id);
+                setManagerStack((prev) => [...prev, id]);
               }
+            }}
+            onBreadcrumbNav={(index) => {
+              setManagerStack((prev) => prev.slice(0, index));
             }}
           />
         );

@@ -593,7 +593,7 @@ interface Filters {
   rating: string | null;
 }
 
-export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManagerId?: string; onDrillDown?: (managerId: string) => void }) {
+export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcrumbNav }: { managerStack?: string[]; onDrillDown?: (managerId: string) => void; onBreadcrumbNav?: (index: number) => void }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [managerFilter, setManagerFilter] = useState<string | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -602,19 +602,21 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
 
   const activeFilterCount = Object.values(filters).filter(Boolean).length;
 
+  const currentManagerId = managerStack.length > 0 ? managerStack[managerStack.length - 1] : undefined;
+
   const filteredEmployees = useMemo(() => {
-    let result = viewManagerId
-      ? employees.filter((e) => e.managerId === viewManagerId)
+    let result = currentManagerId
+      ? employees.filter((e) => e.managerId === currentManagerId)
       : employees;
     if (filters.jobLevel) result = result.filter((e) => e.jobLevel === filters.jobLevel);
     if (filters.jobFamily) result = result.filter((e) => e.jobFamily === filters.jobFamily);
     if (filters.zone) result = result.filter((e) => e.zone === filters.zone);
     if (filters.rating) result = result.filter((e) => e.fy24H2Rating === filters.rating);
     return result;
-  }, [viewManagerId, filters]);
+  }, [currentManagerId, filters]);
 
-  const viewingManager = viewManagerId
-    ? employees.find((e) => e.id === viewManagerId)
+  const viewingManager = currentManagerId
+    ? employees.find((e) => e.id === currentManagerId)
     : null;
 
   const rows = createRows(filteredEmployees, searchQuery, onDrillDown);
@@ -639,7 +641,7 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
       <div>
-        <Heading size="xlarge">{viewingManager ? `${viewingManager.firstName} ${viewingManager.lastName}'s Team` : "Team"}</Heading>
+        <Heading size="xlarge">{viewingManager ? `${viewingManager.firstName} ${viewingManager.lastName}'s Team` : "Team Overview"}</Heading>
         <div style={{ marginTop: token("space.050") }}>
           <Text size="medium" color="color.text.subtlest">View and understand your team's compensation</Text>
         </div>
@@ -747,15 +749,28 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
         />
       </div>
 
-      {viewingManager && (
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <Text size="small" color="color.text.subtlest">
-            <span style={{ cursor: "pointer" }} onClick={() => onDrillDown?.("")}>
-              All Reports
-            </span>
-          </Text>
-          <Text size="small" color="color.text.subtlest">/</Text>
-          <Text size="small" weight="bold">{viewingManager.firstName} {viewingManager.lastName}'s Team</Text>
+      {managerStack.length > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
+          <span style={{ cursor: "pointer" }} onClick={() => onBreadcrumbNav?.(0)}>
+            <Text size="small" color="color.text.brand" weight="medium">All Reports</Text>
+          </span>
+          {managerStack.map((mgrId, i) => {
+            const mgr = employees.find((e) => e.id === mgrId);
+            if (!mgr) return null;
+            const isLast = i === managerStack.length - 1;
+            return (
+              <React.Fragment key={mgrId}>
+                <Text size="small" color="color.text.subtlest">/</Text>
+                {isLast ? (
+                  <Text size="small" weight="bold">{mgr.firstName} {mgr.lastName}</Text>
+                ) : (
+                  <span style={{ cursor: "pointer" }} onClick={() => onBreadcrumbNav?.(i + 1)}>
+                    <Text size="small" color="color.text.brand" weight="medium">{mgr.firstName} {mgr.lastName}</Text>
+                  </span>
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
       )}
 
