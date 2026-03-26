@@ -236,95 +236,21 @@ export default function Home() {
       return (
         <MenuList>
           <LinkMenuItem
+            href="#compensation"
+            elemBefore={<DashboardIcon label="" color="currentColor" />}
+            isSelected={activeNav === "compensation"}
+            onClick={(e) => { e.preventDefault(); setActiveNav("compensation"); }}
+          >
+            Total Rewards
+          </LinkMenuItem>
+          <LinkMenuItem
             href="#team-overview"
             elemBefore={<PeopleGroupIcon label="" color="currentColor" />}
-            isSelected={activeNav === "team-overview" && !viewManagerId}
+            isSelected={activeNav === "team-overview"}
             onClick={(e) => { e.preventDefault(); setViewManagerId(undefined); setActiveNav("team-overview"); }}
           >
             Team Overview
           </LinkMenuItem>
-          <MenuSection title="Direct Reports">
-            <div style={{ paddingLeft: token("space.200") }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: token("space.050"),
-                  cursor: "pointer",
-                  padding: `${token("space.050")} 0`,
-                  marginBottom: token("space.050"),
-                }}
-                onClick={() => setDirectReportsExpanded(!directReportsExpanded)}
-              >
-                {directReportsExpanded ? (
-                  <ChevronDownIcon label="" LEGACY_size="small" color={token("color.icon.subtle")} />
-                ) : (
-                  <ChevronRightIcon label="" LEGACY_size="small" color={token("color.icon.subtle")} />
-                )}
-                <Text size="small" weight="medium" color="color.text.subtlest">
-                  {employees.length} team members
-                </Text>
-              </div>
-              {directReportsExpanded && (
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  {employees.filter((e) => !e.managerId).map((emp) => {
-                    const hasReports = employees.some((e) => e.managerId === emp.id);
-                    const reportsCount = employees.filter((e) => e.managerId === emp.id).length;
-                    return (
-                      <div
-                        key={emp.id}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: token("space.100"),
-                          padding: `${token("space.075")} ${token("space.100")}`,
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          backgroundColor: viewManagerId === emp.id ? token("color.background.selected") : "transparent",
-                        }}
-                        onClick={() => {
-                          if (hasReports) {
-                            setViewManagerId(emp.id);
-                            setActiveNav("team-overview");
-                          }
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: 24,
-                            height: 24,
-                            borderRadius: "50%",
-                            backgroundColor: token("color.background.accent.blue.subtler"),
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
-                          }}
-                        >
-                          <Text size="small" weight="bold" color="color.text.accent.blue">
-                            {emp.initials}
-                          </Text>
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
-                          <Text size="small" weight={viewManagerId === emp.id ? "bold" : "medium"}>
-                            {emp.firstName} {emp.lastName}
-                          </Text>
-                          {hasReports && (
-                            <Text size="UNSAFE_small" color="color.text.subtlest">
-                              {reportsCount} reports
-                            </Text>
-                          )}
-                        </div>
-                        {hasReports && (
-                          <ChevronRightIcon label="" LEGACY_size="small" color={token("color.icon.subtle")} />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </MenuSection>
           <LinkMenuItem
             href="#about"
             elemBefore={<InformationIcon label="" color="currentColor" />}
