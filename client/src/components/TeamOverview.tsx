@@ -8,6 +8,7 @@ import Textfield from "@atlaskit/textfield";
 import Button from "@atlaskit/button/new";
 import Select from "@atlaskit/select";
 import Popup from "@atlaskit/popup";
+import { Checkbox } from "@atlaskit/checkbox";
 import SearchIcon from "@atlaskit/icon/core/search";
 import ShowMoreHorizontalIcon from "@atlaskit/icon/core/show-more-horizontal";
 import CrossIcon from "@atlaskit/icon/core/cross";
@@ -413,6 +414,7 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
   const [managerFilter, setManagerFilter] = useState<string | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>({ jobLevel: null, jobFamily: null, zone: null, rating: null });
+  const [enabledFilters, setEnabledFilters] = useState<Set<keyof Filters>>(new Set());
 
   const activeFilterCount = Object.values(filters).filter(Boolean).length;
 
@@ -517,36 +519,29 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
           placement="bottom-start"
           shouldRenderToParent
           content={() => (
-            <div style={{ padding: token("space.300"), width: 320 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: token("space.200") }}>
-                <Text size="medium" weight="semibold">Filters</Text>
-                {activeFilterCount > 0 && (
-                  <Button
-                    appearance="subtle"
-                    spacing="compact"
-                    onClick={() => setFilters({ jobLevel: null, jobFamily: null, zone: null, rating: null })}
-                  >
-                    Clear all
-                  </Button>
-                )}
+            <div style={{ padding: token("space.200"), width: 220 }}>
+              <div style={{ marginBottom: token("space.100") }}>
+                <Text size="small" weight="semibold" color="color.text.subtlest">ADD FILTERS</Text>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
                 {filterFields.map((f) => (
-                  <div key={f.key}>
-                    <div style={{ marginBottom: token("space.050") }}>
-                      <Text size="small" weight="medium" color="color.text.subtlest">{f.label}</Text>
-                    </div>
-                    <Select
-                      inputId={`filter-${f.key}`}
-                      options={uniqueValues(f.employeeKey)}
-                      placeholder={`All ${f.label.toLowerCase()}`}
-                      isClearable
-                      value={filters[f.key] ? { label: filters[f.key]!, value: filters[f.key]! } : null}
-                      onChange={(opt: any) => setFilters((prev) => ({ ...prev, [f.key]: opt?.value || null }))}
-                      styles={{ control: (base: any) => ({ ...base, minHeight: 36 }) }}
-                      menuPortalTarget={document.body}
-                    />
-                  </div>
+                  <Checkbox
+                    key={f.key}
+                    label={f.label}
+                    isChecked={enabledFilters.has(f.key)}
+                    onChange={() => {
+                      setEnabledFilters((prev) => {
+                        const next = new Set(prev);
+                        if (next.has(f.key)) {
+                          next.delete(f.key);
+                          setFilters((p) => ({ ...p, [f.key]: null }));
+                        } else {
+                          next.add(f.key);
+                        }
+                        return next;
+                      });
+                    }}
+                  />
                 ))}
               </div>
             </div>
@@ -558,39 +553,62 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
               iconBefore={ShowMoreHorizontalIcon}
               onClick={() => setMoreOpen(!moreOpen)}
             >
-              More{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+              More
             </Button>
           )}
         />
       </div>
 
-      {activeFilterCount > 0 && (
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), flexWrap: "wrap" }}>
-          {filterFields.map((f) =>
-            filters[f.key] ? (
-              <div
-                key={f.key}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: token("space.050"),
-                  padding: `${token("space.025")} ${token("space.100")}`,
-                  borderRadius: "3px",
-                  backgroundColor: token("color.background.selected"),
-                  color: token("color.text.selected"),
-                }}
-              >
-                <Text size="small" weight="medium" color="color.text.selected">
-                  {f.label}: {filters[f.key]}
-                </Text>
+      {enabledFilters.size > 0 && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: token("space.200"),
+            flexWrap: "wrap",
+          }}
+        >
+          {filterFields
+            .filter((f) => enabledFilters.has(f.key))
+            .map((f) => (
+              <div key={f.key} style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                <div style={{ width: 180 }}>
+                  <Select
+                    inputId={`filter-${f.key}`}
+                    options={uniqueValues(f.employeeKey)}
+                    placeholder={f.label}
+                    isClearable
+                    value={filters[f.key] ? { label: filters[f.key]!, value: filters[f.key]! } : null}
+                    onChange={(opt: any) => setFilters((prev) => ({ ...prev, [f.key]: opt?.value || null }))}
+                    styles={{ control: (base: any) => ({ ...base, minHeight: 36 }) }}
+                  />
+                </div>
                 <span
                   style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-                  onClick={() => setFilters((prev) => ({ ...prev, [f.key]: null }))}
+                  onClick={() => {
+                    setEnabledFilters((prev) => {
+                      const next = new Set(prev);
+                      next.delete(f.key);
+                      return next;
+                    });
+                    setFilters((prev) => ({ ...prev, [f.key]: null }));
+                  }}
                 >
-                  <CrossIcon label={`Remove ${f.label} filter`} LEGACY_size="small" color={token("color.icon.selected")} />
+                  <CrossIcon label={`Remove ${f.label} filter`} LEGACY_size="small" color={token("color.icon.subtle")} />
                 </span>
               </div>
-            ) : null
+            ))}
+          {activeFilterCount > 0 && (
+            <Button
+              appearance="subtle"
+              spacing="compact"
+              onClick={() => {
+                setFilters({ jobLevel: null, jobFamily: null, zone: null, rating: null });
+                setEnabledFilters(new Set());
+              }}
+            >
+              Clear all
+            </Button>
           )}
         </div>
       )}
