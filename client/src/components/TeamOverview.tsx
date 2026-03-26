@@ -495,15 +495,17 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
         />
       </div>
 
-      <DynamicTable
-        head={head}
-        rows={rows}
-        rowsPerPage={10}
-        defaultPage={1}
-        isFixedSize
-        defaultSortKey="name"
-        defaultSortOrder="ASC"
-      />
+      <div className="charlie-table">
+        <DynamicTable
+          head={head}
+          rows={rows}
+          rowsPerPage={10}
+          defaultPage={1}
+          isFixedSize
+          defaultSortKey="name"
+          defaultSortOrder="ASC"
+        />
+      </div>
 
       <div style={{ marginTop: token("space.200") }}>
         <Text size="small" color="color.text.subtlest">

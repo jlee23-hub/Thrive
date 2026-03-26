@@ -113,3 +113,46 @@ div[data-selected="true"]::before {
 .hide-range-dot > div::after {
   display: none !important;
 }
+
+.charlie-table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.charlie-table table thead tr th {
+  background: transparent !important;
+  border-bottom: 2px solid var(--ds-border, #091e4224) !important;
+  padding: 12px 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: var(--ds-text-subtlest, #626F86) !important;
+  height: 48px !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+}
+
+.charlie-table table tbody tr {
+  height: 48px !important;
+}
+
+.charlie-table table tbody tr td {
+  border-bottom: 1px solid var(--ds-border, #091e4224) !important;
+  padding: 8px !important;
+  height: 48px !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+}
+
+.charlie-table table tbody tr:last-child td {
+  border-bottom: 1px solid var(--ds-border, #091e4224) !important;
+}
+
+.charlie-table table tbody tr:hover td {
+  background-color: var(--ds-background-neutral-subtle-hovered, #F1F2F4) !important;
+}
+
+.charlie-table table tfoot {
+  display: none !important;
+}
