@@ -452,31 +452,32 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
       <div>
-        {viewingManager && (
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.100") }}>
-            <Text size="small" color="color.text.subtlest">
-              <span style={{ cursor: "pointer" }} onClick={() => onDrillDown?.("")}>
-                All Reports
-              </span>
-            </Text>
-            <Text size="small" color="color.text.subtlest">/</Text>
-            <Text size="small" weight="bold">{viewingManager.firstName} {viewingManager.lastName}'s Team</Text>
-          </div>
-        )}
         <Heading size="xlarge">{viewingManager ? `${viewingManager.firstName} ${viewingManager.lastName}'s Team` : "Team"}</Heading>
         <div style={{ marginTop: token("space.050") }}>
           <Text size="medium" color="color.text.subtlest">View and understand your team's compensation</Text>
         </div>
       </div>
 
+      {viewingManager && (
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <Text size="small" color="color.text.subtlest">
+            <span style={{ cursor: "pointer" }} onClick={() => onDrillDown?.("")}>
+              All Reports
+            </span>
+          </Text>
+          <Text size="small" color="color.text.subtlest">/</Text>
+          <Text size="small" weight="bold">{viewingManager.firstName} {viewingManager.lastName}'s Team</Text>
+        </div>
+      )}
+
       <div
         style={{
           display: "flex",
           alignItems: "center",
           gap: token("space.200"),
-          marginBottom: token("space.300"),
+          marginBottom: token("space.100"),
         }}
       >
         <div style={{ width: 180 }}>
