@@ -78,57 +78,57 @@ export const grants: Grant[] = [
 ];
 
 export const vestingScheduleData = [
-  { date: "Nov 2023", vested: 0, unvested: 5519, grantBreakdown: [] as { grantDate: string; units: number; value: number }[] },
-  { date: "Mar 2024", vested: 550, unvested: 4969, grantBreakdown: [
+  { date: "Nov 2023", vested: 0, unvested: 5519, vestedValue: 0, unvestedValue: 438374, grantBreakdown: [] as { grantDate: string; units: number; value: number }[] },
+  { date: "Mar 2024", vested: 550, unvested: 4969, vestedValue: 43696, unvestedValue: 394678, grantBreakdown: [
     { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
     { grantDate: "Nov 13, 2023", units: 130, value: 10327 },
   ] },
-  { date: "Jul 2024", vested: 1100, unvested: 4419, grantBreakdown: [
+  { date: "Jul 2024", vested: 1100, unvested: 4419, vestedValue: 87392, unvestedValue: 350982, grantBreakdown: [
     { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
     { grantDate: "Nov 13, 2023", units: 130, value: 10327 },
   ] },
-  { date: "Nov 2024", vested: 1650, unvested: 3869, grantBreakdown: [
+  { date: "Nov 2024", vested: 1650, unvested: 3869, vestedValue: 131088, unvestedValue: 307286, grantBreakdown: [
     { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
     { grantDate: "Nov 13, 2023", units: 130, value: 10327 },
   ] },
-  { date: "Mar 2025", vested: 2200, unvested: 3319, grantBreakdown: [
+  { date: "Mar 2025", vested: 2200, unvested: 3319, vestedValue: 174783, unvestedValue: 263591, grantBreakdown: [
     { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
     { grantDate: "Nov 13, 2023", units: 50, value: 3972 },
     { grantDate: "Nov 13, 2024", units: 80, value: 6354 },
   ] },
-  { date: "Jul 2025", vested: 2750, unvested: 2769, grantBreakdown: [
+  { date: "Jul 2025", vested: 2750, unvested: 2769, vestedValue: 218479, unvestedValue: 219895, grantBreakdown: [
     { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
     { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
   ] },
-  { date: "Nov 2025", vested: 3489, unvested: 2030, grantBreakdown: [
+  { date: "Nov 2025", vested: 3489, unvested: 2030, vestedValue: 277188, unvestedValue: 161186, grantBreakdown: [
     { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
     { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
     { grantDate: "Nov 13, 2025", units: 189, value: 15013 },
   ] },
-  { date: "Mar 2026", vested: 3900, unvested: 1619, grantBreakdown: [
+  { date: "Mar 2026", vested: 3900, unvested: 1619, vestedValue: 309836, unvestedValue: 128538, grantBreakdown: [
     { grantDate: "Nov 18, 2023", units: 195, value: 15491 },
     { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
     { grantDate: "Nov 13, 2025", units: 86, value: 6830 },
   ] },
-  { date: "Jul 2026", vested: 4300, unvested: 1219, grantBreakdown: [
+  { date: "Jul 2026", vested: 4300, unvested: 1219, vestedValue: 341610, unvestedValue: 96764, grantBreakdown: [
     { grantDate: "Nov 18, 2023", units: 174, value: 13822 },
     { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
     { grantDate: "Nov 13, 2025", units: 96, value: 7625 },
   ] },
-  { date: "Nov 2026", vested: 4700, unvested: 819, grantBreakdown: [
+  { date: "Nov 2026", vested: 4700, unvested: 819, vestedValue: 373385, unvestedValue: 64989, grantBreakdown: [
     { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
     { grantDate: "Nov 13, 2025", units: 170, value: 13504 },
     { grantDate: "Nov 18, 2023", units: 100, value: 7944 },
   ] },
-  { date: "Mar 2027", vested: 5000, unvested: 519, grantBreakdown: [
+  { date: "Mar 2027", vested: 5000, unvested: 519, vestedValue: 397216, unvestedValue: 41158, grantBreakdown: [
     { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
     { grantDate: "Nov 13, 2025", units: 170, value: 13504 },
   ] },
-  { date: "Jul 2027", vested: 5200, unvested: 319, grantBreakdown: [
+  { date: "Jul 2027", vested: 5200, unvested: 319, vestedValue: 413103, unvestedValue: 25271, grantBreakdown: [
     { grantDate: "Nov 13, 2024", units: 129, value: 10247 },
     { grantDate: "Nov 13, 2025", units: 71, value: 5640 },
   ] },
-  { date: "Nov 2027", vested: 5519, unvested: 0, grantBreakdown: [
+  { date: "Nov 2027", vested: 5519, unvested: 0, vestedValue: 438374, unvestedValue: 0, grantBreakdown: [
     { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
     { grantDate: "Nov 13, 2025", units: 89, value: 7070 },
     { grantDate: "Nov 18, 2023", units: 100, value: 7944 },

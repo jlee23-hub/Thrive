@@ -418,15 +418,16 @@ export default function RSUDetails() {
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
-                  tickFormatter={(v) => v.toLocaleString()}
-                  width={50}
+                  tickFormatter={(v) => `$${(v / 1000).toFixed(0)}K`}
+                  width={60}
                 />
                 <RechartsTooltip
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
                     const dataPoint = vestingScheduleData.find((d) => d.date === label);
-                    const vestedUnitsInPeriod = payload.find((p) => p.name === "vested")?.value as number || 0;
                     const totalValueInPeriod = dataPoint?.grantBreakdown?.reduce((sum, g) => sum + g.value, 0) || 0;
+                    const vestedUnits = dataPoint?.vested || 0;
+                    const unvestedUnits = dataPoint?.unvested || 0;
                     return (
                       <div style={{
                         backgroundColor: token("elevation.surface.overlay"),
@@ -443,33 +444,40 @@ export default function RSUDetails() {
                             ${totalValueInPeriod.toLocaleString()}
                           </span>
                         </div>
-                        {payload.map((entry) => (
-                          <div key={entry.name} style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: token("space.100"),
-                            marginTop: token("space.050"),
-                          }}>
-                            <div style={{
-                              width: 10,
-                              height: 10,
-                              borderRadius: 2,
-                              backgroundColor: entry.color,
-                              flexShrink: 0,
-                            }} />
-                            <span style={{
-                              color: entry.name === "unvested"
-                                ? token("color.text.subtlest")
-                                : token("color.text.success"),
-                              fontWeight: 500,
+                        {payload.map((entry) => {
+                          const isVested = entry.name === "vested";
+                          const unitCount = isVested ? vestedUnits : unvestedUnits;
+                          return (
+                            <div key={entry.name} style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: token("space.100"),
+                              marginTop: token("space.050"),
                             }}>
-                              {entry.name === "vested" ? "Vested" : "Unvested"}:
-                            </span>
-                            <span style={{ color: token("color.text"), fontWeight: 600 }}>
-                              {(entry.value as number).toLocaleString()} units
-                            </span>
-                          </div>
-                        ))}
+                              <div style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 2,
+                                backgroundColor: entry.color,
+                                flexShrink: 0,
+                              }} />
+                              <span style={{
+                                color: isVested
+                                  ? token("color.text.success")
+                                  : token("color.text.subtlest"),
+                                fontWeight: 500,
+                              }}>
+                                {isVested ? "Vested" : "Unvested"}:
+                              </span>
+                              <span style={{ color: token("color.text"), fontWeight: 600 }}>
+                                ${(entry.value as number).toLocaleString()}
+                              </span>
+                              <span style={{ color: token("color.text.subtlest"), fontSize: 11 }}>
+                                ({unitCount.toLocaleString()} units)
+                              </span>
+                            </div>
+                          );
+                        })}
                         {dataPoint?.grantBreakdown && dataPoint.grantBreakdown.length > 0 && (
                           <div style={{
                             marginTop: token("space.100"),
@@ -508,14 +516,14 @@ export default function RSUDetails() {
                   }}
                 />
                 <Bar
-                  dataKey="vested"
+                  dataKey="vestedValue"
                   stackId="1"
                   fill={token("color.chart.success.bold")}
                   name="vested"
                   radius={[0, 0, 0, 0]}
                 />
                 <Bar
-                  dataKey="unvested"
+                  dataKey="unvestedValue"
                   stackId="1"
                   fill={token("color.background.neutral")}
                   name="unvested"
@@ -524,7 +532,7 @@ export default function RSUDetails() {
                 <Legend
                   formatter={(value: string) => (
                     <span style={{ color: token("color.text"), fontSize: 12 }}>
-                      {value === "vested" ? "Vested Units" : "Unvested Units"}
+                      {value === "vested" ? "Vested Value" : "Unvested Value"}
                     </span>
                   )}
                   iconType="square"
