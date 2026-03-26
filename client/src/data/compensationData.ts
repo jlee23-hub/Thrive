@@ -78,19 +78,61 @@ export const grants: Grant[] = [
 ];
 
 export const vestingScheduleData = [
-  { date: "Nov 2023", vested: 0, unvested: 5519 },
-  { date: "Mar 2024", vested: 550, unvested: 4969 },
-  { date: "Jul 2024", vested: 1100, unvested: 4419 },
-  { date: "Nov 2024", vested: 1650, unvested: 3869 },
-  { date: "Mar 2025", vested: 2200, unvested: 3319 },
-  { date: "Jul 2025", vested: 2750, unvested: 2769 },
-  { date: "Nov 2025", vested: 3489, unvested: 2030 },
-  { date: "Mar 2026", vested: 3900, unvested: 1619 },
-  { date: "Jul 2026", vested: 4300, unvested: 1219 },
-  { date: "Nov 2026", vested: 4700, unvested: 819 },
-  { date: "Mar 2027", vested: 5000, unvested: 519 },
-  { date: "Jul 2027", vested: 5200, unvested: 319 },
-  { date: "Nov 2027", vested: 5519, unvested: 0 },
+  { date: "Nov 2023", vested: 0, unvested: 5519, grantBreakdown: [] as { grantDate: string; units: number; value: number }[] },
+  { date: "Mar 2024", vested: 550, unvested: 4969, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
+    { grantDate: "Nov 13, 2023", units: 130, value: 10327 },
+  ] },
+  { date: "Jul 2024", vested: 1100, unvested: 4419, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
+    { grantDate: "Nov 13, 2023", units: 130, value: 10327 },
+  ] },
+  { date: "Nov 2024", vested: 1650, unvested: 3869, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
+    { grantDate: "Nov 13, 2023", units: 130, value: 10327 },
+  ] },
+  { date: "Mar 2025", vested: 2200, unvested: 3319, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
+    { grantDate: "Nov 13, 2023", units: 50, value: 3972 },
+    { grantDate: "Nov 13, 2024", units: 80, value: 6354 },
+  ] },
+  { date: "Jul 2025", vested: 2750, unvested: 2769, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
+    { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
+  ] },
+  { date: "Nov 2025", vested: 3489, unvested: 2030, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 420, value: 33369 },
+    { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
+    { grantDate: "Nov 13, 2025", units: 189, value: 15013 },
+  ] },
+  { date: "Mar 2026", vested: 3900, unvested: 1619, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 195, value: 15491 },
+    { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
+    { grantDate: "Nov 13, 2025", units: 86, value: 6830 },
+  ] },
+  { date: "Jul 2026", vested: 4300, unvested: 1219, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 174, value: 13822 },
+    { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
+    { grantDate: "Nov 13, 2025", units: 96, value: 7625 },
+  ] },
+  { date: "Nov 2026", vested: 4700, unvested: 819, grantBreakdown: [
+    { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
+    { grantDate: "Nov 13, 2025", units: 170, value: 13504 },
+    { grantDate: "Nov 18, 2023", units: 100, value: 7944 },
+  ] },
+  { date: "Mar 2027", vested: 5000, unvested: 519, grantBreakdown: [
+    { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
+    { grantDate: "Nov 13, 2025", units: 170, value: 13504 },
+  ] },
+  { date: "Jul 2027", vested: 5200, unvested: 319, grantBreakdown: [
+    { grantDate: "Nov 13, 2024", units: 129, value: 10247 },
+    { grantDate: "Nov 13, 2025", units: 71, value: 5640 },
+  ] },
+  { date: "Nov 2027", vested: 5519, unvested: 0, grantBreakdown: [
+    { grantDate: "Nov 13, 2024", units: 130, value: 10327 },
+    { grantDate: "Nov 13, 2025", units: 89, value: 7070 },
+    { grantDate: "Nov 18, 2023", units: 100, value: 7944 },
+  ] },
 ];
 
 export const getGrantVestingData = (grant: Grant) => {

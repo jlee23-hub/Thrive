@@ -424,31 +424,42 @@ export default function RSUDetails() {
                 <RechartsTooltip
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
+                    const dataPoint = vestingScheduleData.find((d) => d.date === label);
+                    const vestedUnitsInPeriod = payload.find((p) => p.name === "vested")?.value as number || 0;
+                    const totalValueInPeriod = dataPoint?.grantBreakdown?.reduce((sum, g) => sum + g.value, 0) || 0;
                     return (
                       <div style={{
                         backgroundColor: token("elevation.surface.overlay"),
                         border: `1px solid ${token("color.border")}`,
                         borderRadius: 8,
                         fontSize: 13,
-                        padding: token("space.150"),
+                        padding: token("space.200"),
+                        minWidth: 260,
+                        boxShadow: token("elevation.shadow.overlay"),
                       }}>
-                        <div style={{ marginBottom: token("space.050"), fontWeight: 600 }}>{label}</div>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: token("space.100") }}>
+                          <span style={{ fontWeight: 700, color: token("color.text") }}>{label}</span>
+                          <span style={{ fontWeight: 700, color: token("color.text") }}>
+                            ${totalValueInPeriod.toLocaleString()}
+                          </span>
+                        </div>
                         {payload.map((entry) => (
                           <div key={entry.name} style={{
                             display: "flex",
                             alignItems: "center",
                             gap: token("space.100"),
-                            marginTop: token("space.025"),
+                            marginTop: token("space.050"),
                           }}>
                             <div style={{
                               width: 10,
                               height: 10,
                               borderRadius: 2,
                               backgroundColor: entry.color,
+                              flexShrink: 0,
                             }} />
                             <span style={{
                               color: entry.name === "unvested"
-                                ? token("color.text")
+                                ? token("color.text.subtlest")
                                 : token("color.text.success"),
                               fontWeight: 500,
                             }}>
@@ -459,6 +470,39 @@ export default function RSUDetails() {
                             </span>
                           </div>
                         ))}
+                        {dataPoint?.grantBreakdown && dataPoint.grantBreakdown.length > 0 && (
+                          <div style={{
+                            marginTop: token("space.100"),
+                            paddingTop: token("space.100"),
+                            borderTop: `1px solid ${token("color.border")}`,
+                          }}>
+                            {dataPoint.grantBreakdown.map((gb, i) => (
+                              <div key={i} style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                marginTop: i > 0 ? token("space.050") : 0,
+                                fontSize: 12,
+                              }}>
+                                <span style={{ color: token("color.text.subtlest") }}>
+                                  {gb.units.toLocaleString()} units from {gb.grantDate} grant
+                                </span>
+                                <span style={{ color: token("color.text.subtle"), fontWeight: 500 }}>
+                                  ${gb.value.toLocaleString()}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <div style={{
+                          marginTop: token("space.100"),
+                          paddingTop: token("space.075"),
+                          borderTop: `1px solid ${token("color.border")}`,
+                          fontSize: 11,
+                          color: token("color.text.subtlest"),
+                          fontStyle: "italic",
+                        }}>
+                          Vested equity valued at share price on vest date
+                        </div>
                       </div>
                     );
                   }}
