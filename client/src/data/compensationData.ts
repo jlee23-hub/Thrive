@@ -7,11 +7,29 @@ export const compensationData = {
 };
 
 export const rsuYearlyData = [
-  { year: "2023", vested: 65000, unvested: 0, isCurrent: false },
-  { year: "2024", vested: 78000, unvested: 0, isCurrent: false },
-  { year: "2025", vested: 72000, unvested: 23000, isCurrent: false },
-  { year: "2026", vested: 48000, unvested: 57000, isCurrent: true },
-  { year: "2027", vested: 0, unvested: 38000, isCurrent: false },
+  { year: "2023", vested: 65000, unvested: 0, isCurrent: false, vestedUnits: 818, unvestedUnits: 0, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 818, value: 65000 },
+  ] },
+  { year: "2024", vested: 78000, unvested: 0, isCurrent: false, vestedUnits: 982, unvestedUnits: 0, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 840, value: 66738 },
+    { grantDate: "Nov 13, 2023", units: 142, value: 11282 },
+  ] },
+  { year: "2025", vested: 72000, unvested: 23000, isCurrent: false, vestedUnits: 907, unvestedUnits: 290, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 560, value: 44492 },
+    { grantDate: "Nov 13, 2024", units: 247, value: 19622 },
+    { grantDate: "Nov 13, 2025", units: 100, value: 7944 },
+    { grantDate: "Nov 13, 2023", units: 290, value: 23042 },
+  ] },
+  { year: "2026", vested: 48000, unvested: 57000, isCurrent: true, vestedUnits: 605, unvestedUnits: 718, grantBreakdown: [
+    { grantDate: "Nov 18, 2023", units: 369, value: 29313 },
+    { grantDate: "Nov 13, 2024", units: 390, value: 30978 },
+    { grantDate: "Nov 13, 2025", units: 246, value: 19543 },
+    { grantDate: "Nov 13, 2023", units: 318, value: 25266 },
+  ] },
+  { year: "2027", vested: 0, unvested: 38000, isCurrent: false, vestedUnits: 0, unvestedUnits: 479, grantBreakdown: [
+    { grantDate: "Nov 13, 2024", units: 222, value: 17637 },
+    { grantDate: "Nov 13, 2025", units: 257, value: 20413 },
+  ] },
 ];
 
 export const equityData = {

@@ -275,41 +275,95 @@ export default function CompensationSummary() {
                 <RechartsTooltip
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
+                    const dataPoint = rsuYearlyData.find((d) => d.year === label);
+                    const totalValue = (payload.reduce((sum, p) => sum + (p.value as number), 0));
+                    const isFuture = parseInt(label as string) > 2026 || (parseInt(label as string) === 2026 && new Date().getMonth() < 2);
+                    const isCurrentOrFuture = parseInt(label as string) >= 2026;
                     return (
                       <div style={{
                         backgroundColor: token("elevation.surface.overlay"),
                         border: `1px solid ${token("color.border")}`,
                         borderRadius: 8,
                         fontSize: 13,
-                        padding: token("space.150"),
+                        padding: token("space.200"),
+                        minWidth: 260,
+                        boxShadow: token("elevation.shadow.overlay"),
                       }}>
-                        <div style={{ marginBottom: token("space.050"), fontWeight: 600 }}>{label}</div>
-                        {payload.map((entry) => (
-                          <div key={entry.name} style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: token("space.100"),
-                            marginTop: token("space.025"),
-                          }}>
-                            <div style={{
-                              width: 10,
-                              height: 10,
-                              borderRadius: 2,
-                              backgroundColor: entry.color,
-                            }} />
-                            <span style={{
-                              color: entry.name === "unvested"
-                                ? token("color.text")
-                                : token("color.text.success"),
-                              fontWeight: 500,
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: token("space.100") }}>
+                          <span style={{ fontWeight: 700, color: token("color.text") }}>{label}</span>
+                          <span style={{ fontWeight: 700, color: token("color.text") }}>
+                            {formatCurrency(totalValue)}
+                          </span>
+                        </div>
+                        {payload.map((entry) => {
+                          const isVested = entry.name === "vested";
+                          const unitCount = isVested ? (dataPoint?.vestedUnits || 0) : (dataPoint?.unvestedUnits || 0);
+                          return (
+                            <div key={entry.name} style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: token("space.100"),
+                              marginTop: token("space.050"),
                             }}>
-                              {entry.name === "vested" ? "Vested" : "Unvested"}:
-                            </span>
-                            <span style={{ color: token("color.text"), fontWeight: 600 }}>
-                              {formatCurrency(entry.value as number)}
-                            </span>
+                              <div style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 2,
+                                backgroundColor: entry.color,
+                                flexShrink: 0,
+                              }} />
+                              <span style={{
+                                color: isVested
+                                  ? token("color.text.success")
+                                  : token("color.text.subtlest"),
+                                fontWeight: 500,
+                              }}>
+                                {isVested ? "Vested" : "Unvested"}:
+                              </span>
+                              <span style={{ color: token("color.text"), fontWeight: 600 }}>
+                                {formatCurrency(entry.value as number)}
+                              </span>
+                              <span style={{ color: token("color.text.subtlest"), fontSize: 11 }}>
+                                ({unitCount.toLocaleString()} units)
+                              </span>
+                            </div>
+                          );
+                        })}
+                        {dataPoint?.grantBreakdown && dataPoint.grantBreakdown.length > 0 && (
+                          <div style={{
+                            marginTop: token("space.100"),
+                            paddingTop: token("space.100"),
+                            borderTop: `1px solid ${token("color.border")}`,
+                          }}>
+                            {dataPoint.grantBreakdown.map((gb, i) => (
+                              <div key={i} style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                marginTop: i > 0 ? token("space.050") : 0,
+                                fontSize: 12,
+                              }}>
+                                <span style={{ color: token("color.text.subtlest") }}>
+                                  {gb.units.toLocaleString()} units from {gb.grantDate} grant
+                                </span>
+                                <span style={{ color: token("color.text.subtle"), fontWeight: 500 }}>
+                                  {formatCurrency(gb.value)}
+                                </span>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
+                        <div style={{
+                          marginTop: token("space.100"),
+                          paddingTop: token("space.075"),
+                          borderTop: `1px solid ${token("color.border")}`,
+                          fontSize: 11,
+                          color: isCurrentOrFuture ? token("color.text.warning") : token("color.text.subtlest"),
+                          fontStyle: "italic",
+                        }}>
+                          {isCurrentOrFuture
+                            ? "Projected value based on modeled share price"
+                            : "Vested equity valued at share price on vest date"}
+                        </div>
                       </div>
                     );
                   }}
