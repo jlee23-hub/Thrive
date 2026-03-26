@@ -11,7 +11,6 @@ import Popup from "@atlaskit/popup";
 import { Checkbox } from "@atlaskit/checkbox";
 import SearchIcon from "@atlaskit/icon/core/search";
 import ShowMoreHorizontalIcon from "@atlaskit/icon/core/show-more-horizontal";
-import CrossIcon from "@atlaskit/icon/core/cross";
 
 
 interface Employee {
@@ -513,6 +512,21 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
             }}
           />
         </div>
+        {filterFields
+          .filter((f) => enabledFilters.has(f.key))
+          .map((f) => (
+            <div key={f.key} style={{ width: 180 }}>
+              <Select
+                inputId={`filter-${f.key}`}
+                options={uniqueValues(f.employeeKey)}
+                placeholder={f.label}
+                isClearable
+                value={filters[f.key] ? { label: filters[f.key]!, value: filters[f.key]! } : null}
+                onChange={(opt: any) => setFilters((prev) => ({ ...prev, [f.key]: opt?.value || null }))}
+                styles={{ control: (base: any) => ({ ...base, minHeight: 36 }) }}
+              />
+            </div>
+          ))}
         <Popup
           isOpen={moreOpen}
           onClose={() => setMoreOpen(false)}
@@ -558,60 +572,6 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
           )}
         />
       </div>
-
-      {enabledFilters.size > 0 && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: token("space.200"),
-            flexWrap: "wrap",
-          }}
-        >
-          {filterFields
-            .filter((f) => enabledFilters.has(f.key))
-            .map((f) => (
-              <div key={f.key} style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                <div style={{ width: 180 }}>
-                  <Select
-                    inputId={`filter-${f.key}`}
-                    options={uniqueValues(f.employeeKey)}
-                    placeholder={f.label}
-                    isClearable
-                    value={filters[f.key] ? { label: filters[f.key]!, value: filters[f.key]! } : null}
-                    onChange={(opt: any) => setFilters((prev) => ({ ...prev, [f.key]: opt?.value || null }))}
-                    styles={{ control: (base: any) => ({ ...base, minHeight: 36 }) }}
-                  />
-                </div>
-                <span
-                  style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-                  onClick={() => {
-                    setEnabledFilters((prev) => {
-                      const next = new Set(prev);
-                      next.delete(f.key);
-                      return next;
-                    });
-                    setFilters((prev) => ({ ...prev, [f.key]: null }));
-                  }}
-                >
-                  <CrossIcon label={`Remove ${f.label} filter`} LEGACY_size="small" color={token("color.icon.subtle")} />
-                </span>
-              </div>
-            ))}
-          {activeFilterCount > 0 && (
-            <Button
-              appearance="subtle"
-              spacing="compact"
-              onClick={() => {
-                setFilters({ jobLevel: null, jobFamily: null, zone: null, rating: null });
-                setEnabledFilters(new Set());
-              }}
-            >
-              Clear all
-            </Button>
-          )}
-        </div>
-      )}
 
       <div className="charlie-table">
         <DynamicTable
