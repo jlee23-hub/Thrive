@@ -9,6 +9,7 @@ import Button from "@atlaskit/button/new";
 import Select from "@atlaskit/select";
 import Popup from "@atlaskit/popup";
 import { Checkbox } from "@atlaskit/checkbox";
+import Avatar from "@atlaskit/avatar";
 import SearchIcon from "@atlaskit/icon/core/search";
 import ShowMoreHorizontalIcon from "@atlaskit/icon/core/show-more-horizontal";
 
@@ -18,6 +19,7 @@ interface Employee {
   initials: string;
   firstName: string;
   lastName: string;
+  avatarUrl: string;
   startDate: string;
   eligibilityDate: string;
   jobLevel: string;
@@ -37,6 +39,7 @@ const employees: Employee[] = [
     initials: "SJ",
     firstName: "Sarah",
     lastName: "Jenkins",
+    avatarUrl: "https://i.pravatar.cc/150?u=sarah-jenkins",
     startDate: "Mar 15, 2019",
     eligibilityDate: "Mar 15, 2020",
     jobLevel: "P40",
@@ -52,6 +55,7 @@ const employees: Employee[] = [
     initials: "MC",
     firstName: "Michael",
     lastName: "Chen",
+    avatarUrl: "https://i.pravatar.cc/150?u=michael-chen",
     startDate: "Jun 01, 2018",
     eligibilityDate: "Jun 01, 2019",
     jobLevel: "M50",
@@ -68,6 +72,7 @@ const employees: Employee[] = [
     initials: "JW",
     firstName: "Jessica",
     lastName: "Wu",
+    avatarUrl: "https://i.pravatar.cc/150?u=jessica-wu",
     startDate: "Jan 10, 2021",
     eligibilityDate: "Jan 10, 2022",
     jobLevel: "P30",
@@ -84,6 +89,7 @@ const employees: Employee[] = [
     initials: "DM",
     firstName: "David",
     lastName: "Miller",
+    avatarUrl: "https://i.pravatar.cc/150?u=david-miller",
     startDate: "Sep 22, 2017",
     eligibilityDate: "Sep 22, 2018",
     jobLevel: "M50",
@@ -100,6 +106,7 @@ const employees: Employee[] = [
     initials: "EW",
     firstName: "Emma",
     lastName: "Wilson",
+    avatarUrl: "https://i.pravatar.cc/150?u=emma-wilson",
     startDate: "Aug 05, 2022",
     eligibilityDate: "Aug 05, 2023",
     jobLevel: "P20",
@@ -116,6 +123,7 @@ const employees: Employee[] = [
     initials: "JR",
     firstName: "James",
     lastName: "Rodriguez",
+    avatarUrl: "https://i.pravatar.cc/150?u=james-rodriguez",
     startDate: "Feb 14, 2020",
     eligibilityDate: "Feb 14, 2021",
     jobLevel: "P40",
@@ -132,6 +140,7 @@ const employees: Employee[] = [
     initials: "LC",
     firstName: "Lisa",
     lastName: "Chang",
+    avatarUrl: "https://i.pravatar.cc/150?u=lisa-chang",
     startDate: "Nov 30, 2019",
     eligibilityDate: "Nov 30, 2020",
     jobLevel: "P40",
@@ -147,6 +156,7 @@ const employees: Employee[] = [
     initials: "RT",
     firstName: "Robert",
     lastName: "Taylor",
+    avatarUrl: "https://i.pravatar.cc/150?u=robert-taylor",
     startDate: "Apr 18, 2021",
     eligibilityDate: "Apr 18, 2022",
     jobLevel: "P30",
@@ -163,6 +173,7 @@ const employees: Employee[] = [
     initials: "AP",
     firstName: "Anika",
     lastName: "Patel",
+    avatarUrl: "https://i.pravatar.cc/150?u=anika-patel",
     startDate: "May 12, 2020",
     eligibilityDate: "May 12, 2021",
     jobLevel: "P30",
@@ -179,6 +190,7 @@ const employees: Employee[] = [
     initials: "KN",
     firstName: "Kevin",
     lastName: "Nguyen",
+    avatarUrl: "https://i.pravatar.cc/150?u=kevin-nguyen",
     startDate: "Jul 08, 2021",
     eligibilityDate: "Jul 08, 2022",
     jobLevel: "P20",
@@ -200,27 +212,6 @@ const formatCurrency = (value: number) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-function AvatarInitials({ initials }: { initials: string }) {
-  return (
-    <div
-      style={{
-        width: 32,
-        height: 32,
-        borderRadius: "50%",
-        backgroundColor: token("color.background.accent.blue.subtler"),
-        color: token("color.text.accent.blue"),
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontWeight: 600,
-        fontSize: 12,
-        flexShrink: 0,
-      }}
-    >
-      {initials}
-    </div>
-  );
-}
 
 const ratingAppearance = (rating: string): "success" | "inprogress" | "default" | "moved" | "removed" => {
   if (rating === "Greatly Exceeds") return "success";
@@ -262,7 +253,7 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
         key: employee.lastName,
         content: (
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <AvatarInitials initials={employee.initials} />
+            <Avatar size="small" src={employee.avatarUrl} name={`${employee.firstName} ${employee.lastName}`} />
             {employee.isManager && onDrillDown ? (
               <span
                 style={{ cursor: "pointer", color: token("color.text.brand") }}
@@ -297,31 +288,19 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
                   key={r.id}
                   title={`${r.firstName} ${r.lastName}`}
                   style={{
-                    width: 24,
-                    height: 24,
-                    borderRadius: "50%",
-                    backgroundColor: token("color.background.accent.blue.subtler"),
-                    color: token("color.text.accent.blue"),
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 600,
-                    fontSize: 9,
-                    flexShrink: 0,
-                    marginLeft: i > 0 ? -6 : 0,
-                    border: `2px solid ${token("elevation.surface.raised")}`,
+                    marginLeft: i > 0 ? -8 : 0,
                     position: "relative" as const,
                     zIndex: reports.length - i,
                   }}
                 >
-                  {r.initials}
+                  <Avatar size="small" src={r.avatarUrl} name={`${r.firstName} ${r.lastName}`} />
                 </div>
               ))}
               {reports.length > 4 && (
                 <div
                   style={{
-                    width: 24,
-                    height: 24,
+                    width: 28,
+                    height: 28,
                     borderRadius: "50%",
                     backgroundColor: token("color.background.neutral"),
                     color: token("color.text.subtlest"),
@@ -329,9 +308,9 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 600,
-                    fontSize: 9,
+                    fontSize: 10,
                     flexShrink: 0,
-                    marginLeft: -6,
+                    marginLeft: -8,
                     border: `2px solid ${token("elevation.surface.raised")}`,
                     position: "relative" as const,
                     zIndex: 0,

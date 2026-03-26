@@ -114,9 +114,14 @@ div[data-selected="true"]::before {
   display: none !important;
 }
 
+.charlie-table {
+  overflow-x: auto;
+}
+
 .charlie-table table {
   border-collapse: collapse;
   width: 100%;
+  min-width: 1200px;
 }
 
 .charlie-table table thead tr th {
