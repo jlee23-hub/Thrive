@@ -452,18 +452,18 @@ const ratingAppearance = (rating: string): "success" | "inprogress" | "default" 
 
 const head = {
   cells: [
-    { key: "name", content: "NAME", isSortable: true, width: 13 },
-    { key: "directReports", content: "DIRECT REPORTS", width: 10 },
-    { key: "startDate", content: "START DATE", isSortable: true, width: 8 },
-    { key: "eligibilityDate", content: "ELIGIBILITY DATE", isSortable: true, width: 9 },
-    { key: "jobLevel", content: "JOB LEVEL", isSortable: true, width: 7 },
-    { key: "jobFamily", content: "JOB FAMILY", isSortable: true, width: 9 },
-    { key: "zone", content: "ZONE", isSortable: true, width: 8 },
-    { key: "currentBaseSalary", content: "CURRENT BASE SALARY", isSortable: true, width: 11 },
-    { key: "srpPercent", content: "% OF SRP", isSortable: true, width: 6 },
-    { key: "currentEquity", content: "CURRENT EQUITY (RSUs)", width: 10 },
-    { key: "nextYearEquity", content: "NEXT YEAR EQUITY", width: 10 },
-    { key: "fy24H2Rating", content: "FY24 H2 RATING", isSortable: true, width: 9 },
+    { key: "name", content: "NAME", isSortable: true },
+    { key: "directReports", content: "DIRECT REPORTS" },
+    { key: "startDate", content: "START DATE", isSortable: true },
+    { key: "eligibilityDate", content: "ELIGIBILITY DATE", isSortable: true },
+    { key: "jobLevel", content: "JOB LEVEL", isSortable: true },
+    { key: "jobFamily", content: "JOB FAMILY", isSortable: true },
+    { key: "zone", content: "ZONE", isSortable: true },
+    { key: "currentBaseSalary", content: "CURRENT BASE SALARY", isSortable: true },
+    { key: "srpPercent", content: "% OF SRP", isSortable: true },
+    { key: "currentEquity", content: "CURRENT EQUITY (RSUs)" },
+    { key: "nextYearEquity", content: "NEXT YEAR EQUITY" },
+    { key: "fy24H2Rating", content: "FY24 H2 RATING", isSortable: true },
   ],
 };
 
@@ -808,7 +808,6 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
           rows={rows}
           rowsPerPage={10}
           defaultPage={1}
-          isFixedSize
           defaultSortKey="name"
           defaultSortOrder="ASC"
         />
