@@ -7,11 +7,8 @@ import Lozenge from "@atlaskit/lozenge";
 import Textfield from "@atlaskit/textfield";
 import Button from "@atlaskit/button/new";
 import Select from "@atlaskit/select";
-import { Checkbox } from "@atlaskit/checkbox";
 import SearchIcon from "@atlaskit/icon/core/search";
-import FilterIcon from "@atlaskit/icon/core/filter";
-import SortAscendingIcon from "@atlaskit/icon/core/sort-ascending";
-import EditIcon from "@atlaskit/icon/core/edit";
+import ShowMoreHorizontalIcon from "@atlaskit/icon/core/show-more-horizontal";
 
 
 interface Employee {
@@ -404,7 +401,6 @@ export { employees };
 
 export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManagerId?: string; onDrillDown?: (managerId: string) => void }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [showDirectOnly, setShowDirectOnly] = useState(false);
   const [managerFilter, setManagerFilter] = useState<string | null>(null);
 
   const filteredEmployees = viewManagerId
@@ -464,21 +460,18 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button appearance="default" iconBefore={FilterIcon}>
-          Filter
-        </Button>
-        <Button appearance="default" iconBefore={SortAscendingIcon}>
-          Sort
-        </Button>
         <div style={{ width: 200 }}>
           <Select
             inputId="manager-filter"
             options={managerOptions}
-            placeholder="Filter by manager"
+            placeholder="Manager"
             isClearable
+            value={managerFilter ? managerOptions.find((o) => o.value === managerFilter) : null}
             onChange={(opt: any) => {
-              if (opt && opt.value) {
-                onDrillDown?.(opt.value);
+              const val = opt?.value || "";
+              setManagerFilter(val || null);
+              if (val) {
+                onDrillDown?.(val);
               } else {
                 onDrillDown?.("");
               }
@@ -488,11 +481,9 @@ export default function TeamOverview({ viewManagerId, onDrillDown }: { viewManag
             }}
           />
         </div>
-        <Checkbox
-          label="Show direct reports only"
-          isChecked={showDirectOnly}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowDirectOnly(e.target.checked)}
-        />
+        <Button appearance="default" iconBefore={ShowMoreHorizontalIcon}>
+          More
+        </Button>
       </div>
 
       <div className="charlie-table">
