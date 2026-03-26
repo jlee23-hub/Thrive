@@ -498,58 +498,17 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
                 {employee.firstName} {employee.lastName}
               </Text>
             )}
-            {employee.isManager && (
-              <Lozenge appearance="new">Mgr</Lozenge>
-            )}
           </div>
         ),
       },
       {
         key: `directReports-${employee.id}`,
         content: (() => {
-          const reports = employees.filter((e) => e.managerId === employee.id);
-          if (reports.length === 0) {
-            return <Text size="small" color="color.text.subtlest">—</Text>;
-          }
+          const count = employees.filter((e) => e.managerId === employee.id).length;
           return (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {reports.slice(0, 4).map((r, i) => (
-                <div
-                  key={r.id}
-                  title={`${r.firstName} ${r.lastName}`}
-                  style={{
-                    marginLeft: i > 0 ? -8 : 0,
-                    position: "relative" as const,
-                    zIndex: reports.length - i,
-                  }}
-                >
-                  <Avatar size="small" src={r.avatarUrl} name={`${r.firstName} ${r.lastName}`} />
-                </div>
-              ))}
-              {reports.length > 4 && (
-                <div
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: "50%",
-                    backgroundColor: token("color.background.neutral"),
-                    color: token("color.text.subtlest"),
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 600,
-                    fontSize: 10,
-                    flexShrink: 0,
-                    marginLeft: -8,
-                    border: `2px solid ${token("elevation.surface.raised")}`,
-                    position: "relative" as const,
-                    zIndex: 0,
-                  }}
-                >
-                  +{reports.length - 4}
-                </div>
-              )}
-            </div>
+            <Text size="small" weight={count > 0 ? "bold" : "regular"} color={count > 0 ? "color.text" : "color.text.subtlest"}>
+              {count}
+            </Text>
           );
         })(),
       },
