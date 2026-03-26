@@ -142,7 +142,7 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
               <Text size="small" color="color.text.subtlest">Vested</Text>
               <div>
                 <Text size="large" weight="bold" color="color.text.success">
-                  {formatCurrency(grant.vestedUnits * sharePrice)}
+                  {formatCurrency(grant.vestedValue)}
                 </Text>
               </div>
               <Text size="small" color="color.text.subtlest">
@@ -327,9 +327,9 @@ export default function RSUDetails() {
   const vestedUnits = useMemo(() => grants.reduce((sum, g) => sum + g.vestedUnits, 0), []);
   const unvestedUnits = totalUnits - vestedUnits;
 
-  const totalValue = totalUnits * modeledPrice;
-  const vestedValue = vestedUnits * modeledPrice;
+  const vestedValue = useMemo(() => grants.reduce((sum, g) => sum + g.vestedValue, 0), []);
   const unvestedValue = unvestedUnits * modeledPrice;
+  const totalValue = vestedValue + unvestedValue;
 
   const priceDiff = modeledPrice - defaultPrice;
   const priceDiffPct = ((priceDiff / defaultPrice) * 100).toFixed(1);
