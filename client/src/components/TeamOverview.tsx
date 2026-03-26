@@ -806,17 +806,9 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
         <DynamicTable
           head={head}
           rows={rows}
-          rowsPerPage={10}
-          defaultPage={1}
           defaultSortKey="name"
           defaultSortOrder="ASC"
         />
-      </div>
-
-      <div style={{ marginTop: token("space.200") }}>
-        <Text size="small" color="color.text.subtlest">
-          Showing {rows.length} of {filteredEmployees.length} employees
-        </Text>
       </div>
     </div>
   );
