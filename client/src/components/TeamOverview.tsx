@@ -283,9 +283,10 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
                 {employee.firstName} {employee.lastName}
               </Text>
             )}
-            {employee.isManager && (
-              <Lozenge appearance="new">Mgr</Lozenge>
-            )}
+            {employee.isManager && (() => {
+              const reportCount = employees.filter((e) => e.managerId === employee.id).length;
+              return <Lozenge appearance="new">Mgr · {reportCount} reports</Lozenge>;
+            })()}
           </div>
         ),
       },
