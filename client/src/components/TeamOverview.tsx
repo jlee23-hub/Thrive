@@ -239,16 +239,17 @@ const ratingAppearance = (rating: string): "success" | "inprogress" | "default" 
 
 const head = {
   cells: [
-    { key: "name", content: "NAME", isSortable: true, width: 14 },
-    { key: "startDate", content: "START DATE", isSortable: true, width: 9 },
-    { key: "eligibilityDate", content: "ELIGIBILITY DATE", isSortable: true, width: 10 },
+    { key: "name", content: "NAME", isSortable: true, width: 13 },
+    { key: "directReports", content: "DIRECT REPORTS", width: 10 },
+    { key: "startDate", content: "START DATE", isSortable: true, width: 8 },
+    { key: "eligibilityDate", content: "ELIGIBILITY DATE", isSortable: true, width: 9 },
     { key: "jobLevel", content: "JOB LEVEL", isSortable: true, width: 7 },
-    { key: "jobFamily", content: "JOB FAMILY", isSortable: true, width: 10 },
-    { key: "zone", content: "ZONE", isSortable: true, width: 9 },
-    { key: "currentBaseSalary", content: "CURRENT BASE SALARY", isSortable: true, width: 12 },
-    { key: "srpPercent", content: "% OF SRP", isSortable: true, width: 7 },
-    { key: "currentEquity", content: "CURRENT EQUITY (RSUs)", width: 12 },
-    { key: "fy24H2Rating", content: "FY24 H2 RATING", isSortable: true, width: 10 },
+    { key: "jobFamily", content: "JOB FAMILY", isSortable: true, width: 9 },
+    { key: "zone", content: "ZONE", isSortable: true, width: 8 },
+    { key: "currentBaseSalary", content: "CURRENT BASE SALARY", isSortable: true, width: 11 },
+    { key: "srpPercent", content: "% OF SRP", isSortable: true, width: 6 },
+    { key: "currentEquity", content: "CURRENT EQUITY (RSUs)", width: 10 },
+    { key: "fy24H2Rating", content: "FY24 H2 RATING", isSortable: true, width: 9 },
   ],
 };
 
@@ -283,12 +284,72 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
                 {employee.firstName} {employee.lastName}
               </Text>
             )}
-            {employee.isManager && (() => {
-              const reportCount = employees.filter((e) => e.managerId === employee.id).length;
-              return <Lozenge appearance="new">Mgr · {reportCount} reports</Lozenge>;
-            })()}
+            {employee.isManager && (
+              <Lozenge appearance="new">Mgr</Lozenge>
+            )}
           </div>
         ),
+      },
+      {
+        key: `directReports-${employee.id}`,
+        content: (() => {
+          const reports = employees.filter((e) => e.managerId === employee.id);
+          if (reports.length === 0) {
+            return <Text size="small" color="color.text.subtlest">—</Text>;
+          }
+          return (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {reports.slice(0, 4).map((r, i) => (
+                <div
+                  key={r.id}
+                  title={`${r.firstName} ${r.lastName}`}
+                  style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: "50%",
+                    backgroundColor: token("color.background.accent.blue.subtler"),
+                    color: token("color.text.accent.blue"),
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 600,
+                    fontSize: 9,
+                    flexShrink: 0,
+                    marginLeft: i > 0 ? -6 : 0,
+                    border: `2px solid ${token("elevation.surface.raised")}`,
+                    position: "relative" as const,
+                    zIndex: reports.length - i,
+                  }}
+                >
+                  {r.initials}
+                </div>
+              ))}
+              {reports.length > 4 && (
+                <div
+                  style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: "50%",
+                    backgroundColor: token("color.background.neutral"),
+                    color: token("color.text.subtlest"),
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 600,
+                    fontSize: 9,
+                    flexShrink: 0,
+                    marginLeft: -6,
+                    border: `2px solid ${token("elevation.surface.raised")}`,
+                    position: "relative" as const,
+                    zIndex: 0,
+                  }}
+                >
+                  +{reports.length - 4}
+                </div>
+              )}
+            </div>
+          );
+        })(),
       },
       {
         key: employee.startDate,
