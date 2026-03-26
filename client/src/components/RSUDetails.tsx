@@ -53,7 +53,7 @@ const cardStyle: React.CSSProperties = {
 
 
 function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: Grant; allGrants: Grant[]; onSelectGrant: (g: Grant) => void; sharePrice: number }) {
-  const vestingData = useMemo(() => getGrantVestingData(grant), [grant]);
+  const vestingData = useMemo(() => getGrantVestingData(grant, sharePrice), [grant, sharePrice]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
@@ -241,11 +241,55 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
                   width={45}
                 />
                 <RechartsTooltip
-                  contentStyle={{
-                    backgroundColor: token("elevation.surface.overlay"),
-                    border: `1px solid ${token("color.border")}`,
-                    borderRadius: 8,
-                    fontSize: 13,
+                  content={({ active, payload, label }) => {
+                    if (!active || !payload?.length) return null;
+                    const point = vestingData.find((d) => d.date === label);
+                    if (!point) return null;
+                    return (
+                      <div style={{
+                        backgroundColor: token("elevation.surface.overlay"),
+                        border: `1px solid ${token("color.border")}`,
+                        borderRadius: 8,
+                        fontSize: 13,
+                        padding: token("space.200"),
+                        minWidth: 220,
+                        boxShadow: token("elevation.shadow.overlay"),
+                      }}>
+                        <div style={{ fontWeight: 700, marginBottom: token("space.100"), color: token("color.text") }}>
+                          {label} – {point.vestingPct}%
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Text size="small" color="color.text.subtlest">Share Price:</Text>
+                            <Text size="small" weight="bold">{formatCurrencyDecimal(point.sharePrice)}</Text>
+                          </div>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Text size="small" color="color.text.subtlest">Vesting Units:</Text>
+                            <Text size="small" weight="bold">{point.vestingUnits.toLocaleString()}</Text>
+                          </div>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Text size="small" color="color.text.subtlest">Vesting Value:</Text>
+                            <Text size="small" weight="bold">{formatCurrency(point.vestingValue)}</Text>
+                          </div>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Text size="small" color="color.text.subtlest">Total Vested Units:</Text>
+                            <Text size="small" weight="bold">{point.totalVestedUnits.toLocaleString()}</Text>
+                          </div>
+                        </div>
+                        <div style={{
+                          marginTop: token("space.100"),
+                          paddingTop: token("space.075"),
+                          borderTop: `1px solid ${token("color.border")}`,
+                          fontSize: 11,
+                          color: point.isFuture ? token("color.text.warning") : token("color.text.subtlest"),
+                          fontStyle: "italic",
+                        }}>
+                          {point.isFuture
+                            ? "Projected using modeled share price"
+                            : "Based on share price at vest date"}
+                        </div>
+                      </div>
+                    );
                   }}
                 />
                 <Line

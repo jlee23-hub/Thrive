@@ -153,11 +153,21 @@ export const vestingScheduleData = [
   ] },
 ];
 
-export const getGrantVestingData = (grant: Grant) => {
+const historicalSharePrices: Record<string, number> = {
+  "Nov 2023": 72.15, "Feb 2024": 74.80, "May 2024": 78.22, "Aug 2024": 76.50,
+  "Nov 2024": 80.10, "Feb 2025": 82.45, "May 2025": 79.90, "Aug 2025": 84.38,
+  "Nov 2025": 81.20, "Feb 2026": 84.38, "May 2026": 0, "Aug 2026": 0,
+  "Nov 2026": 0, "Feb 2027": 0, "May 2027": 0, "Aug 2027": 0,
+  "Nov 2027": 0, "Feb 2028": 0, "May 2028": 0, "Aug 2028": 0,
+  "Nov 2028": 0, "Feb 2029": 0, "May 2029": 0, "Aug 2029": 0,
+};
+
+export const getGrantVestingData = (grant: Grant, modeledPrice?: number) => {
   const totalQuarters = 16;
   const vestedPerQuarter = Math.floor(grant.totalUnits / totalQuarters);
   const data = [];
   const startYear = parseInt(grant.vestingStartDate.split(", ")[1]);
+  const now = new Date();
 
   for (let i = 0; i <= totalQuarters; i++) {
     const quarterIndex = i % 4;
@@ -165,13 +175,33 @@ export const getGrantVestingData = (grant: Grant) => {
     const months = ["Nov", "Feb", "May", "Aug"];
     const month = months[quarterIndex];
     const year = startYear + yearOffset;
-    const vested = Math.min(i * vestedPerQuarter, grant.vestedUnits);
+    const dateKey = `${month} ${year}`;
+    const vested = Math.min(i * vestedPerQuarter, grant.totalUnits);
     const total = grant.totalUnits;
+    const vestingUnits = i === 0 ? 0 : vestedPerQuarter;
+    const vestingPct = ((vested / total) * 100).toFixed(2);
+
+    const monthIndex = months.indexOf(month);
+    const calendarMonths = [10, 1, 4, 7];
+    const periodDate = new Date(year, calendarMonths[monthIndex]);
+    const isFuture = periodDate > now;
+
+    const sharePrice = isFuture
+      ? (modeledPrice || compensationData.defaultSharePrice)
+      : (historicalSharePrices[dateKey] || compensationData.defaultSharePrice);
+
+    const vestingValue = vestingUnits * sharePrice;
 
     data.push({
-      date: `${month} ${year}`,
+      date: dateKey,
       vested: Math.min(vested, total),
       total: total,
+      vestingUnits,
+      vestingValue: Math.round(vestingValue),
+      totalVestedUnits: Math.min(vested, total),
+      vestingPct: parseFloat(vestingPct),
+      sharePrice,
+      isFuture,
     });
   }
   return data;
