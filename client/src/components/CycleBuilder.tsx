@@ -489,7 +489,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             iconAfter={ChevronRightIcon}
             onClick={handleNext}
           >
-            {currentStep === STEPS.length - 1 ? "Finalize Cycle" : "Next Step"}
+            {currentStep === STEPS.length - 1 ? "Finalize Cycle" : currentStep === 0 ? "Create Cycle" : "Next Step"}
           </Button>
         </div>
       </div>
@@ -553,8 +553,7 @@ function StepperNav({
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
-        flex: 1,
+        gap: token("space.300"),
         position: "relative",
       }}
     >
@@ -640,20 +639,13 @@ function StepperNav({
             </div>
 
             <div style={{ paddingTop: token("space.025") }}>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-                <Text
-                  size="medium"
-                  weight="semibold"
-                  color={isActive ? "color.text.brand" : "color.text"}
-                >
-                  {step.title}
-                </Text>
-                {index === 0 ? (
-                  <span style={{ color: token("color.text.danger"), lineHeight: 1 }}>*</span>
-                ) : (
-                  <Text size="UNSAFE_small" color="color.text.disabled">(optional)</Text>
-                )}
-              </div>
+              <Text
+                size="medium"
+                weight="semibold"
+                color={isActive ? "color.text.brand" : "color.text"}
+              >
+                {step.title}
+              </Text>
               <div style={{ lineHeight: 1.2 }}>
                 <Text size="UNSAFE_small" color="color.text.subtlest">
                   {step.description}
