@@ -571,7 +571,7 @@ export default function RSUDetails() {
                               Vested value based on share price at vest date
                             </span>
                           )}
-                          {(dataPoint?.unvestedValue || 0) > 0 && (
+                          {(dataPoint?.unvestedValue || 0) > 0 && isFuture && (
                             <span style={{ color: token("color.text.warning") }}>
                               Unvested value projected at modeled share price
                             </span>
