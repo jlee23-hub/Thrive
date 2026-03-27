@@ -70,7 +70,7 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
   return (
     <div style={cardStyle}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.200"), marginBottom: token("space.400") }}>
-        <Heading size="medium">Grant Details For</Heading>
+        <Heading size="small">Grant Details For</Heading>
         <div ref={dropdownRef} style={{ position: "relative" }}>
           <div
             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -295,9 +295,9 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
                 <Line
                   type="monotone"
                   dataKey="vested"
-                  stroke="#36B37E"
+                  stroke={token("color.chart.success.bold")}
                   strokeWidth={2}
-                  dot={{ fill: "#36B37E", r: 3 }}
+                  dot={{ fill: token("color.chart.success.bold"), r: 3 }}
                   name="Vested Units"
                 />
                 <Line
@@ -482,9 +482,9 @@ function EquitySummary({ grants: allGrants, grantYearFilter, setGrantYearFilter,
               <Line
                 type="monotone"
                 dataKey="vested"
-                stroke="#36B37E"
+                stroke={token("color.chart.success.bold")}
                 strokeWidth={2}
-                dot={{ fill: "#36B37E", r: 3 }}
+                dot={{ fill: token("color.chart.success.bold"), r: 3 }}
                 name="Vested Units"
               />
               <Legend
@@ -571,9 +571,9 @@ export default function RSUDetails() {
           {modeledPrice !== defaultPrice && (
             <span
               onClick={() => setModeledPrice(defaultPrice)}
-              style={{ fontSize: 11, color: token("color.text.brand"), cursor: "pointer", fontWeight: 500 }}
+              style={{ color: token("color.text.brand"), cursor: "pointer" }}
             >
-              Reset to current
+              <Text size="UNSAFE_small" weight="medium" color="color.text.brand">Reset to current</Text>
             </span>
           )}
         </div>
@@ -640,7 +640,7 @@ export default function RSUDetails() {
         </div>
 
         <div style={{ marginTop: token("space.300") }}>
-          <Heading size="small">Vesting Value by Period</Heading>
+          <Text size="medium" weight="bold">Vesting Value by Period</Text>
           <div style={{ marginTop: token("space.200"), height: 320 }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={1}>
               <BarChart data={adjustedVestingData}>
