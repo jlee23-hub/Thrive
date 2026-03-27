@@ -337,6 +337,7 @@ export default function RSUDetails() {
     return vestingScheduleData.map((d) => ({
       ...d,
       unvestedValue: Math.round(d.unvestedValue * ratio),
+      periodUnvestedValue: Math.round(d.periodUnvestedValue * ratio),
     }));
   }, [modeledPrice, defaultPrice]);
 
@@ -476,9 +477,8 @@ export default function RSUDetails() {
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
                     const dataPoint = adjustedVestingData.find((d) => d.date === label);
-                    const totalValueInPeriod = (dataPoint?.vestedValue || 0) + (dataPoint?.unvestedValue || 0);
-                    const vestedUnits = dataPoint?.vested || 0;
-                    const unvestedUnits = dataPoint?.unvested || 0;
+                    const totalValueInPeriod = (dataPoint?.periodVestedValue || 0) + (dataPoint?.periodUnvestedValue || 0);
+                    const periodUnits = dataPoint?.periodVested || 0;
                     const now = new Date();
                     const [monthStr, yearStr] = (label as string).split(" ");
                     const monthIndex = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthStr);
@@ -500,9 +500,21 @@ export default function RSUDetails() {
                             ${totalValueInPeriod.toLocaleString()}
                           </span>
                         </div>
-                        {payload.map((entry) => {
+                        <div style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: token("space.100"),
+                          marginTop: token("space.050"),
+                        }}>
+                          <span style={{ color: token("color.text.subtlest"), fontWeight: 500 }}>
+                            Vesting Units:
+                          </span>
+                          <span style={{ color: token("color.text"), fontWeight: 600 }}>
+                            {periodUnits.toLocaleString()}
+                          </span>
+                        </div>
+                        {payload.filter(e => (e.value as number) > 0).map((entry) => {
                           const isVested = entry.name === "vested";
-                          const unitCount = isVested ? vestedUnits : unvestedUnits;
                           return (
                             <div key={entry.name} style={{
                               display: "flex",
@@ -527,9 +539,6 @@ export default function RSUDetails() {
                               </span>
                               <span style={{ color: token("color.text"), fontWeight: 600 }}>
                                 ${(entry.value as number).toLocaleString()}
-                              </span>
-                              <span style={{ color: token("color.text.subtlest"), fontSize: 11 }}>
-                                ({unitCount.toLocaleString()} units)
                               </span>
                             </div>
                           );
@@ -567,12 +576,12 @@ export default function RSUDetails() {
                           flexDirection: "column",
                           gap: token("space.050"),
                         }}>
-                          {(dataPoint?.vestedValue || 0) > 0 && (
+                          {(dataPoint?.periodVestedValue || 0) > 0 && (
                             <span style={{ color: token("color.text.subtlest") }}>
                               Vested value based on share price at vest date
                             </span>
                           )}
-                          {(dataPoint?.unvestedValue || 0) > 0 && isFuture && (
+                          {(dataPoint?.periodUnvestedValue || 0) > 0 && isFuture && (
                             <span style={{ color: token("color.text.warning") }}>
                               Unvested value projected at modeled share price
                             </span>
@@ -583,10 +592,17 @@ export default function RSUDetails() {
                   }}
                 />
                 <Bar
-                  dataKey="vestedValue"
+                  dataKey="periodVestedValue"
                   stackId="1"
                   fill={token("color.chart.success.bold")}
                   name="vested"
+                  radius={[0, 0, 0, 0]}
+                />
+                <Bar
+                  dataKey="periodUnvestedValue"
+                  stackId="1"
+                  fill={token("color.background.neutral")}
+                  name="unvested"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>
