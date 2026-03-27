@@ -52,7 +52,7 @@ const cardStyle: React.CSSProperties = {
 };
 
 
-function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: Grant; allGrants: Grant[]; onSelectGrant: (g: Grant) => void; sharePrice: number }) {
+function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice, grantYearFilter, setGrantYearFilter, vestingScheduleData: vsd, modeledPrice }: { grant: Grant; allGrants: Grant[]; onSelectGrant: (g: Grant) => void; sharePrice: number; grantYearFilter: string; setGrantYearFilter: (v: string) => void; vestingScheduleData: typeof vestingScheduleData; modeledPrice: number }) {
   const vestingData = useMemo(() => getGrantVestingData(grant, sharePrice), [grant, sharePrice]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -308,6 +308,187 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
                   strokeDasharray="4 4"
                   dot={false}
                   name="Total Units"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ borderTop: `1px solid ${token("color.border")}`, marginTop: token("space.400"), paddingTop: token("space.400") }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Heading size="small">Equity Summary</Heading>
+          <div style={{ display: "flex", gap: token("space.050"), backgroundColor: token("color.background.neutral"), borderRadius: 6, padding: 2 }}>
+            {["All", ...Array.from(new Set(allGrants.map((g) => g.grantDate.split(", ")[1]))).sort()].map((year) => (
+              <button
+                key={year}
+                onClick={() => setGrantYearFilter(year)}
+                style={{
+                  padding: `${token("space.025")} ${token("space.150")}`,
+                  borderRadius: 4,
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: 12,
+                  fontWeight: grantYearFilter === year ? 600 : 400,
+                  backgroundColor: grantYearFilter === year ? token("elevation.surface.raised") : "transparent",
+                  color: grantYearFilter === year ? token("color.text") : token("color.text.subtlest"),
+                  boxShadow: grantYearFilter === year ? token("elevation.shadow.raised") : "none",
+                }}
+              >
+                {year}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.200") }}>
+          <div style={{ minWidth: 280, maxHeight: 260, overflowY: "auto", display: "flex", flexDirection: "column", gap: token("space.300"), paddingRight: token("space.100") }}>
+            {[...allGrants].reverse().filter((g) => grantYearFilter === "All" || g.grantDate.split(", ")[1] === grantYearFilter).map((g) => {
+              const pct = (g.vestedUnits / g.totalUnits) * 100;
+              return (
+                <div key={g.id}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: token("space.100"), flexWrap: "wrap" }}>
+                    <Text size="medium" weight="bold">{g.grantDate} Grant</Text>
+                    <Text size="small" color="color.text.subtlest">
+                      {formatCurrency(g.vestedValue)} / {formatCurrency(g.totalValue)}
+                    </Text>
+                  </div>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Text size="small" color="color.text.subtlest">
+                      {g.vestedUnits.toLocaleString()} vested / {g.totalUnits.toLocaleString()} total units
+                    </Text>
+                  </div>
+                  <div style={{
+                    marginTop: token("space.100"),
+                    height: 6,
+                    borderRadius: 3,
+                    backgroundColor: token("color.background.neutral"),
+                    overflow: "hidden",
+                  }}>
+                    <div style={{
+                      width: `${pct}%`,
+                      height: "100%",
+                      borderRadius: 3,
+                      backgroundColor: token("color.chart.success.bold"),
+                    }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ flex: 1, height: 280, minWidth: 0 }}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={1}>
+              <LineChart data={vsd}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
+                <XAxis
+                  dataKey="date"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: token("color.text.subtlest"), fontSize: 10 }}
+                  interval={1}
+                  angle={-45}
+                  textAnchor="end"
+                  height={60}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
+                  width={50}
+                  tickFormatter={(v) => v.toLocaleString()}
+                />
+                <RechartsTooltip
+                  content={({ active, payload, label }) => {
+                    if (!active || !payload?.length) return null;
+                    const idx = vsd.findIndex((d) => d.date === label);
+                    if (idx < 0) return null;
+                    const dataPoint = vsd[idx];
+                    const prev = idx > 0 ? vsd[idx - 1] : null;
+                    const vestingUnits = prev ? dataPoint.vested - prev.vested : dataPoint.vested;
+                    const totalUnits = dataPoint.vested + dataPoint.unvested;
+                    const vestingPct = ((dataPoint.vested / totalUnits) * 100).toFixed(2);
+                    const now = new Date();
+                    const [monthStr, yearStr] = (label as string).split(" ");
+                    const monthIndex = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthStr);
+                    const periodDate = new Date(parseInt(yearStr), monthIndex);
+                    const isFuture = periodDate > now;
+                    const sp = vestingUnits > 0
+                      ? (isFuture ? modeledPrice : Math.round((prev ? dataPoint.vestedValue - prev.vestedValue : dataPoint.vestedValue) / vestingUnits))
+                      : 0;
+                    const vestingValue = vestingUnits > 0
+                      ? (isFuture ? vestingUnits * modeledPrice : (prev ? dataPoint.vestedValue - prev.vestedValue : dataPoint.vestedValue))
+                      : 0;
+                    return (
+                      <div style={{
+                        backgroundColor: token("elevation.surface.overlay"),
+                        border: `1px solid ${token("color.border")}`,
+                        borderRadius: 8,
+                        fontSize: 13,
+                        padding: token("space.200"),
+                        minWidth: 240,
+                        boxShadow: token("elevation.shadow.overlay"),
+                      }}>
+                        <div style={{ fontWeight: 700, marginBottom: token("space.100"), color: token("color.text") }}>
+                          {label} – {vestingPct}%
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Text size="small" color="color.text.subtlest">Share Price:</Text>
+                            <Text size="small" weight="bold">{formatCurrencyDecimal(sp)}</Text>
+                          </div>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Text size="small" color="color.text.subtlest">Vesting Units:</Text>
+                            <Text size="small" weight="bold">{vestingUnits.toLocaleString()}</Text>
+                          </div>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Text size="small" color="color.text.subtlest">Vesting Value:</Text>
+                            <Text size="small" weight="bold">{formatCurrency(vestingValue)}</Text>
+                          </div>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <Text size="small" color="color.text.subtlest">Total Vested Units:</Text>
+                            <Text size="small" weight="bold">{dataPoint.vested.toLocaleString()}</Text>
+                          </div>
+                        </div>
+                        <div style={{
+                          marginTop: token("space.100"),
+                          paddingTop: token("space.075"),
+                          borderTop: `1px solid ${token("color.border")}`,
+                          fontSize: 11,
+                          fontStyle: "italic",
+                          color: isFuture ? token("color.text.warning") : token("color.text.subtlest"),
+                        }}>
+                          {isFuture
+                            ? "Projected using modeled share price"
+                            : "Based on share price at vest date"}
+                        </div>
+                      </div>
+                    );
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="unvested"
+                  stroke={token("color.border")}
+                  strokeWidth={1}
+                  strokeDasharray="4 4"
+                  dot={{ fill: token("color.border"), r: 3 }}
+                  name="Unvested Units"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="vested"
+                  stroke="#36B37E"
+                  strokeWidth={2}
+                  dot={{ fill: "#36B37E", r: 3 }}
+                  name="Vested Units"
+                />
+                <Legend
+                  formatter={(value: string) => (
+                    <span style={{ color: token("color.text"), fontSize: 12 }}>
+                      {value}
+                    </span>
+                  )}
+                  iconType="circle"
                 />
               </LineChart>
             </ResponsiveContainer>
