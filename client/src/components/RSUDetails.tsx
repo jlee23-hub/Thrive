@@ -336,7 +336,7 @@ export default function RSUDetails() {
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={cardStyle}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <Heading size="large">Equity Summary</Heading>
+          <Heading size="large">RSU's</Heading>
         </div>
 
         <div style={{
