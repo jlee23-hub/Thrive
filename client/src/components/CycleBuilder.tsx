@@ -424,38 +424,13 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
         flexDirection: "column",
         height: "100%",
         backgroundColor: token("elevation.surface"),
-        borderRadius: "0 0 6px 6px",
+        borderRadius: "6px",
         border: `1px solid ${token("color.border")}`,
         overflow: "hidden",
         position: "relative",
       }}
     >
       {showComplete && <SuccessAnimation onDone={onBack} />}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: `${token("space.400")} ${token("space.500")}`,
-          borderBottom: `1px solid ${token("color.border")}`,
-          backgroundColor: token("elevation.surface"),
-        }}
-      >
-        <div>
-          <Heading size="large">Cycle Builder</Heading>
-          <div style={{ marginTop: token("space.050") }}>
-            <Text size="medium" color="color.text.subtlest">
-              Configure cycle details, integrate data sources, define eligibility rules, set budgets and FX rates, manage salary bands, assign user permissions, and finalize reward letters — all in one guided workflow.
-            </Text>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: token("space.100") }}>
-          <Button appearance="subtle" onClick={onBack}>
-            Cancel
-          </Button>
-          <Button appearance="default">Save Draft</Button>
-        </div>
-      </div>
 
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         <div
@@ -665,13 +640,20 @@ function StepperNav({
             </div>
 
             <div style={{ paddingTop: token("space.025") }}>
-              <Text
-                size="medium"
-                weight="semibold"
-                color={isActive ? "color.text.brand" : "color.text"}
-              >
-                {step.title}
-              </Text>
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
+                <Text
+                  size="medium"
+                  weight="semibold"
+                  color={isActive ? "color.text.brand" : "color.text"}
+                >
+                  {step.title}
+                </Text>
+                {index === 0 ? (
+                  <span style={{ color: token("color.text.danger"), lineHeight: 1 }}>*</span>
+                ) : (
+                  <Text size="UNSAFE_small" color="color.text.disabled">(optional)</Text>
+                )}
+              </div>
               <div style={{ lineHeight: 1.2 }}>
                 <Text size="UNSAFE_small" color="color.text.subtlest">
                   {step.description}
@@ -947,14 +929,16 @@ function EmployeeDataGridStep() {
       </div>
 
       <div style={{ ...cardStyle, padding: 0, overflow: "hidden" }}>
-        <div style={{ padding: `0 ${token("space.200")}` }}>
-          <DynamicTable
-            head={head}
-            rows={rows}
-            isFixedSize
-            defaultSortKey="id"
-            defaultSortOrder="ASC"
-          />
+        <div style={{ overflowX: "auto", padding: `0 ${token("space.200")}` }}>
+          <div style={{ minWidth: 1200 }}>
+            <DynamicTable
+              head={head}
+              rows={rows}
+              isFixedSize
+              defaultSortKey="id"
+              defaultSortOrder="ASC"
+            />
+          </div>
         </div>
         <div
           style={{
@@ -1665,14 +1649,16 @@ function CompDataGridStep() {
       </div>
 
       <div style={{ ...cardStyle, padding: 0, overflow: "hidden" }}>
-        <div style={{ padding: `0 ${token("space.200")}` }}>
-          <DynamicTable
-            head={head}
-            rows={rows}
-            isFixedSize
-            defaultSortKey="id"
-            defaultSortOrder="ASC"
-          />
+        <div style={{ overflowX: "auto", padding: `0 ${token("space.200")}` }}>
+          <div style={{ minWidth: 1200 }}>
+            <DynamicTable
+              head={head}
+              rows={rows}
+              isFixedSize
+              defaultSortKey="id"
+              defaultSortOrder="ASC"
+            />
+          </div>
         </div>
         <div
           style={{
