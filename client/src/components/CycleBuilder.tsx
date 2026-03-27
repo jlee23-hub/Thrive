@@ -956,6 +956,8 @@ function EmployeeDataGridStep() {
 
 function EligibilityRulesStep() {
   const [workdayExpanded, setWorkdayExpanded] = useState(true);
+  const [rulesExpanded, setRulesExpanded] = useState(true);
+  const [exclusionExpanded, setExclusionExpanded] = useState(true);
   const [showNewRule, setShowNewRule] = useState(false);
 
   const manualExclusions = [
@@ -1018,21 +1020,41 @@ function EligibilityRulesStep() {
         )}
       </div>
 
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Heading size="xsmall">Eligibility Rules</Heading>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
+        <div
+          onClick={() => setRulesExpanded(!rulesExpanded)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            cursor: "pointer",
+            marginBottom: rulesExpanded ? token("space.200") : 0,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+            <FilterIcon label="" color={token("color.icon.brand")} />
+            <Text size="medium" weight="bold">Eligibility Rules</Text>
+            <Lozenge appearance="inprogress">7 rules</Lozenge>
+          </div>
+          {rulesExpanded ? (
+            <ChevronUpIcon label="" color={token("color.icon.subtle")} />
+          ) : (
+            <ChevronDownIcon label="" color={token("color.icon.subtle")} />
+          )}
+        </div>
+        {rulesExpanded && (
+        <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
           <Button appearance="primary" iconBefore={AddIcon} onClick={() => setShowNewRule(true)}>New Rule</Button>
         </div>
 
-        <div style={{ marginTop: token("space.150") }}>
-          <SectionMessage appearance="information">
-            <Text size="small">
-              Rules use AND logic — employees must match all active rules to be eligible. Employee type is used for overall APEX and comp eligibility.
-            </Text>
-          </SectionMessage>
-        </div>
+        <SectionMessage appearance="information">
+          <Text size="small">
+            Rules use AND logic — employees must match all active rules to be eligible.
+          </Text>
+        </SectionMessage>
 
-        <div style={{ marginTop: token("space.200"), display: "flex", flexDirection: "column", gap: token("space.200") }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
           {[
             { name: "Start Date Cutoff", field: "Start Date", operator: "IS BEFORE", values: "March 31, 2026", count: "48 matched" },
             { name: "Employment Type", field: "Employee Type", operator: "IS ONE OF", values: "Regular, Definite", count: "45 matched" },
@@ -1123,10 +1145,36 @@ function EligibilityRulesStep() {
             </div>
           </div>
         )}
+        </div>
+        )}
       </div>
 
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <Heading size="xsmall">Exclusion List</Heading>
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
+        <div
+          onClick={() => setExclusionExpanded(!exclusionExpanded)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            cursor: "pointer",
+            marginBottom: exclusionExpanded ? token("space.200") : 0,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+            <PageIcon label="" color={token("color.icon.brand")} />
+            <Text size="medium" weight="bold">Exclusion List</Text>
+            {manualExclusions.length > 0 && (
+              <Lozenge appearance="removed">{manualExclusions.length} excluded</Lozenge>
+            )}
+          </div>
+          {exclusionExpanded ? (
+            <ChevronUpIcon label="" color={token("color.icon.subtle")} />
+          ) : (
+            <ChevronDownIcon label="" color={token("color.icon.subtle")} />
+          )}
+        </div>
+        {exclusionExpanded && (
+        <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
         <div style={{ marginTop: token("space.100") }}>
           <Text size="UNSAFE_small" color="color.text.subtlest">
             Upload a CSV file containing employee IDs to manually exclude from this cycle
@@ -1188,6 +1236,8 @@ function EligibilityRulesStep() {
               </tbody>
             </table>
           </div>
+        )}
+        </div>
         )}
       </div>
 
