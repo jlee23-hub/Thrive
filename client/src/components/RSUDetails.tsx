@@ -587,13 +587,6 @@ export default function RSUDetails() {
                   stackId="1"
                   fill={token("color.chart.success.bold")}
                   name="vested"
-                  radius={[0, 0, 0, 0]}
-                />
-                <Bar
-                  dataKey="unvestedValue"
-                  stackId="1"
-                  fill={token("color.background.neutral")}
-                  name="unvested"
                   radius={[4, 4, 0, 0]}
                 />
                 <Legend
