@@ -621,7 +621,10 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
       <div>
-        <Heading size="xlarge">{viewingManager ? `${viewingManager.firstName} ${viewingManager.lastName}'s Team` : "Team Overview"}</Heading>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <Heading size="xlarge">{viewingManager ? `${viewingManager.firstName} ${viewingManager.lastName}'s Team` : "Team Overview"}</Heading>
+          <Lozenge appearance="default">{rows.length} {rows.length === 1 ? "person" : "people"}</Lozenge>
+        </div>
         <div style={{ marginTop: token("space.050") }}>
           <Text size="medium" color="color.text.subtlest">View and understand your team's compensation</Text>
         </div>
