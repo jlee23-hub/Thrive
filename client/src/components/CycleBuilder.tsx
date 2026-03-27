@@ -186,11 +186,11 @@ const salaryBands = [
 ];
 
 const users = [
-  { name: "System Administrator", username: "@admin1", email: "admin@compvista.com", linked: "Sarah Chen (EMP-00001)", role: "admin", permissions: "APEX System Admin | Comp", active: true },
+  { name: "System Administrator", username: "@admin1", email: "admin@compvista.com", linked: "Sarah Chen (EMP-00001)", role: "admin", permissions: "Thrive System Admin | Comp", active: true },
   { name: "Team Manager", username: "@manager1", email: "manager@compvista.com", linked: "Lisa Patel (EMP-00003)", role: "manager", permissions: "", active: true },
-  { name: "Org Leader", username: "@leader1", email: "leader@compvista.com", linked: "Michael Johnson (EMP-00002)", role: "leader", permissions: "APEX Executive Planner", active: true },
-  { name: "Comp Planner", username: "@planner1", email: "planner@compvista.com", linked: "Emily Williams (EMP-00005)", role: "planner", permissions: "APEX Planner + Full Budget View", active: true },
-  { name: "HR Business Partner", username: "@hrbp1", email: "hrbp@compvista.com", linked: "Christopher Taylor (EMP-00010)", role: "hrbp", permissions: "APEX System Admin | HRBP", active: true },
+  { name: "Org Leader", username: "@leader1", email: "leader@compvista.com", linked: "Michael Johnson (EMP-00002)", role: "leader", permissions: "Thrive Executive Planner", active: true },
+  { name: "Comp Planner", username: "@planner1", email: "planner@compvista.com", linked: "Emily Williams (EMP-00005)", role: "planner", permissions: "Thrive Planner + Full Budget View", active: true },
+  { name: "HR Business Partner", username: "@hrbp1", email: "hrbp@compvista.com", linked: "Christopher Taylor (EMP-00010)", role: "hrbp", permissions: "Thrive System Admin | HRBP", active: true },
   { name: "Demo Employee", username: "@employee1", email: "employee@compvista.com", linked: "Chris Williams (EMP-00004)", role: "employee", permissions: "", active: true },
 ];
 
@@ -218,20 +218,20 @@ const fieldPermissionsData: ColumnField[] = [
   { id: "h1Rating", name: "H1 Rating # FY23", variable: "h1RatingNumericValue", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "h2Rating", name: "H2 Rating FY23", variable: "h2RatingMadebyManager", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "newSalary", name: "New Salary (Annualized)", variable: "newSalary", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "apexEquityTarget", name: "APEX Equity Target (pre-vested)", variable: "fullBaseEquityTargetCompBase", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Columns Gr...", appearance: "moved" }, { role: "All Other Users Can Not View", appearance: "default" }] },
-  { id: "meritApex", name: "Modeled APEX Multiplier", variable: "modeledApexMultiplier", dataSource: "User Input or Data Upload", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "CRP ZU an...", appearance: "inprogress" }, { role: "HRBP All Role...", appearance: "moved" }, { role: "APEX Syste...", appearance: "success" }] },
-  { id: "refreshEquity", name: "Refresh Equity (USD)", variable: "equity1RefreshAmount", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Plans...", appearance: "success" }, { role: "CRP Org an...", appearance: "inprogress" }, { role: "All Other Users Can View", appearance: "default" }] },
+  { id: "apexEquityTarget", name: "Thrive Equity Target (pre-vested)", variable: "fullBaseEquityTargetCompBase", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Columns Gr...", appearance: "moved" }, { role: "All Other Users Can Not View", appearance: "default" }] },
+  { id: "meritApex", name: "Modeled Thrive Multiplier", variable: "modeledApexMultiplier", dataSource: "User Input or Data Upload", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "CRP ZU an...", appearance: "inprogress" }, { role: "HRBP All Role...", appearance: "moved" }, { role: "Thrive Syste...", appearance: "success" }] },
+  { id: "refreshEquity", name: "Refresh Equity (USD)", variable: "equity1RefreshAmount", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Thrive Plans...", appearance: "success" }, { role: "CRP Org an...", appearance: "inprogress" }, { role: "All Other Users Can View", appearance: "default" }] },
   { id: "maxEquity", name: "Max Equity - (USD)", variable: "maxEquity", dataSource: "Computed", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Other Users Can View", appearance: "default" }] },
   { id: "futureTermination", name: "Future termination", variable: "futureTermDate", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
-  { id: "equityDiscretionJustification", name: "Equity Discretion Justification", variable: "deviationFromModelRat", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "APEX Basis...", appearance: "success" }, { role: "CRP Org an...", appearance: "inprogress" }] },
-  { id: "equityDiscretionComments", name: "Equity Discretion Comments - Other", variable: "comments", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Basis...", appearance: "success" }] },
+  { id: "equityDiscretionJustification", name: "Equity Discretion Justification", variable: "deviationFromModelRat", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Thrive Basis...", appearance: "success" }, { role: "CRP Org an...", appearance: "inprogress" }] },
+  { id: "equityDiscretionComments", name: "Equity Discretion Comments - Other", variable: "comments", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Thrive Basis...", appearance: "success" }] },
   { id: "declineAppeal", name: "Decline/decline appeal?", variable: "isDeclined", dataSource: "Computed", displayType: "Yes/No", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "fy25SpecialEquity", name: "FY25 Special Equity Top", variable: "specialEquityTop", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
-  { id: "fy19SpecialEquity", name: "FY19 Special Equity Recipient", variable: "fy19SpecialEquityRecipient", dataSource: "User Input or Data Upload", displayType: "Yes/No", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "HRBP Intro...", appearance: "moved" }, { role: "APEX Basis...", appearance: "success" }] },
+  { id: "fy19SpecialEquity", name: "FY19 Special Equity Recipient", variable: "fy19SpecialEquityRecipient", dataSource: "User Input or Data Upload", displayType: "Yes/No", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "HRBP Intro...", appearance: "moved" }, { role: "Thrive Basis...", appearance: "success" }] },
   { id: "stockRank", name: "Stock Rank", variable: "stockRank", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "HRBP Role...", appearance: "moved" }, { role: "Columns De...", appearance: "moved" }] },
   { id: "specialEquityComponent", name: "Special Equity - Components", variable: "specialEquityBreakdownPayline", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
-  { id: "specialEquityGrant", name: "Special Equity Grant (USD)", variable: "equityGrants", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }, { role: "Columns De...", appearance: "moved" }, { role: "APEX Syste...", appearance: "success" }] },
-  { id: "lusoProm", name: "L500+ Promotion Equity (USD)", variable: "promoEquityGrantUsd", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "APEX Basis...", appearance: "success" }, { role: "Columns De...", appearance: "moved" }] },
+  { id: "specialEquityGrant", name: "Special Equity Grant (USD)", variable: "equityGrants", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "Thrive Basis...", appearance: "success" }, { role: "Columns De...", appearance: "moved" }, { role: "Thrive Syste...", appearance: "success" }] },
+  { id: "lusoProm", name: "L500+ Promotion Equity (USD)", variable: "promoEquityGrantUsd", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Thrive Basis...", appearance: "success" }, { role: "Columns De...", appearance: "moved" }] },
   { id: "lusoRetention", name: "L500+ Retention Equity (USD)", variable: "retentionEquity", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [] },
   { id: "finalEquityMultiplier", name: "Final Equity Multiplier (%)", variable: "fullBaseEquityMultiplierPercentage", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "inti", name: "INTI Status", visible: true, editable: false, variable: "intiStatus", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
@@ -244,17 +244,17 @@ const fieldPermissionsData: ColumnField[] = [
   { id: "timeInJobProfile", name: "Time in Job Profile", visible: true, editable: false, variable: "timeInJobProfile", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "tenure", name: "Tenure", visible: true, editable: false, variable: "tenure", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "fte", name: "FTE %", visible: true, editable: false, variable: "ftePct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "currentSalary", name: "Current Salary", visible: true, editable: true, variable: "currentSalary", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }, { role: "All Other Users Can Not View", appearance: "default" }] },
+  { id: "currentSalary", name: "Current Salary", visible: true, editable: true, variable: "currentSalary", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "Thrive Basis...", appearance: "success" }, { role: "All Other Users Can Not View", appearance: "default" }] },
   { id: "currentTargetBonus", name: "Current Target Bonus", visible: true, editable: false, variable: "currentTargetBonus", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "currentEquity", name: "Current Equity", visible: true, editable: false, variable: "currentEquity", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "proposedSalary", name: "Proposed Salary", visible: true, editable: true, variable: "proposedSalary", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Admin", appearance: "removed" }, { role: "All Other Users Can Not View", appearance: "default" }] },
   { id: "proposedTargetBonus", name: "Proposed Target Bonus", visible: true, editable: false, variable: "proposedBonus", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "proposedEquity", name: "Proposed Equity", visible: true, editable: false, variable: "proposedEquity", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Plans...", appearance: "success" }] },
+  { id: "proposedEquity", name: "Proposed Equity", visible: true, editable: false, variable: "proposedEquity", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Thrive Plans...", appearance: "success" }] },
   { id: "meritIncrease", name: "Merit Increase %", visible: true, editable: true, variable: "meritIncreasePct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "meritIncreaseAmount", name: "Merit Increase Amount", visible: true, editable: false, variable: "meritIncreaseAmt", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "promotionIncrease", name: "Promotion Increase %", visible: true, editable: false, variable: "promotionIncrPct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "promotionAmount", name: "Promotion Amount", visible: true, editable: false, variable: "promotionAmt", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "oneTimeBonus", name: "One-Time Bonus", visible: true, editable: true, variable: "oneTimeBonus", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }] },
+  { id: "oneTimeBonus", name: "One-Time Bonus", visible: true, editable: true, variable: "oneTimeBonus", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "Thrive Basis...", appearance: "success" }] },
   { id: "equityGrant", name: "Equity Grant", visible: true, editable: false, variable: "equityGrant", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
   { id: "totalCompensation", name: "Total Compensation", visible: true, editable: false, variable: "totalComp", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
 ];
@@ -1425,7 +1425,7 @@ function EligibilityRulesStep() {
         <SectionMessage appearance="information">
           <Text size="small" weight="bold">Note: </Text>
           <Text size="small">
-            Employee type is used for overall APEX and comp eligibility.
+            Employee type is used for overall Thrive and comp eligibility.
           </Text>
           <div style={{ marginTop: token("space.050") }}>
             <Text size="UNSAFE_small" color="color.text.subtlest">
@@ -1652,18 +1652,18 @@ const cityMap: Record<string, string> = {
 };
 
 const userRoleAssignments: Record<string, string> = {
-  "EMP-00001": "APEX System Admin | Comp",
-  "EMP-00002": "APEX Executive Planner",
-  "EMP-00003": "APEX Planner",
-  "EMP-00004": "APEX Planner",
-  "EMP-00005": "APEX Planner",
-  "EMP-00006": "APEX Planner + Full Budget View",
-  "EMP-00007": "APEX Planner",
-  "EMP-00008": "APEX Planner",
-  "EMP-00009": "APEX Planner",
-  "EMP-00010": "APEX System Admin | HRBP",
-  "EMP-00011": "APEX Planner",
-  "EMP-00012": "APEX Planner",
+  "EMP-00001": "Thrive System Admin | Comp",
+  "EMP-00002": "Thrive Executive Planner",
+  "EMP-00003": "Thrive Planner",
+  "EMP-00004": "Thrive Planner",
+  "EMP-00005": "Thrive Planner",
+  "EMP-00006": "Thrive Planner + Full Budget View",
+  "EMP-00007": "Thrive Planner",
+  "EMP-00008": "Thrive Planner",
+  "EMP-00009": "Thrive Planner",
+  "EMP-00010": "Thrive System Admin | HRBP",
+  "EMP-00011": "Thrive Planner",
+  "EMP-00012": "Thrive Planner",
 };
 
 const TOTAL_USERS = 13128;
@@ -1675,13 +1675,13 @@ function UsersTabContent() {
   const perPage = 10;
 
   const availableUserRoles = [
-    { role: "APEX System Admin | Comp", appearance: "success" as const },
-    { role: "APEX System Admin | HRBP", appearance: "success" as const },
-    { role: "APEX Executive Planner", appearance: "success" as const },
-    { role: "APEX Planner", appearance: "default" as const },
-    { role: "APEX Planner + Full Budget View", appearance: "inprogress" as const },
-    { role: "APEX Basis Points", appearance: "success" as const },
-    { role: "APEX Plans View", appearance: "success" as const },
+    { role: "Thrive System Admin | Comp", appearance: "success" as const },
+    { role: "Thrive System Admin | HRBP", appearance: "success" as const },
+    { role: "Thrive Executive Planner", appearance: "success" as const },
+    { role: "Thrive Planner", appearance: "default" as const },
+    { role: "Thrive Planner + Full Budget View", appearance: "inprogress" as const },
+    { role: "Thrive Basis Points", appearance: "success" as const },
+    { role: "Thrive Plans View", appearance: "success" as const },
     { role: "CRP Zone", appearance: "inprogress" as const },
     { role: "CRP Org and Geo Zone", appearance: "inprogress" as const },
     { role: "HRBP All Roles", appearance: "moved" as const },
@@ -1692,7 +1692,7 @@ function UsersTabContent() {
   const [employeeRoles, setEmployeeRoles] = useState<Record<string, { role: string; appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new" }[]>>(() => {
     const initial: Record<string, { role: string; appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new" }[]> = {};
     employeeData.forEach((emp) => {
-      const assignedRole = userRoleAssignments[emp.id] || "APEX Planner";
+      const assignedRole = userRoleAssignments[emp.id] || "Thrive Planner";
       const match = availableUserRoles.find((r) => r.role === assignedRole);
       initial[emp.id] = [{ role: assignedRole, appearance: match?.appearance || "default" }];
     });
@@ -1847,7 +1847,7 @@ function UsersTabContent() {
                 {filteredEmployees.map((emp, i) => {
                   const email = `${emp.firstName.toLowerCase()}.${emp.lastName.charAt(0).toLowerCase()}@company.com`;
                   const city = cityMap[emp.location] || "Austin";
-                  const roleLabel = userRoleAssignments[emp.id] || "APEX Planner";
+                  const roleLabel = userRoleAssignments[emp.id] || "Thrive Planner";
                   const colorIdx = i % avatarColors.length;
                   const isManagerLevel = emp.level.startsWith("M");
 
@@ -2138,10 +2138,10 @@ function UsersRolesStep() {
   ];
 
   const permissionOptions = [
-    { label: "APEX System Admin | Comp", value: "APEX System Admin | Comp" },
-    { label: "APEX Executive Planner", value: "APEX Executive Planner" },
-    { label: "APEX Planner + Full Budget View", value: "APEX Planner + Full Budget View" },
-    { label: "APEX System Admin | HRBP", value: "APEX System Admin | HRBP" },
+    { label: "Thrive System Admin | Comp", value: "Thrive System Admin | Comp" },
+    { label: "Thrive Executive Planner", value: "Thrive Executive Planner" },
+    { label: "Thrive Planner + Full Budget View", value: "Thrive Planner + Full Budget View" },
+    { label: "Thrive System Admin | HRBP", value: "Thrive System Admin | HRBP" },
     { label: "None", value: "" },
   ];
 
@@ -2409,10 +2409,10 @@ function FieldPermissionsStep({
     { role: "HRBP All Roles", appearance: "moved" as const },
     { role: "HRBP Intro Roles", appearance: "moved" as const },
     { role: "HRBP Role View", appearance: "moved" as const },
-    { role: "APEX System Admin", appearance: "success" as const },
-    { role: "APEX Basis Points", appearance: "success" as const },
-    { role: "APEX Plans View", appearance: "success" as const },
-    { role: "APEX Executive Planner", appearance: "success" as const },
+    { role: "Thrive System Admin", appearance: "success" as const },
+    { role: "Thrive Basis Points", appearance: "success" as const },
+    { role: "Thrive Plans View", appearance: "success" as const },
+    { role: "Thrive Executive Planner", appearance: "success" as const },
     { role: "Columns Group Default", appearance: "moved" as const },
     { role: "Columns Derived", appearance: "moved" as const },
   ];
