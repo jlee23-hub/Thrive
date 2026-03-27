@@ -1768,9 +1768,6 @@ function UsersTabContent() {
           />
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <Button appearance="subtle" iconBefore={ChevronDownIcon}>
-            1 sort
-          </Button>
           <Button appearance="subtle" iconBefore={TableColumnsDistributeIcon}>
             Columns
           </Button>
