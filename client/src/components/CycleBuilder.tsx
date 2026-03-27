@@ -2476,8 +2476,7 @@ function FieldPermissionsStep({
           </div>
           <div style={{ marginTop: token("space.100") }}>
             <Text size="small" color="color.text.subtlest">
-              Specify the columns that will appear in the Planner and surrogate which roles will be able to view and edit them.{" "}
-              <Button appearance="link" spacing="none">Learn more about columns</Button>
+              Specify the columns that will appear in the Planner and surrogate which roles will be able to view and edit them.
             </Text>
           </div>
         </div>
