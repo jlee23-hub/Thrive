@@ -10,7 +10,6 @@ import Select from "@atlaskit/select";
 import Lozenge from "@atlaskit/lozenge";
 import DynamicTable from "@atlaskit/dynamic-table";
 import SectionMessage from "@atlaskit/section-message";
-import InlineMessage from "@atlaskit/inline-message";
 import Toggle from "@atlaskit/toggle";
 
 import PageIcon from "@atlaskit/icon/core/page";
@@ -123,16 +122,6 @@ const employeeData = [
   { id: "EMP-00010", firstName: "Christopher", lastName: "Taylor", title: "HR Business Partner", level: "P50", dept: "HR", location: "Zone C USA", rating: "Met", salary: 120000, commission: null, bonus: 10.0, equity: null },
   { id: "EMP-00011", firstName: "Jennifer", lastName: "Moore", title: "Data Scientist", level: "P60", dept: "Data Science", location: "Zone A USA", rating: "Exceeded", salary: 170000, commission: null, bonus: 10.0, equity: 55000 },
   { id: "EMP-00012", firstName: "Daniel", lastName: "Jackson", title: "Sales Director", level: "M60", dept: "Sales", location: "Zone B USA", rating: "Exceeded", salary: 165000, commission: 40.0, bonus: 25.0, equity: null },
-];
-
-const excludedEmployees = [
-  { name: "Alex Thompson", id: "EMP-00067", dept: "Engineering", startDate: "April 15, 2026", empType: "Regular", reason: "Start Date", detail: "Started after March 31, 2026 cutoff" },
-  { name: "Marcus Johnson", id: "EMP-00089", dept: "Sales", startDate: "January 12, 2024", empType: "Contractor", reason: "Employment Type", detail: "Not Regular or Definite employment type" },
-  { name: "Sophie Chen", id: "EMP-00134", dept: "Marketing", startDate: "August 3, 2025", empType: "Temporary", reason: "Employment Type", detail: "Not Regular or Definite employment type" },
-  { name: "Daniel Rodriguez", id: "EMP-00421", dept: "Engineering", startDate: "April 8, 2026", empType: "Definite", reason: "Start Date", detail: "Started after March 31, 2026 cutoff" },
-  { name: "Emma Watson", id: "EMP-00156", dept: "Design", startDate: "February 20, 2025", empType: "Intern", reason: "Employment Type", detail: "Not Regular or Definite employment type" },
-  { name: "James Park", id: "EMP-00398", dept: "Operations", startDate: "May 10, 2026", empType: "Regular", reason: "Start Date", detail: "Started after March 31, 2026 cutoff" },
-  { name: "Olivia Martinez", id: "EMP-00267", dept: "Finance", startDate: "November 5, 2024", empType: "Consultant", reason: "Employment Type", detail: "Not Regular or Definite employment type" },
 ];
 
 const salaryBands = [
@@ -967,6 +956,7 @@ function EmployeeDataGridStep() {
 
 function EligibilityRulesStep() {
   const [workdayExpanded, setWorkdayExpanded] = useState(true);
+  const [showNewRule, setShowNewRule] = useState(false);
 
   const manualExclusions = [
     { name: "Rachel Kim", id: "EMP-00045", dept: "Engineering", reason: "On extended leave" },
@@ -976,14 +966,12 @@ function EligibilityRulesStep() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <FilterIcon label="" color={token("color.icon.brand")} />
-            <Heading size="medium">Eligibility Rules</Heading>
-          </div>
-          <Text size="small" color="color.text.subtlest">Define data sources, exclusion lists, and rules to determine which employees are eligible for this cycle</Text>
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <FilterIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Eligibility Rules</Heading>
         </div>
+        <Text size="small" color="color.text.subtlest">Define data sources, exclusion lists, and rules to determine which employees are eligible for this cycle</Text>
       </div>
 
       <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
@@ -1031,7 +1019,114 @@ function EligibilityRulesStep() {
       </div>
 
       <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <Heading size="xsmall">Exclude Employee IDs</Heading>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Heading size="xsmall">Eligibility Rules</Heading>
+          <Button appearance="primary" iconBefore={AddIcon} onClick={() => setShowNewRule(true)}>New Rule</Button>
+        </div>
+
+        <div style={{ marginTop: token("space.150") }}>
+          <SectionMessage appearance="information">
+            <Text size="small">
+              Rules use AND logic — employees must match all active rules to be eligible. Employee type is used for overall APEX and comp eligibility.
+            </Text>
+          </SectionMessage>
+        </div>
+
+        <div style={{ marginTop: token("space.200"), display: "flex", flexDirection: "column", gap: token("space.200") }}>
+          {[
+            { name: "Start Date Cutoff", field: "Start Date", operator: "IS BEFORE", values: "March 31, 2026", count: "48 matched" },
+            { name: "Employment Type", field: "Employee Type", operator: "IS ONE OF", values: "Regular, Definite", count: "45 matched" },
+            { name: "Country Scope", field: "Country", operator: "IS ONE OF", values: "United States, Canada, United Kingdom", count: "42 matched" },
+            { name: "Department Filter", field: "Department", operator: "IS NOT ONE OF", values: "Intern Programs", count: "51 matched" },
+            { name: "Manager Line", field: "Manager", operator: "IS NOT", values: "Vacant", count: "50 matched" },
+            { name: "Cost Center Active", field: "Cost Center", operator: "IS NOT", values: "CLOSED", count: "52 matched" },
+            { name: "Level Minimum", field: "Level", operator: "GREATER THAN OR EQUAL", values: "P30", count: "49 matched" },
+          ].map((rule, i) => (
+            <div
+              key={i}
+              style={{
+                border: `1px solid ${token("color.border")}`,
+                borderRadius: "6px",
+                padding: token("space.200"),
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.100") }}>
+                <Text size="small" weight="bold">{rule.name}</Text>
+                <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+                  <Lozenge appearance="success">Active</Lozenge>
+                  <IconButton appearance="subtle" spacing="compact" icon={EditIcon} label="Edit" />
+                  <IconButton appearance="subtle" spacing="compact" icon={DeleteIcon} label="Delete" />
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: token("space.200"), alignItems: "center", flexWrap: "wrap" }}>
+                <Text size="UNSAFE_small" color="color.text.subtlest">{rule.field}</Text>
+                <Lozenge>{rule.operator}</Lozenge>
+                <Text size="UNSAFE_small" weight="semibold">{rule.values}</Text>
+                <Text size="UNSAFE_small" color="color.text.subtlest">· {rule.count}</Text>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {showNewRule && (
+          <div style={{ marginTop: token("space.300"), paddingTop: token("space.300"), borderTop: `1px solid ${token("color.border")}` }}>
+            <Text size="small" weight="bold">New Eligibility Rule</Text>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.200") }}>
+              <div>
+                <LabelText required>Rule Name</LabelText>
+                <Textfield placeholder="e.g., Full-time employees only" />
+              </div>
+              <div>
+                <LabelText required>Field</LabelText>
+                <Select
+                  options={[
+                    { label: "Start Date", value: "startDate" },
+                    { label: "Employee Type", value: "empType" },
+                    { label: "Country", value: "country" },
+                    { label: "Department", value: "department" },
+                    { label: "Manager", value: "manager" },
+                    { label: "Cost Center", value: "costCenter" },
+                    { label: "Level", value: "level" },
+                  ]}
+                  placeholder="Select field..."
+                />
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.300") }}>
+              <div>
+                <LabelText required>Operator</LabelText>
+                <Select
+                  options={[
+                    { label: "IS ONE OF", value: "isOneOf" },
+                    { label: "IS NOT ONE OF", value: "isNotOneOf" },
+                    { label: "EQUALS", value: "equals" },
+                    { label: "IS NOT", value: "isNot" },
+                    { label: "GREATER THAN", value: "greaterThan" },
+                    { label: "GREATER THAN OR EQUAL", value: "gte" },
+                    { label: "LESS THAN", value: "lessThan" },
+                    { label: "IS BEFORE", value: "isBefore" },
+                    { label: "IS AFTER", value: "isAfter" },
+                  ]}
+                  placeholder="Select operator..."
+                />
+              </div>
+              <div>
+                <LabelText required>Value</LabelText>
+                <Textfield placeholder="Value" />
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginTop: token("space.300"), paddingTop: token("space.200"), borderTop: `1px solid ${token("color.border")}` }}>
+              <div style={{ display: "flex", gap: token("space.100") }}>
+                <Button appearance="subtle" onClick={() => setShowNewRule(false)}>Cancel</Button>
+                <Button appearance="primary">Save Rule</Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
+        <Heading size="xsmall">Exclusion List</Heading>
         <div style={{ marginTop: token("space.100") }}>
           <Text size="UNSAFE_small" color="color.text.subtlest">
             Upload a CSV file containing employee IDs to manually exclude from this cycle
@@ -1060,8 +1155,8 @@ function EligibilityRulesStep() {
         {manualExclusions.length > 0 && (
           <div style={{ marginTop: token("space.300") }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.150") }}>
-              <Text size="small" weight="bold">{manualExclusions.length} manually excluded</Text>
-              <Button appearance="subtle" spacing="compact" iconBefore={DownloadIcon}>Export list</Button>
+              <Text size="small" weight="bold">{manualExclusions.length} employees excluded</Text>
+              <Button appearance="subtle" spacing="compact" iconBefore={DownloadIcon}>Export exclusion list</Button>
             </div>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
@@ -1098,175 +1193,42 @@ function EligibilityRulesStep() {
 
       <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Heading size="xsmall">Column-Based Rules</Heading>
-          <Button appearance="primary" iconBefore={AddIcon}>New Rule</Button>
-        </div>
-
-        <div style={{ marginTop: token("space.150") }}>
-          <SectionMessage appearance="information">
-            <Text size="small">
-              Rules use AND logic — employees must match all active rules to be eligible. Employee type is used for overall APEX and comp eligibility.
-            </Text>
-          </SectionMessage>
-        </div>
-
-        <div style={{ marginTop: token("space.200"), display: "flex", flexDirection: "column", gap: token("space.200") }}>
-          {[
-            { name: "Start Date Cutoff", field: "Start Date", operator: "IS BEFORE", values: "March 31, 2026", count: "48 matched" },
-            { name: "Employment Type", field: "Employee Type", operator: "IS ONE OF", values: "Regular, Definite", count: "45 matched" },
-            { name: "Department Filter", field: "Department", operator: "IS NOT ONE OF", values: "Intern Programs", count: "51 matched" },
-            { name: "Reporting Line", field: "Report To", operator: "IS NOT", values: "Vacant", count: "50 matched" },
-            { name: "Country Scope", field: "Country", operator: "IS ONE OF", values: "United States, Canada, United Kingdom", count: "42 matched" },
-            { name: "Level Minimum", field: "Level", operator: "GREATER THAN OR EQUAL", values: "P30", count: "49 matched" },
-            { name: "Cost Center Active", field: "Cost Center", operator: "IS NOT", values: "CLOSED", count: "52 matched" },
-          ].map((rule, i) => (
-            <div
-              key={i}
-              style={{
-                border: `1px solid ${token("color.border")}`,
-                borderRadius: "6px",
-                padding: token("space.200"),
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.100") }}>
-                <Text size="small" weight="bold">{rule.name}</Text>
-                <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                  <Lozenge appearance="success">Active</Lozenge>
-                  <IconButton appearance="subtle" spacing="compact" icon={EditIcon} label="Edit" />
-                  <IconButton appearance="subtle" spacing="compact" icon={DeleteIcon} label="Delete" />
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: token("space.200"), alignItems: "center", flexWrap: "wrap" }}>
-                <Text size="UNSAFE_small" color="color.text.subtlest">{rule.field}</Text>
-                <Lozenge>{rule.operator}</Lozenge>
-                <Text size="UNSAFE_small" weight="semibold">{rule.values}</Text>
-                <Text size="UNSAFE_small" color="color.text.subtlest">· {rule.count}</Text>
-              </div>
+          <div>
+            <Heading size="xsmall">Eligible Employees</Heading>
+            <div style={{ marginTop: token("space.050") }}>
+              <Text size="UNSAFE_small" color="color.text.subtlest">
+                Based on current rules and exclusions
+              </Text>
             </div>
-          ))}
+          </div>
+          <Button appearance="default" iconBefore={DownloadIcon}>Export Eligible Employees</Button>
         </div>
-      </div>
-
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <Heading size="xsmall">New Eligibility Rule</Heading>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.200") }}>
-          <div>
-            <LabelText required>Rule Name</LabelText>
-            <Textfield placeholder="e.g., Full-time employees only" />
+        <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.200") }}>
+          <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
+            <Text size="UNSAFE_small" color="color.text.subtlest">Total from Workday</Text>
+            <div style={{ marginTop: token("space.050") }}>
+              <Heading size="small">52</Heading>
+            </div>
           </div>
-          <div>
-            <LabelText required>Field</LabelText>
-            <Select
-              options={[
-                { label: "Start Date", value: "startDate" },
-                { label: "Employee Type", value: "empType" },
-                { label: "Department", value: "department" },
-                { label: "Report To", value: "reportTo" },
-                { label: "Country", value: "country" },
-                { label: "Level", value: "level" },
-                { label: "Cost Center", value: "costCenter" },
-              ]}
-              placeholder="Select field..."
-            />
+          <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
+            <Text size="UNSAFE_small" color="color.text.subtlest">Excluded by Rules</Text>
+            <div style={{ marginTop: token("space.050") }}>
+              <Heading size="small">7</Heading>
+            </div>
           </div>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.300") }}>
-          <div>
-            <LabelText required>Operator</LabelText>
-            <Select
-              options={[
-                { label: "IS ONE OF", value: "isOneOf" },
-                { label: "IS NOT ONE OF", value: "isNotOneOf" },
-                { label: "EQUALS", value: "equals" },
-                { label: "IS NOT", value: "isNot" },
-                { label: "GREATER THAN", value: "greaterThan" },
-                { label: "GREATER THAN OR EQUAL", value: "gte" },
-                { label: "LESS THAN", value: "lessThan" },
-                { label: "IS BEFORE", value: "isBefore" },
-                { label: "IS AFTER", value: "isAfter" },
-              ]}
-              placeholder="Select operator..."
-            />
+          <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
+            <Text size="UNSAFE_small" color="color.text.subtlest">Manually Excluded</Text>
+            <div style={{ marginTop: token("space.050") }}>
+              <Heading size="small">3</Heading>
+            </div>
           </div>
-          <div>
-            <LabelText required>Value</LabelText>
-            <Textfield placeholder="Value" />
+          <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border.success")}`, backgroundColor: token("color.background.success"), flex: 1 }}>
+            <Text size="UNSAFE_small" color="color.text.success">Eligible Employees</Text>
+            <div style={{ marginTop: token("space.050") }}>
+              <Heading size="small">42</Heading>
+            </div>
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: token("space.300"), paddingTop: token("space.200"), borderTop: `1px solid ${token("color.border")}` }}>
-          <Button appearance="subtle" iconBefore={AddIcon}>Add AND Condition</Button>
-          <div style={{ display: "flex", gap: token("space.100") }}>
-            <Button appearance="subtle">Cancel</Button>
-            <Button appearance="primary">Save Rule</Button>
-          </div>
-        </div>
-      </div>
-
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
-          <div>
-            <Heading size="xsmall">Excluded Employees</Heading>
-            <Text size="UNSAFE_small" color="color.text.subtlest">{excludedEmployees.length} employees excluded by eligibility rules</Text>
-          </div>
-        </div>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-              {["Employee", "Department", "Start Date", "Type", "Reason", ""].map((h) => (
-                <th
-                  key={h || "action"}
-                  style={{
-                    padding: `${token("space.100")} ${token("space.200")}`,
-                    textAlign: "left",
-                    textTransform: "uppercase",
-                    width: h === "" ? "100px" : undefined,
-                  }}
-                >
-                  <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {excludedEmployees.map((emp, i) => (
-              <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small" weight="semibold">{emp.name}</Text>
-                  <div>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">{emp.id}</Text>
-                  </div>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small">{emp.dept}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Text size="small" color="color.text.subtlest">{emp.startDate}</Text>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Lozenge
-                    appearance={
-                      emp.empType === "Regular" || emp.empType === "Definite"
-                        ? "success"
-                        : "removed"
-                    }
-                  >
-                    {emp.empType}
-                  </Lozenge>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <InlineMessage appearance="error" title={emp.reason}>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">{emp.detail}</Text>
-                  </InlineMessage>
-                </td>
-                <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                  <Button appearance="default" spacing="compact">
-                    Override
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );
