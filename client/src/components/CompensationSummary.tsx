@@ -65,7 +65,7 @@ export default function CompensationSummary() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
-      <Heading size="xlarge">Welcome Anand, here are your total rewards</Heading>
+      <Heading size="xlarge">Welcome to your Total Rewards Portal Anand</Heading>
       <div style={cardStyle}>
         <div style={{ display: "flex", gap: token("space.400"), alignItems: "flex-start" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
