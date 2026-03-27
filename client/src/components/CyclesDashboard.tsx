@@ -4,7 +4,6 @@ import { Text } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
 import DynamicTable from "@atlaskit/dynamic-table";
 import Lozenge from "@atlaskit/lozenge";
-import ProgressBar from "@atlaskit/progress-bar";
 import Button from "@atlaskit/button/new";
 import AddIcon from "@atlaskit/icon/core/add";
 import CalendarIcon from "@atlaskit/icon/core/calendar";
@@ -99,7 +98,6 @@ const head = {
     { key: "status", content: "STATUS", width: 10 },
     { key: "timeline", content: "TIMELINE", width: 16 },
     { key: "participants", content: "PARTICIPANTS", isSortable: true, width: 12 },
-    { key: "progress", content: "PROGRESS", width: 16 },
     { key: "actions", content: "ACTIONS", width: 6 },
   ],
 };
@@ -129,11 +127,6 @@ function buildRows(onSelectCycle?: (cycle: Cycle) => void) {
             onClick={() => onSelectCycle?.(cycle)}
           >
             <Text size="medium" weight="bold" color="color.link">{cycle.name}</Text>
-            {cycle.subtitle && (
-              <div>
-                <Text size="small" color="color.text.subtlest">{cycle.subtitle}</Text>
-              </div>
-            )}
           </div>
         ),
       },
@@ -160,20 +153,6 @@ function buildRows(onSelectCycle?: (cycle: Cycle) => void) {
           <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
             <PeopleGroupIcon label="" color={token("color.icon.subtle")} />
             <Text size="small">{cycle.participants.toLocaleString()}</Text>
-          </div>
-        ),
-      },
-      {
-        key: cycle.progress,
-        content: (
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), minWidth: 120 }}>
-            <div style={{ flex: 1 }}>
-              <ProgressBar
-                appearance={cycle.progress === 100 ? "success" : "default"}
-                value={cycle.progress / 100}
-              />
-            </div>
-            <Text size="small" color="color.text.subtlest">{cycle.progress}%</Text>
           </div>
         ),
       },
