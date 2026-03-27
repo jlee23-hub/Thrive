@@ -334,6 +334,7 @@ export default function RSUDetails() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
+      <Heading size="large">RSU's</Heading>
       <div style={cardStyle}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Text size="medium" weight="bold">Model Share Price</Text>
@@ -375,10 +376,6 @@ export default function RSUDetails() {
       </div>
 
       <div style={cardStyle}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <Heading size="large">RSU's</Heading>
-        </div>
-
         <div style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
