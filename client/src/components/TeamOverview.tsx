@@ -12,6 +12,9 @@ import { Checkbox } from "@atlaskit/checkbox";
 import Avatar from "@atlaskit/avatar";
 import SearchIcon from "@atlaskit/icon/core/search";
 import ShowMoreHorizontalIcon from "@atlaskit/icon/core/show-more-horizontal";
+import DownloadIcon from "@atlaskit/icon/core/download";
+import TableColumnsDistributeIcon from "@atlaskit/icon/core/table-columns-distribute";
+import FilterIcon from "@atlaskit/icon/core/filter";
 import Breadcrumbs, { BreadcrumbsItem } from "@atlaskit/breadcrumbs";
 
 
@@ -451,21 +454,19 @@ const ratingAppearance = (rating: string): "success" | "inprogress" | "default" 
   return "removed";
 };
 
-const head = {
-  cells: [
-    { key: "name", content: "NAME", isSortable: true },
-    { key: "startDate", content: "START DATE", isSortable: true },
-    { key: "eligibilityDate", content: "ELIGIBILITY DATE", isSortable: true },
-    { key: "jobLevel", content: "JOB LEVEL", isSortable: true },
-    { key: "jobFamily", content: "JOB FAMILY", isSortable: true },
-    { key: "zone", content: "ZONE", isSortable: true },
-    { key: "currentBaseSalary", content: "CURRENT BASE SALARY", isSortable: true },
-    { key: "srpPercent", content: "% OF SRP", isSortable: true },
-    { key: "currentEquity", content: "CURRENT EQUITY (RSUs)" },
-    { key: "nextYearEquity", content: "NEXT YEAR EQUITY" },
-    { key: "fy24H2Rating", content: "FY24 H2 RATING", isSortable: true },
-  ],
-};
+const allColumns = [
+  { key: "name", content: "NAME", isSortable: true, locked: true },
+  { key: "startDate", content: "START DATE", isSortable: true },
+  { key: "eligibilityDate", content: "ELIGIBILITY DATE", isSortable: true },
+  { key: "jobLevel", content: "JOB LEVEL", isSortable: true },
+  { key: "jobFamily", content: "JOB FAMILY", isSortable: true },
+  { key: "zone", content: "ZONE", isSortable: true },
+  { key: "currentBaseSalary", content: "CURRENT BASE SALARY", isSortable: true },
+  { key: "srpPercent", content: "% OF SRP", isSortable: true },
+  { key: "currentEquity", content: "CURRENT EQUITY (RSUs)" },
+  { key: "nextYearEquity", content: "NEXT YEAR EQUITY" },
+  { key: "fy24H2Rating", content: "FY24 H2 RATING", isSortable: true },
+];
 
 const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: string) => void) => {
   const filtered = searchQuery
@@ -577,8 +578,10 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
   const [searchQuery, setSearchQuery] = useState("");
   const [managerFilter, setManagerFilter] = useState<string | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [columnsOpen, setColumnsOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>({ jobLevel: null, jobFamily: null, zone: null, rating: null });
   const [enabledFilters, setEnabledFilters] = useState<Set<keyof Filters>>(new Set());
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set());
 
   const activeFilterCount = Object.values(filters).filter(Boolean).length;
 
@@ -599,7 +602,71 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
     ? employees.find((e) => e.id === currentManagerId)
     : null;
 
-  const rows = createRows(filteredEmployees, searchQuery, onDrillDown);
+  const allRows = createRows(filteredEmployees, searchQuery, onDrillDown);
+
+  const visibleColumnIndices = useMemo(() => {
+    return allColumns.map((col, i) => ({ ...col, originalIndex: i })).filter((col) => !hiddenColumns.has(col.key));
+  }, [hiddenColumns]);
+
+  const head = useMemo(() => ({
+    cells: visibleColumnIndices.map((col) => ({
+      key: col.key,
+      content: col.content,
+      isSortable: col.isSortable,
+    })),
+  }), [visibleColumnIndices]);
+
+  const rows = useMemo(() => {
+    return allRows.map((row) => ({
+      ...row,
+      cells: visibleColumnIndices.map((col) => row.cells[col.originalIndex]),
+    }));
+  }, [allRows, visibleColumnIndices]);
+
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setManagerFilter(null);
+    setFilters({ jobLevel: null, jobFamily: null, zone: null, rating: null });
+    setEnabledFilters(new Set());
+  };
+
+  const handleExportCSV = () => {
+    const headers = visibleColumnIndices.map((col) => col.content);
+    const csvRows = filteredEmployees
+      .filter((e) =>
+        !searchQuery ||
+        `${e.firstName} ${e.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        e.jobFamily.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      .map((e) => {
+        const allValues: Record<string, string> = {
+          name: `${e.firstName} ${e.lastName}`,
+          startDate: e.startDate,
+          eligibilityDate: e.eligibilityDate,
+          jobLevel: e.jobLevel,
+          jobFamily: e.jobFamily,
+          zone: e.zone,
+          currentBaseSalary: formatCurrency(e.currentBaseSalary),
+          srpPercent: e.srpPercent,
+          currentEquity: e.currentEquity,
+          nextYearEquity: e.nextYearEquity,
+          fy24H2Rating: e.fy24H2Rating,
+        };
+        return visibleColumnIndices.map((col) => {
+          const val = allValues[col.key] || "";
+          return `"${val.replace(/"/g, '""')}"`;
+        });
+      });
+
+    const csv = [headers.join(","), ...csvRows.map((r) => r.join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "team-overview-export.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   const managerOptions = [
     { label: "All managers", value: "" },
@@ -730,6 +797,61 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
             </Button>
           )}
         />
+
+        <div style={{ marginLeft: "auto", display: "flex", gap: token("space.100") }}>
+          <Popup
+            isOpen={columnsOpen}
+            onClose={() => setColumnsOpen(false)}
+            placement="bottom-end"
+            shouldRenderToParent
+            content={() => (
+              <div style={{ padding: token("space.200"), width: 240 }}>
+                <div style={{ marginBottom: token("space.100") }}>
+                  <Text size="small" weight="semibold" color="color.text.subtlest">SHOW COLUMNS</Text>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
+                  {allColumns.map((col) => (
+                    <Checkbox
+                      key={col.key}
+                      label={col.content.charAt(0) + col.content.slice(1).toLowerCase()}
+                      isChecked={!hiddenColumns.has(col.key)}
+                      isDisabled={col.locked}
+                      onChange={() => {
+                        if (col.locked) return;
+                        setHiddenColumns((prev) => {
+                          const next = new Set(prev);
+                          if (next.has(col.key)) {
+                            next.delete(col.key);
+                          } else {
+                            next.add(col.key);
+                          }
+                          return next;
+                        });
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            trigger={(triggerProps) => (
+              <Button
+                {...triggerProps}
+                appearance="default"
+                iconBefore={TableColumnsDistributeIcon}
+                onClick={() => setColumnsOpen(!columnsOpen)}
+              >
+                Columns
+              </Button>
+            )}
+          />
+          <Button
+            appearance="default"
+            iconBefore={DownloadIcon}
+            onClick={handleExportCSV}
+          >
+            Export
+          </Button>
+        </div>
       </div>
 
       {managerStack.length > 0 && (
@@ -753,14 +875,49 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
         </Breadcrumbs>
       )}
 
-      <div className="charlie-table">
-        <DynamicTable
-          head={head}
-          rows={rows}
-          defaultSortKey="name"
-          defaultSortOrder="ASC"
-        />
-      </div>
+      {rows.length === 0 ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: `${token("space.600")} ${token("space.400")}`,
+            backgroundColor: token("elevation.surface"),
+            borderRadius: "6px",
+            border: `1px solid ${token("color.border")}`,
+            gap: token("space.200"),
+          }}
+        >
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              backgroundColor: token("color.background.neutral"),
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FilterIcon label="" color={token("color.icon.subtle")} LEGACY_size="large" />
+          </div>
+          <Heading size="small">No results found</Heading>
+          <Text color="color.text.subtlest">Try adjusting your filters or search query</Text>
+          <Button appearance="primary" onClick={clearAllFilters}>
+            Clear all filters
+          </Button>
+        </div>
+      ) : (
+        <div className="charlie-table">
+          <DynamicTable
+            head={head}
+            rows={rows}
+            defaultSortKey="name"
+            defaultSortOrder="ASC"
+          />
+        </div>
+      )}
     </div>
   );
 }
