@@ -957,10 +957,6 @@ function EligibilityRulesStep() {
         </div>
         {rulesExpanded && (
         <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-          <Button appearance="primary" iconBefore={AddIcon} onClick={() => setShowNewRule(true)}>New Rule</Button>
-        </div>
-
         <SectionMessage appearance="information">
           <Text size="small">
             Rules use AND logic — employees must match all active rules to be eligible.
@@ -1002,6 +998,12 @@ function EligibilityRulesStep() {
             </div>
           ))}
         </div>
+
+        {!showNewRule && (
+          <div style={{ display: "flex", justifyContent: "flex-start" }}>
+            <Button appearance="subtle" iconBefore={AddIcon} onClick={() => setShowNewRule(true)}>New Rule</Button>
+          </div>
+        )}
 
         {showNewRule && (
           <div style={{ marginTop: token("space.300"), paddingTop: token("space.300"), borderTop: `1px solid ${token("color.border")}` }}>
@@ -1095,21 +1097,20 @@ function EligibilityRulesStep() {
         </div>
         <div
           style={{
-            marginTop: token("space.200"),
             border: `2px dashed ${token("color.border")}`,
             borderRadius: "6px",
-            padding: token("space.400"),
-            textAlign: "center",
+            padding: `${token("space.200")} ${token("space.300")}`,
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
-            gap: token("space.150"),
+            gap: token("space.200"),
             cursor: "pointer",
           }}
         >
           <UploadIcon label="" color={token("color.icon.subtle")} />
-          <Text size="small" weight="semibold">Upload exclusion list</Text>
-          <Text size="UNSAFE_small" color="color.text.subtlest">CSV with a single column: Employee ID</Text>
+          <div style={{ flex: 1 }}>
+            <Text size="small" weight="semibold">Upload exclusion list</Text>
+            <div><Text size="UNSAFE_small" color="color.text.subtlest">CSV with a single column: Employee ID</Text></div>
+          </div>
           <Button appearance="primary" iconBefore={UploadIcon}>Choose File</Button>
         </div>
 
