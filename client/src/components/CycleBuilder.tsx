@@ -856,33 +856,36 @@ function EligibilityRulesStep() {
         <Text size="small" color="color.text.subtlest">Define data sources, exclusion lists, and rules to determine which employees are eligible for this cycle</Text>
       </div>
 
-      <div style={{ display: "flex", gap: token("space.300"), alignItems: "stretch" }}>
-        <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
-          <Text size="UNSAFE_small" color="color.text.subtlest">Total from Workday</Text>
-          <div style={{ marginTop: token("space.050") }}>
-            <Heading size="small">52</Heading>
-          </div>
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
+          <Heading size="xsmall">Eligible Employees</Heading>
+          <Button appearance="default" iconBefore={DownloadIcon}>Export Eligible Employees</Button>
         </div>
-        <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
-          <Text size="UNSAFE_small" color="color.text.subtlest">Excluded by Rules</Text>
-          <div style={{ marginTop: token("space.050") }}>
-            <Heading size="small">7</Heading>
+        <div style={{ display: "flex", gap: token("space.300") }}>
+          <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
+            <Text size="UNSAFE_small" color="color.text.subtlest">Total from Workday</Text>
+            <div style={{ marginTop: token("space.050") }}>
+              <Heading size="small">52</Heading>
+            </div>
           </div>
-        </div>
-        <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
-          <Text size="UNSAFE_small" color="color.text.subtlest">Manually Excluded</Text>
-          <div style={{ marginTop: token("space.050") }}>
-            <Heading size="small">3</Heading>
+          <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
+            <Text size="UNSAFE_small" color="color.text.subtlest">Excluded by Rules</Text>
+            <div style={{ marginTop: token("space.050") }}>
+              <Heading size="small">7</Heading>
+            </div>
           </div>
-        </div>
-        <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border.success")}`, backgroundColor: token("color.background.success"), flex: 1 }}>
-          <Text size="UNSAFE_small" color="color.text.success">Eligible Employees</Text>
-          <div style={{ marginTop: token("space.050") }}>
-            <Heading size="small">42</Heading>
+          <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border")}`, flex: 1 }}>
+            <Text size="UNSAFE_small" color="color.text.subtlest">Manually Excluded</Text>
+            <div style={{ marginTop: token("space.050") }}>
+              <Heading size="small">3</Heading>
+            </div>
           </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Button appearance="subtle" iconBefore={DownloadIcon}>Export</Button>
+          <div style={{ padding: token("space.200"), borderRadius: "6px", border: `1px solid ${token("color.border.success")}`, backgroundColor: token("color.background.success"), flex: 1 }}>
+            <Text size="UNSAFE_small" color="color.text.success">Eligible Employees</Text>
+            <div style={{ marginTop: token("space.050") }}>
+              <Heading size="small">42</Heading>
+            </div>
+          </div>
         </div>
       </div>
 
