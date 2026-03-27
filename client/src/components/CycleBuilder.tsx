@@ -467,19 +467,14 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
           alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <Button
-            appearance="subtle"
-            iconBefore={ChevronLeftIcon}
-            onClick={handleBack}
-            isDisabled={currentStep === 0}
-          >
-            Back
-          </Button>
-          <Button appearance="subtle" onClick={onBack}>
-            Cancel
-          </Button>
-        </div>
+        <Button
+          appearance="subtle"
+          iconBefore={ChevronLeftIcon}
+          onClick={handleBack}
+          isDisabled={currentStep === 0}
+        >
+          Back
+        </Button>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.200") }}>
           {lastSaved && (
             <div style={{ display: "flex", alignItems: "center", gap: token("space.075") }}>
@@ -489,6 +484,9 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
               </Text>
             </div>
           )}
+          <Button appearance="subtle" onClick={onBack}>
+            Cancel
+          </Button>
           <Button
             appearance={currentStep === STEPS.length - 1 || currentStep === 0 ? "primary" : "default"}
             iconAfter={ChevronRightIcon}
