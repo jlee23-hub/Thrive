@@ -490,7 +490,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             </div>
           )}
           <Button
-            appearance={currentStep === STEPS.length - 1 ? "primary" : "default"}
+            appearance={currentStep === STEPS.length - 1 || currentStep === 0 ? "primary" : "default"}
             iconAfter={ChevronRightIcon}
             onClick={handleNext}
           >
