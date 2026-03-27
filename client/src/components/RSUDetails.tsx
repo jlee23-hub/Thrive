@@ -8,6 +8,8 @@ import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
 import Button from "@atlaskit/button/new";
 import Range from "@atlaskit/range";
 import {
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -438,6 +440,154 @@ export default function RSUDetails() {
                 {unvestedUnits.toLocaleString()} unvested units
               </Text>
             </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop: token("space.300") }}>
+          <Heading size="small">Vesting Schedule</Heading>
+          <div style={{ marginTop: token("space.200"), height: 320 }}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={1}>
+              <BarChart data={vestingScheduleData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
+                <XAxis
+                  dataKey="date"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
+                  interval={1}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
+                  tickFormatter={(v) => `$${(v / 1000).toFixed(0)}K`}
+                  width={60}
+                />
+                <RechartsTooltip
+                  content={({ active, payload, label }) => {
+                    if (!active || !payload?.length) return null;
+                    const dataPoint = vestingScheduleData.find((d) => d.date === label);
+                    const totalValueInPeriod = dataPoint?.grantBreakdown?.reduce((sum, g) => sum + g.value, 0) || 0;
+                    const vestedUnits = dataPoint?.vested || 0;
+                    const unvestedUnits = dataPoint?.unvested || 0;
+                    const now = new Date();
+                    const [monthStr, yearStr] = (label as string).split(" ");
+                    const monthIndex = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthStr);
+                    const periodDate = new Date(parseInt(yearStr), monthIndex);
+                    const isFuture = periodDate > now;
+                    return (
+                      <div style={{
+                        backgroundColor: token("elevation.surface.overlay"),
+                        border: `1px solid ${token("color.border")}`,
+                        borderRadius: 8,
+                        fontSize: 13,
+                        padding: token("space.200"),
+                        minWidth: 260,
+                        boxShadow: token("elevation.shadow.overlay"),
+                      }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: token("space.100") }}>
+                          <span style={{ fontWeight: 700, color: token("color.text") }}>{label}</span>
+                          <span style={{ fontWeight: 700, color: token("color.text") }}>
+                            ${totalValueInPeriod.toLocaleString()}
+                          </span>
+                        </div>
+                        {payload.map((entry) => {
+                          const isVested = entry.name === "vested";
+                          const unitCount = isVested ? vestedUnits : unvestedUnits;
+                          return (
+                            <div key={entry.name} style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: token("space.100"),
+                              marginTop: token("space.050"),
+                            }}>
+                              <div style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 2,
+                                backgroundColor: entry.color,
+                                flexShrink: 0,
+                              }} />
+                              <span style={{
+                                color: isVested
+                                  ? token("color.text.success")
+                                  : token("color.text.subtlest"),
+                                fontWeight: 500,
+                              }}>
+                                {isVested ? "Vested" : "Unvested"}:
+                              </span>
+                              <span style={{ color: token("color.text"), fontWeight: 600 }}>
+                                ${(entry.value as number).toLocaleString()}
+                              </span>
+                              <span style={{ color: token("color.text.subtlest"), fontSize: 11 }}>
+                                ({unitCount.toLocaleString()} units)
+                              </span>
+                            </div>
+                          );
+                        })}
+                        {dataPoint?.grantBreakdown && dataPoint.grantBreakdown.length > 0 && (
+                          <div style={{
+                            marginTop: token("space.100"),
+                            paddingTop: token("space.100"),
+                            borderTop: `1px solid ${token("color.border")}`,
+                          }}>
+                            {dataPoint.grantBreakdown.map((gb, i) => (
+                              <div key={i} style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                marginTop: i > 0 ? token("space.050") : 0,
+                                fontSize: 12,
+                              }}>
+                                <span style={{ color: token("color.text.subtlest") }}>
+                                  {gb.units.toLocaleString()} units from {gb.grantDate} grant
+                                </span>
+                                <span style={{ color: token("color.text.subtle"), fontWeight: 500 }}>
+                                  ${gb.value.toLocaleString()}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <div style={{
+                          marginTop: token("space.100"),
+                          paddingTop: token("space.075"),
+                          borderTop: `1px solid ${token("color.border")}`,
+                          fontSize: 11,
+                          color: isFuture ? token("color.text.warning") : token("color.text.subtlest"),
+                          fontStyle: "italic",
+                        }}>
+                          {isFuture
+                            ? "Projected value based on modeled share price"
+                            : "Vested equity valued at share price on vest date"}
+                        </div>
+                      </div>
+                    );
+                  }}
+                />
+                <Bar
+                  dataKey="vestedValue"
+                  stackId="1"
+                  fill={token("color.chart.success.bold")}
+                  name="vested"
+                  radius={[0, 0, 0, 0]}
+                />
+                <Bar
+                  dataKey="unvestedValue"
+                  stackId="1"
+                  fill={token("color.background.neutral")}
+                  name="unvested"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Legend
+                  formatter={(value: string) => (
+                    <span style={{ color: token("color.text"), fontSize: 12 }}>
+                      {value === "vested" ? "Vested Units" : "Unvested Units"}
+                    </span>
+                  )}
+                  iconType="square"
+                />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
