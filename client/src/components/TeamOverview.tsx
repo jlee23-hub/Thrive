@@ -453,7 +453,6 @@ const ratingAppearance = (rating: string): "success" | "inprogress" | "default" 
 const head = {
   cells: [
     { key: "name", content: "NAME", isSortable: true },
-    { key: "directReports", content: "DIRECT REPORTS" },
     { key: "startDate", content: "START DATE", isSortable: true },
     { key: "eligibilityDate", content: "ELIGIBILITY DATE", isSortable: true },
     { key: "jobLevel", content: "JOB LEVEL", isSortable: true },
@@ -498,57 +497,12 @@ const createRows = (data: Employee[], searchQuery: string, onDrillDown?: (id: st
                 {employee.firstName} {employee.lastName}
               </Text>
             )}
+            {(() => {
+              const reportCount = employees.filter((e) => e.managerId === employee.id).length;
+              return reportCount > 0 ? <Lozenge appearance="new">{reportCount}</Lozenge> : null;
+            })()}
           </div>
         ),
-      },
-      {
-        key: `directReports-${employee.id}`,
-        content: (() => {
-          const reports = employees.filter((e) => e.managerId === employee.id);
-          if (reports.length === 0) {
-            return <Text size="small" color="color.text.subtlest">—</Text>;
-          }
-          return (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {reports.slice(0, 4).map((r, i) => (
-                <div
-                  key={r.id}
-                  title={`${r.firstName} ${r.lastName}`}
-                  style={{
-                    marginLeft: i > 0 ? -8 : 0,
-                    position: "relative" as const,
-                    zIndex: reports.length - i,
-                  }}
-                >
-                  <Avatar size="small" src={r.avatarUrl} name={`${r.firstName} ${r.lastName}`} />
-                </div>
-              ))}
-              {reports.length > 4 && (
-                <div
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: "50%",
-                    backgroundColor: token("color.background.neutral"),
-                    color: token("color.text.subtlest"),
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 600,
-                    fontSize: 10,
-                    flexShrink: 0,
-                    marginLeft: -8,
-                    border: `2px solid ${token("elevation.surface.raised")}`,
-                    position: "relative" as const,
-                    zIndex: 0,
-                  }}
-                >
-                  +{reports.length - 4}
-                </div>
-              )}
-            </div>
-          );
-        })(),
       },
       {
         key: employee.startDate,
