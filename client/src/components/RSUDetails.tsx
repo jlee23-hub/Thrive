@@ -70,7 +70,7 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
   return (
     <div style={cardStyle}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.200"), marginBottom: token("space.400") }}>
-        <Heading size="small">Grant Details For</Heading>
+        <Heading size="medium">Grant Details For</Heading>
         <div ref={dropdownRef} style={{ position: "relative" }}>
           <div
             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -322,25 +322,24 @@ function EquitySummary({ grants: allGrants, grantYearFilter, setGrantYearFilter,
   return (
     <div style={cardStyle}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Heading size="small">Equity Summary</Heading>
-        <div style={{ display: "flex", gap: token("space.050"), backgroundColor: token("color.background.neutral"), borderRadius: 6, padding: 2 }}>
+        <Heading size="medium">Equity Summary</Heading>
+        <div style={{ display: "flex", gap: token("space.050"), backgroundColor: token("color.background.neutral"), borderRadius: "6px", padding: token("space.025") }}>
           {["All", ...Array.from(new Set(allGrants.map((g) => g.grantDate.split(", ")[1]))).sort()].map((year) => (
             <button
               key={year}
               onClick={() => setGrantYearFilter(year)}
               style={{
                 padding: `${token("space.025")} ${token("space.150")}`,
-                borderRadius: 4,
+                borderRadius: "4px",
                 border: "none",
                 cursor: "pointer",
-                fontSize: 12,
                 fontWeight: grantYearFilter === year ? 600 : 400,
                 backgroundColor: grantYearFilter === year ? token("elevation.surface.raised") : "transparent",
                 color: grantYearFilter === year ? token("color.text") : token("color.text.subtlest"),
                 boxShadow: grantYearFilter === year ? token("elevation.shadow.raised") : "none",
               }}
             >
-              {year}
+              <Text size="UNSAFE_small" color={grantYearFilter === year ? "color.text" : "color.text.subtlest"} weight={grantYearFilter === year ? "semibold" : "regular"}>{year}</Text>
             </button>
           ))}
         </div>
@@ -580,7 +579,7 @@ export default function RSUDetails() {
       </div>
 
       <div style={cardStyle}>
-        <Heading size="small">Overview</Heading>
+        <Heading size="medium">Overview</Heading>
         <div style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
