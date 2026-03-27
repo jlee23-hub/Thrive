@@ -12,9 +12,10 @@ Employees can also model their RSU value at different share prices using an inte
 
 ### In Scope
 
-- **Total Rewards View** (Employee): Personalized compensation dashboard showing base salary (Workday), bonus target (Workday), and equity value (Shareworks). Each data source displays a "last synced" timestamp.
-- **RSU Modeling** (Employee): Interactive equity grant viewer with per-grant vesting schedules, vesting progress, and a share price modeling slider — all powered by Shareworks data.
+- **Total Rewards View** (Employee): Personalized compensation dashboard showing base salary (Workday), bonus target (Workday), and equity value (Shareworks). Each data source displays a "last synced" timestamp. The page displays a personalized welcome heading: "Welcome to your Total Rewards Portal [First Name]".
+- **RSU Modeling** (Employee): Interactive equity grant viewer with per-grant vesting schedules, vesting progress, and a share price modeling slider — all powered by Shareworks data. The share price slider only affects unvested equity value; vested equity value is always calculated using the historical share price at each vest date.
 - **Okta SSO** (Employee): Authentication via Okta OIDC/SAML; user identity resolved to their employee identifier for data scoping.
+- **About / Resources Page** (Employee): A dedicated page showing external resource links (Atlassian Compensation, About Base Salary, About Equity, About Bonus, Stock Central) and a legal disclaimer with standard informational language about estimates and tax considerations.
 
 ### Out of Scope
 
@@ -39,9 +40,10 @@ An individual contributor who wants to understand their total compensation — b
 |---|
 | See my annualized base salary, bonus target, and total equity value on a single dashboard |
 | View all my RSU grants with vesting schedules, progress, and projected future vesting |
-| Model my equity value at different share prices to understand upside/downside |
+| Model my **unvested** equity value at different share prices to understand upside/downside, while seeing my vested value fixed at the historical price it was vested at |
 | Know when my compensation data was last synced from Workday and when my equity data was last synced from Shareworks |
 | Verify my displayed data matches what I expect from my offer letter and grant agreements |
+| Access external resources and understand legal disclaimers about the compensation data |
 
 ---
 
@@ -53,9 +55,9 @@ An individual contributor who wants to understand their total compensation — b
 |---|---|---|
 | E-1 | As an employee, I can see my annualized base salary on the Total Rewards dashboard. Source: Workday. | P0 |
 | E-2 | As an employee, I can see my bonus target percentage and calculated bonus dollar amount. Source: Workday; calculated as base salary × bonus target percentage. | P0 |
-| E-3 | As an employee, I can see my total equity value (vested + unvested) in dollars. Source: Shareworks (total shares granted × current fair market value). | P0 |
-| E-4 | As an employee, I can see my total annual compensation (base + bonus + equity) as a single headline number and as a donut chart showing the proportional breakdown. | P0 |
-| E-5 | As an employee, I can see a bar chart of my year-over-year RSU value (historical and projected future years). | P1 |
+| E-3 | As an employee, I can see my total equity value (vested + unvested) in dollars. Source: Shareworks. Vested value uses the historical share price at each vest date. Unvested value uses the modeled share price (default or slider-adjusted). | P0 |
+| E-4 | As an employee, I can see my total annual compensation (base + bonus + equity) as a single headline number and as a donut chart showing the proportional breakdown. The page displays a personalized welcome heading: "Welcome to your Total Rewards Portal [First Name]". | P0 |
+| ~~E-5~~ | ~~As an employee, I can see a bar chart of my year-over-year RSU value (historical and projected future years).~~ **Removed** — Year-over-year RSU bar chart has been descoped from the Total Rewards dashboard. | ~~P1~~ |
 | E-6 | As an employee, I can see my vested vs. unvested equity split in both dollars and units. | P0 |
 | E-7 | As an employee, I can see my Job Role and Job Level displayed on the Total Rewards page. Source: Workday. | P0 |
 | E-8 | As an employee, I can see the timestamp of when my compensation data was last synced from Workday. | P0 |
@@ -63,16 +65,17 @@ An individual contributor who wants to understand their total compensation — b
 | E-10 | As an employee, I can see a note indicating that FX rates are updated daily and the default share price used for equity calculations. | P1 |
 | E-11 | As an employee, if my Shareworks data is unavailable (e.g., new hire with no grants), I see an error message: "Equity data is currently unavailable. Please contact your administrator." The equity section is not hidden and does not show $0. | P0 |
 | E-12 | As an employee, I am authenticated via Okta SSO before accessing any the compensation tool data. My identity is resolved to my employee identifier which scopes all queries to my records only. | P0 |
+| E-13 | As an employee, I can access an "About" page from the navigation that shows external resource links (Atlassian Compensation, About Base Salary, About Equity, About Bonus, Stock Central) and a legal disclaimer. | P1 |
 
 ### Employee — RSU Modeling
 
 | # | Requirement | Priority |
 |---|---|---|
-| R-1 | As an employee, I can see all my equity grants listed with grant date, total units, vested units, vested value, total value, and vesting progress percentage. Source: Shareworks. | P0 |
-| R-2 | As an employee, I can select any individual grant and see its detailed quarterly vesting schedule displayed as a timeline (16 quarters over 4 years). | P0 |
-| R-3 | As an employee, I can see a cumulative vesting chart (stacked area) showing vested vs. unvested units over time for the selected grant. | P1 |
-| R-4 | As an employee, I can model my equity value at different share prices using an interactive slider ($20–$200). Total compensation, vested value, and unvested value update in real-time as the slider moves. | P1 |
-| R-5 | As an employee, I can see vesting progress per grant displayed as a progress bar with a percentage label. | P1 |
+| R-1 | As an employee, I can see all my equity grants listed with grant date, total units, vested units, vested value, total value, and vesting progress percentage. The section heading uses "RSUs" (no apostrophe). Source: Shareworks. | P0 |
+| R-2 | As an employee, I can see a Vesting Schedule bar chart showing vested value per period. Unvested value is not displayed in the bar chart. The bar chart does not include a legend. | P0 |
+| R-3 | As an employee, I can see a cumulative vesting line chart showing vested vs. unvested units over time for all grants. | P1 |
+| R-4 | As an employee, I can model my equity value at different share prices using an interactive slider ($20–$200). **Only unvested equity value is recalculated** when the slider moves (unvested units × modeled price). **Vested equity value is always fixed** at the historical share price on the date each tranche vested (sourced from Shareworks). Total equity value = fixed vested value + modeled unvested value. This pricing rule applies consistently across: the Total Rewards donut chart, equity summary cards, the RSU Vesting Schedule bar chart, and the cumulative vesting line chart. | P1 |
+| R-5 | As an employee, I can see vesting progress per grant displayed as a progress bar with a percentage label. The Equity Summary section includes year filter tabs ("All" plus each distinct grant year) allowing grants to be filtered by year. The grant list is scrollable when grants exceed the visible area. | P1 |
 | R-6 | As an employee, I can see the grant date and vesting start date for each grant. | P0 |
 
 ---
@@ -83,6 +86,7 @@ An individual contributor who wants to understand their total compensation — b
 
 **As an employee, I want to see my personalized total compensation on a single dashboard so I understand the full value of my package.**
 
+- The page displays a personalized welcome heading: "Welcome to your Total Rewards Portal [First Name]" above the compensation card.
 - The dashboard shows three compensation components: Base Salary (annualized, from Workday), Bonus/Commission Target (from Workday), and RSU Equity Value (from Shareworks).
 - A donut chart shows the proportional breakdown of base, bonus, and equity.
 - Total annual compensation is displayed as a single headline number (sum of all three components).
@@ -98,10 +102,22 @@ An individual contributor who wants to understand their total compensation — b
 
 - A share price slider (range: $20–$200) allows the employee to adjust the modeled share price.
 - The default share price is $80.
-- Moving the slider dynamically updates: total equity value, vested value, unvested value, and the donut chart proportions.
-- The RSU tab shows a list of all grants, each displayed as a card with: grant date, total units, vested units, vested value, total value, and a vesting progress bar.
-- Selecting a grant shows its detailed quarterly vesting schedule as a line chart (vested units over time vs. total units) and a stacked area chart (vested vs. unvested units).
+- **Vested vs. Unvested Pricing Rule:** When the slider is adjusted, only **unvested** equity value is recalculated (unvested units × modeled share price). **Vested** equity value is always fixed at the historical share price on the date each tranche vested (sourced from Shareworks). Total equity value = fixed vested value + modeled unvested value. This rule is applied consistently across all views: Total Rewards donut chart, equity summary cards, Vesting Schedule bar chart, and cumulative vesting line chart.
+- Moving the slider dynamically updates: total equity value, unvested value, and the donut chart proportions. Vested value remains unchanged.
+- The RSUs page shows all grants in an Equity Summary section, each with: grant date, total units, vested units, vested value, total value, and a vesting progress bar.
+- The Equity Summary section includes year filter tabs ("All" plus each distinct grant year) for filtering grants by year. The grant list is scrollable when grants exceed the visible area.
+- The Vesting Schedule bar chart shows only vested value per period. Unvested value is not displayed in the bar chart. No legend is shown.
+- A cumulative vesting line chart shows vested vs. unvested units over time across all grants.
+- Selecting a grant shows its detailed quarterly vesting schedule.
 - The vesting schedule covers 16 quarters (4 years) starting from the vesting start date.
+
+### Employee: Access Resources and Legal Disclaimer
+
+**As an employee, I want to access external resources about my compensation programs and understand the legal disclaimers so I can make informed decisions.**
+
+- An "About" page is accessible from the navigation.
+- The page shows a **Resources** section with external links: Atlassian Compensation, About Base Salary, About Equity, About Bonus, and Stock Central.
+- The page shows a **Legal Disclaimer** section with standard informational language about estimates, tax considerations, and the nature of the data presented.
 
 ### Employee: Know When My Data Was Last Updated
 
@@ -152,6 +168,7 @@ An individual contributor who wants to understand their total compensation — b
 3. the compensation tool resolves the employee's identity from Okta profile → fetches compensation data from Workday sync cache.
 4. the compensation tool fetches equity data from Shareworks sync cache (joined on the employee's identifier across both systems).
 5. Total Rewards page renders:
+   - Personalized heading: "Welcome to your Total Rewards Portal [First Name]".
    - Headline: Total Annual Compensation (single number).
    - Donut chart: Base Salary, Bonus Target, RSU Equity value as proportional segments.
    - Three detail sections: Base Salary (annualized), Bonus/Commission Target, RSU value.
@@ -167,15 +184,21 @@ An individual contributor who wants to understand their total compensation — b
 
 1. Employee is on the Total Rewards page.
 2. Employee adjusts the share price slider ($20–$200).
-3. Equity value, total compensation, and donut chart update in real-time as the slider moves.
+3. **Only unvested equity value updates** in real-time as the slider moves. Vested equity value remains fixed at the historical share price on each vest date. Total compensation and donut chart update accordingly.
 4. Employee navigates to the RSUs tab.
-5. Sees a list of all grants with progress bars and summary data.
-6. Selects an individual grant → detailed vesting schedule chart and stacked area chart render.
+5. Sees the Vesting Schedule bar chart (vested value only, no legend) and the Equity Summary section with year filter tabs and scrollable grant list.
+6. Selects an individual grant → detailed vesting schedule chart renders.
 7. Vesting schedule shows quarterly vesting over 4 years from the vesting start date.
 
 **Error states:**
 - No grants available (new hire): "Equity data is currently unavailable. Please contact your administrator."
 - Grant with all shares vested: Progress bar shows 100%; no future vesting events on timeline.
+
+### Flow 3: Employee Accesses Resources
+
+1. Employee clicks the "About" link in the navigation.
+2. Resources section displays with external links: Atlassian Compensation, About Base Salary, About Equity, About Bonus, and Stock Central.
+3. Legal Disclaimer section displays below with standard informational language.
 
 ---
 
@@ -193,10 +216,16 @@ An individual contributor who wants to understand their total compensation — b
 | A8 | The default share price for RSU modeling is $80. The slider range is $20–$200. |
 | A9 | Sync timestamps represent the time data was pulled from the source system. Timestamps are displayed per-source (Workday and Shareworks separately) so employees know the freshness of each data source independently. |
 | A10 | The Total Rewards view is read-only. Employees cannot edit any compensation data. |
+| A11 | Vested equity value is always calculated using the historical share price at each vest date (sourced from Shareworks). Only unvested equity value responds to the modeled share price slider. This distinction is applied consistently across all views and charts. |
+
+---
+
+## Cross-Reference: Team Overview Table Update
+
+The "DIRECT REPORTS" column has been removed from the Team Overview table (Manager view). Instead, managers display a small lozenge with their direct report count next to their name in the NAME column. This change is documented here for cross-reference; full details are in the Manager PRD.
 
 ---
 
 ## Open Questions and Clarifications Needed
 
 No open questions at this time. All decisions have been resolved.
-
