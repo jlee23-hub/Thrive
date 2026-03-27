@@ -761,11 +761,28 @@ export default function RSUDetails() {
                   />
                   <Line
                     type="monotone"
+                    dataKey="unvested"
+                    stroke={token("color.border")}
+                    strokeWidth={1}
+                    strokeDasharray="4 4"
+                    dot={{ fill: token("color.border"), r: 3 }}
+                    name="Unvested Units"
+                  />
+                  <Line
+                    type="monotone"
                     dataKey="vested"
                     stroke="#36B37E"
                     strokeWidth={2}
                     dot={{ fill: "#36B37E", r: 3 }}
                     name="Vested Units"
+                  />
+                  <Legend
+                    formatter={(value: string) => (
+                      <span style={{ color: token("color.text"), fontSize: 12 }}>
+                        {value}
+                      </span>
+                    )}
+                    iconType="circle"
                   />
                 </LineChart>
               </ResponsiveContainer>
