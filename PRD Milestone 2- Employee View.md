@@ -219,17 +219,3 @@ An individual contributor who wants to understand their total compensation — b
 | A10 | The Total Rewards view is read-only. Employees cannot edit any compensation data. |
 | A11 | Vested equity value is always calculated using the historical share price at each vest date (sourced from Shareworks). Only unvested equity value responds to the modeled share price slider. This distinction is applied consistently across all views and charts. |
 
----
-
-## Cross-Reference: Team Overview Table Update
-
-The "DIRECT REPORTS" column has been removed from the Team Overview table (Manager view). Instead, managers display a small lozenge with their direct report count next to their name in the NAME column. This change is documented here for cross-reference; full details are in the Manager PRD.
-
----
-
-## Open Questions and Clarifications Needed
-
-| # | Question | Status |
-|---|---|---|
-| Q1 | **Okta SSO (E-12):** The PRD lists Okta SSO as P0 and in scope, but it is not currently implemented. Is this expected to be built in this milestone, or is it deferred to a later integration phase? | Open |
-| Q2 | **About page link destinations (E-13):** The external links (Atlassian Compensation, About Base Salary, About Equity, About Bonus, Stock Central) currently point to placeholder URLs. What are the actual destination URLs for each link? | Open |
