@@ -689,18 +689,18 @@ export default function DataManagement() {
                             <table style={{ width: "100%", borderCollapse: "collapse" }}>
                               <thead>
                                 <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-                                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Field</th>
-                                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Column</th>
-                                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Description</th>
-                                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "center", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Status</th>
+                                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Field</Text></th>
+                                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Column</Text></th>
+                                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Description</Text></th>
+                                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "center" }}><Text size="UNSAFE_small" weight="semibold">Status</Text></th>
                                 </tr>
                               </thead>
                               <tbody>
                                 {table.fields.map((f, i) => (
                                   <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                                    <td style={{ padding: `${token("space.100")} ${token("space.150")}`, fontSize: "13px", fontWeight: 500, color: token("color.text") }}>{f.field}</td>
-                                    <td style={{ padding: `${token("space.100")} ${token("space.150")}`, fontSize: "12px", color: token("color.text.subtlest"), fontFamily: "monospace" }}>{f.column}</td>
-                                    <td style={{ padding: `${token("space.100")} ${token("space.150")}`, fontSize: "12px", color: token("color.text.subtlest") }}>{f.desc}</td>
+                                    <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}><Text size="small" weight="medium">{f.field}</Text></td>
+                                    <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}><Text size="UNSAFE_small" color="color.text.subtlest"><code style={{ fontFamily: "monospace" }}>{f.column}</code></Text></td>
+                                    <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}><Text size="UNSAFE_small" color="color.text.subtlest">{f.desc}</Text></td>
                                     <td style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "center" }}>
                                       {f.isUpdated ? (
                                         <Lozenge appearance="moved">Updated</Lozenge>
@@ -760,13 +760,13 @@ export default function DataManagement() {
                     <table style={{ width: "100%", borderCollapse: "collapse" }}>
                       <thead>
                         <tr style={{ borderBottom: `2px solid ${token("color.border")}`, backgroundColor: token("elevation.surface.sunken") }}>
-                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text"), width: "32px" }}></th>
-                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Source Field ({selectedSourceData.name})</th>
-                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "12px", fontWeight: 600, color: token("color.text"), width: "40px" }}></th>
-                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>System Field</th>
-                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Data Type</th>
-                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Transform</th>
-                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Status</th>
+                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", width: "32px" }}></th>
+                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Source Field ({selectedSourceData.name})</Text></th>
+                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", width: "40px" }}></th>
+                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">System Field</Text></th>
+                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Data Type</Text></th>
+                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Transform</Text></th>
+                          <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}><Text size="UNSAFE_small" weight="semibold">Status</Text></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -779,7 +779,7 @@ export default function DataManagement() {
                               <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
                                 <Text size="small" weight="medium">{mapping.sourceField}</Text>
                                 {mapping.isRequired && (
-                                  <span style={{ color: token("color.text.danger"), fontSize: "12px" }}>*</span>
+                                  <Text size="UNSAFE_small" color="color.text.danger">*</Text>
                                 )}
                               </div>
                             </td>
@@ -788,9 +788,7 @@ export default function DataManagement() {
                             </td>
                             <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                               {mapping.isMapped ? (
-                                <span style={{ fontFamily: "monospace", fontSize: "12px", color: token("color.text"), backgroundColor: token("color.background.neutral"), padding: `${token("space.025")} ${token("space.075")}`, borderRadius: "4px" }}>
-                                  {mapping.thriveField}
-                                </span>
+                                <Text size="UNSAFE_small"><code style={{ fontFamily: "monospace", backgroundColor: token("color.background.neutral"), padding: `${token("space.025")} ${token("space.075")}`, borderRadius: "4px" }}>{mapping.thriveField}</code></Text>
                               ) : (
                                 <Text size="small" color="color.text.disabled">Not mapped</Text>
                               )}
@@ -800,9 +798,7 @@ export default function DataManagement() {
                             </td>
                             <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                               {mapping.transform ? (
-                                <span style={{ fontFamily: "monospace", fontSize: "11px", color: token("color.text.subtlest"), backgroundColor: token("color.background.neutral"), padding: `${token("space.025")} ${token("space.075")}`, borderRadius: "4px" }}>
-                                  {mapping.transform}
-                                </span>
+                                <Text size="UNSAFE_small" color="color.text.subtlest"><code style={{ fontFamily: "monospace", backgroundColor: token("color.background.neutral"), padding: `${token("space.025")} ${token("space.075")}`, borderRadius: "4px" }}>{mapping.transform}</code></Text>
                               ) : (
                                 <Text size="UNSAFE_small" color="color.text.disabled">—</Text>
                               )}
@@ -910,11 +906,9 @@ export default function DataManagement() {
                               padding: token("space.150"),
                               borderRadius: "6px",
                               backgroundColor: token("elevation.surface.sunken"),
-                              fontSize: "12px",
-                              color: token("color.text.subtlest"),
                               lineHeight: "18px",
                             }}>
-                              {error.details}
+                              <Text size="UNSAFE_small" color="color.text.subtlest">{error.details}</Text>
                             </div>
                           )}
                           {!error.resolved && (
@@ -966,14 +960,14 @@ export default function DataManagement() {
                   </colgroup>
                   <thead>
                     <tr style={{ borderBottom: `2px solid ${token("color.border")}`, backgroundColor: token("elevation.surface.sunken") }}>
-                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Timestamp</th>
-                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Source</th>
-                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Table</th>
-                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Status</th>
-                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Records</th>
-                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Failed</th>
-                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Duration</th>
-                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "12px", fontWeight: 600, color: token("color.text") }}>Initiated By</th>
+                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Timestamp</Text></th>
+                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Source</Text></th>
+                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Table</Text></th>
+                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center" }}><Text size="UNSAFE_small" weight="semibold">Status</Text></th>
+                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right" }}><Text size="UNSAFE_small" weight="semibold">Records</Text></th>
+                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right" }}><Text size="UNSAFE_small" weight="semibold">Failed</Text></th>
+                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "right" }}><Text size="UNSAFE_small" weight="semibold">Duration</Text></th>
+                      <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left" }}><Text size="UNSAFE_small" weight="semibold">Initiated By</Text></th>
                     </tr>
                   </thead>
                   <tbody>

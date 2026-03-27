@@ -309,7 +309,7 @@ export default function Home() {
             <CustomTitle>
               <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
                 <SpreadsheetIcon label="Compensation" color={token("color.icon.brand")} />
-                <span style={{ color: token("color.text"), fontWeight: 800 }}>Compensation</span>
+                <Text weight="bold">Compensation</Text>
               </div>
             </CustomTitle>
           </TopNavStart>

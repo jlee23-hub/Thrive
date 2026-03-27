@@ -82,9 +82,6 @@ const cardStyle: React.CSSProperties = {
 const thStyle: React.CSSProperties = {
   padding: `${token("space.100")} ${token("space.200")}`,
   textAlign: "left",
-  fontSize: "11px",
-  fontWeight: 600,
-  color: token("color.text.subtlest"),
   textTransform: "uppercase" as const,
   letterSpacing: "0.5px",
   whiteSpace: "nowrap" as const,
@@ -94,8 +91,6 @@ const thStyle: React.CSSProperties = {
 
 const tdStyle: React.CSSProperties = {
   padding: `${token("space.100")} ${token("space.200")}`,
-  fontSize: "13px",
-  color: token("color.text"),
   borderBottom: `1px solid ${token("color.border")}`,
   verticalAlign: "middle",
 };
@@ -155,8 +150,8 @@ export default function SystemSettings() {
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr>
-                    <th style={thStyle}>Area</th>
-                    <th style={thStyle}>Permission</th>
+                    <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Area</Text></th>
+                    <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Permission</Text></th>
                   </tr>
                 </thead>
                 <tbody>

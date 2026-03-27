@@ -95,9 +95,6 @@ function RangeBar({ min, max, globalMax }: { min: number; max: number; globalMax
 const thStyle: React.CSSProperties = {
   padding: `${token("space.100")} ${token("space.150")}`,
   textAlign: "left",
-  fontSize: 11,
-  fontWeight: 600,
-  color: token("color.text.subtlest"),
   textTransform: "uppercase",
   letterSpacing: "0.5px",
   whiteSpace: "nowrap",
@@ -116,7 +113,6 @@ const tdStyle: React.CSSProperties = {
   padding: `${token("space.075")} ${token("space.150")}`,
   verticalAlign: "middle",
   whiteSpace: "nowrap",
-  fontSize: 13,
 };
 
 const tdRightStyle: React.CSSProperties = {
@@ -221,26 +217,26 @@ export default function SalaryBands() {
                     onChange={toggleAll}
                   />
                 </th>
-                <th style={{ ...thStyle, position: "sticky", left: 0, zIndex: 2, backgroundColor: token("elevation.surface.sunken"), minWidth: 260 }}>Name</th>
-                <th style={thRightStyle}>Base Pay Min</th>
-                <th style={thRightStyle}>SRP (Min)</th>
-                <th style={thRightStyle}>Base Pay Max</th>
-                <th style={{ ...thStyle, minWidth: 140 }}>Base Pay Range</th>
-                <th style={thRightStyle}>Target Variable %</th>
-                <th style={thRightStyle}>Total Equity Value Min</th>
-                <th style={thRightStyle}>Equity Max</th>
-                <th style={{ ...thStyle, minWidth: 140 }}>Total Equity Value Range</th>
-                <th style={thStyle}>Function</th>
-                <th style={thStyle}>Leader</th>
-                <th style={thStyle}>Family</th>
-                <th style={thStyle}>Level</th>
-                <th style={thStyle}>Type</th>
-                <th style={thStyle}>Ladder Name</th>
-                <th style={thStyle}>Track</th>
-                <th style={thRightStyle}>Payments</th>
-                <th style={thStyle}>Currency</th>
-                <th style={thStyle}>Equity Currency</th>
-                <th style={thStyle}>HRIS Job Code</th>
+                <th style={{ ...thStyle, position: "sticky", left: 0, zIndex: 2, backgroundColor: token("elevation.surface.sunken"), minWidth: 260 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Name</Text></th>
+                <th style={thRightStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Base Pay Min</Text></th>
+                <th style={thRightStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">SRP (Min)</Text></th>
+                <th style={thRightStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Base Pay Max</Text></th>
+                <th style={{ ...thStyle, minWidth: 140 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Base Pay Range</Text></th>
+                <th style={thRightStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Target Variable %</Text></th>
+                <th style={thRightStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Total Equity Value Min</Text></th>
+                <th style={thRightStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Equity Max</Text></th>
+                <th style={{ ...thStyle, minWidth: 140 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Total Equity Value Range</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Function</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Leader</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Family</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Level</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Type</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Ladder Name</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Track</Text></th>
+                <th style={thRightStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Payments</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Currency</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Equity Currency</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">HRIS Job Code</Text></th>
               </tr>
             </thead>
             <tbody>
@@ -264,14 +260,14 @@ export default function SalaryBands() {
                     </div>
                   </td>
                   <td style={tdRightStyle}>{formatCurrency(row.basePayMin)}</td>
-                  <td style={{ ...tdRightStyle, fontWeight: 600 }}>{formatCurrency(row.srpOrMin)}</td>
+                  <td style={tdRightStyle}><Text size="small" weight="semibold">{formatCurrency(row.srpOrMin)}</Text></td>
                   <td style={tdRightStyle}>{formatCurrency(row.basePayMax)}</td>
                   <td style={tdStyle}>
                     <RangeBar min={row.basePayMin} max={row.basePayMax} globalMax={globalBaseMax} />
                   </td>
                   <td style={tdRightStyle}>{row.targetVariablePct}%</td>
                   <td style={tdRightStyle}>{formatCurrency(row.totalEquityValueMin)}</td>
-                  <td style={{ ...tdRightStyle, fontWeight: 600 }}>{formatCurrency(row.equityMax)}</td>
+                  <td style={tdRightStyle}><Text size="small" weight="semibold">{formatCurrency(row.equityMax)}</Text></td>
                   <td style={tdStyle}>
                     <RangeBar min={row.totalEquityValueMin} max={row.totalEquityValueMax} globalMax={globalEquityMax} />
                   </td>
@@ -306,9 +302,7 @@ export default function SalaryBands() {
                     <Text size="UNSAFE_small" color="color.text.subtlest">{row.equityCurrency}</Text>
                   </td>
                   <td style={tdStyle}>
-                    <code style={{ fontSize: 11, fontFamily: "monospace", color: token("color.text.subtlest"), backgroundColor: token("color.background.neutral"), padding: `${token("space.025")} ${token("space.075")}`, borderRadius: "6px" }}>
-                      {row.hrisJobCode}
-                    </code>
+                    <Text size="UNSAFE_small" color="color.text.subtlest"><code style={{ fontFamily: "monospace", backgroundColor: token("color.background.neutral"), padding: `${token("space.025")} ${token("space.075")}`, borderRadius: "6px" }}>{row.hrisJobCode}</code></Text>
                   </td>
                 </tr>
               ))}

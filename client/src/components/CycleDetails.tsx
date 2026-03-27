@@ -306,9 +306,9 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
               <div>
-                <Text size="small" weight="bold" color="color.text.subtlest">
-                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Cycle Name</span>
-                </Text>
+                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Cycle Name</Text>
+                </div>
                 <div style={{ marginTop: token("space.050") }}>
                   <Textfield
                     placeholder="Enter cycle name"
@@ -318,9 +318,9 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                 </div>
               </div>
               <div>
-                <Text size="small" weight="bold" color="color.text.subtlest">
-                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Fiscal Year</span>
-                </Text>
+                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Fiscal Year</Text>
+                </div>
                 <div style={{ marginTop: token("space.050") }}>
                   <Select
                     options={fiscalYearOptions}
@@ -330,9 +330,9 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                 </div>
               </div>
               <div>
-                <Text size="small" weight="bold" color="color.text.subtlest">
-                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Cycle Type</span>
-                </Text>
+                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Cycle Type</Text>
+                </div>
                 <div style={{ marginTop: token("space.050") }}>
                   <Select
                     options={cycleTypeOptions}
@@ -345,9 +345,9 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
               <div>
-                <Text size="small" weight="bold" color="color.text.subtlest">
-                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Status</span>
-                </Text>
+                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Status</Text>
+                </div>
                 <div style={{ marginTop: token("space.050") }}>
                   <Select
                     options={statusOptions}
@@ -357,9 +357,9 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                 </div>
               </div>
               <div>
-                <Text size="small" weight="bold" color="color.text.subtlest">
-                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Start Date</span>
-                </Text>
+                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Start Date</Text>
+                </div>
                 <div style={{ marginTop: token("space.050") }}>
                   <Textfield
                     placeholder="mm/dd/yyyy"
@@ -369,9 +369,9 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                 </div>
               </div>
               <div>
-                <Text size="small" weight="bold" color="color.text.subtlest">
-                  <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>End Date</span>
-                </Text>
+                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">End Date</Text>
+                </div>
                 <div style={{ marginTop: token("space.050") }}>
                   <Textfield
                     placeholder="mm/dd/yyyy"
@@ -383,9 +383,9 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
             </div>
 
             <div>
-              <Text size="small" weight="bold" color="color.text.subtlest">
-                <span style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>Description</span>
-              </Text>
+              <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Description</Text>
+              </div>
               <div style={{ marginTop: token("space.050") }}>
                 <Textarea
                   placeholder="Enter cycle description..."
@@ -485,11 +485,11 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Role</th>
-                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>View</th>
-                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Edit</th>
-                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Approve</th>
-                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", fontSize: "11px", fontWeight: 700, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px" }}>Export</th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "left", textTransform: "uppercase", letterSpacing: "0.5px" }}><Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Role</Text></th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", textTransform: "uppercase", letterSpacing: "0.5px" }}><Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">View</Text></th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", textTransform: "uppercase", letterSpacing: "0.5px" }}><Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Edit</Text></th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", textTransform: "uppercase", letterSpacing: "0.5px" }}><Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Approve</Text></th>
+                  <th style={{ padding: `${token("space.150")} ${token("space.200")}`, textAlign: "center", textTransform: "uppercase", letterSpacing: "0.5px" }}><Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Export</Text></th>
                 </tr>
               </thead>
               <tbody>
@@ -537,12 +537,12 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                 <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 900 }}>
                   <thead>
                     <tr style={{ backgroundColor: token("elevation.surface.sunken") }}>
-                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", width: 28 }}></th>
-                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", minWidth: 180 }}>Column Name</th>
-                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}>Data Source</th>
-                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}>Display Type</th>
-                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}>Column Default</th>
-                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", fontSize: 11, fontWeight: 600, color: token("color.text.subtlest"), textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", minWidth: 240 }}>Permissions</th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", width: 28 }}></th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", minWidth: 180 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Column Name</Text></th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Data Source</Text></th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Display Type</Text></th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Column Default</Text></th>
+                      <th style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "left", textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", minWidth: 240 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Permissions</Text></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -580,18 +580,18 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                               ))}
                               {!isExpanded && hiddenCount > 0 && (
                                 <span
-                                  style={{ cursor: "pointer", fontSize: "11px", color: token("color.text.subtle"), fontWeight: 500 }}
+                                  style={{ cursor: "pointer" }}
                                   onClick={() => setExpandedPermissions((prev) => { const next = new Set(prev); next.add(field.id); return next; })}
                                 >
-                                  + {hiddenCount} other{hiddenCount > 1 ? "s" : ""}
+                                  <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">+ {hiddenCount} other{hiddenCount > 1 ? "s" : ""}</Text>
                                 </span>
                               )}
                               {isExpanded && perms.length > 3 && (
                                 <span
-                                  style={{ cursor: "pointer", fontSize: "11px", color: token("color.text.subtle"), fontWeight: 500 }}
+                                  style={{ cursor: "pointer" }}
                                   onClick={() => setExpandedPermissions((prev) => { const next = new Set(prev); next.delete(field.id); return next; })}
                                 >
-                                  Show less
+                                  <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">Show less</Text>
                                 </span>
                               )}
                             </div>

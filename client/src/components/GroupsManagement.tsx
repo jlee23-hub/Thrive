@@ -424,11 +424,9 @@ export default function GroupsManagement() {
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              fontSize: "14px",
-                              fontWeight: 500,
                             }}
                           >
-                            {getInitials(member.name)}
+                            <Text size="small" weight="medium">{getInitials(member.name)}</Text>
                           </div>
                           <div>
                             <Text size="small" weight="medium">{member.name}</Text>
@@ -497,11 +495,9 @@ export default function GroupsManagement() {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          fontSize: "12px",
-                          fontWeight: 500,
                         }}
                       >
-                        {getInitials(user.name)}
+                        <Text size="UNSAFE_small" weight="medium">{getInitials(user.name)}</Text>
                       </div>
                       <div>
                         <Text size="small" weight="medium">{user.name}</Text>

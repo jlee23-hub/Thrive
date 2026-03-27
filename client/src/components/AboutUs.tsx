@@ -16,7 +16,6 @@ const linkStyle: React.CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   gap: token("space.050"),
-  fontSize: 14,
 };
 
 export default function AboutUs() {

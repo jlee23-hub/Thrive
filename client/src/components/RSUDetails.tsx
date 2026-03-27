@@ -249,14 +249,13 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
                       <div style={{
                         backgroundColor: token("elevation.surface.overlay"),
                         border: `1px solid ${token("color.border")}`,
-                        borderRadius: 8,
-                        fontSize: 13,
+                        borderRadius: "8px",
                         padding: token("space.200"),
                         minWidth: 220,
                         boxShadow: token("elevation.shadow.overlay"),
                       }}>
-                        <div style={{ fontWeight: 700, marginBottom: token("space.100"), color: token("color.text") }}>
-                          {label} – {point.vestingPct}%
+                        <div style={{ marginBottom: token("space.100") }}>
+                          <Text size="small" weight="bold">{label} – {point.vestingPct}%</Text>
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
                           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -280,13 +279,13 @@ function GrantDetails({ grant, allGrants, onSelectGrant, sharePrice }: { grant: 
                           marginTop: token("space.100"),
                           paddingTop: token("space.075"),
                           borderTop: `1px solid ${token("color.border")}`,
-                          fontSize: 11,
-                          color: point.isFuture ? token("color.text.warning") : token("color.text.subtlest"),
                           fontStyle: "italic",
                         }}>
-                          {point.isFuture
-                            ? "Projected using modeled share price"
-                            : "Based on share price at vest date"}
+                          <Text size="UNSAFE_small" color={point.isFuture ? "color.text.warning" : "color.text.subtlest"}>
+                            {point.isFuture
+                              ? "Projected using modeled share price"
+                              : "Based on share price at vest date"}
+                          </Text>
                         </div>
                       </div>
                     );
@@ -426,14 +425,13 @@ function EquitySummary({ grants: allGrants, grantYearFilter, setGrantYearFilter,
                     <div style={{
                       backgroundColor: token("elevation.surface.overlay"),
                       border: `1px solid ${token("color.border")}`,
-                      borderRadius: 8,
-                      fontSize: 13,
+                      borderRadius: "8px",
                       padding: token("space.200"),
                       minWidth: 240,
                       boxShadow: token("elevation.shadow.overlay"),
                     }}>
-                      <div style={{ fontWeight: 700, marginBottom: token("space.100"), color: token("color.text") }}>
-                        {label} – {vestingPct}%
+                      <div style={{ marginBottom: token("space.100") }}>
+                        <Text size="small" weight="bold">{label} – {vestingPct}%</Text>
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -457,13 +455,13 @@ function EquitySummary({ grants: allGrants, grantYearFilter, setGrantYearFilter,
                         marginTop: token("space.100"),
                         paddingTop: token("space.075"),
                         borderTop: `1px solid ${token("color.border")}`,
-                        fontSize: 11,
                         fontStyle: "italic",
-                        color: isFuture ? token("color.text.warning") : token("color.text.subtlest"),
                       }}>
-                        {isFuture
-                          ? "Projected using modeled share price"
-                          : "Based on share price at vest date"}
+                        <Text size="UNSAFE_small" color={isFuture ? "color.text.warning" : "color.text.subtlest"}>
+                          {isFuture
+                            ? "Projected using modeled share price"
+                            : "Based on share price at vest date"}
+                        </Text>
                       </div>
                     </div>
                   );
@@ -488,9 +486,7 @@ function EquitySummary({ grants: allGrants, grantYearFilter, setGrantYearFilter,
               />
               <Legend
                 formatter={(value: string) => (
-                  <span style={{ color: token("color.text"), fontSize: 12 }}>
-                    {value}
-                  </span>
+                  <Text size="UNSAFE_small">{value}</Text>
                 )}
                 iconType="circle"
               />
@@ -673,17 +669,14 @@ export default function RSUDetails() {
                       <div style={{
                         backgroundColor: token("elevation.surface.overlay"),
                         border: `1px solid ${token("color.border")}`,
-                        borderRadius: 8,
-                        fontSize: 13,
+                        borderRadius: "8px",
                         padding: token("space.200"),
                         minWidth: 260,
                         boxShadow: token("elevation.shadow.overlay"),
                       }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: token("space.100") }}>
-                          <span style={{ fontWeight: 700, color: token("color.text") }}>{label}</span>
-                          <span style={{ fontWeight: 700, color: token("color.text") }}>
-                            ${totalValueInPeriod.toLocaleString()}
-                          </span>
+                          <Text size="small" weight="bold">{label}</Text>
+                          <Text size="small" weight="bold">${totalValueInPeriod.toLocaleString()}</Text>
                         </div>
                         <div style={{
                           display: "flex",
@@ -691,12 +684,8 @@ export default function RSUDetails() {
                           gap: token("space.100"),
                           marginTop: token("space.050"),
                         }}>
-                          <span style={{ color: token("color.text.subtlest"), fontWeight: 500 }}>
-                            Vesting Units:
-                          </span>
-                          <span style={{ color: token("color.text"), fontWeight: 600 }}>
-                            {periodUnits.toLocaleString()}
-                          </span>
+                          <Text size="small" color="color.text.subtlest" weight="medium">Vesting Units:</Text>
+                          <Text size="small" weight="semibold">{periodUnits.toLocaleString()}</Text>
                         </div>
                         {payload.filter(e => (e.value as number) > 0).map((entry) => {
                           const isVested = entry.name === "vested";
@@ -710,21 +699,14 @@ export default function RSUDetails() {
                               <div style={{
                                 width: 10,
                                 height: 10,
-                                borderRadius: 2,
+                                borderRadius: "2px",
                                 backgroundColor: entry.color,
                                 flexShrink: 0,
                               }} />
-                              <span style={{
-                                color: isVested
-                                  ? token("color.text.success")
-                                  : token("color.text.subtlest"),
-                                fontWeight: 500,
-                              }}>
+                              <Text size="small" weight="medium" color={isVested ? "color.text.success" : "color.text.subtlest"}>
                                 {isVested ? "Vested" : "Unvested"}:
-                              </span>
-                              <span style={{ color: token("color.text"), fontWeight: 600 }}>
-                                ${(entry.value as number).toLocaleString()}
-                              </span>
+                              </Text>
+                              <Text size="small" weight="semibold">${(entry.value as number).toLocaleString()}</Text>
                             </div>
                           );
                         })}
@@ -738,15 +720,14 @@ export default function RSUDetails() {
                               <div key={i} style={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                marginTop: i > 0 ? token("space.050") : 0,
-                                fontSize: 12,
+                                marginTop: i > 0 ? token("space.050") : "0",
                               }}>
-                                <span style={{ color: token("color.text.subtlest") }}>
+                                <Text size="UNSAFE_small" color="color.text.subtlest">
                                   {gb.units.toLocaleString()} units from {gb.grantDate} grant
-                                </span>
-                                <span style={{ color: token("color.text.subtle"), fontWeight: 500 }}>
+                                </Text>
+                                <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">
                                   ${gb.value.toLocaleString()}
-                                </span>
+                                </Text>
                               </div>
                             ))}
                           </div>
@@ -755,21 +736,20 @@ export default function RSUDetails() {
                           marginTop: token("space.100"),
                           paddingTop: token("space.075"),
                           borderTop: `1px solid ${token("color.border")}`,
-                          fontSize: 11,
                           fontStyle: "italic",
                           display: "flex",
                           flexDirection: "column",
                           gap: token("space.050"),
                         }}>
                           {(dataPoint?.periodVestedValue || 0) > 0 && (
-                            <span style={{ color: token("color.text.subtlest") }}>
+                            <Text size="UNSAFE_small" color="color.text.subtlest">
                               Vested value based on share price at vest date
-                            </span>
+                            </Text>
                           )}
                           {(dataPoint?.periodUnvestedValue || 0) > 0 && (
-                            <span style={{ color: token("color.text.warning") }}>
+                            <Text size="UNSAFE_small" color="color.text.warning">
                               Unvested value projected at modeled share price
-                            </span>
+                            </Text>
                           )}
                         </div>
                       </div>

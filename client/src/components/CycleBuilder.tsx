@@ -846,14 +846,12 @@ function StepperNav({
                   ? token("color.text.brand")
                   : token("color.text.subtlest"),
                 flexShrink: 0,
-                fontSize: 12,
-                fontWeight: 600,
               }}
             >
               {isCompleted ? (
                 <CheckMarkIcon label="" color={token("color.icon.inverse")} />
               ) : (
-                <span>{index + 1}</span>
+                <Text size="UNSAFE_small" weight="semibold">{index + 1}</Text>
               )}
             </div>
 
@@ -1168,14 +1166,11 @@ function DataIntegrationsStep({
                   style={{
                     padding: `${token("space.100")} ${token("space.200")}`,
                     textAlign: "left",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: token("color.text.subtlest"),
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
                   }}
                 >
-                  {h}
+                  <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
                 </th>
               ))}
             </tr>
@@ -1250,13 +1245,10 @@ function DataIntegrationsStep({
                                     style={{
                                       padding: `${token("space.100")} ${token("space.200")}`,
                                       textAlign: h === "Action" ? "right" : "left",
-                                      fontSize: 11,
-                                      fontWeight: 600,
-                                      color: token("color.text.subtlest"),
                                       textTransform: "uppercase",
                                     }}
                                   >
-                                    {h}
+                                    <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
                                   </th>
                                 ))}
                               </tr>
@@ -1264,8 +1256,8 @@ function DataIntegrationsStep({
                             <tbody>
                               {file.errorDetails.map((err, ei) => (
                                 <tr key={ei} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                                  <td style={{ padding: `${token("space.100")} ${token("space.200")}`, fontFamily: "monospace", fontSize: 12, color: token("color.text.subtlest") }}>
-                                    {err.row}
+                                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                                    <Text size="UNSAFE_small" color="color.text.subtlest"><code style={{ fontFamily: "monospace" }}>{err.row}</code></Text>
                                   </td>
                                   <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
                                     <Text size="small" weight="semibold">{err.empName}</Text>
@@ -1402,13 +1394,10 @@ function FieldMappingTable({ fields }: { fields: typeof workdayFields }) {
               style={{
                 padding: `${token("space.100")} ${token("space.200")}`,
                 textAlign: "left",
-                fontSize: 11,
-                fontWeight: 600,
-                color: token("color.text.subtlest"),
                 textTransform: "uppercase",
               }}
             >
-              {h}
+              <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
             </th>
           ))}
         </tr>
@@ -1425,18 +1414,18 @@ function FieldMappingTable({ fields }: { fields: typeof workdayFields }) {
               </div>
             </td>
             <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-              <code
-                style={{
-                  fontSize: 11,
-                  color: token("color.text.subtlest"),
-                  backgroundColor: token("color.background.neutral"),
-                  padding: `${token("space.025")} ${token("space.075")}`,
-                  borderRadius: "6px",
-                  fontFamily: "monospace",
-                }}
-              >
-                {row.column}
-              </code>
+              <Text size="UNSAFE_small" color="color.text.subtlest">
+                <code
+                  style={{
+                    backgroundColor: token("color.background.neutral"),
+                    padding: `${token("space.025")} ${token("space.075")}`,
+                    borderRadius: "6px",
+                    fontFamily: "monospace",
+                  }}
+                >
+                  {row.column}
+                </code>
+              </Text>
             </td>
             <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
               <Text size="small" color="color.text.subtlest">{row.desc}</Text>
@@ -1465,25 +1454,25 @@ function EmployeeDataGridStep() {
 
   const head = {
     cells: [
-      { key: "id", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Employee ID</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "firstName", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">First Name</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "lastName", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Last Name</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "title", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Job Title</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "level", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Level</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "dept", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Job Family</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "location", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Location</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "rating", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Performance Rating</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "salary", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Base Salary</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "commission", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Commission %</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "bonus", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Bonus %</Text><div style={{ color: token("color.text.information"), fontSize: 11 }}>Workday</div></div> },
-      { key: "equity", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Current Equity $</Text><div style={{ color: token("color.text.success"), fontSize: 11 }}>Shareworks</div></div> },
+      { key: "id", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Employee ID</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "firstName", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">First Name</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "lastName", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Last Name</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "title", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Job Title</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "level", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Level</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "dept", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Job Family</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "location", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Location</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "rating", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Performance Rating</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "salary", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Base Salary</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "commission", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Commission %</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "bonus", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Bonus %</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
+      { key: "equity", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Current Equity $</Text><Text size="UNSAFE_small" color="color.text.success">Shareworks</Text></div> },
     ],
   };
 
   const rows = employeeData.map((emp, i) => ({
     key: `row-${i}`,
     cells: [
-      { key: "id", content: <Text size="small"><code style={{ fontFamily: "monospace", fontSize: 12 }}>{emp.id}</code></Text> },
+      { key: "id", content: <Text size="UNSAFE_small"><code style={{ fontFamily: "monospace" }}>{emp.id}</code></Text> },
       { key: "firstName", content: <Text size="small" weight="medium">{emp.firstName}</Text> },
       { key: "lastName", content: <Text size="small" weight="medium">{emp.lastName}</Text> },
       { key: "title", content: <Text size="small" color="color.text.subtle">{emp.title}</Text> },
@@ -1682,14 +1671,11 @@ function EligibilityRulesStep() {
                   style={{
                     padding: `${token("space.100")} ${token("space.200")}`,
                     textAlign: "left",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: token("color.text.subtlest"),
                     textTransform: "uppercase",
                     width: h === "" ? "100px" : undefined,
                   }}
                 >
-                  {h}
+                  <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
                 </th>
               ))}
             </tr>
@@ -1793,12 +1779,9 @@ function SalaryBandsStep() {
                   style={{
                     padding: `${token("space.100")} ${token("space.200")}`,
                     textAlign: h === "Actions" ? "right" : "left",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: token("color.text.subtlest"),
                   }}
                 >
-                  {h}
+                  <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
                 </th>
               ))}
             </tr>
@@ -1935,9 +1918,6 @@ function UsersTabContent() {
     background: "none",
     border: isActive ? `1px solid ${token("color.border")}` : `1px solid transparent`,
     borderRadius: "6px",
-    color: isActive ? token("color.text") : token("color.text.subtlest"),
-    fontWeight: isActive ? 600 : 400,
-    fontSize: 14,
     backgroundColor: isActive ? token("elevation.surface.raised") : "transparent",
   });
 
@@ -1991,10 +1971,10 @@ function UsersTabContent() {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", gap: token("space.100") }}>
           <button style={subTabStyle(usersSubTab === "users")} onClick={() => setUsersSubTab("users")}>
-            Users
+            <Text size="small" weight={usersSubTab === "users" ? "semibold" : "regular"} color={usersSubTab === "users" ? "color.text" : "color.text.subtlest"}>Users</Text>
           </button>
           <button style={subTabStyle(usersSubTab === "guests")} onClick={() => setUsersSubTab("guests")}>
-            Guests
+            <Text size="small" weight={usersSubTab === "guests" ? "semibold" : "regular"} color={usersSubTab === "guests" ? "color.text" : "color.text.subtlest"}>Guests</Text>
           </button>
         </div>
         <div style={{ display: "flex", gap: token("space.100") }}>
@@ -2025,14 +2005,11 @@ function UsersTabContent() {
                       style={{
                         padding: `${token("space.100")} ${token("space.150")}`,
                         textAlign: "left",
-                        fontSize: 11,
-                        fontWeight: 600,
-                        color: token("color.text.subtlest"),
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                       }}
                     >
-                      {h}
+                      <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
                     </th>
                   ))}
                 </tr>
@@ -2067,12 +2044,10 @@ function UsersTabContent() {
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              fontSize: 13,
-                              fontWeight: 600,
                               flexShrink: 0,
                             }}
                           >
-                            {emp.firstName.charAt(0)}
+                            <Text size="small" weight="semibold">{emp.firstName.charAt(0)}</Text>
                           </div>
                           <div>
                             <Text size="small" weight="semibold">{emp.firstName} {emp.lastName}</Text>
@@ -2111,9 +2086,6 @@ function UsersTabContent() {
                                 <span
                                   style={{
                                     cursor: "pointer",
-                                    fontSize: "11px",
-                                    color: token("color.text.subtle"),
-                                    fontWeight: 500,
                                   }}
                                   onClick={() => setExpandedUserRoles((prev) => {
                                     const next = new Set(prev);
@@ -2121,16 +2093,13 @@ function UsersTabContent() {
                                     return next;
                                   })}
                                 >
-                                  + {hiddenCount} other{hiddenCount > 1 ? "s" : ""}
+                                  <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">+ {hiddenCount} other{hiddenCount > 1 ? "s" : ""}</Text>
                                 </span>
                               )}
                               {isExpanded && roles.length > 3 && (
                                 <span
                                   style={{
                                     cursor: "pointer",
-                                    fontSize: "11px",
-                                    color: token("color.text.subtle"),
-                                    fontWeight: 500,
                                   }}
                                   onClick={() => setExpandedUserRoles((prev) => {
                                     const next = new Set(prev);
@@ -2138,10 +2107,10 @@ function UsersTabContent() {
                                     return next;
                                   })}
                                 >
-                                  Show less
+                                  <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">Show less</Text>
                                 </span>
                               )}
-                              <span style={{ fontSize: "12px" }}>
+                              <span>
                                 <Button
                                   appearance="subtle"
                                   spacing="compact"
@@ -2369,9 +2338,6 @@ function UsersRolesStep() {
   const tabStyle = (isActive: boolean): React.CSSProperties => ({
     padding: `${token("space.100")} ${token("space.200")}`,
     cursor: "pointer",
-    color: isActive ? token("color.text.brand") : token("color.text.subtlest"),
-    fontWeight: isActive ? 600 : 400,
-    fontSize: 14,
     background: "none",
     borderTop: "none",
     borderLeft: "none",
@@ -2396,10 +2362,10 @@ function UsersRolesStep() {
 
       <div style={{ display: "flex", gap: token("space.200"), borderBottom: `1px solid ${token("color.border")}` }}>
         <button style={tabStyle(activeTab === "roles")} onClick={() => setActiveTab("roles")}>
-          Roles
+          <Text size="small" weight={activeTab === "roles" ? "semibold" : "regular"} color={activeTab === "roles" ? "color.text.brand" : "color.text.subtlest"}>Roles</Text>
         </button>
         <button style={tabStyle(activeTab === "users")} onClick={() => setActiveTab("users")}>
-          Users
+          <Text size="small" weight={activeTab === "users" ? "semibold" : "regular"} color={activeTab === "users" ? "color.text.brand" : "color.text.subtlest"}>Users</Text>
         </button>
       </div>
 
@@ -2681,9 +2647,6 @@ function FieldPermissionsStep({
   const thStyle: React.CSSProperties = {
     padding: `${token("space.100")} ${token("space.150")}`,
     textAlign: "left",
-    fontSize: 11,
-    fontWeight: 600,
-    color: token("color.text.subtlest"),
     textTransform: "uppercase",
     letterSpacing: "0.5px",
     whiteSpace: "nowrap",
@@ -2755,12 +2718,12 @@ function FieldPermissionsStep({
                   />
                 </th>
                 <th style={{ ...thStyle, width: 28 }}></th>
-                <th style={{ ...thStyle, minWidth: 200 }}>Column Name</th>
-                <th style={thStyle}>Data Source</th>
-                <th style={thStyle}>Data Display Type</th>
-                <th style={thStyle}>Reward Letter Status</th>
-                <th style={thStyle}>Column Default</th>
-                <th style={{ ...thStyle, minWidth: 280 }}>Permissions</th>
+                <th style={{ ...thStyle, minWidth: 200 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Column Name</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Data Source</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Data Display Type</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Reward Letter Status</Text></th>
+                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Column Default</Text></th>
+                <th style={{ ...thStyle, minWidth: 280 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Permissions</Text></th>
                 <th style={{ ...thStyle, width: 60, textAlign: "center" }}></th>
               </tr>
             </thead>
@@ -2814,39 +2777,29 @@ function FieldPermissionsStep({
                           ))}
                           {!isExpanded && hiddenCount > 0 && (
                             <span
-                              style={{
-                                cursor: "pointer",
-                                fontSize: "11px",
-                                color: token("color.text.subtle"),
-                                fontWeight: 500,
-                              }}
+                              style={{ cursor: "pointer" }}
                               onClick={() => setExpandedPermissions((prev) => {
                                 const next = new Set(prev);
                                 next.add(field.id);
                                 return next;
                               })}
                             >
-                              + {hiddenCount} other{hiddenCount > 1 ? "s" : ""}
+                              <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">+ {hiddenCount} other{hiddenCount > 1 ? "s" : ""}</Text>
                             </span>
                           )}
                           {isExpanded && perms.length > 3 && (
                             <span
-                              style={{
-                                cursor: "pointer",
-                                fontSize: "11px",
-                                color: token("color.text.subtle"),
-                                fontWeight: 500,
-                              }}
+                              style={{ cursor: "pointer" }}
                               onClick={() => setExpandedPermissions((prev) => {
                                 const next = new Set(prev);
                                 next.delete(field.id);
                                 return next;
                               })}
                             >
-                              Show less
+                              <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">Show less</Text>
                             </span>
                           )}
-                          <span style={{ fontSize: "12px" }}>
+                          <span>
                             <Button
                               appearance="subtle"
                               spacing="compact"
@@ -2864,7 +2817,7 @@ function FieldPermissionsStep({
                       );
                     })()}
                   </td>
-                  <td style={{ ...tdStyle, textAlign: "center", fontSize: "12px" }}>
+                  <td style={{ ...tdStyle, textAlign: "center" }}>
                     <IconButton icon={EditIcon} label="Edit row" appearance="subtle" spacing="compact" />
                   </td>
                 </tr>
