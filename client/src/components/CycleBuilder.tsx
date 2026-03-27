@@ -860,9 +860,12 @@ function CycleDetailsStep({
 }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-        <PageIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Cycle Details</Heading>
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <PageIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Cycle Details</Heading>
+        </div>
+        <Text size="small" color="color.text.subtlest">Define the basic settings for your compensation cycle</Text>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
@@ -1035,9 +1038,12 @@ function DataIntegrationsStep({
 }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-        <UploadIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Data Integrations</Heading>
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <UploadIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Data Integrations</Heading>
+        </div>
+        <Text size="small" color="color.text.subtlest">Connect data sources and upload files for this compensation cycle</Text>
       </div>
 
       <Heading size="small">Data Upload</Heading>
@@ -1365,9 +1371,12 @@ function EligibilityRulesStep() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <LockLockedIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Eligibility Rules</Heading>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+            <LockLockedIcon label="" color={token("color.icon.brand")} />
+            <Heading size="medium">Eligibility Rules</Heading>
+          </div>
+          <Text size="small" color="color.text.subtlest">Define rules to determine which employees are eligible for this cycle</Text>
         </div>
         <Button appearance="primary" iconBefore={AddIcon}>
           New Rule
@@ -2174,9 +2183,12 @@ function UsersRolesStep() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-        <PeopleGroupIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Users & Role Permissions</Heading>
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <PeopleGroupIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Users & Role Permissions</Heading>
+        </div>
+        <Text size="small" color="color.text.subtlest">Manage user access and assign role-based permissions for this cycle</Text>
       </div>
 
       <div style={{ display: "flex", gap: token("space.200"), borderBottom: `1px solid ${token("color.border")}` }}>
@@ -2905,9 +2917,12 @@ function RewardLetterStep({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-        <EmailIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Reward Letter</Heading>
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <EmailIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Reward Letter</Heading>
+        </div>
+        <Text size="small" color="color.text.subtlest">Configure the reward letter template and content for employee notifications</Text>
       </div>
 
       <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
@@ -3018,9 +3033,12 @@ function ReviewFinalizeStep({
 }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-        <CheckCircleIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Review & Finalize</Heading>
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <CheckCircleIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Review & Finalize</Heading>
+        </div>
+        <Text size="small" color="color.text.subtlest">Review all settings and finalize the compensation cycle</Text>
       </div>
 
       <SectionMessage appearance="information">
