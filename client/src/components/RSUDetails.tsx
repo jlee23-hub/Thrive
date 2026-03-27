@@ -561,12 +561,21 @@ export default function RSUDetails() {
                           paddingTop: token("space.075"),
                           borderTop: `1px solid ${token("color.border")}`,
                           fontSize: 11,
-                          color: isFuture ? token("color.text.warning") : token("color.text.subtlest"),
                           fontStyle: "italic",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: token("space.050"),
                         }}>
-                          {isFuture
-                            ? "Projected value based on modeled share price"
-                            : "Vested equity valued at share price on vest date"}
+                          {(dataPoint?.vestedValue || 0) > 0 && (
+                            <span style={{ color: token("color.text.subtlest") }}>
+                              Vested value based on share price at vest date
+                            </span>
+                          )}
+                          {(dataPoint?.unvestedValue || 0) > 0 && (
+                            <span style={{ color: token("color.text.warning") }}>
+                              Unvested value projected at modeled share price
+                            </span>
+                          )}
                         </div>
                       </div>
                     );
