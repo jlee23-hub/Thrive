@@ -533,8 +533,7 @@ export default function RSUDetails() {
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <Heading size="large">RSUs</Heading>
       <div style={cardStyle}>
-        <Heading size="small">Overview</Heading>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: token("space.300") }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
             <Text size="medium" weight="bold">Model Share Price</Text>
             <Tooltip content="Use this slider to model how changes in share price affect your unvested equity value">
@@ -581,6 +580,7 @@ export default function RSUDetails() {
       </div>
 
       <div style={cardStyle}>
+        <Heading size="small">Overview</Heading>
         <div style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
