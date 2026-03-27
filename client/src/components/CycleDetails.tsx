@@ -15,6 +15,7 @@ import PageIcon from "@atlaskit/icon/core/page";
 import DownloadIcon from "@atlaskit/icon/core/download";
 import ShowMoreVerticalIcon from "@atlaskit/icon/core/show-more-vertical";
 import ChevronLeftIcon from "@atlaskit/icon/core/chevron-left";
+import Breadcrumbs, { BreadcrumbsItem } from "@atlaskit/breadcrumbs";
 import CheckCircleIcon from "@atlaskit/icon/core/check-circle";
 import DatabaseIcon from "@atlaskit/icon/core/database";
 import PersonIcon from "@atlaskit/icon/core/person";
@@ -233,27 +234,11 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
           paddingRight: token("space.400"),
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.050") }}>
-          <Text size="small" color="color.text.subtlest">
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={onBack}
-            >
-              Home
-            </span>
-          </Text>
-          <Text size="small" color="color.text.subtlest">/</Text>
-          <Text size="small" color="color.text.subtlest">
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={onBack}
-            >
-              Cycles
-            </span>
-          </Text>
-          <Text size="small" color="color.text.subtlest">/</Text>
-          <Text size="small" weight="bold">{breadcrumbName}</Text>
-        </div>
+        <Breadcrumbs label="Cycle navigation">
+          <BreadcrumbsItem text="Home" onClick={onBack} />
+          <BreadcrumbsItem text="Cycles" onClick={onBack} />
+          <BreadcrumbsItem text={breadcrumbName} />
+        </Breadcrumbs>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: token("space.200") }}>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>

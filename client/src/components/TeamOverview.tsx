@@ -12,6 +12,7 @@ import { Checkbox } from "@atlaskit/checkbox";
 import Avatar from "@atlaskit/avatar";
 import SearchIcon from "@atlaskit/icon/core/search";
 import ShowMoreHorizontalIcon from "@atlaskit/icon/core/show-more-horizontal";
+import Breadcrumbs, { BreadcrumbsItem } from "@atlaskit/breadcrumbs";
 
 
 interface Employee {
@@ -729,28 +730,24 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
       </div>
 
       {managerStack.length > 0 && (
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-          <span style={{ cursor: "pointer" }} onClick={() => onBreadcrumbNav?.(0)}>
-            <Text size="small" color="color.text.brand" weight="medium">All Reports</Text>
-          </span>
+        <Breadcrumbs label="Team navigation">
+          <BreadcrumbsItem
+            text="All Reports"
+            onClick={() => onBreadcrumbNav?.(0)}
+          />
           {managerStack.map((mgrId, i) => {
             const mgr = employees.find((e) => e.id === mgrId);
             if (!mgr) return null;
             const isLast = i === managerStack.length - 1;
             return (
-              <React.Fragment key={mgrId}>
-                <Text size="small" color="color.text.subtlest">/</Text>
-                {isLast ? (
-                  <Text size="small" weight="bold">{mgr.firstName} {mgr.lastName}</Text>
-                ) : (
-                  <span style={{ cursor: "pointer" }} onClick={() => onBreadcrumbNav?.(i + 1)}>
-                    <Text size="small" color="color.text.brand" weight="medium">{mgr.firstName} {mgr.lastName}</Text>
-                  </span>
-                )}
-              </React.Fragment>
+              <BreadcrumbsItem
+                key={mgrId}
+                text={`${mgr.firstName} ${mgr.lastName}`}
+                onClick={isLast ? undefined : () => onBreadcrumbNav?.(i + 1)}
+              />
             );
           })}
-        </div>
+        </Breadcrumbs>
       )}
 
       <div className="charlie-table">
