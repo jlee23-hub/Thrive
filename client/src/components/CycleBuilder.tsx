@@ -349,7 +349,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
   const [includePerformance, setIncludePerformance] = useState(true);
   const [includeComparison, setIncludeComparison] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [cycleCreated, setCycleCreated] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -366,12 +366,10 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const triggerAutosave = useCallback(() => {
-    setLastSaved(new Date());
-  }, []);
-
   const handleNext = () => {
-    triggerAutosave();
+    if (currentStep === 0 && !cycleCreated) {
+      setCycleCreated(true);
+    }
     if (currentStep < STEPS.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
@@ -476,14 +474,6 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
           Back
         </Button>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.200") }}>
-          {lastSaved && (
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.075") }}>
-              <CheckCircleIcon label="" color={token("color.icon.success")} LEGACY_size="small" />
-              <Text size="UNSAFE_small" color="color.text.subtlest">
-                Saved {lastSaved.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-              </Text>
-            </div>
-          )}
           <Button appearance="subtle" onClick={onBack}>
             Cancel
           </Button>
@@ -492,7 +482,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             iconAfter={ChevronRightIcon}
             onClick={handleNext}
           >
-            {currentStep === STEPS.length - 1 ? "Finalize Cycle" : currentStep === 0 ? "Create Cycle" : "Next Step"}
+            {currentStep === STEPS.length - 1 ? "Finalize Cycle" : currentStep === 0 ? (cycleCreated ? "Save Cycle" : "Create Cycle") : "Next Step"}
           </Button>
         </div>
       </div>
