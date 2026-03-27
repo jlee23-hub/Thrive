@@ -291,7 +291,9 @@ export default function Home() {
           </TopNavStart>
           <TopNavMiddle>
             <Search label="Search" />
-            <CreateButton onClick={() => setActiveNav("cycle-builder")}>Create</CreateButton>
+            {(persona === "comp-admin" || persona === "data-integration") && (
+              <CreateButton onClick={() => setActiveNav("cycle-builder")}>Create</CreateButton>
+            )}
           </TopNavMiddle>
           <TopNavEnd>
             <Button appearance="default" iconBefore={() => <ColoredRovoIcon />}>Ask Rovo</Button>
