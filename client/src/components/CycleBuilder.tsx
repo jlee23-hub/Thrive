@@ -22,7 +22,6 @@ import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
 import ChevronUpIcon from "@atlaskit/icon/core/chevron-up";
 import EditIcon from "@atlaskit/icon/core/edit";
 import DeleteIcon from "@atlaskit/icon/core/delete";
-import PersonIcon from "@atlaskit/icon/core/person";
 import EmailIcon from "@atlaskit/icon/core/email";
 import SettingsIcon from "@atlaskit/icon/core/settings";
 import TableIcon from "@atlaskit/icon/core/table";
@@ -48,7 +47,6 @@ type Step = {
 const STEPS: Step[] = [
   { id: "details", title: "Configure Cycle", description: "Name, year, and type" },
   { id: "eligibility", title: "Eligibility Rules", description: "Define participation criteria" },
-  { id: "employee-grid", title: "Employee Data", description: "View eligible employees" },
   { id: "upload-comp", title: "Upload Compensation Data", description: "Upload comp data via CSV" },
   { id: "comp-grid", title: "Employee + Comp Data", description: "Review merged data" },
   { id: "salary-bands", title: "Salary Bands", description: "Upload and manage salary bands" },
@@ -387,14 +385,12 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
       case 1:
         return <EligibilityRulesStep />;
       case 2:
-        return <EmployeeDataGridStep />;
-      case 3:
         return <UploadCompensationDataStep />;
-      case 4:
+      case 3:
         return <CompDataGridStep />;
-      case 5:
+      case 4:
         return <SalaryBandsStep />;
-      case 6:
+      case 5:
         return (
           <RewardStatementsStep
             selectedTemplate={selectedTemplate}
@@ -835,122 +831,6 @@ function FieldMappingTable({ fields }: { fields: typeof workdayFields }) {
         ))}
       </tbody>
     </table>
-  );
-}
-
-function EmployeeDataGridStep() {
-  const levelAppearance = (level: string): "inprogress" | "success" | "moved" => {
-    if (level.startsWith("P")) return "inprogress";
-    if (level.startsWith("M")) return "success";
-    return "moved";
-  };
-
-  const ratingAppearance = (rating: string): "success" | "inprogress" | "removed" | "moved" | "default" => {
-    if (rating === "Greatly Exceeded") return "success";
-    if (rating === "Exceeded") return "inprogress";
-    if (rating === "Met") return "default";
-    if (rating === "Met Some") return "moved";
-    return "removed";
-  };
-
-  const colHeader = (label: string, source: string, sourceColor: "color.text.information" | "color.text.success") => (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.025") }}>
-      <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{label}</Text>
-      <Text size="UNSAFE_small" color={sourceColor}>{source}</Text>
-    </div>
-  );
-
-  const head = {
-    cells: [
-      { key: "id", content: colHeader("Employee ID", "Workday", "color.text.information") },
-      { key: "firstName", content: colHeader("First Name", "Workday", "color.text.information") },
-      { key: "lastName", content: colHeader("Last Name", "Workday", "color.text.information") },
-      { key: "title", content: colHeader("Job Title", "Workday", "color.text.information") },
-      { key: "level", content: colHeader("Level", "Workday", "color.text.information") },
-      { key: "dept", content: colHeader("Job Family", "Workday", "color.text.information") },
-      { key: "location", content: colHeader("Location", "Workday", "color.text.information") },
-      { key: "rating", content: colHeader("Performance Rating", "Workday", "color.text.information") },
-      { key: "salary", content: colHeader("Base Salary", "Workday", "color.text.information") },
-      { key: "commission", content: colHeader("Commission %", "Workday", "color.text.information") },
-      { key: "bonus", content: colHeader("Bonus %", "Workday", "color.text.information") },
-      { key: "equity", content: colHeader("Current Equity $", "Shareworks", "color.text.success") },
-    ],
-  };
-
-  const rows = employeeData.map((emp, i) => ({
-    key: `row-${i}`,
-    cells: [
-      { key: "id", content: <Text size="UNSAFE_small"><code style={{ fontFamily: "monospace" }}>{emp.id}</code></Text> },
-      { key: "firstName", content: <Text size="small" weight="medium">{emp.firstName}</Text> },
-      { key: "lastName", content: <Text size="small" weight="medium">{emp.lastName}</Text> },
-      { key: "title", content: <Text size="small" color="color.text.subtle">{emp.title}</Text> },
-      { key: "level", content: <Lozenge appearance={levelAppearance(emp.level)}>{emp.level}</Lozenge> },
-      { key: "dept", content: <Text size="small" color="color.text.subtle">{emp.dept}</Text> },
-      { key: "location", content: <Text size="small" color="color.text.subtle">{emp.location}</Text> },
-      { key: "rating", content: <Lozenge appearance={ratingAppearance(emp.rating)}>{emp.rating}</Lozenge> },
-      { key: "salary", content: <Text size="small">${emp.salary.toLocaleString()}</Text> },
-      { key: "commission", content: <Text size="small" color={emp.commission ? "color.text" : "color.text.disabled"}>{emp.commission ? `${emp.commission.toFixed(1)}%` : "—"}</Text> },
-      { key: "bonus", content: <Text size="small">{emp.bonus.toFixed(1)}%</Text> },
-      { key: "equity", content: <Text size="small" color={emp.equity ? "color.text" : "color.text.disabled"}>{emp.equity ? `$${emp.equity.toLocaleString()}` : "—"}</Text> },
-    ],
-  }));
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <PersonIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Employee Data</Heading>
-        </div>
-        <Text size="small" color="color.text.subtlest">
-          Eligible employees based on active eligibility rules — export to CSV for review
-        </Text>
-        <div style={{ display: "flex", gap: token("space.100"), marginTop: token("space.150") }}>
-          <Lozenge appearance="inprogress">Workday</Lozenge>
-          <Lozenge appearance="success">Shareworks</Lozenge>
-          <Text size="small" color="color.text.subtlest">52 eligible employees · 12 columns</Text>
-        </div>
-      </div>
-
-      <div style={{ ...cardStyle, padding: 0, overflow: "hidden" }}>
-        <div style={{ overflowX: "auto", padding: `0 ${token("space.200")}` }}>
-          <div style={{ minWidth: 1200 }}>
-            <DynamicTable
-              head={head}
-              rows={rows}
-              isFixedSize
-              defaultSortKey="id"
-              defaultSortOrder="ASC"
-            />
-          </div>
-        </div>
-        <div
-          style={{
-            backgroundColor: token("elevation.surface.sunken"),
-            borderTop: `1px solid ${token("color.border")}`,
-            padding: `${token("space.150")} ${token("space.200")}`,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Text size="small" color="color.text.subtlest">
-            Showing <Text size="small" weight="bold">1-12</Text> of <Text size="small" weight="bold">52</Text> eligible employees
-          </Text>
-          <div style={{ display: "flex", gap: token("space.100") }}>
-            <Button appearance="subtle" spacing="compact" iconBefore={DownloadIcon}>
-              Export
-            </Button>
-            <Button appearance="subtle" spacing="compact" isDisabled iconBefore={ChevronLeftIcon}>
-              Previous
-            </Button>
-            <Button appearance="subtle" spacing="compact" iconAfter={ChevronRightIcon}>
-              Next
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
