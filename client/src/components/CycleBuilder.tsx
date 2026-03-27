@@ -10,43 +10,27 @@ import Lozenge from "@atlaskit/lozenge";
 import DynamicTable from "@atlaskit/dynamic-table";
 import SectionMessage from "@atlaskit/section-message";
 import InlineMessage from "@atlaskit/inline-message";
-import Checkbox from "@atlaskit/checkbox";
 import Toggle from "@atlaskit/toggle";
 
 import PageIcon from "@atlaskit/icon/core/page";
 import AddIcon from "@atlaskit/icon/core/add";
 import UploadIcon from "@atlaskit/icon/core/upload";
 import DownloadIcon from "@atlaskit/icon/core/download";
-import CheckMarkIcon from "@atlaskit/icon/core/check-mark";
 import ChevronLeftIcon from "@atlaskit/icon/core/chevron-left";
 import ChevronRightIcon from "@atlaskit/icon/core/chevron-right";
 import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
 import ChevronUpIcon from "@atlaskit/icon/core/chevron-up";
-import LockLockedIcon from "@atlaskit/icon/core/lock-locked";
 import EditIcon from "@atlaskit/icon/core/edit";
 import DeleteIcon from "@atlaskit/icon/core/delete";
-import SearchIcon from "@atlaskit/icon/core/search";
-import CrossIcon from "@atlaskit/icon/core/cross";
-import ClockIcon from "@atlaskit/icon/core/clock";
 import PersonIcon from "@atlaskit/icon/core/person";
 import EmailIcon from "@atlaskit/icon/core/email";
-import ShieldIcon from "@atlaskit/icon/core/shield";
 import SettingsIcon from "@atlaskit/icon/core/settings";
-import GlobeIcon from "@atlaskit/icon/core/globe";
-import CreditCardIcon from "@atlaskit/icon/core/credit-card";
-import ListBulletedIcon from "@atlaskit/icon/core/list-bulleted";
 import TableIcon from "@atlaskit/icon/core/table";
 import CheckCircleIcon from "@atlaskit/icon/core/check-circle";
 import AlertIcon from "@atlaskit/icon/core/alert";
-import InformationIcon from "@atlaskit/icon/core/information";
-import PeopleGroupIcon from "@atlaskit/icon/core/people-group";
-import EyeOpenIcon from "@atlaskit/icon/core/eye-open";
+import CheckMarkIcon from "@atlaskit/icon/core/check-mark";
 import SpreadsheetIcon from "@atlaskit/icon/core/spreadsheet";
 import FilterIcon from "@atlaskit/icon/core/filter";
-import SortAscendingIcon from "@atlaskit/icon/core/sort-ascending";
-import TableColumnsDistributeIcon from "@atlaskit/icon/core/table-columns-distribute";
-import PersonAddIcon from "@atlaskit/icon/core/person-add";
-import { RadioGroup } from "@atlaskit/radio";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
@@ -62,15 +46,13 @@ type Step = {
 };
 
 const STEPS: Step[] = [
-  { id: "details", title: "Cycle Details", description: "Name, year, and type" },
-  { id: "import", title: "Data Integrations", description: "Employee and comp data" },
-  { id: "columns", title: "Employee data grid", description: "Configure data fields" },
+  { id: "details", title: "Configure Cycle", description: "Name, year, and type" },
   { id: "eligibility", title: "Eligibility Rules", description: "Define participation criteria" },
-  { id: "salary-bands", title: "Salary Bands & Equity Targets", description: "Upload and manage salary bands" },
-  { id: "users", title: "Users & Role Permissions", description: "Manage user access" },
-  { id: "field-permissions", title: "Column Permissions", description: "Configure field access" },
-  { id: "reward-letter", title: "Reward Letter", description: "Configure reward letters" },
-  { id: "review", title: "Review & Finalize", description: "Review all settings" },
+  { id: "employee-grid", title: "Employee Data", description: "View eligible employees" },
+  { id: "upload-comp", title: "Upload Compensation Data", description: "Upload comp data via CSV" },
+  { id: "comp-grid", title: "Employee + Comp Data", description: "Review merged data" },
+  { id: "salary-bands", title: "Salary Bands", description: "Upload and manage salary bands" },
+  { id: "reward-statements", title: "Reward Statements", description: "Configure reward letters" },
 ];
 
 interface CycleBuilderProps {
@@ -127,19 +109,6 @@ const workdayFields = [
   { field: "Target Bonus $", column: "currentTargetBonus", desc: "Calculated target bonus amount" },
 ];
 
-const shareworksFields = [
-  { field: "Grant Date", column: "grantDate", desc: "Date equity was granted" },
-  { field: "Grant Type", column: "grantType", desc: "RSU, ISO, NSO, etc." },
-  { field: "Total Units", column: "totalUnits", desc: "Total shares/units granted" },
-  { field: "Vested Units", column: "vestedUnits", desc: "Units vested to date" },
-  { field: "Vesting Schedule", column: "vestingSchedule", desc: "Vesting cadence (e.g. 4-year)" },
-  { field: "Grant Price", column: "grantPrice", desc: "Price at grant date" },
-  { field: "Current Price", column: "currentPrice", desc: "Current share price" },
-  { field: "Vest Start", column: "vestingStartDate", desc: "Vesting commencement date" },
-  { field: "Vest End", column: "vestingEndDate", desc: "Final vesting date" },
-  { field: "Current Equity $", column: "currentEquity", desc: "Total current equity value on employee record" },
-];
-
 const employeeData = [
   { id: "EMP-00001", firstName: "Sarah", lastName: "Chen", title: "VP of Compensation", level: "M90", dept: "HR", location: "Zone A USA", rating: "Greatly Exceeded", salary: 180000, commission: null as number | null, bonus: 20.0, equity: null as number | null },
   { id: "EMP-00002", firstName: "Michael", lastName: "Johnson", title: "SVP of Engineering", level: "M100", dept: "Engineering", location: "Zone B USA", rating: "Exceeded", salary: 220000, commission: null, bonus: 30.0, equity: 150000 },
@@ -165,16 +134,6 @@ const excludedEmployees = [
   { name: "Olivia Martinez", id: "EMP-00267", dept: "Finance", startDate: "November 5, 2024", empType: "Consultant", reason: "Employment Type", detail: "Not Regular or Definite employment type" },
 ];
 
-const fxRates = [
-  { currency: "Euro", code: "EUR", rate: "0.92", updated: "2024-01-15", updatedBy: "Sarah Chen" },
-  { currency: "British Pound", code: "GBP", rate: "0.79", updated: "2024-01-15", updatedBy: "Sarah Chen" },
-  { currency: "Indian Rupee", code: "INR", rate: "83.12", updated: "2024-01-15", updatedBy: "Sarah Chen" },
-  { currency: "Canadian Dollar", code: "CAD", rate: "1.34", updated: "2024-01-15", updatedBy: "Sarah Chen" },
-  { currency: "Australian Dollar", code: "AUD", rate: "1.48", updated: "2024-01-15", updatedBy: "Sarah Chen" },
-  { currency: "Japanese Yen", code: "JPY", rate: "148.23", updated: "2024-01-15", updatedBy: "Sarah Chen" },
-];
-
-
 const salaryBands = [
   { level: "P30 - Junior", srp: "$75,000", rangeMax: "$95,000", equityMax: "$15,000" },
   { level: "P40 - Mid-Level", srp: "$95,000", rangeMax: "$120,000", equityMax: "$25,000" },
@@ -185,85 +144,7 @@ const salaryBands = [
   { level: "P90 - Distinguished", srp: "$280,000", rangeMax: "$350,000", equityMax: "$175,000" },
 ];
 
-const users = [
-  { name: "System Administrator", username: "@admin1", email: "admin@compvista.com", linked: "Sarah Chen (EMP-00001)", role: "admin", permissions: "APEX System Admin | Comp", active: true },
-  { name: "Team Manager", username: "@manager1", email: "manager@compvista.com", linked: "Lisa Patel (EMP-00003)", role: "manager", permissions: "", active: true },
-  { name: "Org Leader", username: "@leader1", email: "leader@compvista.com", linked: "Michael Johnson (EMP-00002)", role: "leader", permissions: "APEX Executive Planner", active: true },
-  { name: "Comp Planner", username: "@planner1", email: "planner@compvista.com", linked: "Emily Williams (EMP-00005)", role: "planner", permissions: "APEX Planner + Full Budget View", active: true },
-  { name: "HR Business Partner", username: "@hrbp1", email: "hrbp@compvista.com", linked: "Christopher Taylor (EMP-00010)", role: "hrbp", permissions: "APEX System Admin | HRBP", active: true },
-  { name: "Demo Employee", username: "@employee1", email: "employee@compvista.com", linked: "Chris Williams (EMP-00004)", role: "employee", permissions: "", active: true },
-];
 
-type ColumnField = {
-  id: string;
-  name: string;
-  variable: string;
-  dataSource: "Integration" | "User Input or Data Upload" | "Computed" | "Checkbox";
-  displayType: "Text" | "Number" | "Currency" | "Percentage" | "Yes/No" | "Frozen";
-  rewardLetter: boolean;
-  columnDefault: "Visible" | "Hidden";
-  locked: boolean;
-  visible: boolean;
-  editable: boolean;
-  permissions: { role: string; appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new" }[];
-};
-
-const fieldPermissionsData: ColumnField[] = [
-  { id: "employeeName", name: "Employee", variable: "empName", dataSource: "Integration", displayType: "Frozen", rewardLetter: false, columnDefault: "Visible", locked: true, visible: true, editable: true, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "employeeId", name: "Employee ID", variable: "empId001", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: true, visible: true, editable: true, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "geographicZone", name: "Geographic Zone", variable: "geo", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "prorated", name: "Prorated?", variable: "isProrated", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "All Other Users Can View", appearance: "default" }] },
-  { id: "jobFamily", name: "Non - Process Job Family Charge", variable: "csPharmact7MrCharge", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "jobProfile", name: "New Job Profile (Proposed)", variable: "newJobProfile", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Admin", appearance: "removed" }] },
-  { id: "h1Rating", name: "H1 Rating # FY23", variable: "h1RatingNumericValue", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "h2Rating", name: "H2 Rating FY23", variable: "h2RatingMadebyManager", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "newSalary", name: "New Salary (Annualized)", variable: "newSalary", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "apexEquityTarget", name: "APEX Equity Target (pre-vested)", variable: "fullBaseEquityTargetCompBase", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Columns Gr...", appearance: "moved" }, { role: "All Other Users Can Not View", appearance: "default" }] },
-  { id: "meritApex", name: "Modeled APEX Multiplier", variable: "modeledApexMultiplier", dataSource: "User Input or Data Upload", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "CRP ZU an...", appearance: "inprogress" }, { role: "HRBP All Role...", appearance: "moved" }, { role: "APEX Syste...", appearance: "success" }] },
-  { id: "refreshEquity", name: "Refresh Equity (USD)", variable: "equity1RefreshAmount", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Plans...", appearance: "success" }, { role: "CRP Org an...", appearance: "inprogress" }, { role: "All Other Users Can View", appearance: "default" }] },
-  { id: "maxEquity", name: "Max Equity - (USD)", variable: "maxEquity", dataSource: "Computed", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Other Users Can View", appearance: "default" }] },
-  { id: "futureTermination", name: "Future termination", variable: "futureTermDate", dataSource: "User Input or Data Upload", displayType: "Checkbox", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
-  { id: "equityDiscretionJustification", name: "Equity Discretion Justification", variable: "deviationFromModelRat", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "APEX Basis...", appearance: "success" }, { role: "CRP Org an...", appearance: "inprogress" }] },
-  { id: "equityDiscretionComments", name: "Equity Discretion Comments - Other", variable: "comments", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Basis...", appearance: "success" }] },
-  { id: "declineAppeal", name: "Decline/decline appeal?", variable: "isDeclined", dataSource: "Computed", displayType: "Yes/No", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "fy25SpecialEquity", name: "FY25 Special Equity Top", variable: "specialEquityTop", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
-  { id: "fy19SpecialEquity", name: "FY19 Special Equity Recipient", variable: "fy19SpecialEquityRecipient", dataSource: "User Input or Data Upload", displayType: "Yes/No", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "HRBP Intro...", appearance: "moved" }, { role: "APEX Basis...", appearance: "success" }] },
-  { id: "stockRank", name: "Stock Rank", variable: "stockRank", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "HRBP Role...", appearance: "moved" }, { role: "Columns De...", appearance: "moved" }] },
-  { id: "specialEquityComponent", name: "Special Equity - Components", variable: "specialEquityBreakdownPayline", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can Not View", appearance: "default" }] },
-  { id: "specialEquityGrant", name: "Special Equity Grant (USD)", variable: "equityGrants", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }, { role: "Columns De...", appearance: "moved" }, { role: "APEX Syste...", appearance: "success" }] },
-  { id: "lusoProm", name: "L500+ Promotion Equity (USD)", variable: "promoEquityGrantUsd", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "APEX Basis...", appearance: "success" }, { role: "Columns De...", appearance: "moved" }] },
-  { id: "lusoRetention", name: "L500+ Retention Equity (USD)", variable: "retentionEquity", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [] },
-  { id: "finalEquityMultiplier", name: "Final Equity Multiplier (%)", variable: "fullBaseEquityMultiplierPercentage", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, visible: true, editable: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "inti", name: "INTI Status", visible: true, editable: false, variable: "intiStatus", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "paidHourly", name: "Paid Hourly", visible: true, editable: false, variable: "paidHourly", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "location", name: "Location", visible: true, editable: false, variable: "location", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "businessTitle", name: "Business Title", visible: true, editable: false, variable: "businessTitle", dataSource: "User Input or Data Upload", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Admin", appearance: "removed" }, { role: "All Other Users Can Not View", appearance: "default" }] },
-  { id: "department", name: "Department", visible: true, editable: true, variable: "dept", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "manager", name: "Manager", visible: true, editable: false, variable: "managerName", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "startDate", name: "Start Date", visible: true, editable: false, variable: "startDate", dataSource: "Integration", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "timeInJobProfile", name: "Time in Job Profile", visible: true, editable: false, variable: "timeInJobProfile", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "tenure", name: "Tenure", visible: true, editable: false, variable: "tenure", dataSource: "Computed", displayType: "Text", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "fte", name: "FTE %", visible: true, editable: false, variable: "ftePct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "currentSalary", name: "Current Salary", visible: true, editable: true, variable: "currentSalary", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }, { role: "All Other Users Can Not View", appearance: "default" }] },
-  { id: "currentTargetBonus", name: "Current Target Bonus", visible: true, editable: false, variable: "currentTargetBonus", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "currentEquity", name: "Current Equity", visible: true, editable: false, variable: "currentEquity", dataSource: "Integration", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "proposedSalary", name: "Proposed Salary", visible: true, editable: true, variable: "proposedSalary", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "Admin", appearance: "removed" }, { role: "All Other Users Can Not View", appearance: "default" }] },
-  { id: "proposedTargetBonus", name: "Proposed Target Bonus", visible: true, editable: false, variable: "proposedBonus", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "proposedEquity", name: "Proposed Equity", visible: true, editable: false, variable: "proposedEquity", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "CRP Zone", appearance: "inprogress" }, { role: "APEX Plans...", appearance: "success" }] },
-  { id: "meritIncrease", name: "Merit Increase %", visible: true, editable: true, variable: "meritIncreasePct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "meritIncreaseAmount", name: "Merit Increase Amount", visible: true, editable: false, variable: "meritIncreaseAmt", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "promotionIncrease", name: "Promotion Increase %", visible: true, editable: false, variable: "promotionIncrPct", dataSource: "Computed", displayType: "Percentage", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "promotionAmount", name: "Promotion Amount", visible: true, editable: false, variable: "promotionAmt", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "oneTimeBonus", name: "One-Time Bonus", visible: true, editable: true, variable: "oneTimeBonus", dataSource: "User Input or Data Upload", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "Admin", appearance: "removed" }, { role: "APEX Basis...", appearance: "success" }] },
-  { id: "equityGrant", name: "Equity Grant", visible: true, editable: false, variable: "equityGrant", dataSource: "User Input or Data Upload", displayType: "Number", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-  { id: "totalCompensation", name: "Total Compensation", visible: true, editable: false, variable: "totalComp", dataSource: "Computed", displayType: "Currency", rewardLetter: false, columnDefault: "Visible", locked: false, permissions: [{ role: "All Users Can View", appearance: "default" }] },
-];
-
-const fxChangeHistory = [
-  { date: "2024-01-15 14:23:45", user: "Sarah Chen", action: "Imported FX Rates", details: "Updated 6 currencies from CSV file", source: "CSV Import" },
-  { date: "2024-01-10 09:15:22", user: "Michael Johnson", action: "Updated EUR Rate", details: "Changed from 0.89 to 0.92", source: "Manual Edit" },
-  { date: "2024-01-08 16:42:18", user: "Sarah Chen", action: "Updated INR Rate", details: "Changed from 82.45 to 83.12", source: "Manual Edit" },
-];
 
 function SuccessAnimation({ onDone }: { onDone: () => void }) {
   const [phase, setPhase] = useState<"circle" | "check" | "text" | "confetti" | "done">("circle");
@@ -464,14 +345,11 @@ function SuccessAnimation({ onDone }: { onDone: () => void }) {
 export default function CycleBuilder({ onBack }: CycleBuilderProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [showComplete, setShowComplete] = useState(false);
-  const [workdayExpanded, setWorkdayExpanded] = useState(true);
-  const [shareworksExpanded, setShareworksExpanded] = useState(false);
-  const [selectedRole, setSelectedRole] = useState("Admin");
-  const [fieldPermissions, setFieldPermissions] = useState(fieldPermissionsData);
   const [selectedTemplate, setSelectedTemplate] = useState("standard");
   const [includePerformance, setIncludePerformance] = useState(true);
   const [includeComparison, setIncludeComparison] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -488,7 +366,12 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const triggerAutosave = useCallback(() => {
+    setLastSaved(new Date());
+  }, []);
+
   const handleNext = () => {
+    triggerAutosave();
     if (currentStep < STEPS.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
@@ -502,67 +385,23 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
     }
   };
 
-  const toggleFieldPermission = (fieldId: string, type: "visible" | "editable") => {
-    setFieldPermissions((prev) =>
-      prev.map((f) => (f.id === fieldId ? { ...f, [type]: !f[type] } : f))
-    );
-  };
-
-  const addRoleToField = (fieldId: string, role: string, appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new") => {
-    setFieldPermissions((prev) =>
-      prev.map((f) =>
-        f.id === fieldId && !f.permissions.some((p) => p.role === role)
-          ? { ...f, permissions: [...f.permissions, { role, appearance }] }
-          : f
-      )
-    );
-  };
-
-  const removeRoleFromField = (fieldId: string, role: string) => {
-    setFieldPermissions((prev) =>
-      prev.map((f) =>
-        f.id === fieldId
-          ? { ...f, permissions: f.permissions.filter((p) => p.role !== role) }
-          : f
-      )
-    );
-  };
-
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
         return <CycleDetailsStep formData={formData} updateField={updateField} />;
       case 1:
-        return (
-          <DataIntegrationsStep
-            workdayExpanded={workdayExpanded}
-            setWorkdayExpanded={setWorkdayExpanded}
-            shareworksExpanded={shareworksExpanded}
-            setShareworksExpanded={setShareworksExpanded}
-          />
-        );
+        return <EligibilityRulesStep />;
       case 2:
         return <EmployeeDataGridStep />;
       case 3:
-        return <EligibilityRulesStep />;
+        return <UploadCompensationDataStep />;
       case 4:
-        return <SalaryBandsStep />;
+        return <CompDataGridStep />;
       case 5:
-        return <UsersRolesStep />;
+        return <SalaryBandsStep />;
       case 6:
         return (
-          <FieldPermissionsStep
-            selectedRole={selectedRole}
-            setSelectedRole={setSelectedRole}
-            fieldPermissions={fieldPermissions}
-            toggleFieldPermission={toggleFieldPermission}
-            addRoleToField={addRoleToField}
-            removeRoleFromField={removeRoleFromField}
-          />
-        );
-      case 7:
-        return (
-          <RewardLetterStep
+          <RewardStatementsStep
             selectedTemplate={selectedTemplate}
             setSelectedTemplate={setSelectedTemplate}
             includePerformance={includePerformance}
@@ -573,8 +412,6 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
             setCustomMessage={setCustomMessage}
           />
         );
-      case 8:
-        return <ReviewFinalizeStep formData={formData} setCurrentStep={setCurrentStep} />;
       default:
         return null;
     }
@@ -663,13 +500,23 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
         >
           Back
         </Button>
-        <Button
-          appearance={currentStep === STEPS.length - 1 ? "primary" : "default"}
-          iconAfter={ChevronRightIcon}
-          onClick={handleNext}
-        >
-          {currentStep === STEPS.length - 1 ? "Finalize Cycle" : "Next Step"}
-        </Button>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.200") }}>
+          {lastSaved && (
+            <div style={{ display: "flex", alignItems: "center", gap: token("space.075") }}>
+              <CheckCircleIcon label="" color={token("color.icon.success")} LEGACY_size="small" />
+              <Text size="UNSAFE_small" color="color.text.subtlest">
+                Saved {lastSaved.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+              </Text>
+            </div>
+          )}
+          <Button
+            appearance={currentStep === STEPS.length - 1 ? "primary" : "default"}
+            iconAfter={ChevronRightIcon}
+            onClick={handleNext}
+          >
+            {currentStep === STEPS.length - 1 ? "Finalize Cycle" : "Next Step"}
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -862,8 +709,8 @@ function CycleDetailsStep({
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <PageIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Cycle Details</Heading>
+          <SettingsIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Configure Cycle</Heading>
         </div>
         <Text size="small" color="color.text.subtlest">Define the basic settings for your compensation cycle</Text>
       </div>
@@ -970,236 +817,6 @@ function CycleDetailsStep({
   );
 }
 
-function IntegrationCard({
-  name,
-  rows,
-  lastSynced,
-  iconColor,
-  icon,
-  isFile,
-}: {
-  name: string;
-  rows?: string;
-  lastSynced: string;
-  iconColor: string;
-  icon: React.ReactNode;
-  isFile?: boolean;
-}) {
-  return (
-    <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: token("space.150") }}>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: "6px",
-              backgroundColor: iconColor,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {icon}
-          </div>
-          <div>
-            <Text size="small" weight="bold">{name}</Text>
-            {!isFile && (
-              <div>
-                <Lozenge appearance="success">Connected</Lozenge>
-              </div>
-            )}
-          </div>
-        </div>
-        {!isFile && (
-          <Button appearance="link" spacing="none">
-            Sync now
-          </Button>
-        )}
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: token("space.025") }}>
-        {rows && <Text size="UNSAFE_small" color="color.text.subtlest">{rows}</Text>}
-        <Text size="UNSAFE_small" color="color.text.subtlest">{isFile ? "Uploaded" : "Last synced"}: {lastSynced}</Text>
-      </div>
-    </div>
-  );
-}
-
-function DataIntegrationsStep({
-  workdayExpanded,
-  setWorkdayExpanded,
-  shareworksExpanded,
-  setShareworksExpanded,
-}: {
-  workdayExpanded: boolean;
-  setWorkdayExpanded: (v: boolean) => void;
-  shareworksExpanded: boolean;
-  setShareworksExpanded: (v: boolean) => void;
-}) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <UploadIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Data Integrations</Heading>
-        </div>
-        <Text size="small" color="color.text.subtlest">Connect data sources and upload files for this compensation cycle</Text>
-      </div>
-
-      <Heading size="small">Data Upload</Heading>
-
-      <div
-        style={{
-          border: `2px dashed ${token("color.border")}`,
-          borderRadius: "6px",
-          backgroundColor: token("elevation.surface.sunken"),
-          padding: token("space.500"),
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          textAlign: "center",
-          cursor: "pointer",
-        }}
-      >
-        <div
-          style={{
-            width: 64,
-            height: 64,
-            borderRadius: "50%",
-            backgroundColor: token("color.background.selected"),
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: token("space.200"),
-          }}
-        >
-          <UploadIcon label="" color={token("color.icon.brand")} />
-        </div>
-        <Heading size="small">Upload Data</Heading>
-        <div style={{ marginTop: token("space.100"), marginBottom: token("space.200"), maxWidth: 400 }}>
-          <Text size="small" color="color.text.subtlest">
-            Drag and drop your file here, or click to browse. Use our template to ensure data compatibility.
-          </Text>
-        </div>
-        <Button appearance="primary" iconBefore={UploadIcon}>
-          Choose File
-        </Button>
-        <div style={{ marginTop: token("space.200") }}>
-          <Text size="UNSAFE_small" color="color.text.subtlest">
-            Supported formats: .xlsx, .xls, .csv (Max size: 50MB)
-          </Text>
-        </div>
-      </div>
-
-      <Heading size="small">Current Integrations</Heading>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.200") }}>
-        <IntegrationCard
-          name="Workday"
-          rows="100 rows"
-          lastSynced="02/20/26 10:34 PM PST"
-          iconColor={token("color.background.brand.bold")}
-          icon={<PageIcon label="" color={token("color.icon.inverse")} />}
-        />
-        <IntegrationCard
-          name="Shareworks"
-          rows="80 rows"
-          lastSynced="02/20/26 10:34 PM PST"
-          iconColor={token("color.background.success.bold")}
-          icon={<CreditCardIcon label="" color={token("color.icon.inverse")} />}
-        />
-      </div>
-
-      <Heading size="small">Data sources</Heading>
-      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
-        <div
-          onClick={() => setWorkdayExpanded(!workdayExpanded)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            cursor: "pointer",
-            marginBottom: workdayExpanded ? token("space.200") : 0,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <PageIcon label="" color={token("color.icon.brand")} />
-            <Text size="medium" weight="bold">Workday</Text>
-          </div>
-          {workdayExpanded ? (
-            <ChevronUpIcon label="" color={token("color.icon.subtle")} />
-          ) : (
-            <ChevronDownIcon label="" color={token("color.icon.subtle")} />
-          )}
-        </div>
-        {workdayExpanded && (
-          <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div>
-                <Text size="small" weight="bold">Workday Field Mapping</Text>
-                <div>
-                  <Text size="UNSAFE_small" color="color.text.subtlest">
-                    {workdayFields.length} fields - Employee and compensation data from Workday
-                  </Text>
-                </div>
-              </div>
-              <Lozenge appearance="inprogress">Workday</Lozenge>
-            </div>
-
-            <FieldMappingTable fields={workdayFields} />
-
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button appearance="primary">Sync now</Button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
-        <div
-          onClick={() => setShareworksExpanded(!shareworksExpanded)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            cursor: "pointer",
-            marginBottom: shareworksExpanded ? token("space.200") : 0,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <CreditCardIcon label="" color={token("color.icon.success")} />
-            <Text size="medium" weight="bold">Shareworks</Text>
-          </div>
-          {shareworksExpanded ? (
-            <ChevronUpIcon label="" color={token("color.icon.subtle")} />
-          ) : (
-            <ChevronDownIcon label="" color={token("color.icon.subtle")} />
-          )}
-        </div>
-        {shareworksExpanded && (
-          <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div>
-                <Text size="small" weight="bold">Shareworks Field Mapping</Text>
-                <div>
-                  <Text size="UNSAFE_small" color="color.text.subtlest">
-                    {shareworksFields.length} fields - Equity and stock data from Shareworks
-                  </Text>
-                </div>
-              </div>
-              <Lozenge appearance="success">Shareworks</Lozenge>
-            </div>
-
-            <FieldMappingTable fields={shareworksFields} />
-
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button appearance="primary">Sync now</Button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
 function FieldMappingTable({ fields }: { fields: typeof workdayFields }) {
   return (
@@ -1320,13 +937,12 @@ function EmployeeDataGridStep() {
           <Heading size="medium">Employee Data</Heading>
         </div>
         <Text size="small" color="color.text.subtlest">
-          Unified view of all employee fields with data source attribution
+          Eligible employees based on active eligibility rules — export to CSV for review
         </Text>
         <div style={{ display: "flex", gap: token("space.100"), marginTop: token("space.150") }}>
           <Lozenge appearance="inprogress">Workday</Lozenge>
           <Lozenge appearance="success">Shareworks</Lozenge>
-          <Lozenge appearance="moved">CSV</Lozenge>
-          <Text size="small" color="color.text.subtlest">52 employees - 18 of 37 columns visible</Text>
+          <Text size="small" color="color.text.subtlest">52 eligible employees · 12 columns</Text>
         </div>
       </div>
 
@@ -1351,9 +967,12 @@ function EmployeeDataGridStep() {
           }}
         >
           <Text size="small" color="color.text.subtlest">
-            Showing <Text size="small" weight="bold">1-12</Text> of <Text size="small" weight="bold">52</Text> employees
+            Showing <Text size="small" weight="bold">1-12</Text> of <Text size="small" weight="bold">52</Text> eligible employees
           </Text>
           <div style={{ display: "flex", gap: token("space.100") }}>
+            <Button appearance="subtle" spacing="compact" iconBefore={DownloadIcon}>
+              Export
+            </Button>
             <Button appearance="subtle" spacing="compact" isDisabled iconBefore={ChevronLeftIcon}>
               Previous
             </Button>
@@ -1368,28 +987,159 @@ function EmployeeDataGridStep() {
 }
 
 function EligibilityRulesStep() {
+  const [workdayExpanded, setWorkdayExpanded] = useState(true);
+
+  const manualExclusions = [
+    { name: "Rachel Kim", id: "EMP-00045", dept: "Engineering", reason: "On extended leave" },
+    { name: "Tom Nguyen", id: "EMP-00078", dept: "Sales", reason: "Transferring to new entity" },
+    { name: "Priya Sharma", id: "EMP-00112", dept: "Finance", reason: "Pending termination" },
+  ];
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <LockLockedIcon label="" color={token("color.icon.brand")} />
+            <FilterIcon label="" color={token("color.icon.brand")} />
             <Heading size="medium">Eligibility Rules</Heading>
           </div>
-          <Text size="small" color="color.text.subtlest">Define rules to determine which employees are eligible for this cycle</Text>
+          <Text size="small" color="color.text.subtlest">Define data sources, exclusion lists, and rules to determine which employees are eligible for this cycle</Text>
         </div>
-        <Button appearance="primary" iconBefore={AddIcon}>
-          New Rule
-        </Button>
+      </div>
+
+      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
+        <div
+          onClick={() => setWorkdayExpanded(!workdayExpanded)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            cursor: "pointer",
+            marginBottom: workdayExpanded ? token("space.200") : 0,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+            <PageIcon label="" color={token("color.icon.brand")} />
+            <Text size="medium" weight="bold">Workday Data Source</Text>
+            <Lozenge appearance="success">Connected</Lozenge>
+          </div>
+          {workdayExpanded ? (
+            <ChevronUpIcon label="" color={token("color.icon.subtle")} />
+          ) : (
+            <ChevronDownIcon label="" color={token("color.icon.subtle")} />
+          )}
+        </div>
+        {workdayExpanded && (
+          <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div>
+                <Text size="small" weight="bold">Workday Field Mapping</Text>
+                <div>
+                  <Text size="UNSAFE_small" color="color.text.subtlest">
+                    {workdayFields.length} fields — Employee and compensation data from Workday
+                  </Text>
+                </div>
+              </div>
+              <Lozenge appearance="inprogress">Workday</Lozenge>
+            </div>
+            <FieldMappingTable fields={workdayFields} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <Text size="UNSAFE_small" color="color.text.subtlest">Last synced: 02/20/26 10:34 PM PST</Text>
+              <Button appearance="primary">Sync now</Button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <Heading size="xsmall">Active Rules</Heading>
+        <Heading size="xsmall">Exclude Employee IDs</Heading>
+        <div style={{ marginTop: token("space.100") }}>
+          <Text size="UNSAFE_small" color="color.text.subtlest">
+            Upload a CSV file containing employee IDs to manually exclude from this cycle
+          </Text>
+        </div>
+        <div
+          style={{
+            marginTop: token("space.200"),
+            border: `2px dashed ${token("color.border")}`,
+            borderRadius: "6px",
+            padding: token("space.400"),
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: token("space.150"),
+            cursor: "pointer",
+          }}
+        >
+          <UploadIcon label="" color={token("color.icon.subtle")} />
+          <Text size="small" weight="semibold">Upload exclusion list</Text>
+          <Text size="UNSAFE_small" color="color.text.subtlest">CSV with a single column: Employee ID</Text>
+          <Button appearance="primary" iconBefore={UploadIcon}>Choose File</Button>
+        </div>
+
+        {manualExclusions.length > 0 && (
+          <div style={{ marginTop: token("space.300") }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.150") }}>
+              <Text size="small" weight="bold">{manualExclusions.length} manually excluded</Text>
+              <Button appearance="subtle" spacing="compact" iconBefore={DownloadIcon}>Export list</Button>
+            </div>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
+                  {["Employee", "Employee ID", "Department", "Reason"].map((h) => (
+                    <th key={h} style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "left", textTransform: "uppercase" }}>
+                      <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {manualExclusions.map((emp, i) => (
+                  <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Text size="small" weight="semibold">{emp.name}</Text>
+                    </td>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Text size="UNSAFE_small"><code style={{ fontFamily: "monospace" }}>{emp.id}</code></Text>
+                    </td>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Text size="small" color="color.text.subtle">{emp.dept}</Text>
+                    </td>
+                    <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                      <Text size="small" color="color.text.subtlest">{emp.reason}</Text>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Heading size="xsmall">Column-Based Rules</Heading>
+          <Button appearance="primary" iconBefore={AddIcon}>New Rule</Button>
+        </div>
+
+        <div style={{ marginTop: token("space.150") }}>
+          <SectionMessage appearance="information">
+            <Text size="small">
+              Rules use AND logic — employees must match all active rules to be eligible. Employee type is used for overall APEX and comp eligibility.
+            </Text>
+          </SectionMessage>
+        </div>
+
         <div style={{ marginTop: token("space.200"), display: "flex", flexDirection: "column", gap: token("space.200") }}>
           {[
-            { name: "Employment Type Filter", field: "Employment Type", operator: "IS ONE OF", values: "Regular, Definite", count: "45 employees matched" },
-            { name: "Start Date Cutoff", field: "Start Date", operator: "IS BEFORE", values: "March 31, 2026", count: "48 employees matched" },
-            { name: "FTE Threshold", field: "FTE %", operator: "GREATER THAN", values: "0.5", count: "50 employees matched" },
+            { name: "Start Date Cutoff", field: "Start Date", operator: "IS BEFORE", values: "March 31, 2026", count: "48 matched" },
+            { name: "Employment Type", field: "Employee Type", operator: "IS ONE OF", values: "Regular, Definite", count: "45 matched" },
+            { name: "Department Filter", field: "Department", operator: "IS NOT ONE OF", values: "Intern Programs", count: "51 matched" },
+            { name: "Reporting Line", field: "Report To", operator: "IS NOT", values: "Vacant", count: "50 matched" },
+            { name: "Country Scope", field: "Country", operator: "IS ONE OF", values: "United States, Canada, United Kingdom", count: "42 matched" },
+            { name: "Level Minimum", field: "Level", operator: "GREATER THAN OR EQUAL", values: "P30", count: "49 matched" },
+            { name: "Cost Center Active", field: "Cost Center", operator: "IS NOT", values: "CLOSED", count: "52 matched" },
           ].map((rule, i) => (
             <div
               key={i}
@@ -1404,13 +1154,14 @@ function EligibilityRulesStep() {
                 <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
                   <Lozenge appearance="success">Active</Lozenge>
                   <IconButton appearance="subtle" spacing="compact" icon={EditIcon} label="Edit" />
+                  <IconButton appearance="subtle" spacing="compact" icon={DeleteIcon} label="Delete" />
                 </div>
               </div>
-              <div style={{ display: "flex", gap: token("space.200"), alignItems: "center" }}>
+              <div style={{ display: "flex", gap: token("space.200"), alignItems: "center", flexWrap: "wrap" }}>
                 <Text size="UNSAFE_small" color="color.text.subtlest">{rule.field}</Text>
                 <Lozenge>{rule.operator}</Lozenge>
                 <Text size="UNSAFE_small" weight="semibold">{rule.values}</Text>
-                <Text size="UNSAFE_small" color="color.text.subtlest">{rule.count}</Text>
+                <Text size="UNSAFE_small" color="color.text.subtlest">· {rule.count}</Text>
               </div>
             </div>
           ))}
@@ -1418,23 +1169,8 @@ function EligibilityRulesStep() {
       </div>
 
       <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <div style={{ marginBottom: token("space.200") }}>
-          <Heading size="xsmall">New Eligibility Rule</Heading>
-        </div>
-
-        <SectionMessage appearance="information">
-          <Text size="small" weight="bold">Note: </Text>
-          <Text size="small">
-            Employee type is used for overall APEX and comp eligibility.
-          </Text>
-          <div style={{ marginTop: token("space.050") }}>
-            <Text size="UNSAFE_small" color="color.text.subtlest">
-              You can combine multiple conditions with AND logic (e.g., Start Date &lt; 31 March 2026 AND Employee Type = Regular or Definite)
-            </Text>
-          </div>
-        </SectionMessage>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.300") }}>
+        <Heading size="xsmall">New Eligibility Rule</Heading>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300"), marginTop: token("space.200") }}>
           <div>
             <LabelText required>Rule Name</LabelText>
             <Textfield placeholder="e.g., Full-time employees only" />
@@ -1443,11 +1179,13 @@ function EligibilityRulesStep() {
             <LabelText required>Field</LabelText>
             <Select
               options={[
-                { label: "Employment Type", value: "empType" },
                 { label: "Start Date", value: "startDate" },
-                { label: "FTE %", value: "fte" },
-                { label: "Location", value: "location" },
+                { label: "Employee Type", value: "empType" },
                 { label: "Department", value: "department" },
+                { label: "Report To", value: "reportTo" },
+                { label: "Country", value: "country" },
+                { label: "Level", value: "level" },
+                { label: "Cost Center", value: "costCenter" },
               ]}
               placeholder="Select field..."
             />
@@ -1461,7 +1199,9 @@ function EligibilityRulesStep() {
                 { label: "IS ONE OF", value: "isOneOf" },
                 { label: "IS NOT ONE OF", value: "isNotOneOf" },
                 { label: "EQUALS", value: "equals" },
+                { label: "IS NOT", value: "isNot" },
                 { label: "GREATER THAN", value: "greaterThan" },
+                { label: "GREATER THAN OR EQUAL", value: "gte" },
                 { label: "LESS THAN", value: "lessThan" },
                 { label: "IS BEFORE", value: "isBefore" },
                 { label: "IS AFTER", value: "isAfter" },
@@ -1474,11 +1214,8 @@ function EligibilityRulesStep() {
             <Textfield placeholder="Value" />
           </div>
         </div>
-
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: token("space.300"), paddingTop: token("space.200"), borderTop: `1px solid ${token("color.border")}` }}>
-          <Button appearance="subtle" iconBefore={AddIcon}>
-            Add AND Condition
-          </Button>
+          <Button appearance="subtle" iconBefore={AddIcon}>Add AND Condition</Button>
           <div style={{ display: "flex", gap: token("space.100") }}>
             <Button appearance="subtle">Cancel</Button>
             <Button appearance="primary">Save Rule</Button>
@@ -1645,1251 +1382,329 @@ function SalaryBandsStep() {
   );
 }
 
-const cityMap: Record<string, string> = {
-  "Zone A USA": "San Francisco",
-  "Zone B USA": "Seattle",
-  "Zone C USA": "Boston",
-};
 
-const userRoleAssignments: Record<string, string> = {
-  "EMP-00001": "APEX System Admin | Comp",
-  "EMP-00002": "APEX Executive Planner",
-  "EMP-00003": "APEX Planner",
-  "EMP-00004": "APEX Planner",
-  "EMP-00005": "APEX Planner",
-  "EMP-00006": "APEX Planner + Full Budget View",
-  "EMP-00007": "APEX Planner",
-  "EMP-00008": "APEX Planner",
-  "EMP-00009": "APEX Planner",
-  "EMP-00010": "APEX System Admin | HRBP",
-  "EMP-00011": "APEX Planner",
-  "EMP-00012": "APEX Planner",
-};
+const compUploadErrors = [
+  { row: 15, field: "email", value: "john.smith@", error: "Invalid email format" },
+  { row: 23, field: "meritIncrease", value: "abc", error: "Expected a numeric value" },
+  { row: 31, field: "email", value: "unknown@company.com", error: "Employee not found in system" },
+  { row: 45, field: "proposedSalary", value: "-50000", error: "Value must be positive" },
+];
 
-const TOTAL_USERS = 13128;
+const compUploadData = [
+  { email: "sarah.chen@company.com", id: "EMP-00001", meritPct: "4.5%", promoIncrease: "—", proposedSalary: "$188,100", equityGrant: "$12,000", oneTimeBonus: "—" },
+  { email: "michael.johnson@company.com", id: "EMP-00002", meritPct: "3.8%", promoIncrease: "8.0%", proposedSalary: "$245,960", equityGrant: "$25,000", oneTimeBonus: "$15,000" },
+  { email: "lisa.patel@company.com", id: "EMP-00003", meritPct: "3.0%", promoIncrease: "—", proposedSalary: "$180,250", equityGrant: "$10,000", oneTimeBonus: "—" },
+  { email: "james.anderson@company.com", id: "EMP-00004", meritPct: "5.2%", promoIncrease: "—", proposedSalary: "$163,060", equityGrant: "$8,000", oneTimeBonus: "$5,000" },
+  { email: "emily.williams@company.com", id: "EMP-00005", meritPct: "3.5%", promoIncrease: "—", proposedSalary: "$170,775", equityGrant: "$9,000", oneTimeBonus: "—" },
+  { email: "david.martinez@company.com", id: "EMP-00006", meritPct: "6.0%", promoIncrease: "10.0%", proposedSalary: "$220,400", equityGrant: "$18,000", oneTimeBonus: "$10,000" },
+];
 
-function UsersTabContent() {
-  const [usersSubTab, setUsersSubTab] = useState<"users" | "guests">("users");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 10;
-
-  const availableUserRoles = [
-    { role: "APEX System Admin | Comp", appearance: "success" as const },
-    { role: "APEX System Admin | HRBP", appearance: "success" as const },
-    { role: "APEX Executive Planner", appearance: "success" as const },
-    { role: "APEX Planner", appearance: "default" as const },
-    { role: "APEX Planner + Full Budget View", appearance: "inprogress" as const },
-    { role: "APEX Basis Points", appearance: "success" as const },
-    { role: "APEX Plans View", appearance: "success" as const },
-    { role: "CRP Zone", appearance: "inprogress" as const },
-    { role: "CRP Org and Geo Zone", appearance: "inprogress" as const },
-    { role: "HRBP All Roles", appearance: "moved" as const },
-    { role: "HRBP Intro Roles", appearance: "moved" as const },
-    { role: "Admin", appearance: "removed" as const },
-  ];
-
-  const [employeeRoles, setEmployeeRoles] = useState<Record<string, { role: string; appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new" }[]>>(() => {
-    const initial: Record<string, { role: string; appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new" }[]> = {};
-    employeeData.forEach((emp) => {
-      const assignedRole = userRoleAssignments[emp.id] || "APEX Planner";
-      const match = availableUserRoles.find((r) => r.role === assignedRole);
-      initial[emp.id] = [{ role: assignedRole, appearance: match?.appearance || "default" }];
-    });
-    return initial;
-  });
-
-  const [userRolePopup, setUserRolePopup] = useState<{ empId: string; anchorRect: DOMRect } | null>(null);
-  const [userRoleSearch, setUserRoleSearch] = useState("");
-  const [expandedUserRoles, setExpandedUserRoles] = useState<Set<string>>(new Set());
-  const userRolePopupRef = useRef<HTMLDivElement>(null);
-
-  const filteredUserRoles = availableUserRoles.filter((r) =>
-    r.role.toLowerCase().includes(userRoleSearch.toLowerCase())
-  );
-
-  useEffect(() => {
-    if (!userRolePopup) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (userRolePopupRef.current && !userRolePopupRef.current.contains(e.target as Node)) {
-        setUserRolePopup(null);
-        setUserRoleSearch("");
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [userRolePopup]);
-
-  const addUserRole = (empId: string, role: string, appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new") => {
-    setEmployeeRoles((prev) => {
-      const current = prev[empId] || [];
-      if (current.some((r) => r.role === role)) return prev;
-      return { ...prev, [empId]: [...current, { role, appearance }] };
-    });
-  };
-
-  const removeUserRole = (empId: string, role: string) => {
-    setEmployeeRoles((prev) => {
-      const current = prev[empId] || [];
-      return { ...prev, [empId]: current.filter((r) => r.role !== role) };
-    });
-  };
-
-  const filteredEmployees = employeeData.filter((emp) => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(q) ||
-      `${emp.firstName.toLowerCase().charAt(0)}.${emp.lastName.toLowerCase()}@company.com`.includes(q)
-    );
-  });
-
-  const subTabStyle = (isActive: boolean): React.CSSProperties => ({
-    padding: `${token("space.050")} ${token("space.150")}`,
-    cursor: "pointer",
-    background: "none",
-    border: isActive ? `1px solid ${token("color.border")}` : `1px solid transparent`,
-    borderRadius: "6px",
-    backgroundColor: isActive ? token("elevation.surface.raised") : "transparent",
-  });
-
-  const avatarColors = [
-    token("color.background.accent.blue.subtler"),
-    token("color.background.accent.green.subtler"),
-    token("color.background.accent.orange.subtler"),
-    token("color.background.accent.purple.subtler"),
-    token("color.background.accent.teal.subtler"),
-  ];
-
-  const avatarTextColors = [
-    token("color.text.accent.blue"),
-    token("color.text.accent.green"),
-    token("color.text.accent.orange"),
-    token("color.text.accent.purple"),
-    token("color.text.accent.teal"),
-  ];
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: token("space.200") }}>
-        <div style={{ flex: 1, maxWidth: 400 }}>
-          <Textfield
-            placeholder={`Search ${TOTAL_USERS.toLocaleString()} users by name or email`}
-            elemBeforeInput={
-              <div style={{ paddingLeft: token("space.100"), display: "flex", alignItems: "center" }}>
-                <SearchIcon label="" color={token("color.icon.subtle")} />
-              </div>
-            }
-            value={searchQuery}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
-            }}
-          />
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <Button appearance="subtle" iconBefore={TableColumnsDistributeIcon}>
-            Columns
-          </Button>
-          <Button appearance="subtle" iconBefore={FilterIcon}>
-            Filters
-          </Button>
-        </div>
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", gap: token("space.100") }}>
-          <button style={subTabStyle(usersSubTab === "users")} onClick={() => setUsersSubTab("users")}>
-            <Text size="small" weight={usersSubTab === "users" ? "semibold" : "regular"} color={usersSubTab === "users" ? "color.text" : "color.text.subtlest"}>Users</Text>
-          </button>
-          <button style={subTabStyle(usersSubTab === "guests")} onClick={() => setUsersSubTab("guests")}>
-            <Text size="small" weight={usersSubTab === "guests" ? "semibold" : "regular"} color={usersSubTab === "guests" ? "color.text" : "color.text.subtlest"}>Guests</Text>
-          </button>
-        </div>
-        <div style={{ display: "flex", gap: token("space.100") }}>
-          <Button appearance="default" iconBefore={TableColumnsDistributeIcon}>
-            Add column
-          </Button>
-          <Button appearance="default" iconBefore={PersonAddIcon}>
-            Add guest
-          </Button>
-          <Button appearance="default" iconBefore={DownloadIcon}>
-            Download CSV
-          </Button>
-        </div>
-      </div>
-
-      {usersSubTab === "users" && (
-        <>
-          <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: "6px", overflow: "hidden" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ backgroundColor: token("elevation.surface.sunken") }}>
-                  <th style={{ padding: `${token("space.100")} ${token("space.150")}`, width: 40, textAlign: "center" }}>
-                    <Checkbox label="" />
-                  </th>
-                  {["USER", "DEPARTMENT", "TITLE", "LEVEL", "CITY", "ROLES"].map((h) => (
-                    <th
-                      key={h}
-                      style={{
-                        padding: `${token("space.100")} ${token("space.150")}`,
-                        textAlign: "left",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.5px",
-                      }}
-                    >
-                      <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {filteredEmployees.map((emp, i) => {
-                  const email = `${emp.firstName.toLowerCase()}.${emp.lastName.charAt(0).toLowerCase()}@company.com`;
-                  const city = cityMap[emp.location] || "Austin";
-                  const roleLabel = userRoleAssignments[emp.id] || "APEX Planner";
-                  const colorIdx = i % avatarColors.length;
-                  const isManagerLevel = emp.level.startsWith("M");
-
-                  return (
-                    <tr
-                      key={emp.id}
-                      style={{
-                        borderTop: `1px solid ${token("color.border")}`,
-                      }}
-                    >
-                      <td style={{ padding: `${token("space.100")} ${token("space.150")}`, textAlign: "center" }}>
-                        <Checkbox label="" />
-                      </td>
-                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                          <div
-                            style={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              backgroundColor: avatarColors[colorIdx],
-                              color: avatarTextColors[colorIdx],
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexShrink: 0,
-                            }}
-                          >
-                            <Text size="small" weight="semibold">{emp.firstName.charAt(0)}</Text>
-                          </div>
-                          <div>
-                            <Text size="small" weight="semibold">{emp.firstName} {emp.lastName}</Text>
-                            <div>
-                              <Text size="UNSAFE_small" color="color.text.subtlest">{email}</Text>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
-                        <Text size="small">{emp.dept}</Text>
-                      </td>
-                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
-                        <Text size="small">{emp.title}</Text>
-                      </td>
-                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
-                        <Lozenge appearance={isManagerLevel ? "success" : "inprogress"}>
-                          {emp.level}
-                        </Lozenge>
-                      </td>
-                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
-                        <Text size="small">{city}</Text>
-                      </td>
-                      <td style={{ padding: `${token("space.100")} ${token("space.150")}` }}>
-                        {(() => {
-                          const roles = employeeRoles[emp.id] || [{ role: roleLabel, appearance: "default" as const }];
-                          const isExpanded = expandedUserRoles.has(emp.id);
-                          const visibleRoles = isExpanded ? roles : roles.slice(0, 3);
-                          const hiddenCount = roles.length - 3;
-                          return (
-                            <div style={{ display: "flex", alignItems: "center", gap: token("space.050"), flexWrap: "wrap" }}>
-                              {visibleRoles.map((r, ri) => (
-                                <Lozenge key={ri} appearance={r.appearance}>{r.role}</Lozenge>
-                              ))}
-                              {!isExpanded && hiddenCount > 0 && (
-                                <span
-                                  style={{
-                                    cursor: "pointer",
-                                  }}
-                                  onClick={() => setExpandedUserRoles((prev) => {
-                                    const next = new Set(prev);
-                                    next.add(emp.id);
-                                    return next;
-                                  })}
-                                >
-                                  <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">+ {hiddenCount} other{hiddenCount > 1 ? "s" : ""}</Text>
-                                </span>
-                              )}
-                              {isExpanded && roles.length > 3 && (
-                                <span
-                                  style={{
-                                    cursor: "pointer",
-                                  }}
-                                  onClick={() => setExpandedUserRoles((prev) => {
-                                    const next = new Set(prev);
-                                    next.delete(emp.id);
-                                    return next;
-                                  })}
-                                >
-                                  <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">Show less</Text>
-                                </span>
-                              )}
-                              <span>
-                                <Button
-                                  appearance="subtle"
-                                  spacing="compact"
-                                  iconBefore={AddIcon}
-                                  onClick={(e: React.MouseEvent<HTMLElement>) => {
-                                    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-                                    setUserRolePopup({ empId: emp.id, anchorRect: rect });
-                                    setUserRoleSearch("");
-                                  }}
-                                >
-                                  Add
-                                </Button>
-                              </span>
-                            </div>
-                          );
-                        })()}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <Text size="small" color="color.text.subtlest">
-              Showing <Text size="small" weight="bold" as="span">1-{filteredEmployees.length}</Text> of <Text size="small" weight="bold" as="span">{TOTAL_USERS.toLocaleString()}</Text> users
-            </Text>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-              <Button appearance="subtle" spacing="compact" isDisabled>
-                Previous
-              </Button>
-              {[1, 2, 3].map((p) => (
-                <Button
-                  key={p}
-                  appearance={currentPage === p ? "primary" : "subtle"}
-                  spacing="compact"
-                  onClick={() => setCurrentPage(p)}
-                >
-                  {p}
-                </Button>
-              ))}
-              <Text size="small" color="color.text.subtlest">...</Text>
-              <Button appearance="subtle" spacing="compact" onClick={() => setCurrentPage(1313)}>
-                1313
-              </Button>
-              <Button appearance="subtle" spacing="compact">
-                Next
-              </Button>
-            </div>
-          </div>
-        </>
-      )}
-
-      {usersSubTab === "guests" && (
-        <div
-          style={{
-            border: `1px solid ${token("color.border")}`,
-            borderRadius: "6px",
-            padding: token("space.500"),
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-            gap: token("space.200"),
-          }}
-        >
-          <PersonAddIcon label="" color={token("color.icon.subtle")} />
-          <Heading size="xsmall">No guests yet</Heading>
-          <Text size="small" color="color.text.subtlest">
-            Invite external collaborators to participate in compensation cycles with limited access.
-          </Text>
-          <Button appearance="primary" iconBefore={PersonAddIcon}>
-            Add guest
-          </Button>
-        </div>
-      )}
-
-      {userRolePopup && (
-        <div
-          ref={userRolePopupRef}
-          style={{
-            position: "fixed",
-            top: Math.min(userRolePopup.anchorRect.bottom + 4, window.innerHeight - 400),
-            left: Math.min(userRolePopup.anchorRect.left, window.innerWidth - 340),
-            width: 320,
-            maxHeight: 380,
-            backgroundColor: token("elevation.surface.overlay"),
-            boxShadow: token("elevation.shadow.overlay"),
-            borderRadius: "6px",
-            border: `1px solid ${token("color.border")}`,
-            zIndex: 600,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div style={{ padding: `${token("space.150")} ${token("space.200")}`, borderBottom: `1px solid ${token("color.border")}` }}>
-            <Textfield
-              isCompact
-              placeholder="Search roles..."
-              value={userRoleSearch}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserRoleSearch(e.target.value)}
-              elemBeforeInput={
-                <div style={{ paddingLeft: token("space.075"), display: "flex", alignItems: "center" }}>
-                  <SearchIcon label="" LEGACY_size="small" />
-                </div>
-              }
-              autoFocus
-            />
-          </div>
-          <div style={{ overflowY: "auto", flex: 1 }}>
-            {filteredUserRoles.length === 0 ? (
-              <div style={{ padding: `${token("space.200")} ${token("space.200")}`, textAlign: "center" }}>
-                <Text size="small" color="color.text.subtlest">No roles found</Text>
-              </div>
-            ) : (
-              filteredUserRoles.map((r) => {
-                const empRoles = employeeRoles[userRolePopup.empId] || [];
-                const isSelected = empRoles.some((er) => er.role === r.role);
-                return (
-                  <div
-                    key={r.role}
-                    style={{
-                      padding: `${token("space.075")} ${token("space.200")}`,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: token("space.100"),
-                      backgroundColor: "transparent",
-                      transition: "background-color 100ms",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.backgroundColor = token("color.background.neutral.subtle.hovered");
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
-                    }}
-                    onClick={() => {
-                      if (isSelected) {
-                        removeUserRole(userRolePopup.empId, r.role);
-                      } else {
-                        addUserRole(userRolePopup.empId, r.role, r.appearance);
-                      }
-                    }}
-                  >
-                    <Checkbox
-                      isChecked={isSelected}
-                      onChange={() => {}}
-                      label=""
-                    />
-                    <Lozenge appearance={r.appearance}>{r.role}</Lozenge>
-                  </div>
-                );
-              })
-            )}
-          </div>
-          <div style={{ padding: `${token("space.100")} ${token("space.200")}`, borderTop: `1px solid ${token("color.border")}`, display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              appearance="primary"
-              spacing="compact"
-              onClick={() => {
-                setUserRolePopup(null);
-                setUserRoleSearch("");
-              }}
-            >
-              Done
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function UsersRolesStep() {
-  const [activeTab, setActiveTab] = useState<"roles" | "users">("roles");
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<typeof users[0] | null>(null);
-  const [editForm, setEditForm] = useState({
-    name: "",
-    username: "",
-    email: "",
-    role: "",
-    peopleGroups: "",
-    permissions: "",
-    linked: "",
-  });
-
-  const roleOptions = [
-    { label: "admin", value: "admin" },
-    { label: "manager", value: "manager" },
-    { label: "leader", value: "leader" },
-    { label: "planner", value: "planner" },
-    { label: "hrbp", value: "hrbp" },
-    { label: "employee", value: "employee" },
-  ];
-
-  const permissionOptions = [
-    { label: "APEX System Admin | Comp", value: "APEX System Admin | Comp" },
-    { label: "APEX Executive Planner", value: "APEX Executive Planner" },
-    { label: "APEX Planner + Full Budget View", value: "APEX Planner + Full Budget View" },
-    { label: "APEX System Admin | HRBP", value: "APEX System Admin | HRBP" },
-    { label: "None", value: "" },
-  ];
-
-  const employeeLinkOptions = users.map((u) => ({
-    label: u.linked,
-    value: u.linked,
-  }));
-
-  const openEditDrawer = (user: typeof users[0]) => {
-    setEditingUser(user);
-    setEditForm({
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      peopleGroups: "",
-      permissions: user.permissions,
-      linked: user.linked,
-    });
-    setDrawerOpen(true);
-  };
-
-  const tabStyle = (isActive: boolean): React.CSSProperties => ({
-    padding: `${token("space.100")} ${token("space.200")}`,
-    cursor: "pointer",
-    background: "none",
-    borderTop: "none",
-    borderLeft: "none",
-    borderRight: "none",
-    borderBottomStyle: "solid",
-    borderBottomWidth: 2,
-    borderBottomColor: isActive ? token("color.border.brand") : "transparent",
-  });
-
-  const LabelText = ({ children }: { children: React.ReactNode }) => (
-    <div style={{ marginBottom: token("space.050") }}>
-      <Text size="small" weight="semibold">{children}</Text>
-    </div>
-  );
+function UploadCompensationDataStep() {
+  const [uploaded, setUploaded] = useState(false);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <PeopleGroupIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Users & Role Permissions</Heading>
+          <UploadIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Upload Compensation Data</Heading>
         </div>
-        <Text size="small" color="color.text.subtlest">Manage user access and assign role-based permissions for this cycle</Text>
+        <Text size="small" color="color.text.subtlest">
+          Upload a CSV file with compensation decisions. Employee email is used as the unique identifier to match records.
+        </Text>
       </div>
 
-      <div style={{ display: "flex", gap: token("space.200"), borderBottom: `1px solid ${token("color.border")}` }}>
-        <button style={tabStyle(activeTab === "roles")} onClick={() => setActiveTab("roles")}>
-          <Text size="small" weight={activeTab === "roles" ? "semibold" : "regular"} color={activeTab === "roles" ? "color.text.brand" : "color.text.subtlest"}>Roles</Text>
-        </button>
-        <button style={tabStyle(activeTab === "users")} onClick={() => setActiveTab("users")}>
-          <Text size="small" weight={activeTab === "users" ? "semibold" : "regular"} color={activeTab === "users" ? "color.text.brand" : "color.text.subtlest"}>Users</Text>
-        </button>
-      </div>
+      <SectionMessage appearance="information">
+        <Text size="small">
+          Your CSV must include an <Text size="small" weight="bold">email</Text> column as the unique identifier. Supported compensation columns: Merit Increase %, Promotion Increase %, Proposed Salary, Equity Grant, One-Time Bonus.
+        </Text>
+      </SectionMessage>
 
-      {activeTab === "roles" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <Heading size="small">Role Permissions</Heading>
-            <Button appearance="primary" iconBefore={PeopleGroupIcon}>
-              Add Role
-            </Button>
+      {!uploaded ? (
+        <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
+          <div
+            onClick={() => setUploaded(true)}
+            style={{
+              border: `2px dashed ${token("color.border")}`,
+              borderRadius: "6px",
+              padding: token("space.500"),
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: token("space.150"),
+              cursor: "pointer",
+            }}
+          >
+            <div
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: "50%",
+                backgroundColor: token("color.background.selected"),
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <UploadIcon label="" color={token("color.icon.brand")} />
+            </div>
+            <Heading size="small">Upload Compensation CSV</Heading>
+            <div style={{ maxWidth: 400 }}>
+              <Text size="small" color="color.text.subtlest">
+                Drag and drop your file here, or click to browse
+              </Text>
+            </div>
+            <Button appearance="primary" iconBefore={UploadIcon}>Choose File</Button>
+            <Text size="UNSAFE_small" color="color.text.subtlest">
+              Supported format: .csv (Max size: 50MB)
+            </Text>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
-            {users.map((user, i) => (
-              <div
-                key={i}
-                style={{
-                  border: `1px solid ${token("color.border")}`,
-                  borderRadius: "6px",
-                  padding: `${token("space.300")} ${token("space.400")}`,
-                  backgroundColor: token("elevation.surface"),
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), flexWrap: "wrap" }}>
-                      <Text size="medium" weight="bold">{user.name}</Text>
-                      <Lozenge
-                        appearance={
-                          user.role === "admin"
-                            ? "removed"
-                            : user.role === "manager"
-                            ? "success"
-                            : user.role === "leader"
-                            ? "inprogress"
-                            : user.role === "hrbp"
-                            ? "moved"
-                            : "default"
-                        }
-                      >
-                        {user.role}
-                      </Lozenge>
-                      {user.permissions && (
-                        <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-                          <ShieldIcon label="" color={token("color.icon.subtle")} />
-                          <Text size="small" color="color.text.subtlest">{user.permissions}</Text>
-                        </div>
-                      )}
-                    </div>
-                    <Text size="small" color="color.text.subtlest">
-                      {user.username} · {user.email}
-                    </Text>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">
-                      Linked: {user.linked}
-                    </Text>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                    <IconButton icon={EditIcon} label="Edit" appearance="subtle" spacing="compact" onClick={() => openEditDrawer(user)} />
-                    <IconButton icon={DeleteIcon} label="Delete" appearance="subtle" spacing="compact" />
+          <div style={{ marginTop: token("space.300") }}>
+            <Button appearance="subtle" iconBefore={DownloadIcon}>Download CSV Template</Button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
+                <CheckCircleIcon label="" color={token("color.icon.success")} />
+                <div>
+                  <Text size="small" weight="bold">compensation_decisions_2026.csv</Text>
+                  <div>
+                    <Text size="UNSAFE_small" color="color.text.subtlest">52 rows · 6 columns · Uploaded Mar 25, 2026</Text>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === "users" && (
-        <UsersTabContent />
-      )}
-
-      {drawerOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: "calc(var(--n_bnrM, 0px) + var(--n_tNvM, 0px))",
-            right: 0,
-            height: "calc(100vh - var(--n_bnrM, 0px) - var(--n_tNvM, 0px))",
-            width: 480,
-            backgroundColor: token("elevation.surface.overlay"),
-            boxShadow: token("elevation.shadow.overlay"),
-            zIndex: 500,
-            overflowY: "auto",
-            animation: "slideInRight 200ms ease-out",
-          }}
-        >
-          <div style={{ position: "absolute", top: token("space.200"), right: token("space.200"), zIndex: 1 }}>
-            <IconButton icon={CrossIcon} label="Close" appearance="subtle" onClick={() => setDrawerOpen(false)} />
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.400") }}>
-            <Heading size="large">Edit Role</Heading>
-            <div>
-              <LabelText>Display Name</LabelText>
-              <Textfield
-                value={editForm.name}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditForm({ ...editForm, name: e.target.value })
-                }
-              />
-            </div>
-
-            <div>
-              <LabelText>Username</LabelText>
-              <Textfield
-                value={editForm.username}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditForm({ ...editForm, username: e.target.value })
-                }
-              />
-            </div>
-
-            <div>
-              <LabelText>Email</LabelText>
-              <Textfield
-                value={editForm.email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditForm({ ...editForm, email: e.target.value })
-                }
-              />
-            </div>
-
-            <div>
-              <LabelText>Role</LabelText>
-              <Select
-                options={roleOptions}
-                value={roleOptions.find((o) => o.value === editForm.role)}
-                onChange={(opt) => opt && setEditForm({ ...editForm, role: opt.value })}
-              />
-            </div>
-
-            <div>
-              <LabelText>People and Groups</LabelText>
-              <Textfield
-                value={editForm.peopleGroups}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditForm({ ...editForm, peopleGroups: e.target.value })
-                }
-                placeholder="Search and add people or groups..."
-              />
-            </div>
-
-            <div>
-              <LabelText>Permissions</LabelText>
-              <Select
-                options={permissionOptions}
-                value={permissionOptions.find((o) => o.value === editForm.permissions)}
-                onChange={(opt) => opt && setEditForm({ ...editForm, permissions: opt.value })}
-              />
-            </div>
-
-            <div>
-              <LabelText>Employee Link</LabelText>
-              <Select
-                options={employeeLinkOptions}
-                value={employeeLinkOptions.find((o) => o.value === editForm.linked)}
-                onChange={(opt) => opt && setEditForm({ ...editForm, linked: opt.value })}
-              />
-            </div>
-
-            <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.200") }}>
-              <Button appearance="primary" onClick={() => setDrawerOpen(false)}>Save</Button>
-              <Button appearance="subtle" onClick={() => setDrawerOpen(false)}>Cancel</Button>
+              <div style={{ display: "flex", gap: token("space.100") }}>
+                <Button appearance="subtle" spacing="compact">Replace File</Button>
+                <Button appearance="subtle" spacing="compact" iconBefore={DeleteIcon}>Remove</Button>
+              </div>
             </div>
           </div>
-        </div>
+
+          {compUploadErrors.length > 0 && (
+            <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}`, borderColor: token("color.border.danger") }}>
+              <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.200") }}>
+                <AlertIcon label="" color={token("color.icon.danger")} />
+                <Heading size="xsmall">{compUploadErrors.length} Validation Errors</Heading>
+              </div>
+              <Text size="UNSAFE_small" color="color.text.subtlest">
+                The following rows have errors that need to be fixed. You can correct the CSV and re-upload, or proceed with valid rows only.
+              </Text>
+              <table style={{ width: "100%", borderCollapse: "collapse", marginTop: token("space.200") }}>
+                <thead>
+                  <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
+                    {["Row", "Field", "Value", "Error"].map((h) => (
+                      <th key={h} style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "left", textTransform: "uppercase" }}>
+                        <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {compUploadErrors.map((err, i) => (
+                    <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="small">{err.row}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <code style={{ fontFamily: "monospace", backgroundColor: token("color.background.neutral"), padding: `${token("space.025")} ${token("space.075")}`, borderRadius: "6px" }}>
+                          <Text size="UNSAFE_small">{err.field}</Text>
+                        </code>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="small" color="color.text.danger">{err.value}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="small" color="color.text.subtlest">{err.error}</Text>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div style={{ display: "flex", gap: token("space.100"), marginTop: token("space.200") }}>
+                <Button appearance="warning" spacing="compact">Proceed with valid rows only</Button>
+                <Button appearance="subtle" spacing="compact">Re-upload corrected CSV</Button>
+              </div>
+            </div>
+          )}
+
+          <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.200") }}>
+              <Heading size="xsmall">Data Preview</Heading>
+              <Text size="UNSAFE_small" color="color.text.subtlest">Showing first {compUploadData.length} of 52 rows</Text>
+            </div>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
+                    {["Email (Key)", "Employee ID", "Merit %", "Promo Increase", "Proposed Salary", "Equity Grant", "One-Time Bonus"].map((h) => (
+                      <th key={h} style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "left", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                        <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {compUploadData.map((row, i) => (
+                    <tr key={i} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="UNSAFE_small" weight="medium">{row.email}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="UNSAFE_small"><code style={{ fontFamily: "monospace" }}>{row.id}</code></Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="small">{row.meritPct}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="small" color={row.promoIncrease === "—" ? "color.text.disabled" : "color.text"}>{row.promoIncrease}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="small">{row.proposedSalary}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="small">{row.equityGrant}</Text>
+                      </td>
+                      <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
+                        <Text size="small" color={row.oneTimeBonus === "—" ? "color.text.disabled" : "color.text"}>{row.oneTimeBonus}</Text>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
 }
 
-function FieldPermissionsStep({
-  selectedRole,
-  setSelectedRole,
-  fieldPermissions,
-  toggleFieldPermission,
-  addRoleToField,
-  removeRoleFromField,
-}: {
-  selectedRole: string;
-  setSelectedRole: (v: string) => void;
-  fieldPermissions: typeof fieldPermissionsData;
-  toggleFieldPermission: (id: string, type: "visible" | "editable") => void;
-  addRoleToField: (fieldId: string, role: string, appearance: "default" | "success" | "inprogress" | "moved" | "removed" | "new") => void;
-  removeRoleFromField: (fieldId: string, role: string) => void;
-}) {
-  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
-  const [addColumnOpen, setAddColumnOpen] = useState(false);
-  const [addRolePopup, setAddRolePopup] = useState<{ fieldId: string; anchorRect: DOMRect } | null>(null);
-  const [roleSearch, setRoleSearch] = useState("");
-  const [expandedPermissions, setExpandedPermissions] = useState<Set<string>>(new Set());
-  const [columnForm, setColumnForm] = useState({
-    column: "custom",
-    name: "",
-    description: "",
-    defaultDisplay: "visible",
-    displayType: "",
-    customFormula: "",
-  });
+function CompDataGridStep() {
+  const levelAppearance = (level: string): "inprogress" | "success" | "moved" => {
+    if (level.startsWith("P")) return "inprogress";
+    if (level.startsWith("M")) return "success";
+    return "moved";
+  };
 
-  const availablePermissionRoles = [
-    { role: "All Users Can View", appearance: "default" as const },
-    { role: "All Users Can Not View", appearance: "default" as const },
-    { role: "All Other Users Can View", appearance: "default" as const },
-    { role: "All Other Users Can Not View", appearance: "default" as const },
-    { role: "Admin", appearance: "removed" as const },
-    { role: "CRP Zone", appearance: "inprogress" as const },
-    { role: "CRP Org and Geo Zone", appearance: "inprogress" as const },
-    { role: "CRP ZU and Geo Zone", appearance: "inprogress" as const },
-    { role: "HRBP All Roles", appearance: "moved" as const },
-    { role: "HRBP Intro Roles", appearance: "moved" as const },
-    { role: "HRBP Role View", appearance: "moved" as const },
-    { role: "APEX System Admin", appearance: "success" as const },
-    { role: "APEX Basis Points", appearance: "success" as const },
-    { role: "APEX Plans View", appearance: "success" as const },
-    { role: "APEX Executive Planner", appearance: "success" as const },
-    { role: "Columns Group Default", appearance: "moved" as const },
-    { role: "Columns Derived", appearance: "moved" as const },
-  ];
+  const ratingAppearance = (rating: string): "success" | "inprogress" | "removed" | "moved" | "default" => {
+    if (rating === "Greatly Exceeded") return "success";
+    if (rating === "Exceeded") return "inprogress";
+    if (rating === "Met") return "default";
+    if (rating === "Met Some") return "moved";
+    return "removed";
+  };
 
-  const filteredRoles = availablePermissionRoles.filter((r) =>
-    r.role.toLowerCase().includes(roleSearch.toLowerCase())
+  const colHeader = (label: string, source: string, sourceColor: "color.text.information" | "color.text.success" | "color.text.warning") => (
+    <div style={{ display: "flex", flexDirection: "column", gap: token("space.025") }}>
+      <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{label}</Text>
+      <Text size="UNSAFE_small" color={sourceColor}>{source}</Text>
+    </div>
   );
 
-  const popupRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!addRolePopup) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
-        setAddRolePopup(null);
-        setRoleSearch("");
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [addRolePopup]);
-
-  const columnTypeOptions = [
-    { label: "Custom", value: "custom" },
-    { label: "Pre-configured: Base Salary", value: "base_salary" },
-    { label: "Pre-configured: Bonus", value: "bonus" },
-    { label: "Pre-configured: Equity", value: "equity" },
-    { label: "Pre-configured: Merit %", value: "merit" },
-    { label: "Pre-configured: Total Compensation", value: "total_comp" },
-  ];
-
-  const displayTypeOptions = [
-    { label: "Select a data display type", value: "" },
-    { label: "Currency", value: "currency" },
-    { label: "Percentage", value: "percentage" },
-    { label: "Number", value: "number" },
-    { label: "Text", value: "text" },
-    { label: "Date", value: "date" },
-  ];
-
-  const defaultDisplayOptions = [
-    { name: "defaultDisplay", value: "visible", label: "Visible" },
-    { name: "defaultDisplay", value: "pinned", label: "Pinned" },
-    { name: "defaultDisplay", value: "hidden", label: "Hidden" },
-  ];
-
-  const toggleRow = (id: string) => {
-    setSelectedRows((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+  const head = {
+    cells: [
+      { key: "id", content: colHeader("Employee ID", "Workday", "color.text.information") },
+      { key: "firstName", content: colHeader("First Name", "Workday", "color.text.information") },
+      { key: "lastName", content: colHeader("Last Name", "Workday", "color.text.information") },
+      { key: "title", content: colHeader("Job Title", "Workday", "color.text.information") },
+      { key: "level", content: colHeader("Level", "Workday", "color.text.information") },
+      { key: "salary", content: colHeader("Base Salary", "Workday", "color.text.information") },
+      { key: "rating", content: colHeader("Rating", "Workday", "color.text.information") },
+      { key: "meritPct", content: colHeader("Merit %", "CSV Upload", "color.text.warning") },
+      { key: "proposedSalary", content: colHeader("Proposed Salary", "CSV Upload", "color.text.warning") },
+      { key: "equityGrant", content: colHeader("Equity Grant", "CSV Upload", "color.text.warning") },
+      { key: "oneTimeBonus", content: colHeader("One-Time Bonus", "CSV Upload", "color.text.warning") },
+    ],
   };
 
-  const toggleAll = () => {
-    if (selectedRows.size === fieldPermissions.length) {
-      setSelectedRows(new Set());
-    } else {
-      setSelectedRows(new Set(fieldPermissions.map((f) => f.id)));
-    }
-  };
+  const mergedData = employeeData.slice(0, 6).map((emp, idx) => ({
+    ...emp,
+    meritPct: compUploadData[idx]?.meritPct || "—",
+    proposedSalary: compUploadData[idx]?.proposedSalary || "—",
+    equityGrant: compUploadData[idx]?.equityGrant || "—",
+    oneTimeBonus: compUploadData[idx]?.oneTimeBonus || "—",
+  }));
 
-  const thStyle: React.CSSProperties = {
-    padding: `${token("space.100")} ${token("space.150")}`,
-    textAlign: "left",
-    textTransform: "uppercase",
-    letterSpacing: "0.5px",
-    whiteSpace: "nowrap",
-  };
-
-  const tdStyle: React.CSSProperties = {
-    padding: `${token("space.075")} ${token("space.150")}`,
-    verticalAlign: "middle",
-  };
+  const rows = mergedData.map((emp, i) => ({
+    key: `row-${i}`,
+    cells: [
+      { key: "id", content: <Text size="UNSAFE_small"><code style={{ fontFamily: "monospace" }}>{emp.id}</code></Text> },
+      { key: "firstName", content: <Text size="small" weight="medium">{emp.firstName}</Text> },
+      { key: "lastName", content: <Text size="small" weight="medium">{emp.lastName}</Text> },
+      { key: "title", content: <Text size="small" color="color.text.subtle">{emp.title}</Text> },
+      { key: "level", content: <Lozenge appearance={levelAppearance(emp.level)}>{emp.level}</Lozenge> },
+      { key: "salary", content: <Text size="small">${emp.salary.toLocaleString()}</Text> },
+      { key: "rating", content: <Lozenge appearance={ratingAppearance(emp.rating)}>{emp.rating}</Lozenge> },
+      { key: "meritPct", content: <Text size="small" weight="semibold" color="color.text.warning">{emp.meritPct}</Text> },
+      { key: "proposedSalary", content: <Text size="small" weight="semibold" color="color.text.warning">{emp.proposedSalary}</Text> },
+      { key: "equityGrant", content: <Text size="small" color={emp.equityGrant === "—" ? "color.text.disabled" : "color.text.warning"}>{emp.equityGrant}</Text> },
+      { key: "oneTimeBonus", content: <Text size="small" color={emp.oneTimeBonus === "—" ? "color.text.disabled" : "color.text.warning"}>{emp.oneTimeBonus}</Text> },
+    ],
+  }));
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <TableIcon label="" color={token("color.icon.brand")} />
-            <Heading size="medium">Columns</Heading>
-            <Button appearance="link" spacing="none">View Audit Log</Button>
-          </div>
-          <Text size="small" color="color.text.subtlest">
-            Specify the columns that will appear in the Planner and surrogate which roles will be able to view and edit them.
-          </Text>
-        </div>
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: token("space.100") }}>
+      <div>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          {selectedRows.size > 0 && (
-            <Text size="small" weight="semibold">{selectedRows.size} selected</Text>
-          )}
-          <Button appearance="danger" iconBefore={DeleteIcon} isDisabled={selectedRows.size === 0}>
-            Delete
-          </Button>
-          <Button appearance="default" iconBefore={DownloadIcon} isDisabled={selectedRows.size === 0}>
-            Export
-          </Button>
-          {selectedRows.size > 0 && (
-            <Button appearance="subtle" onClick={() => setSelectedRows(new Set())}>
-              Clear selection
-            </Button>
-          )}
+          <TableIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Employee + Compensation Data</Heading>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <Button appearance="default" iconBefore={EyeOpenIcon}>
-            View Columns by Role
-          </Button>
-          <Button appearance="default" iconBefore={EditIcon}>
-            Edit Column Order
-          </Button>
-          <Button appearance="primary" iconBefore={AddIcon} onClick={() => setAddColumnOpen(true)}>
-            Add New Column
-          </Button>
+        <Text size="small" color="color.text.subtlest">
+          Merged view of Workday employee data and uploaded compensation decisions
+        </Text>
+        <div style={{ display: "flex", gap: token("space.100"), marginTop: token("space.150") }}>
+          <Lozenge appearance="inprogress">Workday</Lozenge>
+          <Lozenge appearance="moved">CSV Upload</Lozenge>
+          <Text size="small" color="color.text.subtlest">52 employees · 11 columns</Text>
         </div>
       </div>
 
-      <div style={{ border: `1px solid ${token("color.border")}`, borderRadius: "6px", overflow: "hidden" }}>
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1100 }}>
-            <thead>
-              <tr style={{ backgroundColor: token("elevation.surface.sunken") }}>
-                <th style={{ ...thStyle, width: 36, textAlign: "center" }}>
-                  <Checkbox
-                    label=""
-                    isChecked={selectedRows.size === fieldPermissions.length}
-                    isIndeterminate={selectedRows.size > 0 && selectedRows.size < fieldPermissions.length}
-                    onChange={toggleAll}
-                  />
-                </th>
-                <th style={{ ...thStyle, width: 28 }}></th>
-                <th style={{ ...thStyle, minWidth: 200 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Column Name</Text></th>
-                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Data Source</Text></th>
-                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Data Display Type</Text></th>
-                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Reward Letter Status</Text></th>
-                <th style={thStyle}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Column Default</Text></th>
-                <th style={{ ...thStyle, minWidth: 280 }}><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Permissions</Text></th>
-                <th style={{ ...thStyle, width: 60, textAlign: "center" }}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {fieldPermissions.map((field) => (
-                <tr
-                  key={field.id}
-                  style={{
-                    borderTop: `1px solid ${token("color.border")}`,
-                    backgroundColor: selectedRows.has(field.id) ? token("color.background.selected") : undefined,
-                  }}
-                >
-                  <td style={{ ...tdStyle, textAlign: "center" }}>
-                    <Checkbox label="" isChecked={selectedRows.has(field.id)} onChange={() => toggleRow(field.id)} />
-                  </td>
-                  <td style={tdStyle}>
-                    {field.locked && <LockLockedIcon label="Locked" color={token("color.icon.subtle")} />}
-                  </td>
-                  <td style={tdStyle}>
-                    <div>
-                      <Text size="small" weight="medium">{field.name}</Text>
-                      {field.variable && (
-                        <div>
-                          <Text size="UNSAFE_small" color="color.text.subtlest">{field.variable}</Text>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td style={tdStyle}>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">{field.dataSource || ""}</Text>
-                  </td>
-                  <td style={tdStyle}>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">{field.displayType || ""}</Text>
-                  </td>
-                  <td style={tdStyle}>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">{field.rewardLetter ? "Yes" : "No"}</Text>
-                  </td>
-                  <td style={tdStyle}>
-                    <Text size="UNSAFE_small" color="color.text.subtlest">{field.columnDefault || "Visible"}</Text>
-                  </td>
-                  <td style={tdStyle}>
-                    {(() => {
-                      const perms = field.permissions || [];
-                      const isExpanded = expandedPermissions.has(field.id);
-                      const visiblePerms = isExpanded ? perms : perms.slice(0, 3);
-                      const hiddenCount = perms.length - 3;
-                      return (
-                        <div style={{ display: "flex", alignItems: "center", gap: token("space.050"), flexWrap: "wrap" }}>
-                          {visiblePerms.map((p, pi) => (
-                            <Lozenge key={pi} appearance={p.appearance}>{p.role}</Lozenge>
-                          ))}
-                          {!isExpanded && hiddenCount > 0 && (
-                            <span
-                              style={{ cursor: "pointer" }}
-                              onClick={() => setExpandedPermissions((prev) => {
-                                const next = new Set(prev);
-                                next.add(field.id);
-                                return next;
-                              })}
-                            >
-                              <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">+ {hiddenCount} other{hiddenCount > 1 ? "s" : ""}</Text>
-                            </span>
-                          )}
-                          {isExpanded && perms.length > 3 && (
-                            <span
-                              style={{ cursor: "pointer" }}
-                              onClick={() => setExpandedPermissions((prev) => {
-                                const next = new Set(prev);
-                                next.delete(field.id);
-                                return next;
-                              })}
-                            >
-                              <Text size="UNSAFE_small" color="color.text.subtle" weight="medium">Show less</Text>
-                            </span>
-                          )}
-                          <span>
-                            <Button
-                              appearance="subtle"
-                              spacing="compact"
-                              iconBefore={AddIcon}
-                              onClick={(e: React.MouseEvent<HTMLElement>) => {
-                                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-                                setAddRolePopup({ fieldId: field.id, anchorRect: rect });
-                                setRoleSearch("");
-                              }}
-                            >
-                              Add
-                            </Button>
-                          </span>
-                        </div>
-                      );
-                    })()}
-                  </td>
-                  <td style={{ ...tdStyle, textAlign: "center" }}>
-                    <IconButton icon={EditIcon} label="Edit row" appearance="subtle" spacing="compact" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div style={{ ...cardStyle, padding: 0, overflow: "hidden" }}>
+        <div style={{ padding: `0 ${token("space.200")}` }}>
+          <DynamicTable
+            head={head}
+            rows={rows}
+            isFixedSize
+            defaultSortKey="id"
+            defaultSortOrder="ASC"
+          />
         </div>
-      </div>
-
-      {addRolePopup && (
         <div
-          ref={popupRef}
           style={{
-            position: "fixed",
-            top: Math.min(addRolePopup.anchorRect.bottom + 4, window.innerHeight - 400),
-            left: Math.min(addRolePopup.anchorRect.left, window.innerWidth - 340),
-            width: 320,
-            maxHeight: 380,
-            backgroundColor: token("elevation.surface.overlay"),
-            boxShadow: token("elevation.shadow.overlay"),
-            borderRadius: "6px",
-            border: `1px solid ${token("color.border")}`,
-            zIndex: 600,
+            backgroundColor: token("elevation.surface.sunken"),
+            borderTop: `1px solid ${token("color.border")}`,
+            padding: `${token("space.150")} ${token("space.200")}`,
             display: "flex",
-            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <div style={{ padding: `${token("space.150")} ${token("space.200")}`, borderBottom: `1px solid ${token("color.border")}` }}>
-            <Textfield
-              isCompact
-              placeholder="Search roles..."
-              value={roleSearch}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRoleSearch(e.target.value)}
-              elemBeforeInput={
-                <div style={{ paddingLeft: token("space.075"), display: "flex", alignItems: "center" }}>
-                  <SearchIcon label="" LEGACY_size="small" />
-                </div>
-              }
-              autoFocus
-            />
-          </div>
-          <div style={{ overflowY: "auto", flex: 1 }}>
-            {filteredRoles.length === 0 ? (
-              <div style={{ padding: `${token("space.200")} ${token("space.200")}`, textAlign: "center" }}>
-                <Text size="small" color="color.text.subtlest">No roles found</Text>
-              </div>
-            ) : (
-              filteredRoles.map((r) => {
-                const field = fieldPermissions.find((f) => f.id === addRolePopup.fieldId);
-                const isSelected = field?.permissions?.some((p) => p.role === r.role) ?? false;
-                return (
-                  <div
-                    key={r.role}
-                    style={{
-                      padding: `${token("space.075")} ${token("space.200")}`,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: token("space.100"),
-                      backgroundColor: "transparent",
-                      transition: "background-color 100ms",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.backgroundColor = token("color.background.neutral.subtle.hovered");
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
-                    }}
-                    onClick={() => {
-                      if (isSelected) {
-                        removeRoleFromField(addRolePopup.fieldId, r.role);
-                      } else {
-                        addRoleToField(addRolePopup.fieldId, r.role, r.appearance);
-                      }
-                    }}
-                  >
-                    <Checkbox
-                      isChecked={isSelected}
-                      onChange={() => {}}
-                      label=""
-                    />
-                    <Lozenge appearance={r.appearance}>{r.role}</Lozenge>
-                  </div>
-                );
-              })
-            )}
-          </div>
-          <div style={{ padding: `${token("space.100")} ${token("space.200")}`, borderTop: `1px solid ${token("color.border")}`, display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              appearance="primary"
-              spacing="compact"
-              onClick={() => {
-                setAddRolePopup(null);
-                setRoleSearch("");
-              }}
-            >
-              Done
+          <Text size="small" color="color.text.subtlest">
+            Showing <Text size="small" weight="bold">1-6</Text> of <Text size="small" weight="bold">52</Text> employees
+          </Text>
+          <div style={{ display: "flex", gap: token("space.100") }}>
+            <Button appearance="subtle" spacing="compact" iconBefore={DownloadIcon}>
+              Export
+            </Button>
+            <Button appearance="subtle" spacing="compact" isDisabled iconBefore={ChevronLeftIcon}>
+              Previous
+            </Button>
+            <Button appearance="subtle" spacing="compact" iconAfter={ChevronRightIcon}>
+              Next
             </Button>
           </div>
         </div>
-      )}
-
-      {addColumnOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: "calc(var(--n_bnrM, 0px) + var(--n_tNvM, 0px))",
-            right: 0,
-            height: "calc(100vh - var(--n_bnrM, 0px) - var(--n_tNvM, 0px))",
-            width: 480,
-            backgroundColor: token("elevation.surface.overlay"),
-            boxShadow: token("elevation.shadow.overlay"),
-            zIndex: 500,
-            overflowY: "auto",
-            animation: "slideInRight 200ms ease-out",
-          }}
-        >
-          <div style={{ position: "absolute", top: token("space.200"), right: token("space.200"), zIndex: 1 }}>
-            <IconButton icon={CrossIcon} label="Close" appearance="subtle" onClick={() => setAddColumnOpen(false)} />
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: token("space.300"), padding: token("space.400") }}>
-            <Heading size="large">Add a Column</Heading>
-
-            <SectionMessage appearance="information">
-              <Text size="small">
-                Add columns that match your needs by selecting from our pre-configured columns or by creating custom columns. If an option you need is missing, contact your Implementation Manager.
-              </Text>
-            </SectionMessage>
-
-            <div>
-              <LabelText>Column</LabelText>
-              <Select
-                options={columnTypeOptions}
-                value={columnTypeOptions.find((o) => o.value === columnForm.column)}
-                onChange={(opt) => opt && setColumnForm({ ...columnForm, column: opt.value })}
-              />
-            </div>
-
-            <div>
-              <LabelText>Name</LabelText>
-              <Textfield
-                value={columnForm.name}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setColumnForm({ ...columnForm, name: e.target.value })
-                }
-              />
-            </div>
-
-            <div>
-              <LabelText>
-                Description <Text size="UNSAFE_small" color="color.text.subtlest" as="span">Optional</Text>
-              </LabelText>
-              <Textfield
-                value={columnForm.description}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setColumnForm({ ...columnForm, description: e.target.value })
-                }
-              />
-              <Text size="UNSAFE_small" color="color.text.subtlest">
-                This description will appear as a tooltip when hovering over the column name in the Planner table.
-              </Text>
-            </div>
-
-            <div>
-              <LabelText>Default column display</LabelText>
-              <Text size="UNSAFE_small" color="color.text.subtlest">
-                Choose how this column appears by default in planner worksheets. This sets what planners see before they customize their own view. Note: This is separate from column visibility permissions (who can see this column), which is defined on the Permissions tab.
-              </Text>
-              <div style={{ marginTop: token("space.100") }}>
-                <RadioGroup
-                  options={defaultDisplayOptions}
-                  value={columnForm.defaultDisplay}
-                  onChange={(e) => setColumnForm({ ...columnForm, defaultDisplay: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <div>
-              <LabelText>Data Display Type</LabelText>
-              <Select
-                options={displayTypeOptions}
-                value={displayTypeOptions.find((o) => o.value === columnForm.displayType)}
-                onChange={(opt) => opt && setColumnForm({ ...columnForm, displayType: opt.value })}
-                placeholder="Select a data display type"
-              />
-            </div>
-
-            <div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <LabelText>Custom formula</LabelText>
-                <Button appearance="link" spacing="none">Show preview</Button>
-              </div>
-              <div
-                style={{
-                  border: `1px solid ${token("color.border")}`,
-                  borderRadius: "6px",
-                  overflow: "hidden",
-                  marginTop: token("space.050"),
-                }}
-              >
-                <div style={{ display: "flex" }}>
-                  <div
-                    style={{
-                      width: 40,
-                      backgroundColor: token("elevation.surface.sunken"),
-                      borderRight: `1px solid ${token("color.border")}`,
-                      padding: `${token("space.100")} ${token("space.050")}`,
-                      textAlign: "right",
-                    }}
-                  >
-                    <Text size="UNSAFE_small" color="color.text.subtlest">1</Text>
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <TextArea
-                      value={columnForm.customFormula}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                        setColumnForm({ ...columnForm, customFormula: e.target.value })
-                      }
-                      placeholder=""
-                      minimumRows={4}
-                      appearance="none"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div style={{ marginTop: token("space.100") }}>
-                <Button appearance="link" spacing="none">Learn more about Handlebars formulas ↗</Button>
-              </div>
-            </div>
-
-            <div style={{ display: "flex", gap: token("space.200"), marginTop: token("space.200") }}>
-              <Button appearance="primary" onClick={() => setAddColumnOpen(false)}>Save</Button>
-              <Button appearance="subtle" onClick={() => setAddColumnOpen(false)}>Cancel</Button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
 
-function RewardLetterStep({
+function RewardStatementsStep({
   selectedTemplate,
   setSelectedTemplate,
   includePerformance,
@@ -2919,15 +1734,15 @@ function RewardLetterStep({
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
           <EmailIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Reward Letter</Heading>
+          <Heading size="medium">Reward Statements</Heading>
         </div>
-        <Text size="small" color="color.text.subtlest">Configure the reward letter template and content for employee notifications</Text>
+        <Text size="small" color="color.text.subtlest">Configure the reward statement template and content for employee notifications</Text>
       </div>
 
       <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <Heading size="xsmall">Template Selection</Heading>
         <div style={{ marginTop: token("space.200") }}>
-          <LabelText>Letter Template</LabelText>
+          <LabelText>Statement Template</LabelText>
           <Select
             options={templateOptions}
             value={templateOptions.find((o) => o.value === selectedTemplate)}
@@ -2943,7 +1758,7 @@ function RewardLetterStep({
             <div>
               <Text size="small" weight="semibold">Include Performance Summary</Text>
               <div>
-                <Text size="UNSAFE_small" color="color.text.subtlest">Show performance rating and summary in the reward letter</Text>
+                <Text size="UNSAFE_small" color="color.text.subtlest">Show performance rating and summary in the reward statement</Text>
               </div>
             </div>
             <Toggle
@@ -2974,7 +1789,7 @@ function RewardLetterStep({
           <TextArea
             value={customMessage}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCustomMessage(e.target.value)}
-            placeholder="Add a personalized message to include in all reward letters..."
+            placeholder="Add a personalized message to include in all reward statements..."
             minimumRows={4}
           />
         </div>
@@ -3019,103 +1834,6 @@ function RewardLetterStep({
           )}
         </div>
       </div>
-    </div>
-  );
-}
-
-function ReviewFinalizeStep({
-  formData,
-  setCurrentStep,
-}: {
-  formData: { name: string; type: string; startDate: string; endDate: string; description: string };
-  setCurrentStep: (v: number) => void;
-}) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div>
-        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-          <CheckCircleIcon label="" color={token("color.icon.brand")} />
-          <Heading size="medium">Review & Finalize</Heading>
-        </div>
-        <Text size="small" color="color.text.subtlest">Review all settings and finalize the compensation cycle</Text>
-      </div>
-
-      <SectionMessage appearance="information">
-        <Text size="small">
-          Review all your cycle settings before finalizing. You can click on any section header to go back and make changes.
-        </Text>
-      </SectionMessage>
-
-      <div style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
-        <div
-          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
-          onClick={() => setCurrentStep(0)}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <CheckCircleIcon label="" color={token("color.icon.success")} />
-            <Heading size="xsmall">Cycle Details</Heading>
-          </div>
-          <Button appearance="link" spacing="none" onClick={() => setCurrentStep(0)}>
-            Edit
-          </Button>
-        </div>
-        <div style={{ marginTop: token("space.200"), paddingLeft: token("space.300") }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.200") }}>
-            <div>
-              <Text size="UNSAFE_small" color="color.text.subtlest">Cycle Name</Text>
-              <div>
-                <Text size="small" weight="semibold">{formData.name || "Not set"}</Text>
-              </div>
-            </div>
-            <div>
-              <Text size="UNSAFE_small" color="color.text.subtlest">Cycle Type</Text>
-              <div>
-                <Text size="small" weight="semibold">
-                  {formData.type === "other" ? (formData.customType || "Not specified") : (typeOptions.find((o) => o.value === formData.type)?.label || formData.type)}
-                </Text>
-              </div>
-            </div>
-            <div>
-              <Text size="UNSAFE_small" color="color.text.subtlest">Timeline</Text>
-              <div>
-                <Text size="small" weight="semibold">
-                  {formData.startDate && formData.endDate
-                    ? `${formData.startDate} - ${formData.endDate}`
-                    : "Not set"}
-                </Text>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {[
-        { step: 1, label: "Data Integrations", status: "3 data sources configured" },
-        { step: 2, label: "Employee Data Grid", status: "52 employees loaded" },
-        { step: 3, label: "Eligibility Rules", status: "3 active rules" },
-        { step: 4, label: "Salary Bands", status: "7 bands configured" },
-        { step: 5, label: "Users & Roles", status: "6 users configured" },
-        { step: 6, label: "Column Permissions", status: "30 fields configured" },
-        { step: 7, label: "Reward Letter", status: "Template selected" },
-      ].map((section) => (
-        <div key={section.step} style={{ ...cardStyle, padding: `${token("space.200")} ${token("space.400")}` }}>
-          <div
-            style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
-            onClick={() => setCurrentStep(section.step)}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-              <CheckCircleIcon label="" color={token("color.icon.success")} />
-              <Heading size="xsmall">{section.label}</Heading>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.200") }}>
-              <Text size="UNSAFE_small" color="color.text.subtlest">{section.status}</Text>
-              <Button appearance="link" spacing="none" onClick={() => setCurrentStep(section.step)}>
-                Edit
-              </Button>
-            </div>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }

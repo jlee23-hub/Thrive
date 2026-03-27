@@ -107,7 +107,7 @@ Example:
 - `client/src/components/TeamOverview.tsx` - Manager team assignments table
 - `client/src/components/AboutUs.tsx` - About page
 - `client/src/components/CyclesDashboard.tsx` - Comp Admin dashboard with cycle cards
-- `client/src/components/CycleBuilder.tsx` - 10-step wizard for creating compensation cycles
+- `client/src/components/CycleBuilder.tsx` - 7-step wizard: Configure Cycle → Eligibility Rules → Employee Data → Upload Comp Data → Employee+Comp Grid → Salary Bands → Reward Statements
 - `client/src/components/MeritMatrix.tsx` - Performance/compa-ratio merit increase matrix
 - `client/src/components/GroupsManagement.tsx` - User groups and permissions management
 - `client/src/components/SalaryBands.tsx` - Salary bands with charts and data tables
