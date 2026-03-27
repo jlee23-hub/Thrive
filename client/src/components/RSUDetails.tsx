@@ -322,6 +322,7 @@ export default function RSUDetails() {
   const [selectedGrant, setSelectedGrant] = useState<Grant>(grants[0]);
   const defaultPrice = compensationData.defaultSharePrice;
   const [modeledPrice, setModeledPrice] = useState(defaultPrice);
+  const [grantYearFilter, setGrantYearFilter] = useState("All");
 
   const totalUnits = useMemo(() => grants.reduce((sum, g) => sum + g.totalUnits, 0), []);
   const vestedUnits = useMemo(() => grants.reduce((sum, g) => sum + g.vestedUnits, 0), []);
@@ -609,10 +610,33 @@ export default function RSUDetails() {
         </div>
 
         <div style={{ marginTop: token("space.300") }}>
-          <Heading size="small">Equity Summary</Heading>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Heading size="small">Equity Summary</Heading>
+            <div style={{ display: "flex", gap: token("space.050"), backgroundColor: token("color.background.neutral"), borderRadius: 6, padding: 2 }}>
+              {["All", ...Array.from(new Set(grants.map((g) => g.grantDate.split(", ")[1]))).sort()].map((year) => (
+                <button
+                  key={year}
+                  onClick={() => setGrantYearFilter(year)}
+                  style={{
+                    padding: `${token("space.025")} ${token("space.150")}`,
+                    borderRadius: 4,
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: 12,
+                    fontWeight: grantYearFilter === year ? 600 : 400,
+                    backgroundColor: grantYearFilter === year ? token("elevation.surface.raised") : "transparent",
+                    color: grantYearFilter === year ? token("color.text") : token("color.text.subtlest"),
+                    boxShadow: grantYearFilter === year ? token("elevation.shadow.raised") : "none",
+                  }}
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
+          </div>
           <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.200") }}>
-            <div style={{ minWidth: 280, display: "flex", flexDirection: "column", gap: token("space.300") }}>
-              {[...grants].reverse().map((g) => {
+            <div style={{ minWidth: 280, maxHeight: 260, overflowY: "auto", display: "flex", flexDirection: "column", gap: token("space.300"), paddingRight: token("space.100") }}>
+              {[...grants].reverse().filter((g) => grantYearFilter === "All" || g.grantDate.split(", ")[1] === grantYearFilter).map((g) => {
                 const pct = (g.vestedUnits / g.totalUnits) * 100;
                 return (
                   <div key={g.id}>
