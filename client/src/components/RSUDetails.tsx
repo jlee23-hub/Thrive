@@ -723,7 +723,7 @@ export default function RSUDetails() {
                               <Text size="small" color="color.text.subtlest">Vesting Value:</Text>
                               <Text size="small" weight="bold">{formatCurrency(vestingValue)}</Text>
                             </div>
-                            <div style={{ display: "flex", justifyContent: "space-between", paddingTop: token("space.050"), borderTop: `1px solid ${token("color.border")}` }}>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
                               <Text size="small" color="color.text.subtlest">Total Vested Units:</Text>
                               <Text size="small" weight="bold">{dataPoint.vested.toLocaleString()}</Text>
                             </div>
