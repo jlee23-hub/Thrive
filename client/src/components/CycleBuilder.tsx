@@ -1264,20 +1264,27 @@ function EmployeeDataGridStep() {
     return "removed";
   };
 
+  const colHeader = (label: string, source: string, sourceColor: "color.text.information" | "color.text.success") => (
+    <div style={{ display: "flex", flexDirection: "column", gap: token("space.025") }}>
+      <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{label}</Text>
+      <Text size="UNSAFE_small" color={sourceColor}>{source}</Text>
+    </div>
+  );
+
   const head = {
     cells: [
-      { key: "id", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Employee ID</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "firstName", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">First Name</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "lastName", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Last Name</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "title", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Job Title</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "level", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Level</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "dept", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Job Family</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "location", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Location</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "rating", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Performance Rating</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "salary", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Base Salary</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "commission", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Commission %</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "bonus", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Bonus %</Text><Text size="UNSAFE_small" color="color.text.information">Workday</Text></div> },
-      { key: "equity", content: <div><Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">Current Equity $</Text><Text size="UNSAFE_small" color="color.text.success">Shareworks</Text></div> },
+      { key: "id", content: colHeader("Employee ID", "Workday", "color.text.information") },
+      { key: "firstName", content: colHeader("First Name", "Workday", "color.text.information") },
+      { key: "lastName", content: colHeader("Last Name", "Workday", "color.text.information") },
+      { key: "title", content: colHeader("Job Title", "Workday", "color.text.information") },
+      { key: "level", content: colHeader("Level", "Workday", "color.text.information") },
+      { key: "dept", content: colHeader("Job Family", "Workday", "color.text.information") },
+      { key: "location", content: colHeader("Location", "Workday", "color.text.information") },
+      { key: "rating", content: colHeader("Performance Rating", "Workday", "color.text.information") },
+      { key: "salary", content: colHeader("Base Salary", "Workday", "color.text.information") },
+      { key: "commission", content: colHeader("Commission %", "Workday", "color.text.information") },
+      { key: "bonus", content: colHeader("Bonus %", "Workday", "color.text.information") },
+      { key: "equity", content: colHeader("Current Equity $", "Shareworks", "color.text.success") },
     ],
   };
 
