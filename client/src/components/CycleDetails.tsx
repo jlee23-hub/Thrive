@@ -257,14 +257,25 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
   const [expandedPermissions, setExpandedPermissions] = useState<Set<string>>(new Set());
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+          backgroundColor: token("elevation.surface"),
+          borderBottom: `1px solid ${token("color.border")}`,
+          paddingTop: token("space.300"),
+          paddingLeft: token("space.400"),
+          paddingRight: token("space.400"),
+        }}
+      >
         <Breadcrumbs label="Cycle navigation">
           <BreadcrumbsItem text="Dashboard" onClick={onBack} />
           <BreadcrumbsItem text={breadcrumbName} />
         </Breadcrumbs>
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: token("space.100") }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: token("space.100"), marginBottom: token("space.200") }}>
           <Heading size="xlarge">{breadcrumbName}</Heading>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
             <Button appearance="default" iconBefore={DownloadIcon}>
@@ -277,24 +288,21 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
             />
           </div>
         </div>
-        <div style={{ marginTop: token("space.050") }}>
-          <Text size="medium" color="color.text.subtlest">Configure cycle settings, data sources, and permissions</Text>
-        </div>
+
+        <Tabs id="cycle-details-tabs" onChange={setSelectedTab} selected={selectedTab}>
+          <TabList>
+            <Tab>Cycle Details</Tab>
+            <Tab>Data Sources</Tab>
+            <Tab>Employee Data</Tab>
+            <Tab>Eligibility Rules</Tab>
+            <Tab>Budget Allocation</Tab>
+            <Tab>User Role Permissions</Tab>
+            <Tab>Field Permissions</Tab>
+          </TabList>
+        </Tabs>
       </div>
 
-      <Tabs id="cycle-details-tabs" onChange={setSelectedTab} selected={selectedTab}>
-        <TabList>
-          <Tab>Cycle Details</Tab>
-          <Tab>Data Sources</Tab>
-          <Tab>Employee Data</Tab>
-          <Tab>Eligibility Rules</Tab>
-          <Tab>Budget Allocation</Tab>
-          <Tab>User Role Permissions</Tab>
-          <Tab>Field Permissions</Tab>
-        </TabList>
-      </Tabs>
-
-      <div>
+      <div style={{ padding: token("space.400") }}>
         {selectedTab === 0 && (
           <div style={cardStyle}>
             <div style={{ marginBottom: token("space.300") }}>
