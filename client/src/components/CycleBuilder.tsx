@@ -859,7 +859,7 @@ function CycleDetailsStep({
   updateField: (field: string, value: string) => void;
 }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
         <PageIcon label="" color={token("color.icon.brand")} />
         <Heading size="medium">Cycle Details</Heading>
@@ -1309,7 +1309,10 @@ function EmployeeDataGridStep() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div>
-        <Heading size="medium">Employee Data</Heading>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <PersonIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Employee Data</Heading>
+        </div>
         <Text size="small" color="color.text.subtlest">
           Unified view of all employee fields with data source attribution
         </Text>
@@ -2477,7 +2480,8 @@ function FieldPermissionsStep({
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.200") }}>
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+            <TableIcon label="" color={token("color.icon.brand")} />
             <Heading size="medium">Columns</Heading>
             <Button appearance="link" spacing="none">View Audit Log</Button>
           </div>
