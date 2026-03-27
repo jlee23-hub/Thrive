@@ -60,10 +60,10 @@ An individual contributor who wants to understand their total compensation — b
 | ~~E-5~~ | ~~As an employee, I can see a bar chart of my year-over-year RSU value (historical and projected future years).~~ **Removed** — Year-over-year RSU bar chart has been descoped from the Total Rewards dashboard. | ~~P1~~ |
 | E-6 | As an employee, I can see my vested vs. unvested equity split in both dollars and units. | P0 |
 | E-7 | As an employee, I can see my Job Role and Job Level displayed on the Total Rewards page. Source: Workday. | P0 |
-| E-8 | As an employee, I can see the timestamp of when my compensation data was last synced from Workday. | P0 |
-| E-9 | As an employee, I can see the timestamp of when my equity data was last synced from Shareworks. | P0 |
-| E-10 | As an employee, I can see a note indicating that FX rates are updated daily and the default share price used for equity calculations. | P1 |
-| E-11 | As an employee, if my Shareworks data is unavailable (e.g., new hire with no grants), I see an error message: "Equity data is currently unavailable. Please contact your administrator." The equity section is not hidden and does not show $0. | P0 |
+| E-8 | As an employee, I can see the timestamp of when my compensation data was last synced from Workday, displayed in a footer at the bottom of the page in absolute format (e.g., "Mar 27, 2026 3:45 PM"). | P0 |
+| E-9 | As an employee, I can see the timestamp of when my equity data was last synced from Shareworks, displayed in a footer at the bottom of the page in absolute format (e.g., "Mar 27, 2026 3:42 PM"). | P0 |
+| ~~E-10~~ | ~~As an employee, I can see a note indicating that FX rates are updated daily and the default share price used for equity calculations.~~ **Deferred** — FX rates note moved to a later milestone. | ~~P1~~ |
+| E-11 | As an employee, if the Shareworks API call fails, I see an error message: "Equity data is currently unavailable. Please contact your administrator." If Shareworks returns successfully but I have zero grants (e.g., new hire), I see: "No equity grants are currently available." In both cases, the equity section is not hidden and does not show $0. | P0 |
 | E-12 | As an employee, I am authenticated via Okta SSO before accessing any the compensation tool data. My identity is resolved to my employee identifier which scopes all queries to my records only. | P0 |
 | E-13 | As an employee, I can access an "About" page from the navigation that shows external resource links (Atlassian Compensation, About Base Salary, About Equity, About Bonus, Stock Central) and a legal disclaimer. | P1 |
 
@@ -74,7 +74,7 @@ An individual contributor who wants to understand their total compensation — b
 | R-1 | As an employee, I can see all my equity grants listed with grant date, total units, vested units, vested value, total value, and vesting progress percentage. The section heading uses "RSUs" (no apostrophe). Source: Shareworks. | P0 |
 | R-2 | As an employee, I can see a Vesting Schedule bar chart showing vested value per period. Unvested value is not displayed in the bar chart. The bar chart does not include a legend. | P0 |
 | R-3 | As an employee, I can see a cumulative vesting line chart showing vested vs. unvested units over time for all grants. | P1 |
-| R-4 | As an employee, I can model my equity value at different share prices using an interactive slider ($20–$200). **Only unvested equity value is recalculated** when the slider moves (unvested units × modeled price). **Vested equity value is always fixed** at the historical share price on the date each tranche vested (sourced from Shareworks). Total equity value = fixed vested value + modeled unvested value. This pricing rule applies consistently across: the Total Rewards donut chart, equity summary cards, the RSU Vesting Schedule bar chart, and the cumulative vesting line chart. | P1 |
+| R-4 | As an employee, I can model my equity value at different share prices using an interactive slider ($20–$200). The default share price is the current TEAM stock price. **Only unvested equity value is recalculated** when the slider moves (unvested units × modeled price). **Vested equity value is always fixed** at the historical share price on the date each tranche vested (sourced from Shareworks). Total equity value = fixed vested value + modeled unvested value. This pricing rule applies consistently across: the Total Rewards donut chart, equity summary cards, the RSU Vesting Schedule bar chart, and the cumulative vesting line chart. | P1 |
 | R-5 | As an employee, I can see vesting progress per grant displayed as a progress bar with a percentage label. The Equity Summary section includes year filter tabs ("All" plus each distinct grant year) allowing grants to be filtered by year. The grant list is scrollable when grants exceed the visible area. | P1 |
 | R-6 | As an employee, I can see the grant date and vesting start date for each grant. | P0 |
 
@@ -91,17 +91,15 @@ An individual contributor who wants to understand their total compensation — b
 - A donut chart shows the proportional breakdown of base, bonus, and equity.
 - Total annual compensation is displayed as a single headline number (sum of all three components).
 - Job Role (e.g., "Senior Engineer") and Job Level (e.g., "P50") are shown, sourced from Workday.
-- A "last synced from Workday" timestamp is displayed near the salary/bonus data.
-- A "last synced from Shareworks" timestamp is displayed near the equity data.
-- A note indicates that FX rates are updated daily and states the default share price used for equity calculations.
-- If Shareworks data is unavailable for the employee, the equity section shows an error message rather than $0 values or hiding the section entirely.
+- A page footer displays sync timestamps in absolute format: "Last synced from Workday: [timestamp]" and "Last synced from Shareworks: [timestamp]".
+- If the Shareworks API call fails, the equity section shows: "Equity data is currently unavailable. Please contact your administrator." If Shareworks returns successfully but the employee has zero grants, the equity section shows: "No equity grants are currently available." In both cases, the section is visible and does not show $0.
 
 ### Employee: Model My RSU Value
 
 **As an employee, I want to model my equity at different share prices so I can understand the potential value of my grants.**
 
 - A share price slider (range: $20–$200) allows the employee to adjust the modeled share price.
-- The default share price is $80.
+- The default share price is the current TEAM stock price.
 - **Vested vs. Unvested Pricing Rule:** When the slider is adjusted, only **unvested** equity value is recalculated (unvested units × modeled share price). **Vested** equity value is always fixed at the historical share price on the date each tranche vested (sourced from Shareworks). Total equity value = fixed vested value + modeled unvested value. This rule is applied consistently across all views: Total Rewards donut chart, equity summary cards, Vesting Schedule bar chart, and cumulative vesting line chart.
 - Moving the slider dynamically updates: total equity value, unvested value, and the donut chart proportions. Vested value remains unchanged.
 - The RSUs page shows all grants in an Equity Summary section, each with: grant date, total units, vested units, vested value, total value, and a vesting progress bar.
@@ -123,8 +121,8 @@ An individual contributor who wants to understand their total compensation — b
 
 **As an employee, I want to see timestamps showing when my compensation and equity data were last synced so I know how current the numbers are.**
 
-- The Total Rewards page shows "Last synced from Workday: [timestamp]" for salary, bonus, and job data.
-- The Total Rewards page shows "Last synced from Shareworks: [timestamp]" for equity data.
+- A footer at the bottom of the Total Rewards page shows "Last synced from Workday: [timestamp]" and "Last synced from Shareworks: [timestamp]".
+- Timestamps are displayed in absolute format (e.g., "Mar 27, 2026 3:45 PM").
 - Timestamps are displayed per-source so the employee can see freshness of each system independently.
 
 ---
@@ -173,11 +171,13 @@ An individual contributor who wants to understand their total compensation — b
    - Donut chart: Base Salary, Bonus Target, RSU Equity value as proportional segments.
    - Three detail sections: Base Salary (annualized), Bonus/Commission Target, RSU value.
    - Job metadata: Role and Level from Workday.
-   - Sync timestamps: "Last synced from Workday: [timestamp]" and "Last synced from Shareworks: [timestamp]".
-6. If Shareworks data is unavailable → equity section shows: "Equity data is currently unavailable. Please contact your administrator." (not $0, not hidden).
+   - Footer: Sync timestamps in absolute format — "Last synced from Workday: [timestamp]" and "Last synced from Shareworks: [timestamp]".
+6. If Shareworks API call fails → equity section shows: "Equity data is currently unavailable. Please contact your administrator." (not $0, not hidden).
+7. If Shareworks returns successfully but employee has zero grants → equity section shows: "No equity grants are currently available."
 
 **Error states:**
-- Shareworks unavailable: Error message displayed in equity section.
+- Shareworks API failure: "Equity data is currently unavailable. Please contact your administrator."
+- Shareworks returns zero grants: "No equity grants are currently available."
 - No Workday record found for user: "We couldn't find your compensation record. Please contact your administrator."
 
 ### Flow 2: Employee Models RSU Value
@@ -191,7 +191,8 @@ An individual contributor who wants to understand their total compensation — b
 7. Vesting schedule shows quarterly vesting over 4 years from the vesting start date.
 
 **Error states:**
-- No grants available (new hire): "Equity data is currently unavailable. Please contact your administrator."
+- Shareworks API failure: "Equity data is currently unavailable. Please contact your administrator."
+- No grants available (new hire): "No equity grants are currently available."
 - Grant with all shares vested: Progress bar shows 100%; no future vesting events on timeline.
 
 ### Flow 3: Employee Accesses Resources
@@ -212,9 +213,9 @@ An individual contributor who wants to understand their total compensation — b
 | A4 | The Shareworks integration is already configured and data is flowing into the compensation tool. |
 | A5 | Currency is USD for all employees; multi-currency support is deferred. |
 | A6 | Sync frequency defaults to daily (3:45 PM for Workday, 3:42 PM for Shareworks). Data ingestion configuration is handled outside the application. |
-| A7 | When Shareworks data is unavailable for an employee (e.g., new hire with no grants), the UI displays an error message rather than showing $0 or hiding the equity section. |
-| A8 | The default share price for RSU modeling is $80. The slider range is $20–$200. |
-| A9 | Sync timestamps represent the time data was pulled from the source system. Timestamps are displayed per-source (Workday and Shareworks separately) so employees know the freshness of each data source independently. |
+| A7 | When the Shareworks API call fails, the UI displays "Equity data is currently unavailable. Please contact your administrator." When Shareworks returns successfully but the employee has zero grants, the UI displays "No equity grants are currently available." In both cases, the equity section is visible and does not show $0. |
+| A8 | The default share price for RSU modeling is the current TEAM stock price. The slider range is $20–$200. |
+| A9 | Sync timestamps represent the time data was pulled from the source system. Timestamps are displayed in absolute format in a footer at the bottom of the page. Timestamps are per-source (Workday and Shareworks separately) so employees know the freshness of each data source independently. |
 | A10 | The Total Rewards view is read-only. Employees cannot edit any compensation data. |
 | A11 | Vested equity value is always calculated using the historical share price at each vest date (sourced from Shareworks). Only unvested equity value responds to the modeled share price slider. This distinction is applied consistently across all views and charts. |
 
@@ -228,4 +229,7 @@ The "DIRECT REPORTS" column has been removed from the Team Overview table (Manag
 
 ## Open Questions and Clarifications Needed
 
-No open questions at this time. All decisions have been resolved.
+| # | Question | Status |
+|---|---|---|
+| Q1 | **Okta SSO (E-12):** The PRD lists Okta SSO as P0 and in scope, but it is not currently implemented. Is this expected to be built in this milestone, or is it deferred to a later integration phase? | Open |
+| Q2 | **About page link destinations (E-13):** The external links (Atlassian Compensation, About Base Salary, About Equity, About Bonus, Stock Central) currently point to placeholder URLs. What are the actual destination URLs for each link? | Open |
