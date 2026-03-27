@@ -336,9 +336,6 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                   </div>
                 </label>
               </div>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
               <div>
                 <label>
                   <Text size="small" weight="semibold">Status</Text>
@@ -351,6 +348,9 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                   </div>
                 </label>
               </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
               <div>
                 <label>
                   <Text size="small" weight="semibold">Start Date</Text>
