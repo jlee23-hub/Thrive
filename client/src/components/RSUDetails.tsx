@@ -8,8 +8,6 @@ import ChevronDownIcon from "@atlaskit/icon/core/chevron-down";
 import Button from "@atlaskit/button/new";
 import Range from "@atlaskit/range";
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -446,150 +444,129 @@ export default function RSUDetails() {
         </div>
 
         <div style={{ marginTop: token("space.300") }}>
-          <Heading size="small">Vesting Schedule</Heading>
-          <div style={{ marginTop: token("space.200"), height: 320 }}>
-            <ResponsiveContainer width="100%" height="100%" minWidth={1}>
-              <BarChart data={vestingScheduleData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
-                <XAxis
-                  dataKey="date"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
-                  interval={1}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
-                  tickFormatter={(v) => `$${(v / 1000).toFixed(0)}K`}
-                  width={60}
-                />
-                <RechartsTooltip
-                  content={({ active, payload, label }) => {
-                    if (!active || !payload?.length) return null;
-                    const dataPoint = vestingScheduleData.find((d) => d.date === label);
-                    const totalValueInPeriod = dataPoint?.grantBreakdown?.reduce((sum, g) => sum + g.value, 0) || 0;
-                    const vestedUnits = dataPoint?.vested || 0;
-                    const unvestedUnits = dataPoint?.unvested || 0;
-                    const now = new Date();
-                    const [monthStr, yearStr] = (label as string).split(" ");
-                    const monthIndex = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthStr);
-                    const periodDate = new Date(parseInt(yearStr), monthIndex);
-                    const isFuture = periodDate > now;
-                    return (
+          <Heading size="small">Equity Summary</Heading>
+          <div style={{ display: "flex", gap: token("space.400"), marginTop: token("space.200") }}>
+            <div style={{ minWidth: 280, display: "flex", flexDirection: "column", gap: token("space.300") }}>
+              {[...grants].reverse().map((g) => {
+                const pct = (g.vestedUnits / g.totalUnits) * 100;
+                return (
+                  <div key={g.id}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: token("space.100"), flexWrap: "wrap" }}>
+                      <Text size="medium" weight="bold">{g.grantDate} Grant</Text>
+                      <Text size="small" color="color.text.subtlest">
+                        {formatCurrency(g.vestedValue)} / {formatCurrency(g.totalValue)}
+                      </Text>
+                    </div>
+                    <div style={{ marginTop: token("space.050") }}>
+                      <Text size="small" color="color.text.subtlest">
+                        {g.vestedUnits.toLocaleString()} vested / {g.totalUnits.toLocaleString()} total units
+                      </Text>
+                    </div>
+                    <div style={{
+                      marginTop: token("space.100"),
+                      height: 6,
+                      borderRadius: 3,
+                      backgroundColor: token("color.background.neutral"),
+                      overflow: "hidden",
+                    }}>
                       <div style={{
-                        backgroundColor: token("elevation.surface.overlay"),
-                        border: `1px solid ${token("color.border")}`,
-                        borderRadius: 8,
-                        fontSize: 13,
-                        padding: token("space.200"),
-                        minWidth: 260,
-                        boxShadow: token("elevation.shadow.overlay"),
-                      }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: token("space.100") }}>
-                          <span style={{ fontWeight: 700, color: token("color.text") }}>{label}</span>
-                          <span style={{ fontWeight: 700, color: token("color.text") }}>
-                            ${totalValueInPeriod.toLocaleString()}
-                          </span>
-                        </div>
-                        {payload.map((entry) => {
-                          const isVested = entry.name === "vested";
-                          const unitCount = isVested ? vestedUnits : unvestedUnits;
-                          return (
-                            <div key={entry.name} style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: token("space.100"),
-                              marginTop: token("space.050"),
-                            }}>
-                              <div style={{
-                                width: 10,
-                                height: 10,
-                                borderRadius: 2,
-                                backgroundColor: entry.color,
-                                flexShrink: 0,
-                              }} />
-                              <span style={{
-                                color: isVested
-                                  ? token("color.text.success")
-                                  : token("color.text.subtlest"),
-                                fontWeight: 500,
-                              }}>
-                                {isVested ? "Vested" : "Unvested"}:
-                              </span>
-                              <span style={{ color: token("color.text"), fontWeight: 600 }}>
-                                ${(entry.value as number).toLocaleString()}
-                              </span>
-                              <span style={{ color: token("color.text.subtlest"), fontSize: 11 }}>
-                                ({unitCount.toLocaleString()} units)
-                              </span>
-                            </div>
-                          );
-                        })}
-                        {dataPoint?.grantBreakdown && dataPoint.grantBreakdown.length > 0 && (
-                          <div style={{
-                            marginTop: token("space.100"),
-                            paddingTop: token("space.100"),
-                            borderTop: `1px solid ${token("color.border")}`,
-                          }}>
-                            {dataPoint.grantBreakdown.map((gb, i) => (
-                              <div key={i} style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                marginTop: i > 0 ? token("space.050") : 0,
-                                fontSize: 12,
-                              }}>
-                                <span style={{ color: token("color.text.subtlest") }}>
-                                  {gb.units.toLocaleString()} units from {gb.grantDate} grant
-                                </span>
-                                <span style={{ color: token("color.text.subtle"), fontWeight: 500 }}>
-                                  ${gb.value.toLocaleString()}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        width: `${pct}%`,
+                        height: "100%",
+                        borderRadius: 3,
+                        backgroundColor: token("color.chart.success.bold"),
+                      }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{ flex: 1, height: 280, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={1}>
+                <LineChart data={vestingScheduleData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
+                  <XAxis
+                    dataKey="date"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: token("color.text.subtlest"), fontSize: 10 }}
+                    interval={1}
+                    angle={-45}
+                    textAnchor="end"
+                    height={60}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: token("color.text.subtlest"), fontSize: 11 }}
+                    width={50}
+                    tickFormatter={(v) => v.toLocaleString()}
+                  />
+                  <RechartsTooltip
+                    content={({ active, payload, label }) => {
+                      if (!active || !payload?.length) return null;
+                      const dataPoint = vestingScheduleData.find((d) => d.date === label);
+                      if (!dataPoint) return null;
+                      const totalUnits = dataPoint.vested + dataPoint.unvested;
+                      return (
                         <div style={{
-                          marginTop: token("space.100"),
-                          paddingTop: token("space.075"),
-                          borderTop: `1px solid ${token("color.border")}`,
-                          fontSize: 11,
-                          color: isFuture ? token("color.text.warning") : token("color.text.subtlest"),
-                          fontStyle: "italic",
+                          backgroundColor: token("elevation.surface.overlay"),
+                          border: `1px solid ${token("color.border")}`,
+                          borderRadius: 8,
+                          fontSize: 13,
+                          padding: token("space.200"),
+                          minWidth: 220,
+                          boxShadow: token("elevation.shadow.overlay"),
                         }}>
-                          {isFuture
-                            ? "Projected value based on modeled share price"
-                            : "Vested equity valued at share price on vest date"}
+                          <div style={{ fontWeight: 700, marginBottom: token("space.100"), color: token("color.text") }}>
+                            {label}
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                              <Text size="small" color="color.text.subtlest">Vested Units:</Text>
+                              <Text size="small" weight="bold">{dataPoint.vested.toLocaleString()}</Text>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                              <Text size="small" color="color.text.subtlest">Unvested Units:</Text>
+                              <Text size="small" weight="bold">{dataPoint.unvested.toLocaleString()}</Text>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between", paddingTop: token("space.050"), borderTop: `1px solid ${token("color.border")}` }}>
+                              <Text size="small" color="color.text.subtlest">Total Units:</Text>
+                              <Text size="small" weight="bold">{totalUnits.toLocaleString()}</Text>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  }}
-                />
-                <Bar
-                  dataKey="vestedValue"
-                  stackId="1"
-                  fill={token("color.chart.success.bold")}
-                  name="vested"
-                  radius={[0, 0, 0, 0]}
-                />
-                <Bar
-                  dataKey="unvestedValue"
-                  stackId="1"
-                  fill={token("color.background.neutral")}
-                  name="unvested"
-                  radius={[4, 4, 0, 0]}
-                />
-                <Legend
-                  formatter={(value: string) => (
-                    <span style={{ color: token("color.text"), fontSize: 12 }}>
-                      {value === "vested" ? "Vested Value" : "Unvested Value"}
-                    </span>
-                  )}
-                  iconType="square"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+                      );
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="unvested"
+                    stroke={token("color.border")}
+                    strokeWidth={1}
+                    strokeDasharray="4 4"
+                    dot={{ fill: token("color.border"), r: 3 }}
+                    name="Unvested Units"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="vested"
+                    stroke="#36B37E"
+                    strokeWidth={2}
+                    dot={{ fill: "#36B37E", r: 3 }}
+                    name="Vested Units"
+                  />
+                  <Legend
+                    formatter={(value: string) => (
+                      <span style={{ color: token("color.text"), fontSize: 12 }}>
+                        {value}
+                      </span>
+                    )}
+                    iconType="circle"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
