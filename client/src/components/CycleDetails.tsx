@@ -14,13 +14,7 @@ import DynamicTable from "@atlaskit/dynamic-table";
 import PageIcon from "@atlaskit/icon/core/page";
 import DownloadIcon from "@atlaskit/icon/core/download";
 import ShowMoreVerticalIcon from "@atlaskit/icon/core/show-more-vertical";
-import ChevronLeftIcon from "@atlaskit/icon/core/chevron-left";
 import Breadcrumbs, { BreadcrumbsItem } from "@atlaskit/breadcrumbs";
-import CheckCircleIcon from "@atlaskit/icon/core/check-circle";
-import DatabaseIcon from "@atlaskit/icon/core/database";
-import PersonIcon from "@atlaskit/icon/core/person";
-import ShieldIcon from "@atlaskit/icon/core/shield";
-import SearchIcon from "@atlaskit/icon/core/search";
 import LockLockedIcon from "@atlaskit/icon/core/lock-locked";
 
 const cardStyle: React.CSSProperties = {
@@ -220,43 +214,16 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
   const [expandedPermissions, setExpandedPermissions] = useState<Set<string>>(new Set());
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 10,
-          backgroundColor: token("elevation.surface"),
-          borderBottom: `1px solid ${token("color.border")}`,
-          paddingTop: token("space.300"),
-          paddingLeft: token("space.400"),
-          paddingRight: token("space.400"),
-        }}
-      >
+    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
+      <div>
         <Breadcrumbs label="Cycle navigation">
-          <BreadcrumbsItem text="Home" onClick={onBack} />
-          <BreadcrumbsItem text="Cycles" onClick={onBack} />
+          <BreadcrumbsItem text="Dashboard" onClick={onBack} />
           <BreadcrumbsItem text={breadcrumbName} />
         </Breadcrumbs>
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: token("space.200") }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: token("space.100") }}>
+          <Heading size="xlarge">{breadcrumbName}</Heading>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-            <div
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: token("border.radius.circle"),
-                backgroundColor: token("color.background.brand.bold"),
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <PageIcon label="" color={token("color.text.inverse")} LEGACY_size="small" />
-            </div>
-            <Heading size="large">{breadcrumbName}</Heading>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
             <Button appearance="default" iconBefore={DownloadIcon}>
               Export
             </Button>
@@ -267,105 +234,107 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
             />
           </div>
         </div>
-
-        <Tabs id="cycle-details-tabs" onChange={setSelectedTab} selected={selectedTab}>
-          <TabList>
-            <Tab>Cycle Details</Tab>
-            <Tab>Data Sources</Tab>
-            <Tab>Employee Data</Tab>
-            <Tab>Eligibility Rules</Tab>
-            <Tab>User Role Permissions</Tab>
-            <Tab>Field Permissions</Tab>
-          </TabList>
-        </Tabs>
+        <div style={{ marginTop: token("space.050") }}>
+          <Text size="medium" color="color.text.subtlest">Configure cycle settings, data sources, and permissions</Text>
+        </div>
       </div>
 
-      <div style={{ padding: token("space.400"), width: "100%" }}>
+      <Tabs id="cycle-details-tabs" onChange={setSelectedTab} selected={selectedTab}>
+        <TabList>
+          <Tab>Cycle Details</Tab>
+          <Tab>Data Sources</Tab>
+          <Tab>Employee Data</Tab>
+          <Tab>Eligibility Rules</Tab>
+          <Tab>User Role Permissions</Tab>
+          <Tab>Field Permissions</Tab>
+        </TabList>
+      </Tabs>
+
+      <div>
         {selectedTab === 0 && (
           <div style={cardStyle}>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-              <PageIcon label="" color={token("color.icon.brand")} />
-              <Heading size="small">Cycle Details</Heading>
+            <div style={{ marginBottom: token("space.300") }}>
+              <Heading size="medium">Cycle Details</Heading>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
               <div>
-                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Cycle Name</Text>
-                </div>
-                <div style={{ marginTop: token("space.050") }}>
-                  <Textfield
-                    placeholder="Enter cycle name"
-                    value={cycleName}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCycleName(e.target.value)}
-                  />
-                </div>
+                <label>
+                  <Text size="small" weight="semibold">Cycle Name</Text>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Textfield
+                      placeholder="Enter cycle name"
+                      value={cycleName}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCycleName(e.target.value)}
+                    />
+                  </div>
+                </label>
               </div>
               <div>
-                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Cycle Type</Text>
-                </div>
-                <div style={{ marginTop: token("space.050") }}>
-                  <Select
-                    options={cycleTypeOptions}
-                    value={cycleType}
-                    onChange={(val: any) => val && setCycleType(val)}
-                  />
-                </div>
+                <label>
+                  <Text size="small" weight="semibold">Cycle Type</Text>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Select
+                      options={cycleTypeOptions}
+                      value={cycleType}
+                      onChange={(val: any) => val && setCycleType(val)}
+                    />
+                  </div>
+                </label>
               </div>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: token("space.300"), marginBottom: token("space.300") }}>
               <div>
-                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Status</Text>
-                </div>
-                <div style={{ marginTop: token("space.050") }}>
-                  <Select
-                    options={statusOptions}
-                    value={status}
-                    onChange={(val: any) => val && setStatus(val)}
-                  />
-                </div>
+                <label>
+                  <Text size="small" weight="semibold">Status</Text>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Select
+                      options={statusOptions}
+                      value={status}
+                      onChange={(val: any) => val && setStatus(val)}
+                    />
+                  </div>
+                </label>
               </div>
               <div>
-                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Start Date</Text>
-                </div>
-                <div style={{ marginTop: token("space.050") }}>
-                  <Textfield
-                    placeholder="mm/dd/yyyy"
-                    value={startDate}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
-                  />
-                </div>
+                <label>
+                  <Text size="small" weight="semibold">Start Date</Text>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Textfield
+                      placeholder="mm/dd/yyyy"
+                      value={startDate}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
+                    />
+                  </div>
+                </label>
               </div>
               <div>
-                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">End Date</Text>
-                </div>
-                <div style={{ marginTop: token("space.050") }}>
-                  <Textfield
-                    placeholder="mm/dd/yyyy"
-                    value={endDate}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
-                  />
-                </div>
+                <label>
+                  <Text size="small" weight="semibold">End Date</Text>
+                  <div style={{ marginTop: token("space.050") }}>
+                    <Textfield
+                      placeholder="mm/dd/yyyy"
+                      value={endDate}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
+                    />
+                  </div>
+                </label>
               </div>
             </div>
 
             <div>
-              <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Description</Text>
-              </div>
-              <div style={{ marginTop: token("space.050") }}>
-                <Textarea
-                  placeholder="Enter cycle description..."
-                  value={description}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
-                  minimumRows={4}
-                />
-              </div>
+              <label>
+                <Text size="small" weight="semibold">Description</Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Textarea
+                    placeholder="Enter cycle description..."
+                    value={description}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
+                    minimumRows={4}
+                  />
+                </div>
+              </label>
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end", gap: token("space.100"), marginTop: token("space.400") }}>
@@ -377,9 +346,8 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
 
         {selectedTab === 1 && (
           <div style={cardStyle}>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-              <DatabaseIcon label="" color={token("color.icon.brand")} />
-              <Heading size="small">Connected Data Sources</Heading>
+            <div style={{ marginBottom: token("space.300") }}>
+              <Heading size="medium">Connected Data Sources</Heading>
             </div>
             <DynamicTable
               head={dsHead}
@@ -392,10 +360,7 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
         {selectedTab === 2 && (
           <div style={cardStyle}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: token("space.300") }}>
-              <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                <PersonIcon label="" color={token("color.icon.brand")} />
-                <Heading size="small">Employee Data Fields</Heading>
-              </div>
+              <Heading size="medium">Employee Data Fields</Heading>
               <Text size="small" color="color.text.subtlest">
                 {employeeFields.filter((f) => f.required).length} required · {employeeFields.length} total fields
               </Text>
@@ -410,9 +375,8 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
 
         {selectedTab === 3 && (
           <div style={cardStyle}>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-              <CheckCircleIcon label="" color={token("color.icon.brand")} />
-              <Heading size="small">Eligibility Rules</Heading>
+            <div style={{ marginBottom: token("space.300") }}>
+              <Heading size="medium">Eligibility Rules</Heading>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
               {rules.map((rule) => (
@@ -450,9 +414,8 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
 
         {selectedTab === 4 && (
           <div style={cardStyle}>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.300") }}>
-              <ShieldIcon label="" color={token("color.icon.brand")} />
-              <Heading size="small">User Role Permissions</Heading>
+            <div style={{ marginBottom: token("space.300") }}>
+              <Heading size="medium">User Role Permissions</Heading>
             </div>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
@@ -495,9 +458,8 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
 
         {selectedTab === 5 && (
           <div style={cardStyle}>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.200") }}>
-              <ShieldIcon label="" color={token("color.icon.brand")} />
-              <Heading size="small">Column Permissions</Heading>
+            <div style={{ marginBottom: token("space.200") }}>
+              <Heading size="medium">Column Permissions</Heading>
             </div>
             <div style={{ marginBottom: token("space.300") }}>
               <Text size="small" color="color.text.subtlest">
