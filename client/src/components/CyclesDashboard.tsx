@@ -9,7 +9,6 @@ import Button from "@atlaskit/button/new";
 import AddIcon from "@atlaskit/icon/core/add";
 import CalendarIcon from "@atlaskit/icon/core/calendar";
 import PeopleGroupIcon from "@atlaskit/icon/core/people-group";
-import PageIcon from "@atlaskit/icon/core/page";
 import ShowMoreVerticalIcon from "@atlaskit/icon/core/show-more-vertical";
 import { IconButton } from "@atlaskit/button/new";
 
@@ -93,52 +92,6 @@ function StatusLozenge({ status }: { status: Cycle["status"] }) {
   return <Lozenge appearance={appearance} isBold>{status}</Lozenge>;
 }
 
-function SummaryStatCard({
-  title,
-  value,
-  icon,
-  borderColor,
-}: {
-  title: string;
-  value: string;
-  icon: React.ReactNode;
-  borderColor: string;
-}) {
-  return (
-    <div
-      style={{
-        ...cardStyle,
-        padding: `${token("space.300")} ${token("space.400")}`,
-        flex: 1,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "flex-start",
-        borderLeft: `4px solid ${borderColor}`,
-      }}
-    >
-      <div>
-        <Text size="small" color="color.text.subtlest">{title}</Text>
-        <div style={{ marginTop: token("space.100") }}>
-          <Heading size="xlarge">{value}</Heading>
-        </div>
-      </div>
-      <div
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: "50%",
-          backgroundColor: token("color.background.neutral"),
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {icon}
-      </div>
-    </div>
-  );
-}
-
 const head = {
   cells: [
     { key: "name", content: "CYCLE NAME", isSortable: true, width: 20 },
@@ -156,8 +109,16 @@ interface CyclesDashboardProps {
   onSelectCycle?: (cycle: Cycle) => void;
 }
 
+function parseEndDate(timeline: string): number {
+  const parts = timeline.split(" - ");
+  if (parts.length < 2) return 0;
+  return new Date(parts[1]).getTime();
+}
+
+const sortedCycles = [...cycles].sort((a, b) => parseEndDate(b.timeline) - parseEndDate(a.timeline));
+
 function buildRows(onSelectCycle?: (cycle: Cycle) => void) {
-  return cycles.map((cycle) => ({
+  return sortedCycles.map((cycle) => ({
     key: cycle.id,
     cells: [
       {
@@ -231,14 +192,11 @@ function buildRows(onSelectCycle?: (cycle: Cycle) => void) {
 }
 
 export default function CyclesDashboard({ onCreateCycle, onSelectCycle }: CyclesDashboardProps) {
-  const activeCycles = cycles.filter((c) => c.status === "Active").length;
-  const inactiveCycles = cycles.filter((c) => c.status === "Inactive").length;
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
         <div>
-          <Heading size="xlarge">Compensation Cycle Dash</Heading>
+          <Heading size="xlarge">Compensation Cycle Dashboard</Heading>
           <div style={{ marginTop: token("space.050") }}>
             <Text size="medium" color="color.text.subtlest">
               Manage and monitor all compensation cycles across your organization
@@ -250,40 +208,7 @@ export default function CyclesDashboard({ onCreateCycle, onSelectCycle }: Cycles
         </Button>
       </div>
 
-      <div style={{ display: "flex", gap: token("space.400") }}>
-        <SummaryStatCard
-          title="Total Cycles"
-          value={String(cycles.length)}
-          icon={<PageIcon label="" color={token("color.icon.brand")} />}
-          borderColor={token("color.border.brand")}
-        />
-        <SummaryStatCard
-          title="Active Cycles"
-          value={String(activeCycles)}
-          icon={<PageIcon label="" color={token("color.icon.success")} />}
-          borderColor={token("color.border.success")}
-        />
-        <SummaryStatCard
-          title="Inactive Cycles"
-          value={String(inactiveCycles)}
-          icon={<PageIcon label="" color={token("color.icon.subtle")} />}
-          borderColor={token("color.border")}
-        />
-      </div>
-
       <div style={{ ...cardStyle, paddingTop: token("space.300"), paddingLeft: token("space.300"), paddingRight: token("space.300"), paddingBottom: token("space.025") }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: token("space.100"),
-            marginBottom: token("space.200"),
-          }}
-        >
-          <PageIcon label="" color={token("color.icon")} />
-          <Heading size="medium">All Cycles</Heading>
-        </div>
-
         <div className="no-last-row-border">
           <DynamicTable
             head={head}
@@ -291,8 +216,6 @@ export default function CyclesDashboard({ onCreateCycle, onSelectCycle }: Cycles
             rowsPerPage={10}
             defaultPage={1}
             isFixedSize
-            defaultSortKey="name"
-            defaultSortOrder="ASC"
           />
         </div>
       </div>
