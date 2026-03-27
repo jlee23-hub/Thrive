@@ -1560,14 +1560,15 @@ function EligibilityRulesStep() {
 function SalaryBandsStep() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
-      <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-        <SpreadsheetIcon label="" color={token("color.icon.brand")} />
-        <Heading size="medium">Salary Bands</Heading>
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+          <SpreadsheetIcon label="" color={token("color.icon.brand")} />
+          <Heading size="medium">Salary Bands</Heading>
+        </div>
+        <Text size="small" color="color.text.subtlest">
+          Upload salary band data via CSV or update bands individually.
+        </Text>
       </div>
-
-      <Text size="small" color="color.text.subtlest">
-        Upload salary band data via CSV or update bands individually.
-      </Text>
 
       <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
         <div
@@ -2497,11 +2498,9 @@ function FieldPermissionsStep({
             <Heading size="medium">Columns</Heading>
             <Button appearance="link" spacing="none">View Audit Log</Button>
           </div>
-          <div style={{ marginTop: token("space.100") }}>
-            <Text size="small" color="color.text.subtlest">
-              Specify the columns that will appear in the Planner and surrogate which roles will be able to view and edit them.
-            </Text>
-          </div>
+          <Text size="small" color="color.text.subtlest">
+            Specify the columns that will appear in the Planner and surrogate which roles will be able to view and edit them.
+          </Text>
         </div>
       </div>
 
