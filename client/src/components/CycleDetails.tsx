@@ -16,6 +16,8 @@ import DownloadIcon from "@atlaskit/icon/core/download";
 import ShowMoreVerticalIcon from "@atlaskit/icon/core/show-more-vertical";
 import Breadcrumbs, { BreadcrumbsItem } from "@atlaskit/breadcrumbs";
 import LockLockedIcon from "@atlaskit/icon/core/lock-locked";
+import UploadIcon from "@atlaskit/icon/core/upload";
+import ProgressBar from "@atlaskit/progress-bar";
 
 const cardStyle: React.CSSProperties = {
   backgroundColor: token("elevation.surface.raised"),
@@ -40,13 +42,6 @@ interface CycleDetailsProps {
   onBack: () => void;
 }
 
-const fiscalYearOptions = [
-  { label: "2024", value: "2024" },
-  { label: "2025", value: "2025" },
-  { label: "2026", value: "2026" },
-  { label: "2027", value: "2027" },
-];
-
 const cycleTypeOptions = [
   { label: "Merit Only", value: "merit" },
   { label: "Promotion", value: "promotion" },
@@ -63,9 +58,18 @@ const statusOptions = [
 ];
 
 const dataSourceRows = [
-  { id: "1", name: "Workday - Employee Data", type: "HRIS", status: "connected", lastSync: "2 hours ago", records: 1842 },
-  { id: "2", name: "Shareworks - Equity Data", type: "Equity", status: "connected", lastSync: "4 hours ago", records: 956 },
-  { id: "3", name: "Budget Allocations", type: "CSV Upload", status: "pending", lastSync: "—", records: 0 },
+  { id: "1", name: "Workday Employee Data", type: "HRIS", status: "connected", lastSync: "2 hours ago", records: 1842 },
+  { id: "2", name: "Workday Compensation Data", type: "HRIS", status: "connected", lastSync: "2 hours ago", records: 1842 },
+  { id: "3", name: "Shareworks", type: "Equity", status: "connected", lastSync: "4 hours ago", records: 956 },
+];
+
+const budgetRows = [
+  { department: "Engineering", allocated: 2400000, used: 1860000, headcount: 120 },
+  { department: "Product", allocated: 1200000, used: 980000, headcount: 45 },
+  { department: "Design", allocated: 600000, used: 420000, headcount: 28 },
+  { department: "Marketing", allocated: 800000, used: 640000, headcount: 35 },
+  { department: "Sales", allocated: 1500000, used: 1350000, headcount: 60 },
+  { department: "Operations", allocated: 500000, used: 375000, headcount: 22 },
 ];
 
 const employeeFields = [
@@ -135,15 +139,6 @@ function getCycleTypeDefault(type: string) {
   return cycleTypeOptions[0];
 }
 
-function getFiscalYear(name: string) {
-  const match = name.match(/FY(\d{4})|(\d{4})/);
-  if (match) {
-    const year = match[1] || match[2];
-    return fiscalYearOptions.find((o) => o.value === year) || fiscalYearOptions[2];
-  }
-  return fiscalYearOptions[2];
-}
-
 export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
   const dates = parseCycleDates(cycle.timeline);
   const [cycleName, setCycleName] = useState(cycle.name);
@@ -154,6 +149,8 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
   const [description, setDescription] = useState("");
   const [rules, setRules] = useState(eligibilityRules);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const shortName = cycle.name.replace(/^FY\d{4}\s+/, "").replace(/\s+Cycle$/, "");
   const breadcrumbName = shortName || cycle.name;
@@ -211,6 +208,52 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
     ],
   }));
 
+  const handleCsvSelect = (file: File) => {
+    if (file.name.endsWith(".csv")) {
+      setCsvFile(file);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleCsvSelect(file);
+  };
+
+  const fmt = (n: number) => "$" + n.toLocaleString();
+
+  const budgetHead = {
+    cells: [
+      { key: "department", content: "DEPARTMENT", width: 25 },
+      { key: "headcount", content: "HEADCOUNT", width: 15 },
+      { key: "allocated", content: "ALLOCATED", width: 20 },
+      { key: "used", content: "USED", width: 20 },
+      { key: "remaining", content: "REMAINING", width: 20 },
+    ],
+  };
+
+  const budgetTableRows = budgetRows.map((b, i) => ({
+    key: String(i),
+    cells: [
+      { key: b.department, content: <Text weight="semibold">{b.department}</Text> },
+      { key: String(b.headcount), content: <Text size="small">{b.headcount}</Text> },
+      { key: String(b.allocated), content: <Text size="small">{fmt(b.allocated)}</Text> },
+      { key: String(b.used), content: <Text size="small">{fmt(b.used)}</Text> },
+      {
+        key: String(b.allocated - b.used),
+        content: (
+          <Lozenge appearance={b.allocated - b.used > 0 ? "success" : "removed"}>
+            {fmt(b.allocated - b.used)}
+          </Lozenge>
+        ),
+      },
+    ],
+  }));
+
+  const totalAllocated = budgetRows.reduce((s, b) => s + b.allocated, 0);
+  const totalUsed = budgetRows.reduce((s, b) => s + b.used, 0);
+
   const [expandedPermissions, setExpandedPermissions] = useState<Set<string>>(new Set());
 
   return (
@@ -245,6 +288,7 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
           <Tab>Data Sources</Tab>
           <Tab>Employee Data</Tab>
           <Tab>Eligibility Rules</Tab>
+          <Tab>Budget Allocation</Tab>
           <Tab>User Role Permissions</Tab>
           <Tab>Field Permissions</Tab>
         </TabList>
@@ -345,15 +389,85 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
         )}
 
         {selectedTab === 1 && (
-          <div style={cardStyle}>
-            <div style={{ marginBottom: token("space.300") }}>
-              <Heading size="medium">Connected Data Sources</Heading>
+          <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
+            <div style={cardStyle}>
+              <div style={{ marginBottom: token("space.300") }}>
+                <Heading size="medium">Connected Data Sources</Heading>
+              </div>
+              <DynamicTable
+                head={dsHead}
+                rows={dsRows}
+                isFixedSize
+              />
             </div>
-            <DynamicTable
-              head={dsHead}
-              rows={dsRows}
-              isFixedSize
-            />
+
+            <div style={cardStyle}>
+              <div style={{ marginBottom: token("space.100") }}>
+                <Heading size="medium">Compensation Modeling CSV</Heading>
+              </div>
+              <div style={{ marginBottom: token("space.300") }}>
+                <Text size="small" color="color.text.subtlest">
+                  Upload a CSV file with compensation modeling data to supplement connected sources.
+                </Text>
+              </div>
+
+              <div
+                onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+                onDragLeave={() => setIsDragOver(false)}
+                onDrop={handleDrop}
+                style={{
+                  border: `2px dashed ${isDragOver ? token("color.border.brand") : token("color.border")}`,
+                  borderRadius: "6px",
+                  padding: token("space.500"),
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: token("space.200"),
+                  backgroundColor: isDragOver ? token("color.background.selected") : token("elevation.surface.sunken"),
+                  transition: "all 0.15s ease",
+                }}
+              >
+                <UploadIcon label="" color={token("color.icon.subtle")} LEGACY_size="large" />
+                {csvFile ? (
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: token("space.100") }}>
+                    <Text weight="semibold">{csvFile.name}</Text>
+                    <Text size="small" color="color.text.subtlest">
+                      {(csvFile.size / 1024).toFixed(1)} KB
+                    </Text>
+                    <div style={{ display: "flex", gap: token("space.100") }}>
+                      <Button
+                        appearance="subtle"
+                        onClick={() => setCsvFile(null)}
+                      >
+                        Remove
+                      </Button>
+                      <Button appearance="primary">Upload</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: token("space.100") }}>
+                    <Text weight="semibold">Drag and drop a CSV file here</Text>
+                    <Text size="small" color="color.text.subtlest">or</Text>
+                    <Button
+                      appearance="default"
+                      iconBefore={UploadIcon}
+                      onClick={() => {
+                        const input = document.createElement("input");
+                        input.type = "file";
+                        input.accept = ".csv";
+                        input.onchange = (e) => {
+                          const file = (e.target as HTMLInputElement).files?.[0];
+                          if (file) handleCsvSelect(file);
+                        };
+                        input.click();
+                      }}
+                    >
+                      Browse Files
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -414,6 +528,79 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
 
         {selectedTab === 4 && (
           <div style={cardStyle}>
+            <div style={{ marginBottom: token("space.100") }}>
+              <Heading size="medium">Budget Allocation</Heading>
+            </div>
+            <div style={{ marginBottom: token("space.300") }}>
+              <Text size="small" color="color.text.subtlest">
+                Department-level budget allocation and utilization for this compensation cycle.
+              </Text>
+            </div>
+
+            <div style={{ display: "flex", gap: token("space.300"), marginBottom: token("space.300") }}>
+              <div style={{
+                flex: 1,
+                padding: token("space.300"),
+                borderRadius: "6px",
+                border: `1px solid ${token("color.border")}`,
+                backgroundColor: token("elevation.surface"),
+              }}>
+                <Text size="small" color="color.text.subtlest">Total Allocated</Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Heading size="medium">{fmt(totalAllocated)}</Heading>
+                </div>
+              </div>
+              <div style={{
+                flex: 1,
+                padding: token("space.300"),
+                borderRadius: "6px",
+                border: `1px solid ${token("color.border")}`,
+                backgroundColor: token("elevation.surface"),
+              }}>
+                <Text size="small" color="color.text.subtlest">Total Used</Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Heading size="medium">{fmt(totalUsed)}</Heading>
+                </div>
+              </div>
+              <div style={{
+                flex: 1,
+                padding: token("space.300"),
+                borderRadius: "6px",
+                border: `1px solid ${token("color.border")}`,
+                backgroundColor: token("elevation.surface"),
+              }}>
+                <Text size="small" color="color.text.subtlest">Remaining</Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Heading size="medium">{fmt(totalAllocated - totalUsed)}</Heading>
+                </div>
+              </div>
+              <div style={{
+                flex: 1,
+                padding: token("space.300"),
+                borderRadius: "6px",
+                border: `1px solid ${token("color.border")}`,
+                backgroundColor: token("elevation.surface"),
+              }}>
+                <Text size="small" color="color.text.subtlest">Utilization</Text>
+                <div style={{ marginTop: token("space.050") }}>
+                  <Heading size="medium">{Math.round((totalUsed / totalAllocated) * 100)}%</Heading>
+                </div>
+                <div style={{ marginTop: token("space.100") }}>
+                  <ProgressBar value={totalUsed / totalAllocated} />
+                </div>
+              </div>
+            </div>
+
+            <DynamicTable
+              head={budgetHead}
+              rows={budgetTableRows}
+              isFixedSize
+            />
+          </div>
+        )}
+
+        {selectedTab === 5 && (
+          <div style={cardStyle}>
             <div style={{ marginBottom: token("space.300") }}>
               <Heading size="medium">User Role Permissions</Heading>
             </div>
@@ -456,7 +643,7 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
           </div>
         )}
 
-        {selectedTab === 5 && (
+        {selectedTab === 6 && (
           <div style={cardStyle}>
             <div style={{ marginBottom: token("space.200") }}>
               <Heading size="medium">Column Permissions</Heading>
