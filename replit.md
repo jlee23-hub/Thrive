@@ -11,6 +11,59 @@
   ```
 - Any new card, container, panel, or box element created in the future must also use `borderRadius: "6px"`
 
+## ADS Design Rules (Mandatory)
+All UI must follow these rules. No exceptions without documented justification.
+
+### Typography
+- **NEVER** use native HTML elements `<h1>`–`<h6>`, `<p>`, `<span>`, `<div>` for text content
+- **ALWAYS** use `<Heading>` from `@atlaskit/heading` for headings
+- **ALWAYS** use `<Text>` from `@atlaskit/primitives` (NOT `@atlaskit/primitives/text`)
+- **NEVER** use raw `fontSize` or `fontWeight` in inline styles for visible text — use `<Text size="..." weight="...">` or `<Heading size="...">`
+- Exception: recharts chart axis `tick` and tooltip configs may use raw pixel values since they are chart library props
+
+### Heading Hierarchy
+- Page title: `<Heading size="large">`
+- Card/section title: `<Heading size="medium">`
+- Sub-section within a card: `<Text size="medium" weight="bold">`
+
+### Colors
+- **NEVER** use hex values like `#FFFFFF` or `#36B37E`
+- **ALWAYS** use `token("color.xxx")` for all colors
+- Chart colors: `token("color.chart.success.bold")`, `token("color.border")`, etc.
+- Text colors: `token("color.text")`, `token("color.text.subtlest")`, `token("color.text.success")`, etc.
+
+### Spacing
+- **NEVER** use pixel or rem values for padding, margin, or gap
+- **ALWAYS** use space tokens: `token("space.100")`, `token("space.200")`, etc.
+- Exception: `height`/`width` for chart containers and fixed-size decorative elements (e.g., progress bar `height: 6`)
+
+### Components
+- **Buttons**: `@atlaskit/button/new` — never native `<button>` with Tailwind
+- **Checkbox**: `@atlaskit/checkbox`
+- **Toggle**: `@atlaskit/toggle`
+- **Tabs**: `@atlaskit/tabs`
+- **Lozenge**: `@atlaskit/lozenge`
+- **Tag**: `@atlaskit/tag`
+- **Banner**: `@atlaskit/banner`
+- **Radio**: `@atlaskit/radio`
+- **Textarea**: `@atlaskit/textarea`
+- **Progress Bar**: `@atlaskit/progress-bar`
+- **Drawer**: `@atlaskit/drawer`
+- **Skeleton**: `@atlaskit/skeleton`
+- **Tooltip**: `@atlaskit/tooltip`
+- **Range slider**: `@atlaskit/range`
+
+### Icons
+- **NEVER** import from `@atlaskit/icon/glyph/` (deprecated)
+- **ALWAYS** import from `@atlaskit/icon/core/` or `@atlaskit/icon-lab/core/`
+- Use `LEGACY_size` prop for sizing
+- **NEVER** invent or guess icon names — verify they exist
+
+### Layout
+- Use `div` with inline styles and spacing tokens for layout
+- Cards/containers: `borderRadius: "6px"`, no `boxShadow`, `border: 1px solid ${token("color.border")}`
+- Smaller rounded elements (pills, progress bars): use `"3px"` or `"4px"` as string values
+
 ## Architecture
 - React + TypeScript frontend with Express backend
 - Uses Atlassian Design System (@atlaskit) components and design tokens
