@@ -22,41 +22,7 @@ const linkStyle: React.CSSProperties = {
 export default function AboutUs() {
   return (
     <div style={{ maxWidth: 900 }}>
-      <Heading size="large">About Your Compensation</Heading>
-      <div style={{ marginTop: token("space.200") }}>
-        <Text size="medium">
-          This tool provides a comprehensive view of your total compensation package, including base salary, bonus targets, and equity grants. Use it to understand and model how changes in share price may affect your total compensation.
-        </Text>
-      </div>
-
-      <div style={sectionDivider}>
-        <Heading size="medium">Compensation Philosophy</Heading>
-        <div style={{ marginTop: token("space.200") }}>
-          <Text size="medium">
-            We believe in competitive, transparent compensation. Our packages are benchmarked against top-tier technology companies and reviewed annually to ensure market competitiveness.
-          </Text>
-        </div>
-      </div>
-
-      <div style={sectionDivider}>
-        <Heading size="medium">Equity Program</Heading>
-        <div style={{ marginTop: token("space.200") }}>
-          <Text size="medium">
-            RSUs (Restricted Stock Units) vest over a 4-year schedule, typically with a 1-year cliff. This aligns your interests with long-term company performance and shareholder value.
-          </Text>
-        </div>
-      </div>
-
-      <div style={sectionDivider}>
-        <Heading size="medium">Bonus Structure</Heading>
-        <div style={{ marginTop: token("space.200") }}>
-          <Text size="medium">
-            Your bonus target is based on a combination of company performance and individual contribution. Actual payouts may vary based on achievement against goals.
-          </Text>
-        </div>
-      </div>
-
-      <div style={sectionDivider}>
+      <div>
         <Heading size="medium">Resources</Heading>
         <div style={{ marginTop: token("space.200") }}>
           <Text size="medium">
