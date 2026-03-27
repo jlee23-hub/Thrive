@@ -337,7 +337,14 @@ export default function RSUDetails() {
       <Heading size="large">RSU's</Heading>
       <div style={cardStyle}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Text size="medium" weight="bold">Model Share Price</Text>
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+            <Text size="medium" weight="bold">Model Share Price</Text>
+            <Tooltip content="Use this slider to model how changes in share price affect your unvested equity value">
+              <span style={{ display: "inline-flex", cursor: "help" }}>
+                <InformationIcon label="info" />
+              </span>
+            </Tooltip>
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
             <Heading size="medium">{formatCurrencyDecimal(modeledPrice)}</Heading>
             {priceDiff !== 0 && (
