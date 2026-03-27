@@ -589,14 +589,6 @@ export default function RSUDetails() {
                   name="vested"
                   radius={[4, 4, 0, 0]}
                 />
-                <Legend
-                  formatter={(value: string) => (
-                    <span style={{ color: token("color.text"), fontSize: 12 }}>
-                      {value === "vested" ? "Vested Units" : "Unvested Units"}
-                    </span>
-                  )}
-                  iconType="square"
-                />
               </BarChart>
             </ResponsiveContainer>
           </div>
