@@ -26,7 +26,6 @@ import LockLockedIcon from "@atlaskit/icon/core/lock-locked";
 import EditIcon from "@atlaskit/icon/core/edit";
 import DeleteIcon from "@atlaskit/icon/core/delete";
 import SearchIcon from "@atlaskit/icon/core/search";
-import ErrorIcon from "@atlaskit/icon/core/error";
 import CrossIcon from "@atlaskit/icon/core/cross";
 import ClockIcon from "@atlaskit/icon/core/clock";
 import PersonIcon from "@atlaskit/icon/core/person";
@@ -91,40 +90,6 @@ const typeOptions = [
   { label: "Equity", value: "equity" },
   { label: "Combined (Merit + Promo + Equity)", value: "all" },
   { label: "Other", value: "other" },
-];
-
-const uploadHistory = [
-  {
-    name: "employee_comp_data_v3.xlsx",
-    date: "Feb 25, 2026 2:45 PM",
-    size: "2.4 MB",
-    records: 1247,
-    status: "failed" as const,
-    errors: 5,
-    errorDetails: [
-      { row: 4, empName: "Sarah Miller", col: "Employee ID", issue: "Missing required value" },
-      { row: 12, empName: "James Wilson", col: "Base Salary", issue: "Invalid currency format" },
-      { row: 23, empName: "Robert Chen", col: "Employee ID", issue: "Duplicate Employee ID: EMP-2847" },
-      { row: 28, empName: "Emily Davis", col: "Start Date", issue: "Date format must be YYYY-MM-DD" },
-      { row: 41, empName: "David Martinez", col: "Email", issue: "Non-breaking space detected in email" },
-    ],
-  },
-  {
-    name: "employee_comp_data_v2.xlsx",
-    date: "Feb 25, 2026 1:30 PM",
-    size: "2.3 MB",
-    records: 1245,
-    status: "success" as const,
-    errors: 0,
-  },
-  {
-    name: "employee_comp_data_v1.csv",
-    date: "Feb 24, 2026 4:15 PM",
-    size: "1.8 MB",
-    records: 1240,
-    status: "success" as const,
-    errors: 0,
-  },
 ];
 
 const workdayFields = [
@@ -499,7 +464,6 @@ function SuccessAnimation({ onDone }: { onDone: () => void }) {
 export default function CycleBuilder({ onBack }: CycleBuilderProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [showComplete, setShowComplete] = useState(false);
-  const [expandedErrorFile, setExpandedErrorFile] = useState<number | null>(null);
   const [workdayExpanded, setWorkdayExpanded] = useState(true);
   const [shareworksExpanded, setShareworksExpanded] = useState(false);
   const [selectedRole, setSelectedRole] = useState("Admin");
@@ -571,8 +535,6 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
       case 1:
         return (
           <DataIntegrationsStep
-            expandedErrorFile={expandedErrorFile}
-            setExpandedErrorFile={setExpandedErrorFile}
             workdayExpanded={workdayExpanded}
             setWorkdayExpanded={setWorkdayExpanded}
             shareworksExpanded={shareworksExpanded}
@@ -1061,15 +1023,11 @@ function IntegrationCard({
 }
 
 function DataIntegrationsStep({
-  expandedErrorFile,
-  setExpandedErrorFile,
   workdayExpanded,
   setWorkdayExpanded,
   shareworksExpanded,
   setShareworksExpanded,
 }: {
-  expandedErrorFile: number | null;
-  setExpandedErrorFile: (v: number | null) => void;
   workdayExpanded: boolean;
   setWorkdayExpanded: (v: boolean) => void;
   shareworksExpanded: boolean;
@@ -1143,152 +1101,6 @@ function DataIntegrationsStep({
           iconColor={token("color.background.success.bold")}
           icon={<CreditCardIcon label="" color={token("color.icon.inverse")} />}
         />
-        <IntegrationCard
-          name="Compensation data.csv"
-          lastSynced="02/20/26 10:34 PM PST"
-          iconColor={token("color.background.success.bold")}
-          icon={<SpreadsheetIcon label="" color={token("color.icon.inverse")} />}
-          isFile
-        />
-      </div>
-
-      <div style={{ ...cardStyle, padding: `${token("space.300")} ${token("space.400")}` }}>
-        <div style={{ marginBottom: token("space.200") }}>
-          <Heading size="small">Upload History</Heading>
-          <Text size="small" color="color.text.subtlest">Previous data uploads for this compensation cycle</Text>
-        </div>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${token("color.border")}` }}>
-              {["File Name", "Uploaded", "Size", "Records", "Status"].map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: `${token("space.100")} ${token("space.200")}`,
-                    textAlign: "left",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {uploadHistory.map((file, i) => (
-              <React.Fragment key={i}>
-                <tr
-                  style={{
-                    borderBottom: `1px solid ${token("color.border")}`,
-                    cursor: file.status === "failed" ? "pointer" : "default",
-                  }}
-                  onClick={() => {
-                    if (file.status === "failed") {
-                      setExpandedErrorFile(expandedErrorFile === i ? null : i);
-                    }
-                  }}
-                >
-                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
-                      <SpreadsheetIcon label="" color={token("color.icon.subtle")} />
-                      <Text size="small" weight="semibold">{file.name}</Text>
-                    </div>
-                  </td>
-                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                    <Text size="small" color="color.text.subtlest">{file.date}</Text>
-                  </td>
-                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                    <Text size="small" color="color.text.subtlest">{file.size}</Text>
-                  </td>
-                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                    <Text size="small" color="color.text.subtlest">{file.records.toLocaleString()}</Text>
-                  </td>
-                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                    {file.status === "success" ? (
-                      <Lozenge appearance="success">Success</Lozenge>
-                    ) : (
-                      <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-                        <Lozenge appearance="removed">{file.errors} Errors</Lozenge>
-                        {expandedErrorFile === i ? (
-                          <ChevronUpIcon label="" color={token("color.icon.subtle")} />
-                        ) : (
-                          <ChevronDownIcon label="" color={token("color.icon.subtle")} />
-                        )}
-                      </div>
-                    )}
-                  </td>
-                </tr>
-                {file.status === "failed" && expandedErrorFile === i && file.errorDetails && (
-                  <tr>
-                    <td colSpan={5} style={{ padding: 0 }}>
-                      <div
-                        style={{
-                          backgroundColor: token("color.background.danger"),
-                          padding: token("space.200"),
-                        }}
-                      >
-                        <div style={cardStyle}>
-                          <div style={{ display: "flex", alignItems: "center", gap: token("space.100"), marginBottom: token("space.150") }}>
-                            <ErrorIcon label="" color={token("color.icon.danger")} />
-                            <Text size="small" weight="bold">Data Validation Errors</Text>
-                          </div>
-                          <Text size="UNSAFE_small" color="color.text.subtlest">
-                            {file.errorDetails.length} critical errors requiring attention
-                          </Text>
-                          <table style={{ width: "100%", borderCollapse: "collapse", marginTop: token("space.150") }}>
-                            <thead>
-                              <tr style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                                {["Row", "Employee", "Column", "Issue", "Action"].map((h) => (
-                                  <th
-                                    key={h}
-                                    style={{
-                                      padding: `${token("space.100")} ${token("space.200")}`,
-                                      textAlign: h === "Action" ? "right" : "left",
-                                      textTransform: "uppercase",
-                                    }}
-                                  >
-                                    <Text size="UNSAFE_small" weight="semibold" color="color.text.subtlest">{h}</Text>
-                                  </th>
-                                ))}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {file.errorDetails.map((err, ei) => (
-                                <tr key={ei} style={{ borderBottom: `1px solid ${token("color.border")}` }}>
-                                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                                    <Text size="UNSAFE_small" color="color.text.subtlest"><code style={{ fontFamily: "monospace" }}>{err.row}</code></Text>
-                                  </td>
-                                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                                    <Text size="small" weight="semibold">{err.empName}</Text>
-                                  </td>
-                                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                                    <Text size="small">{err.col}</Text>
-                                  </td>
-                                  <td style={{ padding: `${token("space.100")} ${token("space.200")}` }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: token("space.050") }}>
-                                      <ErrorIcon label="" color={token("color.icon.danger")} />
-                                      <Text size="small" color="color.text.danger">{err.issue}</Text>
-                                    </div>
-                                  </td>
-                                  <td style={{ padding: `${token("space.100")} ${token("space.200")}`, textAlign: "right" }}>
-                                    <Button appearance="subtle" spacing="compact">
-                                      Fix
-                                    </Button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
       </div>
 
       <Heading size="small">Data sources</Heading>
