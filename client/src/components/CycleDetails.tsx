@@ -153,7 +153,6 @@ function getFiscalYear(name: string) {
 export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
   const dates = parseCycleDates(cycle.timeline);
   const [cycleName, setCycleName] = useState(cycle.name);
-  const [fiscalYear, setFiscalYear] = useState(getFiscalYear(cycle.name));
   const [cycleType, setCycleType] = useState(getCycleTypeDefault(cycle.type));
   const [status, setStatus] = useState(statusOptions.find((o) => o.value === cycle.status) || statusOptions[0]);
   const [startDate, setStartDate] = useState(dates.start);
@@ -299,18 +298,6 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
                     placeholder="Enter cycle name"
                     value={cycleName}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCycleName(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div>
-                <div style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                  <Text size="UNSAFE_small" weight="bold" color="color.text.subtlest">Fiscal Year</Text>
-                </div>
-                <div style={{ marginTop: token("space.050") }}>
-                  <Select
-                    options={fiscalYearOptions}
-                    value={fiscalYear}
-                    onChange={(val: any) => val && setFiscalYear(val)}
                   />
                 </div>
               </div>
