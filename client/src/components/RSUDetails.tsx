@@ -331,6 +331,14 @@ export default function RSUDetails() {
   const unvestedValue = unvestedUnits * modeledPrice;
   const totalValue = vestedValue + unvestedValue;
 
+  const adjustedVestingData = useMemo(() => {
+    const ratio = modeledPrice / defaultPrice;
+    return vestingScheduleData.map((d) => ({
+      ...d,
+      unvestedValue: Math.round(d.unvestedValue * ratio),
+    }));
+  }, [modeledPrice, defaultPrice]);
+
   const priceDiff = modeledPrice - defaultPrice;
   const priceDiffPct = ((priceDiff / defaultPrice) * 100).toFixed(1);
 
@@ -447,7 +455,7 @@ export default function RSUDetails() {
           <Heading size="small">Vesting Schedule</Heading>
           <div style={{ marginTop: token("space.200"), height: 320 }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={1}>
-              <BarChart data={vestingScheduleData}>
+              <BarChart data={adjustedVestingData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={token("color.border")} />
                 <XAxis
                   dataKey="date"
@@ -466,8 +474,8 @@ export default function RSUDetails() {
                 <RechartsTooltip
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
-                    const dataPoint = vestingScheduleData.find((d) => d.date === label);
-                    const totalValueInPeriod = dataPoint?.grantBreakdown?.reduce((sum, g) => sum + g.value, 0) || 0;
+                    const dataPoint = adjustedVestingData.find((d) => d.date === label);
+                    const totalValueInPeriod = (dataPoint?.vestedValue || 0) + (dataPoint?.unvestedValue || 0);
                     const vestedUnits = dataPoint?.vested || 0;
                     const unvestedUnits = dataPoint?.unvested || 0;
                     const now = new Date();
