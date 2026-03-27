@@ -260,7 +260,7 @@ export default function Home() {
             isSelected={activeNav === "about"}
             onClick={(e) => { e.preventDefault(); setActiveNav("about"); }}
           >
-            About Us
+            Resources
           </LinkMenuItem>
         </MenuList>
       );
@@ -290,7 +290,7 @@ export default function Home() {
           isSelected={activeNav === "about"}
           onClick={(e) => { e.preventDefault(); setActiveNav("about"); }}
         >
-          About Us
+          Resources
         </LinkMenuItem>
       </MenuList>
     );

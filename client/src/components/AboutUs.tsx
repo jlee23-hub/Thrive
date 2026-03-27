@@ -22,8 +22,9 @@ const linkStyle: React.CSSProperties = {
 export default function AboutUs() {
   return (
     <div style={{ maxWidth: 900 }}>
-      <div>
-        <Heading size="medium">Resources</Heading>
+      <Heading size="large">Resources</Heading>
+      <div style={{ marginTop: token("space.300") }}>
+        <Heading size="medium">Links</Heading>
         <div style={{ marginTop: token("space.200") }}>
           <Text size="medium">
             Explore the links below to learn more about the three major parts of your compensation – base salary, bonus/commission, and equity. We've written an "About" page for each component that takes you into more detail about how each program works.
