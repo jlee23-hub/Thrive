@@ -335,54 +335,48 @@ export default function RSUDetails() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
       <div style={cardStyle}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <Heading size="large">RSU's</Heading>
-        </div>
-
-        <div style={{
-          marginTop: token("space.300"),
-          padding: token("space.300"),
-          borderRadius: "6px",
-          border: `1px solid ${token("color.border")}`,
-          backgroundColor: token("elevation.surface.sunken"),
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: token("space.100") }}>
-            <Text size="medium" weight="bold">Model Share Price</Text>
-            <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
-              <Heading size="medium">{formatCurrencyDecimal(modeledPrice)}</Heading>
-              {priceDiff !== 0 && (
-                <Text size="small" color={priceDiff > 0 ? "color.text.success" : "color.text.danger"} weight="semibold">
-                  {priceDiff > 0 ? "+" : ""}{priceDiffPct}%
-                </Text>
-              )}
-            </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.200") }}>
-            <Text size="UNSAFE_small" color="color.text.subtlest">{formatCurrencyDecimal(defaultPrice * 0.5)}</Text>
-            <div style={{ flex: 1 }} className="hide-range-dot">
-              <Range
-                min={Math.round(defaultPrice * 0.5 * 100) / 100}
-                max={Math.round(defaultPrice * 2 * 100) / 100}
-                step={0.01}
-                value={modeledPrice}
-                onChange={(val) => setModeledPrice(val)}
-              />
-            </div>
-            <Text size="UNSAFE_small" color="color.text.subtlest">{formatCurrencyDecimal(defaultPrice * 2)}</Text>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: token("space.050") }}>
-            <Text size="UNSAFE_small" color="color.text.subtlest">
-              Current price: {formatCurrencyDecimal(defaultPrice)}
-            </Text>
-            {modeledPrice !== defaultPrice && (
-              <span
-                onClick={() => setModeledPrice(defaultPrice)}
-                style={{ fontSize: 11, color: token("color.text.brand"), cursor: "pointer", fontWeight: 500 }}
-              >
-                Reset to current
-              </span>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Text size="medium" weight="bold">Model Share Price</Text>
+          <div style={{ display: "flex", alignItems: "center", gap: token("space.150") }}>
+            <Heading size="medium">{formatCurrencyDecimal(modeledPrice)}</Heading>
+            {priceDiff !== 0 && (
+              <Text size="small" color={priceDiff > 0 ? "color.text.success" : "color.text.danger"} weight="semibold">
+                {priceDiff > 0 ? "+" : ""}{priceDiffPct}%
+              </Text>
             )}
           </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: token("space.200"), marginTop: token("space.200") }}>
+          <Text size="UNSAFE_small" color="color.text.subtlest">{formatCurrencyDecimal(defaultPrice * 0.5)}</Text>
+          <div style={{ flex: 1 }} className="hide-range-dot">
+            <Range
+              min={Math.round(defaultPrice * 0.5 * 100) / 100}
+              max={Math.round(defaultPrice * 2 * 100) / 100}
+              step={0.01}
+              value={modeledPrice}
+              onChange={(val) => setModeledPrice(val)}
+            />
+          </div>
+          <Text size="UNSAFE_small" color="color.text.subtlest">{formatCurrencyDecimal(defaultPrice * 2)}</Text>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: token("space.050") }}>
+          <Text size="UNSAFE_small" color="color.text.subtlest">
+            Current price: {formatCurrencyDecimal(defaultPrice)}
+          </Text>
+          {modeledPrice !== defaultPrice && (
+            <span
+              onClick={() => setModeledPrice(defaultPrice)}
+              style={{ fontSize: 11, color: token("color.text.brand"), cursor: "pointer", fontWeight: 500 }}
+            >
+              Reset to current
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div style={cardStyle}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <Heading size="large">RSU's</Heading>
         </div>
 
         <div style={{
