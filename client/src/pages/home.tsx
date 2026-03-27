@@ -185,36 +185,12 @@ export default function Home() {
             Dashboard
           </LinkMenuItem>
           <LinkMenuItem
-            href="#groups"
-            elemBefore={<ShieldIcon label="" color="currentColor" />}
-            isSelected={activeNav === "groups"}
-            onClick={(e) => { e.preventDefault(); setActiveNav("groups"); }}
-          >
-            Groups
-          </LinkMenuItem>
-          <LinkMenuItem
-            href="#salary-bands"
-            elemBefore={<CashIcon label="" color="currentColor" />}
-            isSelected={activeNav === "salary-bands"}
-            onClick={(e) => { e.preventDefault(); setActiveNav("salary-bands"); }}
-          >
-            Salary Bands
-          </LinkMenuItem>
-          <LinkMenuItem
             href="#data-management"
             elemBefore={<DatabaseIcon label="" color="currentColor" />}
             isSelected={activeNav === "data-management"}
             onClick={(e) => { e.preventDefault(); setActiveNav("data-management"); }}
           >
             Data Management
-          </LinkMenuItem>
-          <LinkMenuItem
-            href="#system-settings"
-            elemBefore={<SettingsIcon label="" color="currentColor" />}
-            isSelected={activeNav === "system-settings"}
-            onClick={(e) => { e.preventDefault(); setActiveNav("system-settings"); }}
-          >
-            Permissions
           </LinkMenuItem>
         </MenuList>
       );
