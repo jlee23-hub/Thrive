@@ -364,7 +364,7 @@ export default function Home() {
         </SideNav>
 
         <Main>
-          <div style={{ overflowY: "auto", height: "100%" }}>
+          <div style={{ overflowY: "auto", height: "100%", backgroundColor: token("elevation.surface") }}>
             {(persona === "comp-admin" && activeNav !== "cycles-dashboard" && activeNav !== "salary-bands") || persona === "data-integration" ? (
               renderContent()
             ) : (
