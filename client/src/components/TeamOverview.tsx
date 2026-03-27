@@ -855,7 +855,7 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
       </div>
 
       {managerStack.length > 0 && (
-        <Breadcrumbs label="Team navigation">
+        <div style={{ fontSize: "12px" }}><Breadcrumbs label="Team navigation">
           <BreadcrumbsItem
             text="All Reports"
             onClick={() => onBreadcrumbNav?.(0)}
@@ -872,7 +872,7 @@ export default function TeamOverview({ managerStack = [], onDrillDown, onBreadcr
               />
             );
           })}
-        </Breadcrumbs>
+        </Breadcrumbs></div>
       )}
 
       {rows.length === 0 ? (

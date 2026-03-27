@@ -270,10 +270,12 @@ export default function CycleDetails({ cycle, onBack }: CycleDetailsProps) {
           paddingRight: token("space.400"),
         }}
       >
-        <Breadcrumbs label="Cycle navigation">
-          <BreadcrumbsItem text="Dashboard" onClick={onBack} />
-          <BreadcrumbsItem text={breadcrumbName} />
-        </Breadcrumbs>
+        <div style={{ fontSize: "12px" }}>
+          <Breadcrumbs label="Cycle navigation">
+            <BreadcrumbsItem text="Dashboard" onClick={onBack} />
+            <BreadcrumbsItem text={breadcrumbName} />
+          </Breadcrumbs>
+        </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: token("space.100"), marginBottom: token("space.200") }}>
           <Heading size="xlarge">{breadcrumbName}</Heading>
