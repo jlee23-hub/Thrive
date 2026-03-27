@@ -3,127 +3,98 @@ import Heading from "@atlaskit/heading";
 import { Text } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
 import LinkExternalIcon from "@atlaskit/icon/core/link-external";
-import PeopleGroupIcon from "@atlaskit/icon/core/people-group";
-import GlobeIcon from "@atlaskit/icon/core/globe";
-import OfficeIcon from "@atlaskit/icon/core/office-building";
-import Button from "@atlaskit/button/new";
 
-const cardStyle: React.CSSProperties = {
-  backgroundColor: token("elevation.surface.raised"),
-  borderRadius: "6px",
-  padding: token("space.400"),
-  border: `1px solid ${token("color.border")}`,
+const sectionDivider: React.CSSProperties = {
+  borderTop: `1px solid ${token("color.border")}`,
+  marginTop: token("space.400"),
+  paddingTop: token("space.400"),
+};
+
+const linkStyle: React.CSSProperties = {
+  color: token("color.link"),
+  textDecoration: "none",
+  display: "inline-flex",
+  alignItems: "center",
+  gap: token("space.050"),
+  fontSize: 14,
 };
 
 export default function AboutUs() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.400") }}>
-      <div style={cardStyle}>
-        <Heading size="large">About Your Compensation</Heading>
-        <div style={{ marginTop: token("space.300") }}>
-          <Text size="medium">
-            This tool provides a comprehensive view of your total compensation package, including base salary, bonus targets, and equity grants. Use it to understand and model how changes in share price may affect your total compensation.
-          </Text>
-        </div>
+    <div style={{ maxWidth: 900 }}>
+      <Heading size="large">About Your Compensation</Heading>
+      <div style={{ marginTop: token("space.200") }}>
+        <Text size="medium">
+          This tool provides a comprehensive view of your total compensation package, including base salary, bonus targets, and equity grants. Use it to understand and model how changes in share price may affect your total compensation.
+        </Text>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: token("space.300") }}>
-        <div style={cardStyle}>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.150"), marginBottom: token("space.200") }}>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: "6px",
-                backgroundColor: token("color.background.discovery"),
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <PeopleGroupIcon label="team" color={token("color.icon.discovery")} />
-            </div>
-            <Heading size="small">Compensation Philosophy</Heading>
-          </div>
+      <div style={sectionDivider}>
+        <Heading size="medium">Compensation Philosophy</Heading>
+        <div style={{ marginTop: token("space.200") }}>
           <Text size="medium">
             We believe in competitive, transparent compensation. Our packages are benchmarked against top-tier technology companies and reviewed annually to ensure market competitiveness.
           </Text>
         </div>
+      </div>
 
-        <div style={cardStyle}>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.150"), marginBottom: token("space.200") }}>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: "6px",
-                backgroundColor: token("color.background.success"),
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <GlobeIcon label="equity" color={token("color.icon.success")} />
-            </div>
-            <Heading size="small">Equity Program</Heading>
-          </div>
+      <div style={sectionDivider}>
+        <Heading size="medium">Equity Program</Heading>
+        <div style={{ marginTop: token("space.200") }}>
           <Text size="medium">
             RSUs (Restricted Stock Units) vest over a 4-year schedule, typically with a 1-year cliff. This aligns your interests with long-term company performance and shareholder value.
           </Text>
         </div>
+      </div>
 
-        <div style={cardStyle}>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.150"), marginBottom: token("space.200") }}>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: "6px",
-                backgroundColor: token("color.background.warning"),
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <OfficeIcon label="company" color={token("color.icon.warning")} />
-            </div>
-            <Heading size="small">Bonus Structure</Heading>
-          </div>
+      <div style={sectionDivider}>
+        <Heading size="medium">Bonus Structure</Heading>
+        <div style={{ marginTop: token("space.200") }}>
           <Text size="medium">
             Your bonus target is based on a combination of company performance and individual contribution. Actual payouts may vary based on achievement against goals.
           </Text>
         </div>
+      </div>
 
-        <div style={cardStyle}>
-          <div style={{ display: "flex", alignItems: "center", gap: token("space.150"), marginBottom: token("space.200") }}>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: "6px",
-                backgroundColor: token("color.background.information"),
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <LinkExternalIcon label="resources" color={token("color.icon.information")} />
-            </div>
-            <Heading size="small">Resources</Heading>
-          </div>
+      <div style={sectionDivider}>
+        <Heading size="medium">Resources</Heading>
+        <div style={{ marginTop: token("space.200") }}>
           <Text size="medium">
-            For questions about your compensation, contact the People Team or visit the internal compensation FAQ. Stock-related inquiries can be directed to your equity administrator.
+            Explore the links below to learn more about the three major parts of your compensation – base salary, bonus/commission, and equity. We've written an "About" page for each component that takes you into more detail about how each program works.
           </Text>
-          <div style={{ marginTop: token("space.200") }}>
-            <Button appearance="primary">Contact People Team</Button>
-          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: token("space.100"), marginTop: token("space.200") }}>
+          <a href="https://atlassian.design" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+            Atlassian Compensation <LinkExternalIcon label="" LEGACY_size="small" />
+          </a>
+          <a href="https://atlassian.design" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+            About Base Salary <LinkExternalIcon label="" LEGACY_size="small" />
+          </a>
+          <a href="https://atlassian.design" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+            About Equity <LinkExternalIcon label="" LEGACY_size="small" />
+          </a>
+          <a href="https://atlassian.design" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+            About Bonus <LinkExternalIcon label="" LEGACY_size="small" />
+          </a>
+        </div>
+        <div style={{ marginTop: token("space.200") }}>
+          <Text size="medium">
+            Visit{" "}
+            <a href="https://atlassian.design" target="_blank" rel="noopener noreferrer" style={{ color: token("color.link"), textDecoration: "none" }}>
+              Stock Central <LinkExternalIcon label="" LEGACY_size="small" />
+            </a>
+            {" "}for links to FAQs, country-specific tax guides, and more!
+          </Text>
         </div>
       </div>
 
-      <div style={cardStyle}>
-        <Text size="small" color="color.text.subtlest">
-          Disclaimer: The information presented in this tool is for informational purposes only and does not constitute financial advice. Actual compensation may vary. Stock prices are subject to market fluctuations. Please consult with a financial advisor for personalized guidance.
-        </Text>
+      <div style={sectionDivider}>
+        <Heading size="medium">Legal Disclaimer</Heading>
+        <div style={{ marginTop: token("space.200") }}>
+          <Text size="medium">
+            This tool provides estimates based on current information, and is not a promise of any future entitlement. Actual results may vary due to potential performance measurements, account corrections, termination and other adjustments. Fluctuations in market price, foreign exchange rates, and changes to fees, commissions and taxes will also impact actual proceeds. Results have been simplified for demonstration purposes. Results do not take into account any applicable taxes that may be due on exercise, vest, delivery, or sale. Atlassian does not provide tax or legal advice. You are encouraged to consult your tax advisor for information about any taxes that may apply. This tool is informational only and will not result in an exercise or transaction of any kind. Vesting is contingent on active employment on designated vesting dates. You should review your employment and/or grant agreements for more information.
+          </Text>
+        </div>
       </div>
     </div>
   );
