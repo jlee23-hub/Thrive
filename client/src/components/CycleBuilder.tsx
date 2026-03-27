@@ -1770,7 +1770,7 @@ function UsersTabContent() {
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("space.200") }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: token("space.200") }}>
         <div style={{ flex: 1, maxWidth: 400 }}>
           <Textfield

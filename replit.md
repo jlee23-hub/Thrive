@@ -37,6 +37,30 @@ All UI must follow these rules. No exceptions without documented justification.
 - **ALWAYS** use space tokens: `token("space.100")`, `token("space.200")`, etc.
 - Exception: `height`/`width` for chart containers and fixed-size decorative elements (e.g., progress bar `height: 6`)
 
+### Step/Section Layout Pattern (CycleBuilder, CycleDetails, and all wizard-like views)
+Every step or section MUST follow this consistent structure:
+1. **Outer container**: `display: flex, flexDirection: column, gap: token("space.300")`
+2. **Title block** (wrapped in a single `<div>`):
+   - Icon + `<Heading size="medium">` in a flex row with `gap: token("space.100")`
+   - `<Text size="small" color="color.text.subtlest">` description directly below (no extra wrapper div, no extra margin)
+3. **Content** follows after the title block, separated by the outer container's `gap: space.300`
+4. **Cards within sections**: use `cardStyle` with `padding: space.300 / space.400`
+5. **Sub-section headings inside cards**: `<Heading size="xsmall">`
+
+Example:
+```tsx
+<div style={{ display: "flex", flexDirection: "column", gap: token("space.300") }}>
+  <div>
+    <div style={{ display: "flex", alignItems: "center", gap: token("space.100") }}>
+      <SomeIcon label="" color={token("color.icon.brand")} />
+      <Heading size="medium">Step Title</Heading>
+    </div>
+    <Text size="small" color="color.text.subtlest">Brief description of this step</Text>
+  </div>
+  {/* Content cards and controls below */}
+</div>
+```
+
 ### Components
 - **Buttons**: `@atlaskit/button/new` — never native `<button>` with Tailwind
 - **Checkbox**: `@atlaskit/checkbox`
