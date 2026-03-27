@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
+import Spinner from "@atlaskit/spinner";
 import { token } from "@atlaskit/tokens";
 import Heading from "@atlaskit/heading";
 import { Text } from "@atlaskit/primitives";
@@ -350,6 +351,7 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
   const [includeComparison, setIncludeComparison] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
   const [cycleCreated, setCycleCreated] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -368,7 +370,13 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
 
   const handleNext = () => {
     if (currentStep === 0 && !cycleCreated) {
-      setCycleCreated(true);
+      setIsCreating(true);
+      setTimeout(() => {
+        setCycleCreated(true);
+        setIsCreating(false);
+        setCurrentStep(1);
+      }, 1500);
+      return;
     }
     if (currentStep < STEPS.length - 1) {
       setCurrentStep((prev) => prev + 1);
@@ -479,10 +487,12 @@ export default function CycleBuilder({ onBack }: CycleBuilderProps) {
           </Button>
           <Button
             appearance={currentStep === STEPS.length - 1 || currentStep === 0 ? "primary" : "default"}
-            iconAfter={ChevronRightIcon}
+            iconAfter={isCreating ? undefined : ChevronRightIcon}
+            iconBefore={isCreating ? () => <Spinner size="small" appearance="invert" /> : undefined}
             onClick={handleNext}
+            isDisabled={isCreating}
           >
-            {currentStep === STEPS.length - 1 ? "Finalize Cycle" : currentStep === 0 ? (cycleCreated ? "Save Cycle" : "Create Cycle") : "Next Step"}
+            {isCreating ? "Creating..." : currentStep === STEPS.length - 1 ? "Finalize Cycle" : currentStep === 0 ? (cycleCreated ? "Save Cycle" : "Create Cycle") : "Next Step"}
           </Button>
         </div>
       </div>
