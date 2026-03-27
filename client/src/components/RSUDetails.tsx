@@ -670,9 +670,24 @@ export default function RSUDetails() {
                   <RechartsTooltip
                     content={({ active, payload, label }) => {
                       if (!active || !payload?.length) return null;
-                      const dataPoint = vestingScheduleData.find((d) => d.date === label);
-                      if (!dataPoint) return null;
+                      const idx = vestingScheduleData.findIndex((d) => d.date === label);
+                      if (idx < 0) return null;
+                      const dataPoint = vestingScheduleData[idx];
+                      const prev = idx > 0 ? vestingScheduleData[idx - 1] : null;
+                      const vestingUnits = prev ? dataPoint.vested - prev.vested : dataPoint.vested;
                       const totalUnits = dataPoint.vested + dataPoint.unvested;
+                      const vestingPct = ((dataPoint.vested / totalUnits) * 100).toFixed(2);
+                      const now = new Date();
+                      const [monthStr, yearStr] = (label as string).split(" ");
+                      const monthIndex = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthStr);
+                      const periodDate = new Date(parseInt(yearStr), monthIndex);
+                      const isFuture = periodDate > now;
+                      const sharePrice = vestingUnits > 0
+                        ? (isFuture ? modeledPrice : Math.round((prev ? dataPoint.vestedValue - prev.vestedValue : dataPoint.vestedValue) / vestingUnits))
+                        : 0;
+                      const vestingValue = vestingUnits > 0
+                        ? (isFuture ? vestingUnits * modeledPrice : (prev ? dataPoint.vestedValue - prev.vestedValue : dataPoint.vestedValue))
+                        : 0;
                       return (
                         <div style={{
                           backgroundColor: token("elevation.surface.overlay"),
@@ -680,25 +695,41 @@ export default function RSUDetails() {
                           borderRadius: 8,
                           fontSize: 13,
                           padding: token("space.200"),
-                          minWidth: 220,
+                          minWidth: 240,
                           boxShadow: token("elevation.shadow.overlay"),
                         }}>
                           <div style={{ fontWeight: 700, marginBottom: token("space.100"), color: token("color.text") }}>
-                            {label}
+                            {label} – {vestingPct}%
                           </div>
                           <div style={{ display: "flex", flexDirection: "column", gap: token("space.050") }}>
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                              <Text size="small" color="color.text.subtlest">Vested Units:</Text>
-                              <Text size="small" weight="bold">{dataPoint.vested.toLocaleString()}</Text>
+                              <Text size="small" color="color.text.subtlest">Share Price:</Text>
+                              <Text size="small" weight="bold">{formatCurrencyDecimal(sharePrice)}</Text>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                              <Text size="small" color="color.text.subtlest">Unvested Units:</Text>
-                              <Text size="small" weight="bold">{dataPoint.unvested.toLocaleString()}</Text>
+                              <Text size="small" color="color.text.subtlest">Vesting Units:</Text>
+                              <Text size="small" weight="bold">{vestingUnits.toLocaleString()}</Text>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                              <Text size="small" color="color.text.subtlest">Vesting Value:</Text>
+                              <Text size="small" weight="bold">{formatCurrency(vestingValue)}</Text>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between", paddingTop: token("space.050"), borderTop: `1px solid ${token("color.border")}` }}>
-                              <Text size="small" color="color.text.subtlest">Total Units:</Text>
-                              <Text size="small" weight="bold">{totalUnits.toLocaleString()}</Text>
+                              <Text size="small" color="color.text.subtlest">Total Vested Units:</Text>
+                              <Text size="small" weight="bold">{dataPoint.vested.toLocaleString()}</Text>
                             </div>
+                          </div>
+                          <div style={{
+                            marginTop: token("space.100"),
+                            paddingTop: token("space.075"),
+                            borderTop: `1px solid ${token("color.border")}`,
+                            fontSize: 11,
+                            fontStyle: "italic",
+                            color: isFuture ? token("color.text.warning") : token("color.text.subtlest"),
+                          }}>
+                            {isFuture
+                              ? "Projected using modeled share price"
+                              : "Based on share price at vest date"}
                           </div>
                         </div>
                       );
